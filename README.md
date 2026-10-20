@@ -27,6 +27,10 @@ Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages u
 | Teams / Top–Support | Player power bars, head-to-head and tier lists. Hover a player for their champion pool. |
 | Meta | Champion tier list from Worlds pick/ban presence, bot-lane duo grid, best partners, counters. |
 
+## Themes
+
+Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in one of three event themes — *Hextech Gold*, *Brooklyn Final* or *Summoner's Cup* (colour, type and texture only, no Riot artwork). Choices are remembered in the browser.
+
 ## How the tournament works
 
 - **Schedule:** Swiss R1 23 Oct, R2 24 Oct, R3 25–26 Oct, R4 28–30 Oct, R5 31 Oct; quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov. How multi-day rounds split between days isn't published, so that split is assumed.
@@ -42,6 +46,7 @@ Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages u
 ```
 index.html          page markup
 css/styles.css      styles (light and dark themes)
+js/ui.js            theme toggle, Worlds mode, info popover
 js/data.js          teams, ratings, champion pools, meta, synergy, counters, play-in drafts
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation

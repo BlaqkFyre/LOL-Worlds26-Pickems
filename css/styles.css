@@ -212,3 +212,74 @@ img{max-width:100%}
 .pogline{margin-top:4px;font-size:14px}
 @media (max-width:640px){.bracket{grid-template-columns:1fr}.team5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .result .pogline b{font:700 15px var(--body);text-transform:none;letter-spacing:0}
+
+/* ---- header tools: info popover, theme toggle, Worlds mode ---- */
+.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;padding:0}
+.iconbtn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.iconbtn:disabled{opacity:.45;cursor:not-allowed}
+.iconbtn:focus-visible,.wsel select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#themeBtn .i-sun{display:none}#themeBtn.is-dark .i-sun{display:block}#themeBtn.is-dark .i-moon{display:none}
+.wsel{display:inline-flex;align-items:center;gap:6px;font:700 12px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.wsel select{font:600 13px var(--body);text-transform:none;letter-spacing:0}
+.about{position:relative}
+.pop{position:absolute;right:0;top:calc(100% + 8px);z-index:40;width:min(560px,calc(100vw - 32px));max-height:min(70vh,560px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:13px}
+.pop p{margin:0 0 8px}.pop a{color:var(--teal)}
+.pop .src{columns:1;padding-left:18px}
+@media (max-width:640px){.about{position:static}.pop{left:16px;right:16px;width:auto;top:auto;margin-top:8px;position:absolute}}
+
+/* =====================================================================
+   Worlds mode themes. Each sets its own palette and display face and
+   overrides light/dark. No Riot logos or artwork — colour, type and
+   texture only.
+   ===================================================================== */
+html:root[data-worlds]{color-scheme:dark}
+html:root[data-worlds] body{background-attachment:fixed}
+html:root[data-worlds] h1,html:root[data-worlds] h2,html:root[data-worlds] h3,html:root[data-worlds] .tabs button,html:root[data-worlds] .eyebrow{font-family:var(--display)}
+
+/* 1. Hextech Gold — black-navy and burnished gold, engraved serif caps */
+html:root[data-worlds="hextech"]{
+  --bg:#060a11; --panel:#0c131e; --line:#2b2a22; --fg:#efe5cf; --muted:#a39a85;
+  --gold:#c89b3c; --teal:#0ac8b9; --blue:#5a8fd8; --grey:#5b5f66; --track:#18202c;
+  --lose:#e0705c; --bside:#4f8fe8; --bsidebg:#0f1b2e; --rside:#e2604d; --rsidebg:#2a1210;
+  --meta:#0ac8b9; --metabg:#082a2a; --mix:#c89b3c; --mixbg:#2a2110; --off:#8d8678; --offbg:#151b25;
+  --display:"Cinzel","Saira Condensed",serif;
+}
+html:root[data-worlds="hextech"] body{background:radial-gradient(1200px 500px at 50% -120px,#1d2a3c 0%,transparent 70%),radial-gradient(800px 400px at 100% 100%,#1a1508 0%,transparent 70%),var(--bg)}
+html:root[data-worlds="hextech"] .panel,html:root[data-worlds="hextech"] .side,html:root[data-worlds="hextech"] .an{border:1px solid #3a321f;box-shadow:inset 0 1px 0 rgba(200,155,60,.25)}
+html:root[data-worlds="hextech"] h1 span{background:linear-gradient(180deg,#f0d38a,#c89b3c 55%,#7a5a1e);-webkit-background-clip:text;background-clip:text;color:transparent}
+html:root[data-worlds="hextech"] .tabs button[aria-selected="true"],html:root[data-worlds="hextech"] .btn.primary{background:linear-gradient(180deg,#e2bd6a,#a67a2a);color:#0b0f15;border-color:#c89b3c}
+html:root[data-worlds="hextech"] h1{letter-spacing:.04em}
+
+/* 2. Brooklyn Final — night-city violet with neon magenta and cyan, tall condensed type */
+html:root[data-worlds="brooklyn"]{
+  --bg:#0b0616; --panel:#140c25; --line:#2f2150; --fg:#f4effe; --muted:#a898c9;
+  --gold:#ff4fa3; --teal:#38e1ff; --blue:#8f7cff; --grey:#5c527a; --track:#211538;
+  --lose:#ff7a7a; --bside:#38e1ff; --bsidebg:#0d1d33; --rside:#ff4fa3; --rsidebg:#2e0d24;
+  --meta:#38e1ff; --metabg:#0b2333; --mix:#ffcf4f; --mixbg:#2e2410; --off:#9a8fbb; --offbg:#1a1130;
+  --display:"Big Shoulders Display","Saira Condensed",sans-serif;
+}
+html:root[data-worlds="brooklyn"] body{background:
+  linear-gradient(180deg,transparent 0 62%,rgba(255,79,163,.10) 82%,rgba(56,225,255,.12) 100%),
+  repeating-linear-gradient(90deg,rgba(143,124,255,.06) 0 1px,transparent 1px 56px),
+  repeating-linear-gradient(0deg,rgba(143,124,255,.05) 0 1px,transparent 1px 56px),var(--bg)}
+html:root[data-worlds="brooklyn"] h1{font-weight:900;letter-spacing:.02em;font-size:clamp(36px,6vw,60px)}
+html:root[data-worlds="brooklyn"] h1 span{color:var(--gold);text-shadow:0 0 18px rgba(255,79,163,.55)}
+html:root[data-worlds="brooklyn"] .panel{box-shadow:0 0 0 1px rgba(255,79,163,.15),0 10px 30px rgba(0,0,0,.35)}
+html:root[data-worlds="brooklyn"] .tabs button[aria-selected="true"],html:root[data-worlds="brooklyn"] .btn.primary{background:linear-gradient(90deg,#ff4fa3,#8f7cff);color:#fff;border-color:transparent;box-shadow:0 0 14px rgba(255,79,163,.45)}
+
+/* 3. Summoner's Cup — light platinum broadcast look, silver gradients and ice blue */
+html:root[data-worlds="cup"]{
+  color-scheme:light;
+  --bg:#eef2f6; --panel:#ffffff; --line:#cdd6e1; --fg:#0e1a2b; --muted:#5a6a80;
+  --gold:#8a6d2c; --teal:#1f7fc9; --blue:#4f6fa8; --grey:#97a3b3; --track:#e3e9f0;
+  --lose:#b8443a; --bside:#1f6fd1; --bsidebg:#e4eefc; --rside:#c4413a; --rsidebg:#fbe8e6;
+  --meta:#1f7fc9; --metabg:#e2effa; --mix:#8a6d2c; --mixbg:#f4ecda; --off:#5a6a80; --offbg:#edf1f5;
+  --display:"Oxanium","Saira Condensed",sans-serif;
+}
+html:root[data-worlds="cup"] body{background:linear-gradient(180deg,#dfe6ee 0,#eef2f6 260px),var(--bg)}
+html:root[data-worlds="cup"] header{padding:18px 20px;border-radius:10px;background:linear-gradient(135deg,#ffffff 0%,#dfe5ec 45%,#f7f9fb 55%,#cfd8e2 100%);border:1px solid #c4cfdb;box-shadow:0 6px 20px rgba(14,26,43,.08)}
+html:root[data-worlds="cup"] h1 span{background:linear-gradient(180deg,#5c6f88,#1f7fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+html:root[data-worlds="cup"] .tabs button[aria-selected="true"],html:root[data-worlds="cup"] .btn.primary{background:linear-gradient(180deg,#2a8be0,#165fa8);color:#fff;border-color:#165fa8}
+html:root[data-worlds="cup"] .panel{border-color:#cdd6e1;box-shadow:0 2px 10px rgba(14,26,43,.05)}
