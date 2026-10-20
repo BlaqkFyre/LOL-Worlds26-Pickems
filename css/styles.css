@@ -224,10 +224,10 @@ img{max-width:100%}
 .wsel{display:inline-flex;align-items:center;gap:6px;font:700 12px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .wsel select{font:600 13px var(--body);text-transform:none;letter-spacing:0}
 .about{position:relative}
-.pop{position:absolute;right:0;top:calc(100% + 8px);z-index:40;width:min(560px,calc(100vw - 32px));max-height:min(70vh,560px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:13px}
+/* floating box: fixed so it never pushes the page; ui.js places it under the icon */
+.pop{position:fixed;z-index:60;width:min(560px,calc(100vw - 32px));max-height:min(70vh,560px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:13px}
 .pop p{margin:0 0 8px}.pop a{color:var(--teal)}
 .pop .src{columns:1;padding-left:18px}
-@media (max-width:640px){.about{position:static}.pop{left:16px;right:16px;width:auto;top:auto;margin-top:8px;position:absolute}}
 
 /* =====================================================================
    Worlds mode themes. Each sets its own palette and display face and

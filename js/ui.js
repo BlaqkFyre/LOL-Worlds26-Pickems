@@ -31,7 +31,12 @@
     /* popover: opens on click/tap, or on hover with a pointer; closes on outside click or Esc */
     if(ab && pop){
       let pinned = false, t = null;
-      const open = () => { clearTimeout(t); pop.hidden = false; ab.setAttribute("aria-expanded", "true"); };
+      const place = () => { const r = ab.getBoundingClientRect(), w = Math.min(560, innerWidth - 32);
+        pop.style.left = Math.max(16, Math.min(r.right - w, innerWidth - w - 16)) + "px"; pop.style.top = (r.bottom + 8) + "px";
+        pop.style.maxHeight = Math.max(200, innerHeight - r.bottom - 24) + "px"; };
+      const open = () => { clearTimeout(t); pop.hidden = false; place(); ab.setAttribute("aria-expanded", "true"); };
+      addEventListener("resize", () => { if(!pop.hidden) place(); });
+      addEventListener("scroll", () => { if(!pop.hidden) place(); }, {passive:true});
       const close = () => { pop.hidden = true; pinned = false; ab.setAttribute("aria-expanded", "false"); };
       ab.addEventListener("click", e => { e.stopPropagation(); if(pinned){ close(); } else { pinned = true; open(); } });
       const wrap = ab.parentElement;

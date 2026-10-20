@@ -1,0 +1,1173 @@
+{
+ "source": "https://www.nerfplz.com/lol-pro-meta/picks-bans/ (Leaguepedia data, CC BY-SA 3.0)",
+ "fetched": "2026-10-20",
+ "samples": {
+  "p2620": {
+   "label": "Latest pro patch 26.20",
+   "games": 25,
+   "note": "Worlds play-ins + late regional games; tiny sample"
+  },
+  "p2616_20": {
+   "label": "Patches 26.16-26.20",
+   "games": 465
+  },
+  "season": {
+   "label": "2026 season",
+   "games": 2723,
+   "note": "site total is 3,833 games incl. lower leagues; pick/ban tables use 2,723"
+  }
+ },
+ "p2620": {
+  "K'Sante": {
+   "roles": {
+    "Top": 5,
+    "Mid": 1
+   },
+   "pick": 24,
+   "ban": 28,
+   "presence": 52,
+   "wr": 0,
+   "games_est": 6
+  },
+  "Vi": {
+   "roles": {
+    "Jungle": 6
+   },
+   "pick": 24,
+   "ban": 28,
+   "presence": 52,
+   "wr": 83,
+   "games_est": 6
+  },
+  "Jarvan IV": {
+   "roles": {
+    "Jungle": 6
+   },
+   "pick": 24,
+   "ban": 20,
+   "presence": 44,
+   "wr": 67,
+   "games_est": 6
+  },
+  "Lulu": {
+   "roles": {
+    "Support": 6
+   },
+   "pick": 24,
+   "ban": 20,
+   "presence": 44,
+   "wr": 50,
+   "games_est": 6
+  },
+  "Lucian": {
+   "roles": {
+    "Bot": 6
+   },
+   "pick": 24,
+   "ban": 12,
+   "presence": 36,
+   "wr": 33,
+   "games_est": 6
+  },
+  "Seraphine": {
+   "roles": {
+    "Support": 5
+   },
+   "pick": 20,
+   "ban": 44,
+   "presence": 64,
+   "wr": 80,
+   "games_est": 5
+  },
+  "Olaf": {
+   "roles": {
+    "Top": 5
+   },
+   "pick": 20,
+   "ban": 40,
+   "presence": 60,
+   "wr": 80,
+   "games_est": 5
+  },
+  "Ezreal": {
+   "roles": {
+    "Bot": 5
+   },
+   "pick": 20,
+   "ban": 36,
+   "presence": 56,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Lee Sin": {
+   "roles": {
+    "Jungle": 5
+   },
+   "pick": 20,
+   "ban": 32,
+   "presence": 52,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Jayce": {
+   "roles": {
+    "Top": 4,
+    "Jungle": 1
+   },
+   "pick": 20,
+   "ban": 12,
+   "presence": 32,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Qiyana": {
+   "roles": {
+    "Jungle": 5
+   },
+   "pick": 20,
+   "ban": 12,
+   "presence": 32,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Syndra": {
+   "roles": {
+    "Mid": 5
+   },
+   "pick": 20,
+   "ban": 12,
+   "presence": 32,
+   "wr": 40,
+   "games_est": 5
+  },
+  "Viktor": {
+   "roles": {
+    "Mid": 5
+   },
+   "pick": 20,
+   "ban": 12,
+   "presence": 32,
+   "wr": 80,
+   "games_est": 5
+  },
+  "Rakan": {
+   "roles": {
+    "Support": 5
+   },
+   "pick": 20,
+   "ban": 8,
+   "presence": 28,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Ambessa": {
+   "roles": {
+    "Top": 4,
+    "Jungle": 1
+   },
+   "pick": 20,
+   "ban": 4,
+   "presence": 24,
+   "wr": 40,
+   "games_est": 5
+  },
+  "Xayah": {
+   "roles": {
+    "Bot": 5
+   },
+   "pick": 20,
+   "ban": 4,
+   "presence": 24,
+   "wr": 60,
+   "games_est": 5
+  },
+  "Milio": {
+   "roles": {
+    "Support": 5
+   },
+   "pick": 20,
+   "ban": 0,
+   "presence": 20,
+   "wr": 40,
+   "games_est": 5
+  },
+  "Zaahen": {
+   "roles": {
+    "Top": 4,
+    "Jungle": 1
+   },
+   "pick": 20,
+   "ban": 0,
+   "presence": 20,
+   "wr": 80,
+   "games_est": 5
+  },
+  "Akali": {
+   "roles": {
+    "Mid": 4
+   },
+   "pick": 16,
+   "ban": 28,
+   "presence": 44,
+   "wr": 25,
+   "games_est": 4
+  },
+  "Cassiopeia": {
+   "roles": {
+    "Mid": 4
+   },
+   "pick": 16,
+   "ban": 24,
+   "presence": 40,
+   "wr": 100,
+   "games_est": 4
+  },
+  "Ashe": {
+   "roles": {
+    "Bot": 4
+   },
+   "pick": 16,
+   "ban": 4,
+   "presence": 20,
+   "wr": 75,
+   "games_est": 4
+  },
+  "Renata Glasc": {
+   "roles": {
+    "Support": 3
+   },
+   "pick": 12,
+   "ban": 28,
+   "presence": 40,
+   "wr": 0,
+   "games_est": 3
+  },
+  "Gnar": {
+   "roles": {
+    "Top": 3
+   },
+   "pick": 12,
+   "ban": 20,
+   "presence": 32,
+   "wr": 100,
+   "games_est": 3
+  },
+  "Locke": {
+   "roles": {
+    "Mid": 3
+   },
+   "pick": 12,
+   "ban": 20,
+   "presence": 32,
+   "wr": 33,
+   "games_est": 3
+  },
+  "Orianna": {
+   "roles": {
+    "Mid": 2
+   },
+   "pick": 8,
+   "ban": 28,
+   "presence": 36,
+   "wr": 50,
+   "games_est": 2
+  },
+  "Pantheon": {
+   "roles": {
+    "Jungle": 2
+   },
+   "pick": 8,
+   "ban": 28,
+   "presence": 36,
+   "wr": 0,
+   "games_est": 2
+  },
+  "Sylas": {
+   "roles": {
+    "Mid": 2
+   },
+   "pick": 8,
+   "ban": 20,
+   "presence": 28,
+   "wr": 0,
+   "games_est": 2
+  },
+  "Yone": {
+   "roles": {
+    "Mid": 1,
+    "Top": 1
+   },
+   "pick": 8,
+   "ban": 20,
+   "presence": 28,
+   "wr": 0,
+   "games_est": 2
+  },
+  "Nocturne": {
+   "roles": {
+    "Jungle": 1
+   },
+   "pick": 4,
+   "ban": 84,
+   "presence": 88,
+   "wr": 100,
+   "games_est": 1
+  },
+  "Caitlyn": {
+   "roles": {
+    "Bot": 1
+   },
+   "pick": 4,
+   "ban": 44,
+   "presence": 48,
+   "wr": 0,
+   "games_est": 1
+  },
+  "Maokai": {
+   "roles": {
+    "Jungle": 1
+   },
+   "pick": 4,
+   "ban": 24,
+   "presence": 28,
+   "wr": 0,
+   "games_est": 1
+  },
+  "Skarner": {
+   "roles": {
+    "Jungle": 1
+   },
+   "pick": 4,
+   "ban": 20,
+   "presence": 24,
+   "wr": 100,
+   "games_est": 1
+  },
+  "Vayne": {
+   "roles": {},
+   "pick": 0,
+   "ban": 24,
+   "presence": 24,
+   "wr": null,
+   "games_est": 0
+  }
+ },
+ "p2616_20": {
+  "Ryze": {
+   "roles": {
+    "Mid": 120,
+    "Top": 2
+   },
+   "pick": 26,
+   "ban": 13,
+   "presence": 39,
+   "wr": 52,
+   "games_est": 121
+  },
+  "Ezreal": {
+   "roles": {
+    "Bot": 121
+   },
+   "pick": 26,
+   "ban": 26,
+   "presence": 52,
+   "wr": 54,
+   "games_est": 121
+  },
+  "Rumble": {
+   "roles": {
+    "Top": 112,
+    "Mid": 4
+   },
+   "pick": 25,
+   "ban": 15,
+   "presence": 40,
+   "wr": 59,
+   "games_est": 116
+  },
+  "Jarvan IV": {
+   "roles": {
+    "Jungle": 107
+   },
+   "pick": 23,
+   "ban": 30,
+   "presence": 53,
+   "wr": 51,
+   "games_est": 107
+  },
+  "Seraphine": {
+   "roles": {
+    "Support": 101,
+    "Bot": 3
+   },
+   "pick": 22,
+   "ban": 14,
+   "presence": 36,
+   "wr": 61,
+   "games_est": 102
+  },
+  "Orianna": {
+   "roles": {
+    "Mid": 101
+   },
+   "pick": 22,
+   "ban": 37,
+   "presence": 59,
+   "wr": 51,
+   "games_est": 102
+  },
+  "Lucian": {
+   "roles": {
+    "Bot": 100
+   },
+   "pick": 22,
+   "ban": 28,
+   "presence": 50,
+   "wr": 44,
+   "games_est": 102
+  },
+  "K'Sante": {
+   "roles": {
+    "Top": 99,
+    "Mid": 1
+   },
+   "pick": 22,
+   "ban": 12,
+   "presence": 34,
+   "wr": 47,
+   "games_est": 102
+  },
+  "Karma": {
+   "roles": {
+    "Support": 96
+   },
+   "pick": 21,
+   "ban": 12,
+   "presence": 33,
+   "wr": 53,
+   "games_est": 98
+  },
+  "Syndra": {
+   "roles": {
+    "Mid": 92,
+    "Bot": 3
+   },
+   "pick": 20,
+   "ban": 23,
+   "presence": 43,
+   "wr": 53,
+   "games_est": 93
+  },
+  "Lulu": {
+   "roles": {
+    "Support": 94
+   },
+   "pick": 20,
+   "ban": 12,
+   "presence": 32,
+   "wr": 51,
+   "games_est": 93
+  },
+  "Jhin": {
+   "roles": {
+    "Bot": 94
+   },
+   "pick": 20,
+   "ban": 5,
+   "presence": 25,
+   "wr": 45,
+   "games_est": 93
+  },
+  "Milio": {
+   "roles": {
+    "Support": 93
+   },
+   "pick": 20,
+   "ban": 1,
+   "presence": 21,
+   "wr": 43,
+   "games_est": 93
+  },
+  "Olaf": {
+   "roles": {
+    "Top": 86,
+    "Jungle": 4
+   },
+   "pick": 19,
+   "ban": 35,
+   "presence": 54,
+   "wr": 44,
+   "games_est": 88
+  },
+  "Jayce": {
+   "roles": {
+    "Top": 84,
+    "Jungle": 3,
+    "Mid": 2
+   },
+   "pick": 19,
+   "ban": 21,
+   "presence": 40,
+   "wr": 39,
+   "games_est": 88
+  },
+  "Yunara": {
+   "roles": {
+    "Bot": 90
+   },
+   "pick": 19,
+   "ban": 4,
+   "presence": 23,
+   "wr": 53,
+   "games_est": 88
+  },
+  "Pantheon": {
+   "roles": {
+    "Jungle": 88,
+    "Support": 1
+   },
+   "pick": 19,
+   "ban": 23,
+   "presence": 42,
+   "wr": 49,
+   "games_est": 88
+  },
+  "Vi": {
+   "roles": {
+    "Jungle": 86
+   },
+   "pick": 18,
+   "ban": 51,
+   "presence": 69,
+   "wr": 57,
+   "games_est": 84
+  },
+  "Naafiri": {
+   "roles": {
+    "Jungle": 85,
+    "Bot": 1
+   },
+   "pick": 18,
+   "ban": 14,
+   "presence": 32,
+   "wr": 38,
+   "games_est": 84
+  },
+  "Lee Sin": {
+   "roles": {
+    "Jungle": 85
+   },
+   "pick": 18,
+   "ban": 27,
+   "presence": 45,
+   "wr": 49,
+   "games_est": 84
+  },
+  "Bard": {
+   "roles": {
+    "Support": 85
+   },
+   "pick": 18,
+   "ban": 17,
+   "presence": 35,
+   "wr": 33,
+   "games_est": 84
+  },
+  "Caitlyn": {
+   "roles": {
+    "Bot": 77
+   },
+   "pick": 17,
+   "ban": 20,
+   "presence": 37,
+   "wr": 39,
+   "games_est": 79
+  },
+  "Nautilus": {
+   "roles": {
+    "Support": 63,
+    "Jungle": 1
+   },
+   "pick": 14,
+   "ban": 25,
+   "presence": 39,
+   "wr": 47,
+   "games_est": 65
+  },
+  "Nocturne": {
+   "roles": {
+    "Jungle": 60
+   },
+   "pick": 13,
+   "ban": 65,
+   "presence": 78,
+   "wr": 57,
+   "games_est": 60
+  },
+  "Akali": {
+   "roles": {
+    "Mid": 51,
+    "Top": 2
+   },
+   "pick": 11,
+   "ban": 37,
+   "presence": 48,
+   "wr": 53,
+   "games_est": 51
+  },
+  "Locke": {
+   "roles": {
+    "Mid": 40,
+    "Bot": 1
+   },
+   "pick": 9,
+   "ban": 21,
+   "presence": 30,
+   "wr": 41,
+   "games_est": 42
+  },
+  "Cassiopeia": {
+   "roles": {
+    "Mid": 32,
+    "Bot": 2
+   },
+   "pick": 7,
+   "ban": 82,
+   "presence": 89,
+   "wr": 50,
+   "games_est": 33
+  },
+  "Poppy": {
+   "roles": {
+    "Jungle": 19,
+    "Support": 6,
+    "Top": 1
+   },
+   "pick": 6,
+   "ban": 24,
+   "presence": 30,
+   "wr": 46,
+   "games_est": 28
+  },
+  "Vayne": {
+   "roles": {
+    "Top": 11
+   },
+   "pick": 2,
+   "ban": 22,
+   "presence": 24,
+   "wr": 36,
+   "games_est": 9
+  }
+ },
+ "season": {
+  "Jarvan IV": {
+   "roles": {
+    "Jungle": 707,
+    "Support": 1
+   },
+   "pick": 26,
+   "ban": 31,
+   "presence": 57,
+   "wr": 52,
+   "games_est": 708
+  },
+  "Rumble": {
+   "roles": {
+    "Top": 673,
+    "Mid": 8,
+    "Jungle": 2
+   },
+   "pick": 25,
+   "ban": 33,
+   "presence": 58,
+   "wr": 54,
+   "games_est": 681
+  },
+  "Ezreal": {
+   "roles": {
+    "Bot": 677
+   },
+   "pick": 25,
+   "ban": 20,
+   "presence": 45,
+   "wr": 51,
+   "games_est": 681
+  },
+  "Xin Zhao": {
+   "roles": {
+    "Jungle": 615,
+    "Mid": 1
+   },
+   "pick": 23,
+   "ban": 12,
+   "presence": 35,
+   "wr": 47,
+   "games_est": 626
+  },
+  "Ambessa": {
+   "roles": {
+    "Top": 506,
+    "Jungle": 64,
+    "Mid": 1
+   },
+   "pick": 21,
+   "ban": 17,
+   "presence": 38,
+   "wr": 49,
+   "games_est": 572
+  },
+  "Vi": {
+   "roles": {
+    "Jungle": 567,
+    "Support": 1,
+    "Top": 1
+   },
+   "pick": 21,
+   "ban": 32,
+   "presence": 53,
+   "wr": 54,
+   "games_est": 572
+  },
+  "K'Sante": {
+   "roles": {
+    "Top": 555,
+    "Mid": 3
+   },
+   "pick": 20,
+   "ban": 8,
+   "presence": 28,
+   "wr": 45,
+   "games_est": 545
+  },
+  "Pantheon": {
+   "roles": {
+    "Jungle": 544,
+    "Support": 11
+   },
+   "pick": 20,
+   "ban": 22,
+   "presence": 42,
+   "wr": 50,
+   "games_est": 545
+  },
+  "Yunara": {
+   "roles": {
+    "Bot": 544
+   },
+   "pick": 20,
+   "ban": 9,
+   "presence": 29,
+   "wr": 48,
+   "games_est": 545
+  },
+  "Gnar": {
+   "roles": {
+    "Top": 541,
+    "Jungle": 1,
+    "Mid": 1
+   },
+   "pick": 20,
+   "ban": 13,
+   "presence": 33,
+   "wr": 54,
+   "games_est": 545
+  },
+  "Bard": {
+   "roles": {
+    "Support": 542
+   },
+   "pick": 20,
+   "ban": 26,
+   "presence": 46,
+   "wr": 53,
+   "games_est": 545
+  },
+  "Nautilus": {
+   "roles": {
+    "Support": 476,
+    "Jungle": 3
+   },
+   "pick": 18,
+   "ban": 30,
+   "presence": 48,
+   "wr": 44,
+   "games_est": 490
+  },
+  "Orianna": {
+   "roles": {
+    "Mid": 475,
+    "Bot": 2
+   },
+   "pick": 18,
+   "ban": 56,
+   "presence": 74,
+   "wr": 53,
+   "games_est": 490
+  },
+  "Jhin": {
+   "roles": {
+    "Bot": 474
+   },
+   "pick": 17,
+   "ban": 5,
+   "presence": 22,
+   "wr": 43,
+   "games_est": 463
+  },
+  "Corki": {
+   "roles": {
+    "Bot": 462,
+    "Mid": 2,
+    "Top": 1
+   },
+   "pick": 17,
+   "ban": 4,
+   "presence": 21,
+   "wr": 47,
+   "games_est": 463
+  },
+  "Jayce": {
+   "roles": {
+    "Top": 372,
+    "Jungle": 73,
+    "Mid": 11
+   },
+   "pick": 17,
+   "ban": 32,
+   "presence": 49,
+   "wr": 43,
+   "games_est": 463
+  },
+  "Lulu": {
+   "roles": {
+    "Support": 455
+   },
+   "pick": 17,
+   "ban": 11,
+   "presence": 28,
+   "wr": 47,
+   "games_est": 463
+  },
+  "Renekton": {
+   "roles": {
+    "Top": 447,
+    "Mid": 1
+   },
+   "pick": 16,
+   "ban": 11,
+   "presence": 27,
+   "wr": 46,
+   "games_est": 436
+  },
+  "Seraphine": {
+   "roles": {
+    "Support": 433,
+    "Bot": 13
+   },
+   "pick": 16,
+   "ban": 10,
+   "presence": 26,
+   "wr": 57,
+   "games_est": 436
+  },
+  "Lucian": {
+   "roles": {
+    "Bot": 430
+   },
+   "pick": 16,
+   "ban": 19,
+   "presence": 35,
+   "wr": 45,
+   "games_est": 436
+  },
+  "Varus": {
+   "roles": {
+    "Bot": 338,
+    "Top": 70
+   },
+   "pick": 15,
+   "ban": 43,
+   "presence": 58,
+   "wr": 52,
+   "games_est": 408
+  },
+  "Karma": {
+   "roles": {
+    "Support": 401,
+    "Mid": 1,
+    "Top": 1
+   },
+   "pick": 15,
+   "ban": 25,
+   "presence": 40,
+   "wr": 49,
+   "games_est": 408
+  },
+  "Nocturne": {
+   "roles": {
+    "Jungle": 368
+   },
+   "pick": 14,
+   "ban": 45,
+   "presence": 59,
+   "wr": 48,
+   "games_est": 381
+  },
+  "Neeko": {
+   "roles": {
+    "Support": 345,
+    "Mid": 1
+   },
+   "pick": 13,
+   "ban": 17,
+   "presence": 30,
+   "wr": 51,
+   "games_est": 354
+  },
+  "Cassiopeia": {
+   "roles": {
+    "Mid": 296,
+    "Bot": 26,
+    "Top": 3
+   },
+   "pick": 12,
+   "ban": 30,
+   "presence": 42,
+   "wr": 55,
+   "games_est": 327
+  },
+  "Akali": {
+   "roles": {
+    "Mid": 282,
+    "Top": 13,
+    "Bot": 4
+   },
+   "pick": 11,
+   "ban": 30,
+   "presence": 41,
+   "wr": 55,
+   "games_est": 300
+  },
+  "Poppy": {
+   "roles": {
+    "Jungle": 80,
+    "Support": 63,
+    "Top": 15
+   },
+   "pick": 6,
+   "ban": 27,
+   "presence": 33,
+   "wr": 54,
+   "games_est": 163
+  },
+  "Vayne": {
+   "roles": {
+    "Top": 92,
+    "Bot": 3,
+    "Mid": 1
+   },
+   "pick": 4,
+   "ban": 18,
+   "presence": 22,
+   "wr": 54,
+   "games_est": 109
+  }
+ },
+ "blended": {
+  "Akali": {
+   "blended_presence": 46.7,
+   "trend_vs_season": 7
+  },
+  "Ambessa": {
+   "blended_presence": 25.4,
+   "trend_vs_season": null
+  },
+  "Ashe": {
+   "blended_presence": 18.0,
+   "trend_vs_season": null
+  },
+  "Bard": {
+   "blended_presence": 36.1,
+   "trend_vs_season": -11
+  },
+  "Caitlyn": {
+   "blended_presence": 35.1,
+   "trend_vs_season": null
+  },
+  "Cassiopeia": {
+   "blended_presence": 76.5,
+   "trend_vs_season": 47
+  },
+  "Corki": {
+   "blended_presence": 8.4,
+   "trend_vs_season": null,
+   "flag": "season-only: not in the 26.16-26.20 top list, decayed to 40%"
+  },
+  "Ezreal": {
+   "blended_presence": 51.9,
+   "trend_vs_season": 7
+  },
+  "Gnar": {
+   "blended_presence": 32.1,
+   "trend_vs_season": null
+  },
+  "Jarvan IV": {
+   "blended_presence": 52.0,
+   "trend_vs_season": -4
+  },
+  "Jayce": {
+   "blended_presence": 39.6,
+   "trend_vs_season": -9
+  },
+  "Jhin": {
+   "blended_presence": 24.7,
+   "trend_vs_season": 3
+  },
+  "K'Sante": {
+   "blended_presence": 36.3,
+   "trend_vs_season": 6
+  },
+  "Karma": {
+   "blended_presence": 33.7,
+   "trend_vs_season": -7
+  },
+  "Lee Sin": {
+   "blended_presence": 41.6,
+   "trend_vs_season": null
+  },
+  "Locke": {
+   "blended_presence": 27.3,
+   "trend_vs_season": null
+  },
+  "Lucian": {
+   "blended_presence": 46.3,
+   "trend_vs_season": 15
+  },
+  "Lulu": {
+   "blended_presence": 33.5,
+   "trend_vs_season": 4
+  },
+  "Maokai": {
+   "blended_presence": 25.2,
+   "trend_vs_season": null
+  },
+  "Milio": {
+   "blended_presence": 18.7,
+   "trend_vs_season": null
+  },
+  "Naafiri": {
+   "blended_presence": 28.8,
+   "trend_vs_season": null
+  },
+  "Nautilus": {
+   "blended_presence": 39.9,
+   "trend_vs_season": -9
+  },
+  "Neeko": {
+   "blended_presence": 12.0,
+   "trend_vs_season": null,
+   "flag": "season-only: not in the 26.16-26.20 top list, decayed to 40%"
+  },
+  "Nocturne": {
+   "blended_presence": 77.7,
+   "trend_vs_season": 19
+  },
+  "Olaf": {
+   "blended_presence": 49.6,
+   "trend_vs_season": null
+  },
+  "Orianna": {
+   "blended_presence": 56.8,
+   "trend_vs_season": -15
+  },
+  "Pantheon": {
+   "blended_presence": 41.0,
+   "trend_vs_season": 0
+  },
+  "Poppy": {
+   "blended_presence": 30.3,
+   "trend_vs_season": -3
+  },
+  "Qiyana": {
+   "blended_presence": 28.8,
+   "trend_vs_season": null
+  },
+  "Rakan": {
+   "blended_presence": 25.2,
+   "trend_vs_season": null
+  },
+  "Renata Glasc": {
+   "blended_presence": 36.0,
+   "trend_vs_season": null
+  },
+  "Renekton": {
+   "blended_presence": 10.8,
+   "trend_vs_season": null,
+   "flag": "season-only: not in the 26.16-26.20 top list, decayed to 40%"
+  },
+  "Rumble": {
+   "blended_presence": 41.8,
+   "trend_vs_season": -18
+  },
+  "Ryze": {
+   "blended_presence": 35.1,
+   "trend_vs_season": null
+  },
+  "Seraphine": {
+   "blended_presence": 39.5,
+   "trend_vs_season": 10
+  },
+  "Skarner": {
+   "blended_presence": 21.6,
+   "trend_vs_season": null
+  },
+  "Sylas": {
+   "blended_presence": 25.2,
+   "trend_vs_season": null
+  },
+  "Syndra": {
+   "blended_presence": 36.9,
+   "trend_vs_season": null
+  },
+  "Varus": {
+   "blended_presence": 23.2,
+   "trend_vs_season": null,
+   "flag": "season-only: not in the 26.16-26.20 top list, decayed to 40%"
+  },
+  "Vayne": {
+   "blended_presence": 23.8,
+   "trend_vs_season": 2
+  },
+  "Vi": {
+   "blended_presence": 64.7,
+   "trend_vs_season": 16
+  },
+  "Viktor": {
+   "blended_presence": 28.8,
+   "trend_vs_season": null
+  },
+  "Xayah": {
+   "blended_presence": 21.6,
+   "trend_vs_season": null
+  },
+  "Xin Zhao": {
+   "blended_presence": 14.0,
+   "trend_vs_season": null,
+   "flag": "season-only: not in the 26.16-26.20 top list, decayed to 40%"
+  },
+  "Yone": {
+   "blended_presence": 25.2,
+   "trend_vs_season": null
+  },
+  "Yunara": {
+   "blended_presence": 23.6,
+   "trend_vs_season": -6
+  },
+  "Zaahen": {
+   "blended_presence": 18.0,
+   "trend_vs_season": null
+  }
+ },
+ "blend_rule": "presence = 0.9 x (sample-weighted mean of 26.20 [weight 4x its 25 games] and 26.16-26.20 [465 games]) + 0.1 x season; season-only champions use season presence. Tables list only each sample's top ~30, so champions missing from a table are treated as 0 there (an undercount). Season-only champions are decayed to 40% of season presence and flagged."
+}
