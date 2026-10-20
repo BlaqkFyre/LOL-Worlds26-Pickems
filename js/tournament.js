@@ -40,7 +40,7 @@ let tourConfirmNew = false;
 let tourOpen = {};       // expanded result rows
 
 /* ---------- save / load ---------- */
-function loadRun(){ try{ const s = localStorage.getItem(SAVE_KEY); if(s){ const r = JSON.parse(s); if(r && r.v === 1) RUN = r; } }catch(e){ RUN = null; } }
+function loadRun(){ try{ const s = localStorage.getItem(SAVE_KEY); if(s){ RUN = sanitizeRun(JSON.parse(s)); drawDay(); } }catch(e){ RUN = null; } }
 function saveRun(){ if(!RUN) return; RUN.updated = Date.now(); try{ localStorage.setItem(SAVE_KEY, JSON.stringify(RUN)); }catch(e){} }
 function clearRun(){ RUN = null; try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
 
@@ -229,9 +229,8 @@ function playAIGame(m){
   const rec = withDS({blue, red, fmt: m.bo > 1 ? "fearless" : "bo1", locked: lockedFor(m)}, () => { while(DS.steps.length < 20) autoStep(); return pack(simGame(false)); });
   recordGame(m, rec);
 }
-function recordGame(m, rec){
-  m.games.push(rec);
-  const S = RUN.stats; S.games++;
+function addGameStats(S, m, rec){
+  S.games++;
   rec.steps.forEach(([t, k, c]) => { const st = S.champ[c] = S.champ[c] || {p:0, b:0, w:0}; if(k === "ban") st.b++; else { st.p++; if(t === rec.winner) st.w++; } });
   ["blue","red"].forEach(s => {
     const tid = s === "blue" ? rec.blue : rec.red, won = rec.winner === tid;
@@ -243,15 +242,72 @@ function recordGame(m, rec){
       const pc = (S.pchamp[key] = S.pchamp[key] || {}); const e = pc[p.c] = pc[p.c] || {g:0, w:0}; e.g++; if(won) e.w++;
     });
   });
-  const pk = rec.pog.team + "|" + ROLES.indexOf(rec.pog.r);
-  const P = S.players[pk]; P.pog++; P.pts += 100; if(m.phase === "swiss") P.swissPts += 100;
+  const P = S.players[rec.pog.team + "|" + ROLES.indexOf(rec.pog.r)]; P.pog++; P.pts += 100; if(m.phase === "swiss") P.swissPts += 100;
+}
+function settleMatch(m, run){
   const need = Math.ceil(m.bo / 2), wa = seriesWins(m, m.a), wb = seriesWins(m, m.b);
   if(wa >= need || wb >= need){
     m.status = "done"; m.w = wa > wb ? m.a : m.b; m.l = m.w === m.a ? m.b : m.a; m.sc = `${Math.max(wa,wb)}-${Math.min(wa,wb)}`;
-    if(m.phase === "swiss"){ RUN.W[m.w]++; RUN.L[m.l]++; RUN.met.push(m.a + "|" + m.b, m.b + "|" + m.a); }
-    if(RUN.mode === "guest" && RUN.myTeams.some(id => id === m.a || id === m.b)) RUN.guestAI = false;
+    if(m.phase === "swiss"){ run.W[m.w]++; run.L[m.l]++; run.met.push(m.a + "|" + m.b, m.b + "|" + m.a); }
+    return true;
   }
+  return false;
+}
+function recordGame(m, rec){
+  m.games.push(rec);
+  addGameStats(RUN.stats, m, rec);
+  if(settleMatch(m, RUN) && RUN.mode === "guest" && RUN.myTeams.some(id => id === m.a || id === m.b)) RUN.guestAI = false;
   saveRun();
+}
+
+/* ---------- import / load safety ----------
+   A run file (or saved run) is untrusted. Rebuild it from scratch: every
+   field is type-checked against known teams, roles, champions and match
+   ids, numbers are clamped, text is regenerated from the app's own data,
+   and standings and stats are recomputed from the games rather than read
+   from the file. Anything that doesn't fit is rejected. */
+const IDS = new Set(TEAMS.map(t => t.id));
+const MATCH_ID = /^(S[1-5]-[1-8]|QF[1-4]|SF[12]|F)$/;
+const CHAMP_RE = /^[A-Za-z][A-Za-z' .&]{0,23}$/;
+const num = (v, lo, hi, dp) => { const n = Number(v); if(!Number.isFinite(n)) throw new Error("number"); const c = Math.min(hi, Math.max(lo, n)); return dp == null ? Math.round(c) : +c.toFixed(dp); };
+const tid = v => { if(typeof v !== "string" || !IDS.has(v)) throw new Error("team"); return v; };
+const champ = v => { if(typeof v !== "string" || !CHAMP_RE.test(v)) throw new Error("champ"); return v; };
+const arr = (v, max) => { if(!Array.isArray(v) || v.length > max) throw new Error("array"); return v; };
+function cleanGame(g, m){
+  const blue = tid(g.blue), red = tid(g.red), winner = tid(g.winner);
+  if(new Set([blue, red, m.a, m.b]).size !== 2 || (winner !== blue && winner !== red)) throw new Error("game teams");
+  const steps = arr(g.steps, 20).map(x => { arr(x, 4); const t = tid(x[0]); if(t !== blue && t !== red) throw new Error("step team"); const k = x[1] === "ban" ? "ban" : x[1] === "pick" ? "pick" : null; if(!k) throw new Error("step kind"); const r = k === "pick" ? (ROLES.includes(x[3]) ? x[3] : (() => { throw new Error("role"); })()) : ""; return [t, k, champ(x[2]), r]; });
+  const ps = {};
+  ["blue","red"].forEach(s => { ps[s] = {}; ROLES.forEach(r => { const p = (g.ps && g.ps[s] && g.ps[s][r]) || null; if(!p) throw new Error("player stats");
+    ps[s][r] = {c:champ(p.c), k:num(p.k,0,40), d:num(p.d,0,40), a:num(p.a,0,60), kp:num(p.kp,0,1,3), dmgS:num(p.dmgS,0,1,3), csd:num(p.csd,-60,60), vis:num(p.vis,0,6,2), solo:num(p.solo,0,10), rt:num(p.rt,0,10,2)}; }); });
+  const pog = g.pog || {}, ps2 = pog.s === "blue" || pog.s === "red" ? pog.s : null, pr = ROLES.includes(pog.r) ? pog.r : null;
+  if(!ps2 || !pr) throw new Error("pog");
+  const pteam = ps2 === "blue" ? blue : red;
+  if(pteam !== winner) throw new Error("pog side");
+  return {blue, red, winner, time:num(g.time,10,80), sec:num(g.sec,0,59), kills:{blue:num(g.kills && g.kills.blue,0,80), red:num(g.kills && g.kills.red,0,80)}, steps, ps,
+    pog:{s:ps2, r:pr, team:pteam, n:team(pteam).p[ROLES.indexOf(pr)].n, c:ps[ps2][pr].c, rt:ps[ps2][pr].rt, why:`${ps[ps2][pr].k}/${ps[ps2][pr].d}/${ps[ps2][pr].a} · ${Math.round(ps[ps2][pr].kp * 100)}% KP`}};
+}
+function sanitizeRun(r){
+  if(!r || typeof r !== "object" || r.v !== 1) throw new Error("version");
+  const mode = MODES[r.mode] ? r.mode : null; if(!mode) throw new Error("mode");
+  const myTeams = [...new Set(arr(r.myTeams || [], 4).map(tid))];
+  const out = {v:1, mode, myTeams, guestAI: r.guestAI === true, day:num(r.day,0,DAYS.length - 1), matches:[], W:{}, L:{}, met:[],
+    stats:{games:0, champ:{}, pchamp:{}, players:{}}, created:num(r.created || 0,0,4e12), updated:Date.now()};
+  TEAMS.forEach(t => { out.W[t.id] = 0; out.L[t.id] = 0; });
+  const seen = new Set();
+  arr(r.matches, 40).forEach(x => {
+    if(typeof x.id !== "string" || !MATCH_ID.test(x.id) || seen.has(x.id)) throw new Error("match id"); seen.add(x.id);
+    const a = tid(x.a), b = tid(x.b); if(a === b) throw new Error("same team");
+    const ko = x.id[0] !== "S";
+    const m = {id:x.id, games:[], status:"pending", ctrl: x.ctrl == null ? null : tid(x.ctrl), a, b, day:num(x.day,0,DAYS.length - 1),
+      phase: ko ? "ko" : "swiss", bo: ko ? 5 : (x.bo === 3 ? 3 : 1)};
+    if(m.ctrl && m.ctrl !== a && m.ctrl !== b) m.ctrl = null;
+    if(ko){ m.stage = x.id.startsWith("QF") ? "QF" : x.id.startsWith("SF") ? "SF" : "F"; m.idx = m.stage === "F" ? 0 : num(x.id.replace(/\D/g, ""), 1, 4) - 1; }
+    else { m.round = num(x.id[1], 1, 5); m.rec = /^[0-2]-[0-2]$/.test(x.rec) ? x.rec : (() => { throw new Error("rec"); })(); }
+    arr(x.games, m.bo).forEach(g => { if(m.status === "done") throw new Error("extra game"); const cg = cleanGame(g, m); m.games.push(cg); addGameStats(out.stats, m, cg); settleMatch(m, out); });
+    out.matches.push(m);
+  });
+  return out;
 }
 function simMatch(m){ while(m.status !== "done") playAIGame(m); }
 const dayDone = d => { const ms = dayMatches(d); return ms.length > 0 && ms.every(m => m.status === "done"); };
@@ -469,8 +525,9 @@ document.addEventListener("change", e => {
   const t = e.target;
   if(t.id === "tGuestAI" && RUN){ RUN.guestAI = t.checked; saveRun(); renderTour(); }
   if(t.id === "tImport" && t.files && t.files[0]){
+    if(t.files[0].size > 2e6){ const err = document.getElementById("tErr"); if(err) err.textContent = "That file is too large to be a run file."; t.value = ""; return; }
     const fr = new FileReader();
-    fr.onload = () => { try{ const r = JSON.parse(fr.result); if(r && r.v === 1 && r.matches){ RUN = r; saveRun(); TV = "today"; renderTour(); } else throw 0; }catch(_){ const err = document.getElementById("tErr"); if(err) err.textContent = "That file isn't a run file from this page."; } };
+    fr.onload = () => { try{ if(fr.result.length > 2e6) throw 0; RUN = sanitizeRun(JSON.parse(fr.result)); drawDay(); saveRun(); TV = "today"; renderTour(); }catch(_){ const err = document.getElementById("tErr"); if(err) err.textContent = "That file isn't a run file from this page."; } };
     fr.readAsText(t.files[0]);
   }
 });

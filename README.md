@@ -66,3 +66,15 @@ To update data (e.g. real results or new stats), edit `js/data.js`.
 - POG / MVP: Namuwiki (LCK Awards: POG points), LeagueLab metrics guide, Team Liquid "statistical standouts".
 
 Ratings, simulations and awards are estimates for fun and Pick'Em research, not predictions.
+
+## Licence and legal
+
+- **Code:** MIT licence (see `LICENSE`) — free to reuse with credit.
+- **Data:** stats belong to their sources (credited above and in the app's ⓘ panel). Leaguepedia data is used under CC BY-SA 3.0. The MIT licence covers the code, not third-party data.
+- **Riot Games:** Worlds 2026 Pick'Em Lab is a free fan project. It isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc. The app uses no Riot logos or artwork and must stay free and non-commercial.
+
+## Privacy and safety
+
+- No accounts, analytics, cookies or server: tournament runs and theme choices stay in each visitor's own browser (localStorage).
+- Fonts load from Google Fonts, so browsers contact Google.
+- Imported run files are treated as untrusted: every field is checked against known teams, roles, champions and match ids, numbers are clamped, display text is regenerated, and standings and stats are recomputed from the games. Files over 2 MB or that don't fit are rejected.
