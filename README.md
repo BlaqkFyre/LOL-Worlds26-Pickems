@@ -23,13 +23,15 @@ Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages u
 | Tab | What it does |
 |---|---|
 | Tournament | Worlds 2026 from Swiss round 1 (23 Oct) to the final (14 Nov). Three modes: **My teams** (draft for 1–4 teams, AI plays the rest), **Sim run** (all AI), **My team + guest picks** (your team plus a random side in every other match, with a switch to let the AI play until your team is up). |
-| Champ select | Free-play draft in competitive order, Bo1 or Fearless, optional AI opponent (2 s per action), suggestions, draft review, and a simulated game with a Player of the Game. |
+| Champ select | Free-play draft in competitive order, Bo1 or Fearless, optional AI opponent (2 s per action), suggestions, draft review, and a simulated game with a Player of the Game. Hover a player for their pool, best open pick and lane risk; a team name for its comp (damage mix, plan, synergy, open roles); a champion for its pro card. After every pick a "next best" strip shows the best follow-ups. |
 | Teams / Top–Support | Player power bars, head-to-head and tier lists. Hover a player for their champion pool. |
-| Meta | Champion tier list from Worlds pick/ban presence, bot-lane duo grid, best partners, counters. |
+| Meta | Champion tier list from blended pro pick/ban presence (26.20 + 26.16–26.20) with win rate and rising / falling / fading filters, bot-lane duo grid, best partners, counters. |
 
 ## Themes
 
-Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in one of three event themes — *Hextech Gold*, *Brooklyn Final* or *Summoner's Cup* (colour, type and texture only, no Riot artwork). Choices are remembered in the browser.
+The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in one of three event colour themes — *Hextech Gold*, *Brooklyn Final* or *Summoner's Cup*. Choices are remembered in the browser.
+
+Champion square icons load from Riot's Data Dragon CDN; set `ASSETS.icons = false` in `js/assets.js` to turn them off (tiles then show initials). Teams are shown as colour badges; the app uses no team or Riot logos. The trophy on the winners screen is an original design.
 
 ## How the tournament works
 
@@ -39,6 +41,8 @@ Top-right of the page: the **ⓘ** icon shows how ratings are made and every sou
 - **Live data pool:** every simulated game adds champion picks, bans and wins, and each player's champions and stats. Draft suggestions, champion presence and player comfort picks blend this with the pre-Worlds data, weighting the tournament more as games are played.
 - **Player of the Game:** one per game, from the winning side, using a 0–10 game rating built from what separates LCK POG winners — the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Each POG earns 100 POG points, as in the LCK.
 - **Awards:** Swiss stage MVP (most Swiss POG points), Tournament MVP (most POG points overall), Finals MVP (best rating on the winning team in the final), All-Tournament team (best average rating per role).
+- **Winners screen:** after the final — trophy, the world champions' roster card, the champion team of the tournament (best win rate per role, with a minimum number of games), storylines (biggest upset, Cinderella run, longest game, most banned and picked, flawless runs, best single game) and award cards.
+- **What's shown vs what's used:** player and champion cards show this tournament's numbers first, with 2026 pro numbers dimmed in brackets. Draft suggestions, the AI and the simulation use the full pro research (blended presence, sample-adjusted win rate, flex picks, trends).
 - **Saving:** progress saves automatically in your browser (localStorage), so you can close the page and continue later on the same browser. Use **Download run file** / **Import run file** to move a run between devices or browsers.
 
 ## Project structure
@@ -48,6 +52,8 @@ index.html          page markup
 css/styles.css      styles (light and dark themes)
 js/ui.js            theme toggle, Worlds mode, info popover
 js/data.js          teams, ratings, champion pools, meta, synergy, counters, play-in drafts
+js/champions.js     pro data for 165 champions (presence, win rates, roles, builds, play-in users)
+js/assets.js        champion icons (Data Dragon, with on/off switch) and team colours
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation
 ```
@@ -59,7 +65,8 @@ To update data (e.g. real results or new stats), edit `js/data.js`.
 - Format, dates, teams: Wikipedia (2026 League of Legends World Championship), Inven Global, accountshark.net; round 1 draw: Dot Esports, Insider Gaming.
 - Player rankings: Hotspawn and Strafe role rankings; Sheep Esports "meet the players".
 - Champion pools: mid.gg player pages; Sheep Esports player pages (LOS).
-- Meta: NerfPlz Worlds 2026 picks and bans (patch 26.20); DPM.LOL.
+- Meta: NerfPlz pro picks and bans (26.20, 26.16–26.20, 2026 season), NerfPlz champion pro-build pages, NerfPlz Worlds 2026 picks and bans; DPM.LOL. Details in `research/`.
+- Champion icons: Riot Data Dragon.
 - Synergy: metabot.gg duos and METAsrc duo/synergy pages (patch 26.20, ranked solo queue).
 - Counters: METAsrc counter pages (ranked solo queue, patches 26.17–26.20).
 - Draft rules: Sheep Esports and esports.gg on First Selection; Nerdbot on first vs last pick.
@@ -76,5 +83,5 @@ Ratings, simulations and awards are estimates for fun and Pick'Em research, not 
 ## Privacy and safety
 
 - No accounts, analytics, cookies or server: tournament runs and theme choices stay in each visitor's own browser (localStorage).
-- Fonts load from Google Fonts, so browsers contact Google.
+- Fonts load from Google Fonts and champion icons from Riot's Data Dragon CDN, so browsers contact Google and Riot.
 - Imported run files are treated as untrusted: every field is checked against known teams, roles, champions and match ids, numbers are clamped, display text is regenerated, and standings and stats are recomputed from the games. Files over 2 MB or that don't fit are rejected.

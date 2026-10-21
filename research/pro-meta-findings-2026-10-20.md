@@ -1,6 +1,6 @@
 # Pro meta research — NerfPlz picks/bans and champion pages
 
-Fetched 20 Oct 2026. Prep for a future update; nothing here is wired into the app yet.
+Fetched 20–21 Oct 2026. Now wired into the app through `js/champions.js` (165 champions: picks/bans tables merged with 78 harvested NerfPlz champion pages and the 2026 pro game index) — it drives meta tiers, champion cards, draft scoring, the draft AI, the game sim and the tournament's starting presence.
 Structured data: [`pro-meta-2026-10-20.json`](pro-meta-2026-10-20.json).
 
 ## Source and data rules

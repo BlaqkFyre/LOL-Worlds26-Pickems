@@ -6,8 +6,8 @@
 <title>Worlds 2026 Pick'Em Lab</title>
 <meta name="description" content="Worlds 2026 tournament simulator, champ select drafter, player power bars and meta tools for League of Legends Pick'Em.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700;800&family=Cinzel:wght@600;800&family=Big+Shoulders+Display:wght@700;900&family=Oxanium:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/styles.css?v=5">
 <script>try{var t=localStorage.getItem("lolw26-theme"),w=localStorage.getItem("lolw26-worlds");if(t)document.documentElement.dataset.theme=t;if(w&&w!=="off")document.documentElement.dataset.worlds=w}catch(e){}</script>
 </head>
 <body>
@@ -23,7 +23,8 @@
           <div class="pop notes" id="aboutPop" role="dialog" aria-label="How the ratings are made" hidden>
     <p><strong>How the ratings are made:</strong> these are Claude's estimates, not official numbers. Player order follows Hotspawn's Worlds 2026 role power rankings (four editors each). Ratings are then adjusted with Strafe's top-5 lists and 2026 stats (KDA, kill participation, gold/XP at 15, DPM, solo kills, deaths). Stats from the LCS, LCP and CBLOL are discounted for league strength. Top Esports' 369 replaces ZUIAN (visa) and has only a handful of 2026 games.</p>
     <p><strong>Favourite picks:</strong> each player's three most-played champions in 2026 pro play (games, win rate) from mid.gg player pages. LOS players come from their Sheep Esports player pages, with CBLOL playoff stats from Sheep's event stats.</p>
-    <p><strong>Meta status:</strong> pick + ban presence in Worlds 2026 games on patch 26.20 (play-in, 22 games) from NerfPlz. Ryze is counted as meta because he is the most-picked champion across the latest pro games on NerfPlz's pro-meta page. The sample is small, so treat "Not seen" as "untested at Worlds", not "bad".</p>
+    <p><strong>Meta status and champion cards:</strong> blended pick + ban presence from NerfPlz pro tables — the Worlds patch 26.20 (25 games) weighted ×4 with patches 26.16–26.20 (465 games) for 90%, plus the 2026 season (2,723 games) for 10%. Win rates are shrunk toward 50% for small samples. Builds, roles and play-in users come from NerfPlz champion pages (Leaguepedia data). Champion cards and player cards show this tournament's own numbers first; the pro research drives draft suggestions, the AI and the simulation.</p>
+    <p><strong>Images:</strong> champion square icons load from Riot's Data Dragon. Teams are shown as colour badges only — no team or Riot logos.</p>
     <p><strong>Attributes:</strong> Top — Laning, Teamfight, Consistency · Jungle — Early game, Objectives, Teamfight · Mid — Laning, Roaming, Damage · ADC — Laning, Damage, Positioning · Support — Playmaking, Map presence, Reliability.</p>
     <p><strong>Sources</strong></p>
     <ul class="src">
@@ -34,6 +35,7 @@
       <li>LOS: Sheep Esports player pages for <a href="https://www.sheepesports.com/en/lol/players/Zest%20(Kim%20Dong-min)" target="_blank" rel="noopener">Zest</a>, <a href="https://www.sheepesports.com/en/lol/players/Curse%20(Ra%C3%AD%20Yamada)" target="_blank" rel="noopener">Curse</a>, <a href="https://www.sheepesports.com/en/lol/players/Feisty" target="_blank" rel="noopener">Feisty</a>, <a href="https://www.sheepesports.com/en/lol/players/Duduhh" target="_blank" rel="noopener">Duduhh</a>, <a href="https://www.sheepesports.com/en/lol/players/Ackerman%20(Gabriel%20Aparicio)" target="_blank" rel="noopener">Ackerman</a>; <a href="https://www.sheepesports.com/en/lol/events/cblol-2026-split-2-playoffs/stats" target="_blank" rel="noopener">CBLOL Split 2 playoff stats</a>; <a href="https://rft.gg/match/83726-los-vs-furia-2026-10-10" target="_blank" rel="noopener">LOS vs FURIA final picks</a></li>
       <li>Synergies: <a href="https://metabot.gg/en/league/duos" target="_blank" rel="noopener">metabot.gg bot duos (26.20)</a>, <a href="https://www.metasrc.com/lol/duos" target="_blank" rel="noopener">METAsrc duo tier list (26.20)</a>, METAsrc synergy pages for <a href="https://www.metasrc.com/lol/champions/jarvan/synergies" target="_blank" rel="noopener">Jarvan IV</a>, <a href="https://www.metasrc.com/lol/champions/vi/synergies" target="_blank" rel="noopener">Vi</a>, <a href="https://www.metasrc.com/lol/champions/ryze/synergies" target="_blank" rel="noopener">Ryze</a>, <a href="https://www.metasrc.com/lol/champions/seraphine/synergies" target="_blank" rel="noopener">Seraphine</a>; Worlds drafts from eGamersWorld: <a href="https://egamersworld.com/lol/news/37845/karmine-corp-reverse-sweep-cloud9-in-5-game-worlds-UPAKeIOsw" target="_blank" rel="noopener">KC vs C9</a>, <a href="https://egamersworld.com/lol/news/37864/karmine-corp-sweep-mvk-esports-3-0-in-worlds-2026--x1zdzWrb0" target="_blank" rel="noopener">KC vs MVK</a>, <a href="https://egamersworld.com/lol/news/37877/mvk-crush-furia-3-1-to-set-up-massive-kc-rematch-a-M2s7--7n6" target="_blank" rel="noopener">MVK vs FURIA</a>, <a href="https://egamersworld.com/lol/news/37891/karmine-corp-sweep-mvk-esports-3-0-to-secure-histo-JGn7JUv8u" target="_blank" rel="noopener">KC vs MVK final</a></li>
       <li>Counters: METAsrc counter pages per champion, e.g. <a href="https://www.metasrc.com/lol/champions/vi/counters" target="_blank" rel="noopener">Vi</a>, <a href="https://www.metasrc.com/lol/champions/ryze/counters" target="_blank" rel="noopener">Ryze</a>, <a href="https://www.metasrc.com/lol/champions/seraphine/counters" target="_blank" rel="noopener">Seraphine</a> (links per champion in the Counters table)</li>
+      <li>Pro meta and champion pages: <a href="https://www.nerfplz.com/lol-pro-meta/picks-bans/" target="_blank" rel="noopener">NerfPlz pro picks and bans</a>, <a href="https://www.nerfplz.com/lol-pro-builds/" target="_blank" rel="noopener">NerfPlz champion pro builds</a> (e.g. <a href="https://www.nerfplz.com/lol-pro-builds/nocturne/" target="_blank" rel="noopener">Nocturne</a>); icons: <a href="https://developer.riotgames.com/docs/lol#data-dragon" target="_blank" rel="noopener">Riot Data Dragon</a></li>
       <li>Worlds pick/ban leaders: <a href="https://dpm.lol/esports/events/4884-worlds-2026" target="_blank" rel="noopener">DPM.LOL Worlds 2026</a></li>
       <li>Meta: <a href="https://www.nerfplz.com/lol-pro-meta/worlds/" target="_blank" rel="noopener">NerfPlz Worlds 2026 picks and bans</a>, <a href="https://www.nerfplz.com/lol-pro-meta/" target="_blank" rel="noopener">NerfPlz 2026 pro meta</a>, <a href="https://www.aussyelo.com/blog/lol-patch-26-20-notes" target="_blank" rel="noopener">AussyElo patch 26.20 notes</a></li>
     </ul>
@@ -60,9 +62,9 @@
       <span><i style="background:var(--teal)"></i>90–94 world class</span>
       <span><i style="background:var(--blue)"></i>85–89 strong</span>
       <span><i style="background:var(--grey)"></i>under 85</span>
-      <span><span class="chip meta">Meta</span> 30%+ pick/ban presence at Worlds on 26.20</span>
+      <span><span class="chip meta">Meta</span> 30%+ pick/ban presence in recent pro play (26.20 + 26.16–26.20)</span>
       <span><span class="chip mix">In the mix</span> picked or banned, under 30%</span>
-      <span><span class="chip off">Not seen</span> no 26.20 Worlds picks or bans yet</span>
+      <span><span class="chip off">Not seen</span> outside the recent pro pick/ban tables</span>
     </div>
   </header>
 
@@ -99,9 +101,11 @@
 </div>
 
 
-<script src="js/ui.js?v=4"></script>
-<script src="js/data.js?v=4"></script>
-<script src="js/tournament.js?v=4"></script>
-<script src="js/core.js?v=4"></script>
+<script src="js/ui.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/champions.js?v=5"></script>
+<script src="js/assets.js?v=5"></script>
+<script src="js/tournament.js?v=5"></script>
+<script src="js/core.js?v=5"></script>
 </body>
 </html>

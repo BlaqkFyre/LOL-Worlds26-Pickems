@@ -5,7 +5,7 @@
    functions at run time.
    ===================================================================== */
 const SAVE_KEY = "lolw26-pickems-run-v1";
-const BASE_GAMES = 22; // play-in games behind the pre-Worlds presence numbers (NerfPlz)
+const BASE_GAMES = 40; // weight of the pre-Worlds pro presence (blended 26.20 + 26.16–26.20 tables) against this run's own games
 
 /* Real Swiss round 1 draw (Dot Esports / Insider Gaming). First team listed = higher seed. */
 const R1_DRAW = [["GEN","IG"],["TL","CFO"],["AL","KC"],["G2","DK"],["HLE","TES"],["LOS","T1"],["TSW","LYON"],["BLG","MKOI"]];
@@ -128,7 +128,7 @@ function gameStats(g){
 /* ---------- run setup ---------- */
 function newRun(mode, myTeams){
   RUN = {v:1, mode, myTeams, guestAI:false, day:0, matches:[], W:{}, L:{}, met:[],
-    stats:{games:0, champ:{}, pchamp:{}, players:{}}, created:Date.now(), updated:Date.now()};
+    stats:{games:0, champ:{}, pchamp:{}, players:{}, crole:{}}, created:Date.now(), updated:Date.now()};
   TEAMS.forEach(t => { RUN.W[t.id] = 0; RUN.L[t.id] = 0; });
   drawDay(); saveRun();
 }
@@ -240,6 +240,7 @@ function addGameStats(S, m, rec){
       P.g++; if(won) P.w++; ["k","d","a","kp","dmgS","csd","vis","solo","rt"].forEach(f => P[f] += p[f]);
       if(m.stage === "F") P.finRt.push(p.rt);
       const pc = (S.pchamp[key] = S.pchamp[key] || {}); const e = pc[p.c] = pc[p.c] || {g:0, w:0}; e.g++; if(won) e.w++;
+      const cr = (S.crole[p.c + "|" + r] = S.crole[p.c + "|" + r] || {p:0, w:0}); cr.p++; if(won) cr.w++;
     });
   });
   const P = S.players[rec.pog.team + "|" + ROLES.indexOf(rec.pog.r)]; P.pog++; P.pts += 100; if(m.phase === "swiss") P.swissPts += 100;
@@ -292,13 +293,13 @@ function sanitizeRun(r){
   const mode = MODES[r.mode] ? r.mode : null; if(!mode) throw new Error("mode");
   const myTeams = [...new Set(arr(r.myTeams || [], 4).map(tid))];
   const out = {v:1, mode, myTeams, guestAI: r.guestAI === true, day:num(r.day,0,DAYS.length - 1), matches:[], W:{}, L:{}, met:[],
-    stats:{games:0, champ:{}, pchamp:{}, players:{}}, created:num(r.created || 0,0,4e12), updated:Date.now()};
+    stats:{games:0, champ:{}, pchamp:{}, players:{}, crole:{}}, created:num(r.created || 0,0,4e12), updated:Date.now()};
   TEAMS.forEach(t => { out.W[t.id] = 0; out.L[t.id] = 0; });
   const seen = new Set();
   arr(r.matches, 40).forEach(x => {
     if(typeof x.id !== "string" || !MATCH_ID.test(x.id) || seen.has(x.id)) throw new Error("match id"); seen.add(x.id);
     const a = tid(x.a), b = tid(x.b); if(a === b) throw new Error("same team");
-    const ko = x.id[0] !== "S";
+    const ko = !/^S[1-5]-/.test(x.id); // SF1/SF2 also start with S
     const m = {id:x.id, games:[], status:"pending", ctrl: x.ctrl == null ? null : tid(x.ctrl), a, b, day:num(x.day,0,DAYS.length - 1),
       phase: ko ? "ko" : "swiss", bo: ko ? 5 : (x.bo === 3 ? 3 : 1)};
     if(m.ctrl && m.ctrl !== a && m.ctrl !== b) m.ctrl = null;
@@ -382,7 +383,7 @@ function awardsData(){
 }
 
 /* ---------- UI ---------- */
-function teamTag(id){ return `<span class="ttag">${esc(id)}</span>`; }
+function teamTag(id){ return `<span class="ttag" style="--tc:${teamCol(id)}">${esc(id)}</span>`; }
 function renderTour(){
   const v = document.getElementById("v-tour"); if(!v) return;
   if(!RUN){ v.innerHTML = setupView(); return; }
@@ -400,6 +401,7 @@ function renderTour(){
         ${RUN.mode === "guest" ? `<label class="tog"><input type="checkbox" id="tGuestAI"${RUN.guestAI ? " checked" : ""}> Play guest games as AI until my team plays</label>` : ""}
       </div></div>
     ${DS.tour ? `<div class="turn blue"><span>A draft is in progress.</span><div class="ctrls"><button class="btn primary" data-ta="resume">Resume draft</button></div></div>` : ""}
+    ${aw.champion ? winnersView(aw) : ""}
     <div class="seg" role="tablist">${sub.map(([k,l]) => `<button data-tv="${k}" aria-pressed="${TV === k}">${l}</button>`).join("")}</div>
     <div>${TV === "today" ? todayView(today) : TV === "standings" ? standingsView() : TV === "bracket" ? bracketView() : TV === "stats" ? statsView() : TV === "awards" ? awardsView(aw) : TV === "results" ? resultsView() : playinView()}</div>
     <details class="notes"${tourConfirmNew ? " open" : ""}><summary style="cursor:pointer">Save, export or start over</summary>
@@ -445,19 +447,101 @@ function bracketView(){
   const cell = id => { const m = M(id); if(!m) return `<div class="bcell"><span class="notes">TBD</span></div>`; return `<div class="bcell ${m.status}">${[m.a, m.b].map(t => `<div class="${m.w === t ? "bw" : ""}">${teamTag(t)} ${esc(team(t).name)} <b>${seriesWins(m, t)}</b></div>`).join("")}<span class="notes">${esc(DAYS[m.day].date)}</span></div>`; };
   return `<div class="bracket"><div><div class="eyebrow">Quarter-finals</div>${["QF1","QF2","QF3","QF4"].map(cell).join("")}</div><div><div class="eyebrow">Semi-finals</div>${["SF1","SF2"].map(cell).join("")}</div><div><div class="eyebrow">Final</div>${cell("F")}</div></div>`;
 }
-let statRole = "ALL", statSort = "pts";
+let statRole = "ALL", statSort = "pts", chRole = "ALL", chSort = "pres", chQ = "";
+/* the role a champion was played in most at this run (falls back to its main pro role) */
+function runRole(c){ const e = ROLES.map(r => [r, (RUN.stats.crole[c + "|" + r] || {p:0}).p]).sort((a,b) => b[1] - a[1])[0]; return e[1] ? e[0] : primaryRole(c); }
 function statsView(){
-  const S = RUN.stats; if(!S.games) return `<p class="notes">No games played yet. Presence numbers still use the play-in data.</p>`;
-  const ch = Object.entries(S.champ).map(([c, v]) => ({c, ...v, pres: Math.round((v.p + v.b) / S.games * 100)})).sort((a,b) => b.pres - a.pres).slice(0, 30);
+  const S = RUN.stats; if(!S.games) return `<p class="notes">No games played yet. Presence numbers still use the pre-Worlds pro data.</p>`;
+  const all = Object.entries(S.champ).map(([c, v]) => ({c, ...v, r: runRole(c), pres: Math.round((v.p + v.b) / S.games * 100), wr: v.p ? v.w / v.p : -1}));
+  const q = chQ.trim().toLowerCase();
+  const cf = {pres: x => x.pres, p: x => x.p, b: x => x.b, wr: x => x.wr}[chSort];
+  const ch = all.filter(x => (chRole === "ALL" || x.r === chRole) && (!q || x.c.toLowerCase().includes(q))).sort((a,b) => cf(b) - cf(a) || b.pres - a.pres);
   const rows = playerRows().filter(r => statRole === "ALL" || r.p.role === statRole);
   const f = {pts: r => r.s.pts, rt: r => r.avgRt, kda: r => (r.s.k + r.s.a) / Math.max(1, r.s.d), dmg: r => r.s.dmgS / r.s.g, csd: r => r.s.csd / r.s.g}[statSort];
   rows.sort((a,b) => f(b) - f(a));
   const th = (k, l) => `<th><button class="sortb" data-ss="${k}" aria-pressed="${statSort === k}">${l}</button></th>`;
+  const tc = (k, l) => `<th><button class="sortb" data-cs="${k}" aria-pressed="${chSort === k}">${l}</button></th>`;
   return `<div style="display:grid;gap:16px">
-    <div><div class="eyebrow">Champions at this Worlds · ${S.games} games</div><p class="notes" style="margin:2px 0 6px">Presence = picked or banned in that share of games. Drafts blend this with the play-in data, weighting the tournament more as games are played.</p>
-    <div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Champion</th><th>Presence</th><th>Picks</th><th>Bans</th><th>W-L</th><th>Win rate</th></tr></thead><tbody>${ch.map(x => `<tr><td class="hov" data-tc="${esc(x.c)}" tabindex="0">${esc(x.c)}</td><td class="num">${x.pres}%</td><td class="num">${x.p}</td><td class="num">${x.b}</td><td class="num">${x.w}-${x.p - x.w}</td><td class="num">${x.p ? Math.round(x.w / x.p * 100) + "%" : "–"}</td></tr>`).join("")}</tbody></table></div></div>
+    <div><div class="eyebrow">Champions at this Worlds · ${all.length} picked or banned · ${S.games} games</div><p class="notes" style="margin:2px 0 6px">Every champion picked or banned at least once. Presence = picked or banned in that share of games. Drafts blend this with the pre-Worlds pro data, weighting the tournament more as games are played.</p>
+    <div class="ctrls" style="margin-bottom:6px"><div class="seg">${[["ALL","All"], ...ROLES.map(r => [r, r])].map(([k,l]) => `<button data-cr="${k}" aria-pressed="${chRole === k}">${l}</button>`).join("")}</div><input id="tChQ" type="search" placeholder="Search champions" value="${esc(chQ)}" aria-label="Search champions"><span class="notes">${ch.length} shown</span></div>
+    <div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Champion</th><th>Role</th>${tc("pres","Presence")}${tc("p","Picks")}${tc("b","Bans")}<th>W-L</th>${tc("wr","Win rate")}</tr></thead><tbody>${ch.map(x => `<tr><td><span class="cname hov" data-tc="${esc(x.c)}" tabindex="0">${icon(x.c, 28)}${esc(x.c)}</span>${x.p + x.b <= 2 ? ` <span class="chip off" title="Picked or banned in 2 games or fewer">small sample</span>` : ""}</td><td>${x.r}</td><td class="num">${x.pres}%</td><td class="num">${x.p}</td><td class="num">${x.b}</td><td class="num">${x.w}-${x.p - x.w}</td><td class="num">${x.p ? Math.round(x.w / x.p * 100) + "%" : "–"}</td></tr>`).join("") || `<tr><td colspan="7" class="notes">No champions match.</td></tr>`}</tbody></table></div></div>
     <div><div class="eyebrow">Players</div><div class="seg" style="margin:6px 0">${[["ALL","All"], ...ROLES.map(r => [r, r])].map(([k,l]) => `<button data-sr="${k}" aria-pressed="${statRole === k}">${l}</button>`).join("")}</div>
-    <div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Player</th><th>Games</th>${th("pts","POG pts")}${th("rt","Avg rating")}${th("kda","KDA")}<th>KP</th>${th("dmg","DMG%")}${th("csd","CSD@15")}</tr></thead><tbody>${rows.slice(0, 40).map(r => `<tr><td><span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.tid} ${r.p.role}</span></td><td class="num">${r.s.g}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td><td class="num">${kdaOf(r.s)}</td><td class="num">${Math.round(r.s.kp / r.s.g * 100)}%</td><td class="num">${Math.round(r.s.dmgS / r.s.g * 100)}%</td><td class="num">${(r.s.csd / r.s.g).toFixed(1)}</td></tr>`).join("")}</tbody></table></div></div>
+    <div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Player</th><th>Games</th>${th("pts","POG pts")}${th("rt","Avg rating")}${th("kda","KDA")}<th>KP</th>${th("dmg","DMG%")}${th("csd","CSD@15")}</tr></thead><tbody>${rows.slice(0, 40).map(r => `<tr><td>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.p.role}</span></td><td class="num">${r.s.g}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td><td class="num">${kdaOf(r.s)}</td><td class="num">${Math.round(r.s.kp / r.s.g * 100)}%</td><td class="num">${Math.round(r.s.dmgS / r.s.g * 100)}%</td><td class="num">${(r.s.csd / r.s.g).toFixed(1)}</td></tr>`).join("")}</tbody></table></div></div>
+  </div>`;
+}
+
+/* ---------- winners screen ---------- */
+/* Original championship trophy (own design — not the Summoner's Cup): crowned rim with a finial gem, faceted bowl
+   tapering to a fluted stem, a front jewel plus two side jewels in profile (a fourth sits at the back, hidden), stepped plinth. */
+const cupSVG = k => `<svg class="cup" viewBox="0 0 120 190" aria-hidden="true">
+  <defs>
+    <linearGradient id="m${k}" x1="0" x2="1"><stop offset="0" stop-color="var(--cupA)"/><stop offset=".32" stop-color="var(--cupB)"/><stop offset=".5" stop-color="var(--cupC)"/><stop offset=".7" stop-color="var(--cupB)"/><stop offset="1" stop-color="var(--cupA)"/></linearGradient>
+    <linearGradient id="d${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--cupB)"/><stop offset="1" stop-color="var(--cupA)"/></linearGradient>
+    <radialGradient id="g${k}" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="var(--teal)"/><stop offset="1" stop-color="var(--gemD)"/></radialGradient>
+  </defs>
+  <path d="M60 2l7 12-7 7-7-7z" fill="url(#m${k})"/><circle cx="60" cy="13" r="3" fill="url(#g${k})"/>
+  <path d="M12 24l12-8 12 9 12-9 12 9 12-9 12 9 12-9 12 8-7 10H19z" fill="url(#m${k})"/>
+  <path d="M19 34h82c-2 22-12 40-28 52-5 4-8 7-9 11h-8c-1-4-4-7-9-11C31 74 21 56 19 34z" fill="url(#m${k})"/>
+  <path d="M38 36c2 18 8 34 18 48M82 36c-2 18-8 34-18 48M60 36v58" stroke="var(--cupA)" stroke-opacity=".4" stroke-width="1.4" fill="none"/>
+  <path d="M60 46l12 12-12 14-12-14z" fill="url(#m${k})" stroke="var(--cupA)" stroke-opacity=".5"/>
+  <path d="M60 50l8 8-8 10-8-10z" fill="url(#g${k})"/>
+  <path d="M31.0 70.0 L23.5 52.0 L17.0 41.0 L12.0 56.0z" fill="url(#m${k})" stroke="var(--cupA)" stroke-opacity=".5"/>
+  <path d="M26.7 63.6 L22.4 53.2 L18.6 46.8 L15.7 55.5z" fill="url(#g${k})"/>
+  <path d="M89.0 70.0 L96.5 52.0 L103.0 41.0 L108.0 56.0z" fill="url(#m${k})" stroke="var(--cupA)" stroke-opacity=".5"/>
+  <path d="M93.3 63.6 L97.6 53.2 L101.4 46.8 L104.3 55.5z" fill="url(#g${k})"/>
+  <circle cx="32" cy="42" r="2.6" fill="url(#g${k})"/><circle cx="88" cy="42" r="2.6" fill="url(#g${k})"/>
+  <path d="M55 96h10l-2 8 2 8-2 8 5 7H52l5-7-2-8 2-8z" fill="url(#m${k})"/>
+  <ellipse cx="60" cy="128" rx="20" ry="5" fill="url(#d${k})"/>
+  <path d="M40 130h40l7 16H33z" fill="url(#m${k})"/>
+  <rect x="27" y="146" width="66" height="11" fill="url(#m${k})"/>
+  <rect x="21" y="157" width="78" height="17" fill="url(#m${k})"/>
+  <circle cx="60" cy="165.5" r="4" fill="url(#g${k})"/>
+  <path d="M30 165.5h22M68 165.5h22" stroke="var(--cupB)" stroke-width="1.2"/>
+  <g class="spark"><path d="M94 28l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#fff"/></g>
+</svg>`;
+/* champion (LoL) team of the tournament: best win rate per role, minimum picks, one champion per slot */
+function champTeam(){
+  const S = RUN.stats, minP = Math.max(4, Math.round(S.games * 0.06)), used = new Set();
+  return {minP, team: ROLES.map(r => {
+    const c = Object.entries(S.crole).filter(([k, v]) => k.endsWith("|" + r) && v.p >= minP).map(([k, v]) => ({c: k.slice(0, k.lastIndexOf("|")), r, ...v, sc: (v.w + 1) / (v.p + 2)}))
+      .filter(x => !used.has(x.c)).sort((a,b) => b.sc - a.sc || b.p - a.p)[0];
+    if(c) used.add(c.c); return c || null; })};
+}
+function storylines(){
+  const out = [], S = RUN.stats, done = RUN.matches.filter(m => m.status === "done");
+  const rank = [...TEAMS].sort((a,b) => b.ov - a.ov).map(t => t.id);
+  const up = done.map(m => ({m, gap: team(m.l).ov - team(m.w).ov})).sort((a,b) => b.gap - a.gap)[0];
+  if(up && up.gap > 0) out.push(["Biggest upset", `${up.m.w} beat ${up.m.l} ${up.m.sc}`, `rated ${up.gap.toFixed(1)} lower · ${stageName(up.m)}`]);
+  const deep = ["F","SF1","SF2"].map(M).filter(Boolean).flatMap(m => [m.a, m.b]).map(id => ({id, r: rank.indexOf(id) + 1})).sort((a,b) => b.r - a.r)[0];
+  if(deep && deep.r >= 7) out.push(["Cinderella run", `${team(deep.id).name}`, `rated #${deep.r} of 16, reached the ${[M("F").a, M("F").b].includes(deep.id) ? "final" : "semi-finals"}`]);
+  let long = null; RUN.matches.forEach(m => m.games.forEach(g => { const t = g.time * 60 + g.sec; if(!long || t > long.t) long = {t, g}; }));
+  if(long) out.push(["Longest game", `${long.g.time}:${String(long.g.sec).padStart(2, "0")}`, `${long.g.blue} vs ${long.g.red}`]);
+  const mb = Object.entries(S.champ).sort((a,b) => b[1].b - a[1].b)[0];
+  if(mb) out.push(["Most banned", mb[0], `banned in ${Math.round(mb[1].b / S.games * 100)}% of games`, mb[0]]);
+  const mp = Object.entries(S.champ).sort((a,b) => b[1].p - a[1].p)[0];
+  if(mp) out.push(["Most picked", mp[0], `${mp[1].p} games · ${mp[1].w}-${mp[1].p - mp[1].w}`, mp[0]]);
+  const perfect = TEAMS.filter(t => RUN.W[t.id] === 3 && RUN.L[t.id] === 0).map(t => t.id), sweeps = done.filter(m => m.bo === 5 && m.sc === "3-0");
+  if(perfect.length || sweeps.length) out.push(["Flawless", perfect.length ? perfect.join(" & ") + " 3-0 in Swiss" : sweeps[0].w + " swept " + sweeps[0].l, sweeps.length ? `${sweeps.length} knockout sweep${sweeps.length > 1 ? "s" : ""}` : "no knockout sweeps"]);
+  let best = null; RUN.matches.forEach(m => m.games.forEach(g => ["blue","red"].forEach(s => ROLES.forEach((r, i) => { const p = g.ps[s][r]; if(!best || p.rt > best.p.rt) best = {p, tid: s === "blue" ? g.blue : g.red, i, opp: s === "blue" ? g.red : g.blue}; }))));
+  if(best) out.push(["Best single game", `${team(best.tid).p[best.i].n} · ${best.p.rt.toFixed(1)}`, `${best.p.c} ${best.p.k}/${best.p.d}/${best.p.a} vs ${best.opp}`, best.p.c]);
+  return out;
+}
+function winnersView(aw){
+  const fin = M("F"), w = aw.champion, t = team(w), S = RUN.stats, ct = champTeam();
+  const roster = t.p.map((p, i) => { const s = S.players[w + "|" + i], pc = Object.entries(S.pchamp[w + "|" + i] || {}).sort((a,b) => b[1].g - a[1].g)[0];
+    const fm = aw.finalsMVP && aw.finalsMVP.key === w + "|" + i;
+    return `<div class="rcard${fm ? " mvp" : ""}"><span class="role">${p.role}</span>${pc ? icon(pc[0], 44) : ""}<b class="hov" data-tp="${w}|${i}" tabindex="0">${esc(p.n)}</b><small>${s ? `KDA ${kdaOf(s)} · ${(s.rt / s.g).toFixed(1)} avg · ${s.pog} POG` : ""}</small>${pc ? `<small class="dim">${esc(pc[0])} ${pc[1].w}-${pc[1].g - pc[1].w}</small>` : ""}${fm ? `<span class="tag">Finals MVP</span>` : ""}</div>`; }).join("");
+  const award = (title, r, sub) => `<div class="award unlocked"><span class="eyebrow">★ ${title}</span>${r ? `<b>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span></b><span class="notes">${sub(r)}</span>` : `<span class="notes">—</span>`}</div>`;
+  const confetti = Array.from({length: 26}, (_, i) => `<i style="--x:${(i * 37 + 11) % 100}%;--d:${((i * 7) % 26) / 10}s;--y:${(i * 23) % 70}%;--c:var(${["--gold","--teal","--bside","--rside"][i % 4]})"></i>`).join("");
+  return `<div class="win" role="region" aria-label="World champions"><div class="confetti" aria-hidden="true">${confetti}</div>${cupSVG("w")}
+    <div class="eyebrow">Brooklyn · ${esc(DAYS[fin.day].date)} · ${esc(fin.sc)}</div>
+    <h3 class="wtitle">${esc(t.name)} are world champions</h3>
+    <div class="notes">beat ${esc(team(fin.l).name)} ${esc(fin.sc)} in the final${aw.finalsMVP ? ` · Finals MVP ${esc(aw.finalsMVP.p.n)} (avg rating ${avg(aw.finalsMVP.s.finRt).toFixed(1)})` : ""}</div>
+    <div class="eyebrow wsub">The champions</div><div class="roster">${roster}</div>
+    <div class="eyebrow wsub">Champion team of the tournament</div><div class="roster">${ct.team.map((x, i) => x ? `<div class="rcard"><span class="role">${ROLES[i]}</span>${icon(x.c, 44)}<b class="hov" data-tc="${esc(x.c)}" tabindex="0">${esc(x.c)}</b><small>${x.w}-${x.p - x.w} · ${Math.round(x.w / x.p * 100)}%</small></div>` : `<div class="rcard"><span class="role">${ROLES[i]}</span><small>no champion with ${ct.minP}+ games</small></div>`).join("")}</div>
+    <p class="notes" style="margin:4px auto 0;font-size:12px">Best win rate in each role with at least ${ct.minP} games (ties go to the most played).</p>
+    <div class="eyebrow wsub">Storylines</div><div class="story">${storylines().map(([h, b, sub, c]) => `<div>${c ? icon(c, 32) : ""}<span><small>${esc(h)}</small><b>${esc(b)}</b><em>${esc(sub)}</em></span></div>`).join("")}</div>
+    <div class="awards" style="margin-top:14px">${award("Finals MVP", aw.finalsMVP, r => `avg rating ${avg(r.s.finRt).toFixed(2)} across ${r.s.finRt.length} final games`)}${award("Tournament MVP", aw.tourMVP, r => `${r.s.pts} POG points · ${r.s.pog} POG`)}${award("Swiss stage MVP", aw.swissMVP, r => `${r.s.swissPts} POG points in the Swiss stage`)}</div>
   </div>`;
 }
 function awardsView(aw){
@@ -498,6 +582,8 @@ document.addEventListener("click", e => {
   if(b.dataset.tv){ TV = b.dataset.tv; renderTour(); return; }
   if(b.dataset.sr){ statRole = b.dataset.sr; renderTour(); return; }
   if(b.dataset.ss){ statSort = b.dataset.ss; renderTour(); return; }
+  if(b.dataset.cr){ chRole = b.dataset.cr; renderTour(); return; }
+  if(b.dataset.cs){ chSort = b.dataset.cs; renderTour(); return; }
   const a = b.dataset.ta; if(!a) return;
   if(a !== "new") tourConfirmNew = false;
   if(a === "start"){
@@ -532,3 +618,4 @@ document.addEventListener("change", e => {
   }
 });
 /* guest mode: 'AI until my team plays' switches off once your team's match is finished (see recordGame). */
+document.addEventListener("input", e => { if(e.target.id !== "tChQ") return; chQ = e.target.value; const pos = e.target.selectionStart; renderTour(); const q = document.getElementById("tChQ"); if(q){ q.focus(); try{ q.setSelectionRange(pos, pos); }catch(_){} } });

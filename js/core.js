@@ -3,7 +3,15 @@
 const ROLES=["TOP","JGL","MID","ADC","SUP"];
 const RNAME={TOP:"Top",JGL:"Jungle",MID:"Mid",ADC:"ADC",SUP:"Support"};
 const ATTR={TOP:["Laning","Teamfight","Consistency"],JGL:["Early game","Objectives","Teamfight"],MID:["Laning","Roaming","Damage"],ADC:["Laning","Damage","Positioning"],SUP:["Playmaking","Map presence","Reliability"]};
-function metaOf(c){if(RECENT[c])return["meta","Meta: "+RECENT[c]];const p=PRES[c];if(p>=30)return["meta","Meta: "+p+"% presence at Worlds on 26.20"];if(p>0)return["mix","In the mix: "+p+"% presence at Worlds on 26.20"];return["off","No picks or bans at Worlds on 26.20 yet"];}
+/* Champion pro data (js/champions.js): blended presence bl = 0.9 × (26.20 weighted 4× + 26.16–26.20) + 0.1 × season */
+function metaOf(c){const d=CHAMP_DB[c],b=d&&d.bl;if(b>=30)return["meta",`Meta: ${Math.round(b)}% pick/ban presence in recent pro play`];if(b>0)return["mix",`In the mix: ${Math.round(b)}% presence in recent pro play`];return["off","Not in the recent pro pick/ban tables"];}
+/* sample-size-shrunk win rate: (wins+20)/(games+40), from the freshest table that lists the champion */
+function wrOf(c){const d=CHAMP_DB[c];if(!d)return null;let n=0,wr=null,src="";
+  if(d.rec){n=Math.round(d.rec[0]*4.65);wr=d.rec[2];src="26.16–26.20"}else if(d.p20&&!d.sea){n=Math.round(d.p20[0]*.25);wr=d.p20[2];src="26.20"}
+  else if(d.sea){n=Math.round(d.sea[0]*27.23);wr=d.sea[2];src="2026 season"}else if(d.g&&d.w!=null){n=d.g;wr=Math.round(d.w/d.g*100);src="2026 pro, all leagues"}
+  if(wr==null||!n)return null;return {wr,n,src,adj:Math.round((wr/100*n+20)/(n+40)*1000)/10}}
+function trendOf(c){const d=CHAMP_DB[c];if(!d)return"";if(d.fade)return"fading";if(d.tr>=6)return"rising";if(d.tr<=-6)return"falling";return""}
+const TREND_TXT={rising:"▲ rising",falling:"▼ falling",fading:"fading"};
 
 const avg=a=>a.reduce((s,x)=>s+x,0)/a.length;
 TEAMS.forEach(t=>{t.p=t.p.map((r,i)=>({n:r[0],a:r[1],picks:r[2],kda:r[3],note:r[4],role:ROLES[i],team:t,key:t.id+"|"+i,ov:Math.round(avg(r[1]))}));t.ov=Math.round(avg(t.p.map(x=>x.ov))*10)/10;
@@ -14,7 +22,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const bar=(v,label)=>`<div class="bar" role="img" aria-label="${esc(label)} ${v}"><b style="width:${pct(v)}%;background:${tier(v)}"></b></div>`;
 function chips(p){
   if(!p.picks.length)return `<div class="chips"><span class="chip off">No 2026 champion data found</span></div>`;
-  return `<div class="chips">${p.picks.map(([c,g,w])=>{const[m,t]=metaOf(c);return `<span class="chip ${m}" data-tc="${esc(c)}" tabindex="0">${esc(c)} <em>${g?g+"g ":""}${w}%</em></span>`}).join("")}</div>`;
+  return `<div class="chips">${p.picks.map(([c,g,w])=>{const[m,t]=metaOf(c);return `<span class="chip ${m}" data-tc="${esc(c)}" tabindex="0">${icon(c,18)}${esc(c)} <em>${g?g+"g ":""}${w}%</em></span>`}).join("")}</div>`;
 }
 
 /* tabs */
@@ -73,7 +81,6 @@ function roleView(role){
   return h+`</div>`;
 }
 const MTIERS=[["S",55,"Must-ban / must-pick","var(--gold)"],["A",40,"Priority","var(--teal)"],["B",30,"Meta","var(--blue)"],["C",1,"Situational","var(--grey)"]];
-const RYZE_EST=42; /* placed in A from recent-pro pick rate, not play-in presence */
 const ALLP=TEAMS.flatMap(t=>t.p);
 function comfort(c){return ALLP.filter(p=>p.picks.some(x=>x[0]===c));}
 let metaRole="ALL",metaSub="tiers";
@@ -108,24 +115,28 @@ function metaView(){
   if(metaSub==="syn")return `<div class="panel" style="display:grid;gap:18px">${subT}${filt0}${synergyView()}</div>`;
   return metaTiers().replace('<div class="panel" style="display:grid;gap:16px">','<div class="panel" style="display:grid;gap:16px">'+subT);
 }
+let metaTrend="ALL";
 function metaTiers(){
-  const rows=CH.map(([c,r,pk,bn,wr,note])=>({c,r,pk,bn,wr,note,pres:pk==null?RYZE_EST:pk+bn,est:pk==null,who:comfort(c)}))
-    .filter(x=>metaRole==="ALL"||x.r===metaRole).sort((a,b)=>b.pres-a.pres);
-  const seen=new Set(CH.map(x=>x[0]));
+  const rows=Object.entries(CHAMP_DB).filter(([c,d])=>d.bl!=null).map(([c,d])=>({c,d,r:primaryRole(c),pres:Math.round(d.bl),W:wrOf(c),t:trendOf(c),who:comfort(c)}))
+    .filter(x=>(metaRole==="ALL"||(ROLEMAP[x.c]&&ROLEMAP[x.c].has(metaRole)))&&(metaTrend==="ALL"||x.t===metaTrend)).sort((a,b)=>b.pres-a.pres);
+  const seen=new Set(Object.keys(CHAMP_DB).filter(c=>CHAMP_DB[c].bl!=null));
   const watch={};ALLP.forEach(p=>p.picks.forEach(([c])=>{if(!seen.has(c)){(watch[c]=watch[c]||{c,r:p.role,who:[]}).who.push(p)}}));
-  const wl=Object.values(watch).filter(w=>w.who.length>=2&&(metaRole==="ALL"||w.r===metaRole)).sort((a,b)=>b.who.length-a.who.length);
+  const wl=metaTrend!=="ALL"?[]:Object.values(watch).filter(w=>w.who.length>=2&&(metaRole==="ALL"||w.r===metaRole)).sort((a,b)=>b.who.length-a.who.length);
   const filt=`<div class="tabs" style="position:static;border:0;padding:0" role="group" aria-label="Filter by role">${[["ALL","All roles"],...ROLES.map(r=>[r,RNAME[r]])].map(([k,l])=>`<button data-mr="${k}" aria-selected="${k===metaRole}">${l}</button>`).join("")}</div>`;
+  const tf=`<div class="seg" role="group" aria-label="Filter by trend">${[["ALL","All"],["rising","▲ Rising"],["falling","▼ Falling"],["fading","Fading"]].map(([k,l])=>`<button data-mt="${k}" aria-pressed="${k===metaTrend}">${l}</button>`).join("")}</div>`;
   const whoTxt=w=>w.length?`Top-3 pick for ${w.map(p=>`${esc(p.n)} (${p.team.id})`).join(", ")}`:"Not a top-3 pick for any Swiss player";
-  let h=`<div class="panel" style="display:grid;gap:16px"><div><h2>Meta tier list · patch 26.20</h2><p class="notes" style="margin:4px 0 8px">Tiered by pick + ban presence in Worlds 2026 games on 26.20 (22 play-in games, NerfPlz), with notes from 465 recent pro games. Small sample: expect movement once the Swiss stage starts. Bars use a 0–100% presence scale.</p>${filt}</div>`;
+  const det=x=>{const t=x.d.rec||x.d.p20||x.d.sea,lab=x.d.rec?"26.16–20":x.d.p20?"26.20":"season";return t?`${t[0]}% picked · ${t[1]}% banned (${lab})`:""};
+  let h=`<div class="panel" style="display:grid;gap:16px"><div><h2>Meta tier list · pro patches 26.16–26.20</h2><p class="notes" style="margin:4px 0 8px">Tiered by blended pick + ban presence: the Worlds patch 26.20 (25 pro games) weighted ×4 with patches 26.16–26.20 (465 games) for 90%, and the 2026 season (2,723 games) for 10% (NerfPlz). Win rate is from the freshest table that lists the champion; trend compares recent presence with the season. Champions only in the season table are marked fading.</p>${filt}<div style="margin-top:8px">${tf}</div></div>`;
   MTIERS.forEach(([T,min,label,col],k)=>{const max=k?MTIERS[k-1][1]:999;const rs=rows.filter(x=>x.pres>=min&&x.pres<max);if(!rs.length)return;
     h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:${col}">${T}</span><span class="eyebrow" style="color:var(--muted)">${label} · ${T==="C"?"under 30%":min+"%+"} presence</span></div>`+
-    rs.map(x=>`<div class="prole"><div class="prow"><span class="role">${x.r}</span><div><div class="pn"><span>${esc(x.c)}</span><small>${x.est?"estimated":`${x.pk}% picked · ${x.bn}% banned · ${esc(x.wr)}`}</small></div><div class="bar" role="img" aria-label="${esc(x.c)} presence ${x.pres}%"><b style="width:${x.pres}%;background:${col}"></b></div></div><span class="num">${x.est?"~":""}${x.pres}%</span></div>`+
-      `<div class="sub notes" style="font-size:12px">${x.note?esc(x.note)+" · ":""}${whoTxt(x.who)}</div></div>`).join("")+`</div>`;});
-  if(wl.length)h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:var(--mix);font-size:15px">?</span><span class="eyebrow" style="color:var(--muted)">Watch list · comfort picks not yet seen at Worlds on 26.20</span></div>`+
-    wl.map(w=>`<div class="prole"><div class="prow"><span class="role">${w.r}</span><div><div class="pn"><span>${esc(w.c)}</span><small>${w.who.length} Swiss players</small></div></div><span></span></div><div class="sub notes" style="font-size:12px">${whoTxt(w.who)}</div></div>`).join("")+`</div>`;
+    rs.map(x=>`<div class="prole"><div class="mrowc"><span class="role">${x.r}</span>${icon(x.c,40)}<div><div class="pn"><span class="hov" data-tc="${esc(x.c)}" tabindex="0">${esc(x.c)}${x.t?` <span class="trend ${x.t}">${TREND_TXT[x.t]}</span>`:""}</span><small>${det(x)}</small></div><div class="bar" role="img" aria-label="${esc(x.c)} presence ${x.pres}%"><b style="width:${x.pres}%;background:${col}"></b></div></div><span class="num">${x.pres}%<small>${x.W?x.W.wr+"% WR":""}</small></span></div>`+
+      `<div class="sub notes" style="font-size:12px">${whoTxt(x.who)}</div></div>`).join("")+`</div>`;});
+  if(!rows.length)h+=`<p class="notes">No champions match this filter.</p>`;
+  if(wl.length)h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:var(--mix);font-size:15px">?</span><span class="eyebrow" style="color:var(--muted)">Watch list · comfort picks outside the recent pro tables</span></div>`+
+    wl.map(w=>`<div class="prole"><div class="mrowc"><span class="role">${w.r}</span>${icon(w.c,40)}<div><div class="pn"><span class="hov" data-tc="${esc(w.c)}" tabindex="0">${esc(w.c)}</span><small>${w.who.length} Swiss players</small></div></div><span></span></div><div class="sub notes" style="font-size:12px">${whoTxt(w.who)}</div></div>`).join("")+`</div>`;
   return h+`</div>`;
 }
-document.getElementById("v-role").addEventListener("click",e=>{const b=e.target.closest("button[data-mr],button[data-ms]");if(!b)return;if(b.dataset.mr)metaRole=b.dataset.mr;if(b.dataset.ms)metaSub=b.dataset.ms;document.getElementById("v-role").innerHTML=metaView();});
+document.getElementById("v-role").addEventListener("click",e=>{const b=e.target.closest("button[data-mr],button[data-ms],button[data-mt]");if(!b)return;if(b.dataset.mr)metaRole=b.dataset.mr;if(b.dataset.mt)metaTrend=b.dataset.mt;if(b.dataset.ms)metaSub=b.dataset.ms;document.getElementById("v-role").innerHTML=metaView();});
 const parseL=s=>s.split(",").map(x=>{const m=x.trim().match(/^(.*) ([\d.]+)$/);return [m[1],+m[2]]});
 const CTR={};Object.entries(CTR_RAW).forEach(([c,[r,patch,s,w,slug]])=>CTR[c]={r,patch,s:parseL(s),w:parseL(w),slug});
 /* matchup(a,b): a's win rate vs b from either page; null if no data */
@@ -145,12 +156,17 @@ CH.forEach(([c,r])=>addRole(c,r));
 TEAMS.forEach(t=>t.p.forEach(p=>p.picks.forEach(([c])=>addRole(c,p.role))));
 DUOS.forEach(([a,s])=>{addRole(a,"ADC");addRole(s,"SUP")});
 PARTNERS.forEach(([c,r,s,by])=>{addRole(c,r);Object.entries(by).forEach(([rr,l])=>l.forEach(([pc])=>addRole(pc,rr)))});
+/* every champion played in 2026 pro play: roles with 3+ games and 10%+ of its games, else the usual pro role */
+Object.entries(CHAMP_DB).forEach(([c,d])=>{if(!d.g&&d.bl==null)return;if(d.roles){const tot=Object.values(d.roles).reduce((a,b)=>a+b,0);Object.entries(d.roles).forEach(([r,n])=>{if(n>=3&&n/tot>=0.1)addRole(c,r)})}
+  if(!ROLEMAP[c])(CHAMP_ROLE_FALLBACK[c]||[]).forEach(r=>addRole(c,r))});
+function primaryRole(c){const d=CHAMP_DB[c];if(d&&d.roles){const e=Object.entries(d.roles).sort((a,b)=>b[1]-a[1]);if(e.length)return e[0][0]}const f=CHAMP_ROLE_FALLBACK[c];if(f)return f[0];const x=CH.find(y=>y[0]===c);if(x)return x[1];return ROLEMAP[c]?[...ROLEMAP[c]][0]:"MID"}
 const POOL=Object.keys(ROLEMAP).sort();
 const SYN={};
 DUOS.forEach(([a,s,wr,l])=>{SYN[a+"|"+s]=SYN[s+"|"+a]=l});
 PARTNERS.forEach(([c,r,s,by])=>Object.values(by).forEach(l=>l.forEach(([pc,ch])=>{SYN[c+"|"+pc]=SYN[pc+"|"+c]=Math.max(SYN[c+"|"+pc]||-99,ch)})));
 const synOf=c=>Object.entries(SYN).filter(([k])=>k.startsWith(c+"|")).map(([k,l])=>[k.split("|")[1],l]).sort((a,b)=>b[1]-a[1]);
-const basePres=c=>{const x=CH.find(y=>y[0]===c);if(!x)return 0;return x[2]==null?RYZE_EST:x[2]+x[3]};
+/* pre-tournament presence: blended pro presence; champions outside the pro tables get a small estimate from 2026 pro games */
+const basePres=c=>{const d=CHAMP_DB[c];if(!d)return 0;if(d.bl!=null)return Math.round(d.bl);return Math.min(9,Math.round((d.g||0)/120))};
 const presOf=c=>{const b=basePres(c);return typeof tourPres==="function"?tourPres(c,b):b};
 /* a player's champion pool: 2026 favourites plus champions played at this simulated Worlds */
 function poolOf(p){return typeof tourPool==="function"?tourPool(p):p.picks}
@@ -178,12 +194,19 @@ function scoreFor(c,actor,kind){
     comfortIn(other,c).forEach(({p,x})=>{s+=25+Math.min(x[1]||10,20);why.push(`${p.n}'s comfort (${x[1]?x[1]+"g, ":""}${x[2]}%)`)});
     if(comfortIn(actor,c).length){s-=15;why.push(`your ${comfortIn(actor,c).map(o=>o.p.n).join(", ")} plays it`)}
     picksOf(actor).forEach(p=>{const m=matchup(c,p.c);if(m!=null&&m>=52&&[...(ROLEMAP[c]||[])].includes(p.r)){s+=(m-50)*3;why.push(`counters your ${p.c} (${m}%)`)}});
+    const W=wrOf(c);if(W&&W.adj>52)s+=(W.adj-50)*0.8;
     if(DS.steps.length>=12){const need=[...(ROLEMAP[c]||[])].filter(r=>openRoles(other).includes(r));if(!need.length)s*=0.3;else why.push(`they still need ${need.join("/")}`)}
+    if(CHAMP_DB[c]&&CHAMP_DB[c].so)s*=0.5;
     return {c,s,why};
   }
   const open=openRoles(actor),roles=[...(ROLEMAP[c]||[])].filter(r=>open.includes(r));
   if(!roles.length)return null;
-  comfortIn(actor,c).filter(o=>roles.includes(o.p.role)).forEach(({p,x})=>{s+=30+Math.min(x[1]||10,20)+((x[2]||50)-50)/2;why.push(`${p.n}'s comfort (${x[1]?x[1]+"g, ":""}${x[2]}%)`)});
+  const fade=!!(CHAMP_DB[c]&&CHAMP_DB[c].fade);
+  comfortIn(actor,c).filter(o=>roles.includes(o.p.role)).forEach(({p,x})=>{s+=(30+Math.min(x[1]||10,20)+((x[2]||50)-50)/2)*(fade?0.6:1);why.push(`${p.n}'s comfort (${x[1]?x[1]+"g, ":""}${x[2]}%)${fade?" — fading in pro":""}`)});
+  const W=wrOf(c);if(W){s+=(W.adj-50)*1.2;if(Math.abs(W.adj-50)>=2)why.push(`${W.wr}% WR (${W.src})`)}
+  if(DS.steps.length<12&&roles.length>=2){s+=5;why.push(`flex ${roles.join("/")}`)}
+  const tr=trendOf(c);if(tr==="rising"){s+=3;why.push("▲ rising")}else if(tr==="falling")why.push("▼ falling");
+  if(CHAMP_DB[c]&&CHAMP_DB[c].so)s*=0.5;
   picksOf(actor).forEach(p=>{const l=SYN[c+"|"+p.c];if(l!=null){s+=l*4;why.push(`${l>0?"+":""}${l} with ${p.c}`)}});
   const deny=comfortIn(other,c);if(deny.length){s+=8;why.push(`denies ${deny.map(o=>o.p.n).join(", ")}`)}
   picksOf(other).filter(p=>roles.includes(p.r)).forEach(p=>{const m=matchup(c,p.c);if(m!=null){s+=(m-50)*3;why.push(m>=50?`beats ${p.c} (${m}%)`:`countered by ${p.c} (${m}%)`)}});
@@ -215,37 +238,84 @@ let aiTimer=null;
 function queueAI(){clearTimeout(aiTimer);const i=DS.steps.length;if(!DS.ai||i>=20)return;if(actorId(SEQ[i][0])===DS.me)return;
   aiTimer=setTimeout(()=>{const r=recs();if(!r.length)return;const w=[0.6,0.25,0.15],x=Math.random();let j=x<w[0]?0:x<w[0]+w[1]?1:2;j=Math.min(j,r.length-1);doPick(r[j].c)},2000)}
 
-/* ---- tooltips ---- */
+/* ---- tooltips and hover cards ---- */
 const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","tooltip");tip.hidden=true;document.body.appendChild(tip);
 function takenWhy(c){const st=DS.steps.find(x=>x.c===c);if(st)return `${st.k==="ban"?"banned":"picked"} by ${st.t}`;if(DS.fmt==="fearless"&&DS.locked.includes(c))return "locked (Fearless)";return ""}
-function playerTip(tid,idx){const t=team(tid),p=t.p[idx];
-  return `<b>${esc(p.n)}</b> <span class="notes">${esc(t.name)} · ${RNAME[p.role]} · ${p.ov}</span><div class="notes">${ATTR[p.role].map((a,j)=>`${a} ${p.a[j]}`).join(" · ")}${p.kda?` · KDA ${p.kda}`:""}</div>`+
-  (p.picks.length?`<table class="tt">${p.picks.map(([c,g,w])=>{const st=takenWhy(c);return `<tr class="${st?"gone":""}"><td>${esc(c)}${st?` <span class="notes">${st}</span>`:""}</td><td>${g?g+" games":""}</td><td>${w}%</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`}).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
+const inDraft=id=>id===DS.me||id===DS.opp;
+/* player card: pool with availability, best pick still open, and lane counter risk against the enemy laner already locked */
+function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.steps.length>0;
+  const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
+  const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
+  /* display: this Worlds' games first (bright), 2026 pro numbers dimmed in brackets */
+  const tp=(typeof RUN!=="undefined"&&RUN&&RUN.stats.pchamp[p.key])||{};
+  const shown=[...new Set([...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
+  const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
+    const risk=m!=null?(m<48?`<span class="neg">countered by ${esc(enemy.c)} (${m}%)</span>`:m>=52?`<span class="pos">beats ${esc(enemy.c)} (${m}%)</span>`:""):"";
+    return `<tr class="${st?"gone":""}"><td>${icon(c,22)} ${esc(c)}${st?` <span class="notes">${st}</span>`:""}${fd&&!st?` <span class="trend fading">fading</span>`:""}${risk?" "+risk:""}</td><td>${tv?`<em class="g">${tv.g} gm</em> <span class="wl">${tv.w}-${tv.g-tv.w}</span>`:""}</td><td class="dim">${sx?`(${sx[1]?sx[1]+"g ":""}${sx[2]}%)`:""}</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`};
+  const open=pool.filter(([c])=>!takenWhy(c));
+  const best=open.slice().sort((a,b)=>{const ma=enemy?matchup(a[0],enemy.c):null,mb=enemy?matchup(b[0],enemy.c):null;return ((mb==null?50:mb)-(ma==null?50:ma))*2+((b[1]||0)-(a[1]||0))*0.3})[0];
+  return `<div class="tiph" style="--tc:${teamCol(tid)}"><span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="notes">${RNAME[p.role]} · ${p.ov}</span></div><div class="notes">${ATTR[p.role].map((a,j)=>`${a} ${p.a[j]}`).join(" · ")}${p.kda?` · KDA ${p.kda}`:""}</div>`+
+  (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
+  (shown.length?`<table class="tt">${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
   (typeof tourPlayerLine==="function"?tourPlayerLine(p):"")+(p.note?`<div class="notes">${esc(p.note)}</div>`:"");}
-function champTip(c){const pr=presOf(c),sy=synOf(c);const good=sy.filter(x=>x[1]>0).slice(0,6),bad=sy.filter(x=>x[1]<0).slice(-3);
+/* team card: comp so far, damage mix, plan, synergy pairs and open roles */
+const ARCH_NAME={engage:"Engage",poke:"Poke and siege",scaling:"Scaling",skirmish:"Skirmish and dive",protect:"Protect the carry"};
+function compOf(cs){const ap=cs.filter(c=>CHAMP_AP.has(c)).length,cnt={};cs.forEach(c=>Object.entries(CHAMP_ARCH).forEach(([k,l])=>{if(l.includes(c))cnt[k]=(cnt[k]||0)+1}));
+  return {ap,ad:cs.length-ap,arch:Object.entries(cnt).sort((a,b)=>b[1]-a[1])}}
+function teamTip(id){const t=team(id),ps=picksOf(id),open=openRoles(id),C=compOf(ps.map(p=>p.c));const pairs=[];
+  for(let a=0;a<ps.length;a++)for(let b=a+1;b<ps.length;b++){const l=SYN[ps[a].c+"|"+ps[b].c];if(l!=null)pairs.push([ps[a].c,ps[b].c,l])}
+  const comf=ps.filter(p=>poolOf(t.p[ROLES.indexOf(p.r)]).some(x=>x[0]===p.c)).length;
+  return `<div class="tiph" style="--tc:${teamCol(id)}"><span class="tm">${esc(id)}</span><b>${esc(t.name)}</b><span class="notes">${sideOf(id)} side · ${ps.length}/5 picked</span></div>`+
+  (ps.length?`<div class="icons">${ROLES.map(r=>{const p=ps.find(x=>x.r===r);return p?icon(p.c,30):`<span class="ico empty" style="--s:30px"><b>${r}</b></span>`}).join("")}</div>`+
+   `<div><span class="notes">Damage:</span> ${C.ap} magic · ${C.ad} physical${ps.length>=3&&(!C.ap||!C.ad)?` <span class="neg">— one damage type, easy to itemise against</span>`:""}</div>`+
+   `<div><span class="notes">Plan:</span> ${C.arch.length?C.arch.slice(0,2).map(([k,n])=>`${ARCH_NAME[k]} ×${n}`).join(", "):"no clear identity yet"}</div>`+
+   `<div><span class="notes">Synergy:</span> ${pairs.length?pairs.map(([a,b,l])=>`${esc(a)} + ${esc(b)} <em class="${l>0?"pos":"neg"}">${l>0?"+":""}${l}</em>`).join(", "):"no measured pairs yet"}</div>`+
+   `<div><span class="notes">Comfort picks:</span> ${comf}/${ps.length}</div>`:`<div class="notes">No picks yet.</div>`)+
+  `<div><span class="notes">Open roles:</span> ${open.length?open.map(r=>RNAME[r]).join(", "):"none — lineup locked"}</div>`}
+/* champion card (Arena HUD): pick/ban, Worlds patch, recent patches, win rate, Worlds W/L, then who played it here, partners and counters */
+const hb=(label,inner,val,sub)=>`<div class="hb"><span>${label}</span><i>${inner}</i><span class="v">${val}<small>${sub}</small></span></div>`;
+const fill=(w,cls)=>`<b${cls?` class="${cls}"`:""} style="width:${Math.max(0,Math.min(100,w))}%"></b>`;
+const infoI=t=>`<span class="info" tabindex="0" aria-label="${esc(t)}">!<span class="tipx">${esc(t)}</span></span>`;
+function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.pin[1]:0;const st=typeof RUN!=="undefined"&&RUN&&RUN.stats.champ[c];if(st){w+=st.w;l+=st.p-st.w}return [w,l]}
+function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
+  (d&&d.pinBy||[]).forEach(([n,t,wl])=>{const [w,l]=wl.split("-").map(Number);m.set(n,{n,t,g:w+l,w})});
+  if(typeof RUN!=="undefined"&&RUN)Object.entries(RUN.stats.pchamp).forEach(([key,pc])=>{const v=pc[c];if(!v)return;const [tid,i]=key.split("|"),p=team(tid).p[+i];const e=m.get(p.n)||{n:p.n,t:tid,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=tid;m.set(p.n,e)});
+  const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
+  return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
+function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),rs=[...(ROLEMAP[c]||[])];
   const inGame=new Map();[DS.me,DS.opp].forEach(id=>picksOf(id).forEach(p=>inGame.set(p.c,id)));
-  const mark=x=>inGame.has(x)?`<b class="ig ${sideOf(inGame.get(x))}">${esc(x)}</b>`:esc(x);
-  const rel=l=>l.filter(([x])=>POOL.includes(x)||inGame.has(x));
-  const cs=countersOf(c),bt=rel(cs.beats).slice(0,5),ls=rel(cs.loses).slice(0,5);
-  const who=TEAMS.flatMap(t=>t.p.filter(p=>p.picks.some(x=>x[0]===c)).map(p=>({p,t})));
-  const here=who.filter(o=>o.t.id===DS.me||o.t.id===DS.opp),rest=who.filter(o=>!(o.t.id===DS.me||o.t.id===DS.opp));
-  const x=pl=>{const v=pl.picks.find(y=>y[0]===c);return v[1]?` ${v[1]}g ${v[2]}%`:` ${v[2]}%`};
-  return `<b>${esc(c)}</b> <span class="notes">${[...(ROLEMAP[c]||[])].join("/")} · ${pr?tierOf(pr)+"-tier, "+pr+"% Worlds presence":"not seen at Worlds"}</span>`+
-  (here.length?`<div class="here">${here.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})${x(o.p)}</span>`).join(" ")} <span class="notes">— in this game</span></div>`:"")+
-  `<div><span class="notes">Pairs well with:</span> ${good.length?good.map(([y,l])=>`${mark(y)} <em class="pos">+${l}</em>`).join(", "):"no data"}</div>`+
-  (bad.length?`<div><span class="notes">Avoid with:</span> ${bad.map(([y,l])=>`${mark(y)} <em class="neg">${l}</em>`).join(", ")}</div>`:"")+
-  `<div><span class="notes">Beats:</span> ${bt.length?bt.map(([y,w])=>`${mark(y)} <em class="pos">${w}%</em>`).join(", "):"no data"}</div>`+
-  `<div><span class="notes">Countered by:</span> ${ls.length?ls.map(([y,w])=>`${mark(y)} <em class="neg">${w}%</em>`).join(", "):"no data"}</div>`+
-  `<div class="notes">${rest.length?"Also a comfort pick for: "+rest.map(o=>`${esc(o.p.n)} (${o.t.id})`).join(", "):here.length?"":"Not a comfort pick for any Swiss player"}</div>`}
-function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(340,innerWidth-24);tip.style.maxWidth=w+"px";
+  const pb=d.rec?[d.rec,"26.16–26.20 · 465 games"]:d.p20?[d.p20,"26.20 · 25 games"]:d.sea?[d.sea,"2026 season"]:null;
+  const [ww,wl]=worldsWL(c),mp=mostPicked(c),sy=synOf(c).filter(x=>x[1]>0).slice(0,4);
+  const rel=l=>l.filter(([x])=>POOL.includes(x)||inGame.has(x));const ctr=rel(countersOf(c).loses).slice(0,3);
+  const cc=(x,em,cls)=>`<span class="cc${inGame.has(x)?" ig "+sideOf(inGame.get(x)):""}">${icon(x,22)}${esc(x)} <em class="${cls}">${em}</em></span>`;
+  const who=TEAMS.flatMap(t=>t.p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,t}))).filter(o=>inDraft(o.t.id)&&DS.steps.length);
+  const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":"",d.fade?"Fading":""].filter(Boolean);
+  return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
+  <div class="hbars">${pb?hb(`Pick / ban ${infoI(`${pb[1]}. Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`)}`,fill(pb[0][0],"pk")+fill(pb[0][1],"bn"),`${pb[0][0]}% · ${pb[0][1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
+  ${d.p20?hb("Worlds patch",fill(d.p20[0]+d.p20[1]),`${d.p20[0]+d.p20[1]}%`,"26.20 · 25 games"):hb("Worlds patch","","—","not in 26.20 list")}
+  ${hb(`Recent patches ${infoI(`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues).${d.sea?` Season-wide: ${d.sea[0]+d.sea[1]}% presence.`:""}`)}`,d.rec?fill(d.rec[0]+d.rec[1]):"",d.rec?`${d.rec[0]+d.rec[1]}%`:"—",d.rec?"presence":"not in recent list")}
+  ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}
+  ${hb("Worlds W/L",ww+wl?fill(ww/(ww+wl)*100):"",`${ww}-${wl}`,"play-ins + Worlds")}</div>
+  <div class="key"><span><i style="background:var(--pick)"></i>Picked</span><span><i class="bnk"></i>Banned</span></div>
+  <div><div class="label">Most picked at this Worlds ${infoI(`Bright: games on ${c} at this Worlds (play-ins and your run), then the win-loss. Dim number in brackets: that player's 2026 pro games on ${c} (mid.gg), used for draft strategy.`)}</div><div class="ccs">${mp.length?mp.map(e=>`<span class="cc" style="--tc:${teamCol(e.t)}"><span class="tm">${esc(e.t)}</span>${esc(e.n)} <em class="g">${e.g} gm</em> <span class="wl">${e.w}-${e.g-e.w}</span>${e.s?` <span class="dim">(${e.s}g)</span>`:""}</span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div></div>
+  ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
+  <div><div class="label">Pairs with</div><div class="ccs">${sy.length?sy.map(([x,l])=>cc(x,"+"+l,"g")).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
+  <div><div class="label">Countered by</div><div class="ccs">${ctr.length?ctr.map(([x,w])=>cc(x,w+"%","b")).join(""):`<span class="notes">no matchup data</span>`}</div></div>
+  ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
+function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
   let x=Math.min(Math.max(12,r.left),innerWidth-w-12),y=r.bottom+8;tip.style.left=x+"px";tip.style.top=y+"px";
   requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,r.top-h-8)+"px"})}
-function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc]");if(!el){return}
-  tip.innerHTML=el.dataset.tp?playerTip(...el.dataset.tp.split("|").map((v,i)=>i?+v:v)):champTip(el.dataset.tc);tip.hidden=false;placeTip({target:el})}
-function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc]");if(el)tip.hidden=true}
+/* the card stays open while the pointer moves onto it, so its ! notes can be read */
+let tipT=null,tipEl=null;
+function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;tipEl=el;
+  const ch=!!el.dataset.tc&&!el.dataset.tp;tip.classList.toggle("wide",ch);
+  tip.innerHTML=el.dataset.tp?playerTip(...el.dataset.tp.split("|").map((v,i)=>i?+v:v)):el.dataset.tt?teamTip(el.dataset.tt):champTip(el.dataset.tc);tip.hidden=false;placeTip({target:el})}
+function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},220)}}
+tip.addEventListener("mouseenter",()=>clearTimeout(tipT));tip.addEventListener("mouseleave",()=>{tip.hidden=true;tipEl=null});
 document.addEventListener("mouseover",tipOn);document.addEventListener("mouseout",tipOff);
-document.addEventListener("focusin",tipOn);document.addEventListener("focusout",tipOff);
-window.addEventListener("scroll",()=>{tip.hidden=true},{passive:true});
+document.addEventListener("focusin",tipOn);document.addEventListener("focusout",e=>{if(!tip.contains(e.relatedTarget))tipOff(e)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!tip.hidden){tip.hidden=true;tipEl=null}});
+window.addEventListener("scroll",()=>{tip.hidden=true;tipEl=null},{passive:true});
 
 /* ---- analysis ---- */
 function draftScore(id){
@@ -281,8 +351,9 @@ function analysis(){
 /* ---- single-game simulation ---- */
 const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
 const sig=x=>1/(1+Math.exp(-x));
-function champMod(pl,c){const x=poolOf(pl).find(y=>y[0]===c),pr=presOf(c);let m=pr>=55?2:pr>=40?1.5:pr>=30?1:pr>0?0.5:0;
-  if(x)m+=3+((x[2]||55)-55)/10;else if(pl.picks.length)m-=3;return m}
+function champMod(pl,c){const x=poolOf(pl).find(y=>y[0]===c),pr=presOf(c),d=CHAMP_DB[c];let m=pr>=55?2:pr>=40?1.5:pr>=30?1:pr>0?0.5:0;
+  const W=wrOf(c);if(W)m+=Math.max(-1.5,Math.min(1.5,(W.adj-50)/4));
+  if(x)m+=(3+((x[2]||55)-55)/10)*(d&&d.fade?0.5:1);else if(pl.picks.length)m-=3;return m}
 const SIMK=0.3;
 function teamStr(id){
   const t=team(id),ps=picksOf(id),P={};ROLES.forEach((r,i)=>{const pk=ps.find(p=>p.r===r);P[r]={pl:t.p[i],c:pk?pk.c:"?",m:pk?champMod(t.p[i],pk.c):0}});
@@ -364,13 +435,18 @@ function simView(){
 /* ---- render ---- */
 function teamPanel(id){
   const t=team(id),sd=sideOf(id),ps=picksOf(id),bs=bansOf(id),i=DS.steps.length,nxt=i<20?SEQ[i]:null,isNext=nxt&&actorId(nxt[0])===id;
-  const fpTeam=idOnSide(DS.fp)===id;
+  const fpTeam=idOnSide(DS.fp)===id,picking=isNext&&nxt[1]==="pick",nextRole=picking?openRoles(id)[0]:null;
   const byRole=ROLES.map((r,ri)=>{const p=ps.find(x=>x.r===r),pl=t.p[ri];
-    return `<div class="slot ${p?"on":""} ${p&&p.i===DS.fresh?"fresh":""}"><span class="role">${r}</span><span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span><span class="ch ${p?"hov":""}" ${p?`data-tc="${esc(p.c)}" tabindex="0"`:""}>${p?esc(p.c):"—"}</span>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
-  const banSlots=[0,1,2,3,4].map(j=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}"`:""}>${b?esc(b.c):willBe?"banning…":""}</span>`}).join("");
-  return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh"><span>${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
-    <div class="bans">${banSlots}</div>${byRole}${isNext&&nxt[1]==="pick"?`<div class="picking">Picking… open: ${openRoles(id).join(", ")}</div>`:""}</div>`;
+    return `<div class="slot ${p?"on":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}">${p?`<span class="hov" data-tc="${esc(p.c)}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch">${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
+  const banSlots=[0,1,2,3,4].map(j=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}" tabindex="0" aria-label="Banned: ${esc(b.c)}"`:""}>${b?icon(b.c,34):willBe?"<small>ban</small>":""}</span>`}).join("");
+  return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh hov" data-tt="${id}" tabindex="0"><span><span class="tb" style="--tc:${teamCol(id)}">${esc(id)}</span> ${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
+    <div class="bans">${banSlots}</div>${byRole}${picking?`<div class="picking">Picking… open: ${openRoles(id).join(", ")}</div>`:""}</div>`;
 }
+/* after each pick: the best follow-ups for the team that just locked in */
+function nextBest(){const last=[...DS.steps].reverse().find(s=>s.k==="pick");if(!last||DS.steps.length>=20)return"";const id=last.t;if(!openRoles(id).length)return"";
+  const tk=taken(),rs=POOL.filter(c=>!tk.has(c)).map(c=>scoreFor(c,id,"pick")).filter(x=>x&&x.s>0).sort((a,b)=>b.s-a.s).slice(0,5);if(!rs.length)return"";
+  const lead=r=>r.why.find(w=>w.includes(" with "+last.c))||r.why.find(w=>/ with /.test(w))||r.why.find(w=>/beats|counters|comfort|denies/.test(w))||r.why[0]||"";
+  return `<div class="nextbest"><div class="label">${icon(last.c,22)} ${esc(last.c)} locked → next best for ${esc(team(id).id)}</div><div class="ccs">${rs.map(r=>`<span class="cc hov" data-tc="${esc(r.c)}" tabindex="0">${icon(r.c,26)}${esc(r.c)} <small>${r.roles.join("/")}</small> <em class="g">${esc(lead(r))}</em></span>`).join("")}</div></div>`}
 function renderDraft(){
   const v=document.getElementById("v-draft");if(!v)return;
   const i=DS.steps.length,done=i>=20;
@@ -399,10 +475,11 @@ function renderDraft(){
     <div class="track" aria-label="Draft progress">${track}</div>
     <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?"<b>Draft complete</b>":`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
     <div class="board">${teamPanel(blueId)}${teamPanel(redId)}</div>
-    ${done?analysis():`<div><div class="eyebrow">${actor===DS.me?"Suggested for you":"Likely for "+esc(team(actor).id)}</div><div class="recs">${rs.map((r,j)=>`<button class="rec ${j===0?"top":""}" data-c="${esc(r.c)}" data-tc="${esc(r.c)}"${aiWaiting?" disabled":""}><b>${esc(r.c)}</b>${r.roles?`<small>${r.roles.join("/")}</small>`:""}<span>${r.why.map(esc).join(" · ")}</span></button>`).join("")||'<span class="notes">No scored options left. Pick from the pool.</span>'}</div></div>
+    ${nextBest()}
+    ${done?analysis():`<div><div class="eyebrow">${actor===DS.me?"Suggested for you":"Likely for "+esc(team(actor).id)}</div><div class="recs">${rs.map((r,j)=>`<button class="rec ${j===0?"top":""}" data-c="${esc(r.c)}" data-tc="${esc(r.c)}"${aiWaiting?" disabled":""}>${icon(r.c,40)}<b>${esc(r.c)}</b>${r.roles?`<small>${r.roles.join("/")}</small>`:""}<span>${r.why.map(esc).join(" · ")}</span></button>`).join("")||'<span class="notes">No scored options left. Pick from the pool.</span>'}</div></div>
     <div><div class="ctrls"><div class="seg">${[["ALL","All"],...ROLES.map(r=>[r,r])].map(([k,l])=>`<button data-set="roleF" data-val="${k}" aria-pressed="${DS.roleF===k}">${l}</button>`).join("")}</div><input id="dQ" type="search" placeholder="Search or type any champion" value="${esc(DS.q)}" aria-label="Search champions"><button class="btn" data-act="custom">Use typed name</button><label class="tog"><input type="checkbox" id="dUsed"${DS.showUsed?" checked":""}> Show banned/picked${DS.fmt==="fearless"?"/locked":""} (${usedN})</label></div>
-    <div class="cgrid">${grid.map(c=>`<button class="cbtn ${metaOf(c)[0]}" data-c="${esc(c)}" data-tc="${esc(c)}"${tk.has(c)||aiWaiting?" disabled":""}>${esc(c)}</button>`).join("")}</div></div>`}
-    <p class="notes" style="font-size:12px;margin:0">Hover a player for their champion pool, or a champion for its synergies. Suggestions score Worlds 26.20 presence (NerfPlz), comfort picks (mid.gg, Sheep Esports), pair lift (metabot.gg, METAsrc) and denying the other side's comfort picks. Draft order and First Selection: <a href="https://www.sheepesports.com/en/articles/new-draft-rules-have-been-introduced-with-first-selection-system-aimed-at-rebalancing-the-sides/en" target="_blank" rel="noopener">Sheep Esports</a>, <a href="https://esports.gg/news/league-of-legends/first-selection-explained/" target="_blank" rel="noopener">esports.gg</a>; first vs last pick: <a href="https://nerdbot.com/2026/09/16/blue-side-vs-red-side-what-the-draft-order-is-worth/" target="_blank" rel="noopener">Nerdbot</a>. Counters: <a href="https://www.metasrc.com/lol/champions/vi/counters" target="_blank" rel="noopener">METAsrc counter pages</a> (ranked solo queue, patches 26.17–26.20) for 37 meta champions.</p>
+    <div class="cgrid">${grid.map(c=>`<button class="cbtn ${metaOf(c)[0]}" data-c="${esc(c)}" data-tc="${esc(c)}"${tk.has(c)||aiWaiting?" disabled":""}>${icon(c,40)}<span>${esc(c)}</span></button>`).join("")}</div></div>`}
+    <p class="notes" style="font-size:12px;margin:0">Hover a player for their pool and lane risk, a team name for its comp, or a champion for its pro card. Suggestions score blended pro presence and win rate (26.20 + 26.16–26.20, NerfPlz), flex value in phase 1, comfort picks (mid.gg, Sheep Esports), pair lift (metabot.gg, METAsrc) and denying the other side's comfort picks. Draft order and First Selection: <a href="https://www.sheepesports.com/en/articles/new-draft-rules-have-been-introduced-with-first-selection-system-aimed-at-rebalancing-the-sides/en" target="_blank" rel="noopener">Sheep Esports</a>, <a href="https://esports.gg/news/league-of-legends/first-selection-explained/" target="_blank" rel="noopener">esports.gg</a>; first vs last pick: <a href="https://nerdbot.com/2026/09/16/blue-side-vs-red-side-what-the-draft-order-is-worth/" target="_blank" rel="noopener">Nerdbot</a>. Counters: <a href="https://www.metasrc.com/lol/champions/vi/counters" target="_blank" rel="noopener">METAsrc counter pages</a> (ranked solo queue, patches 26.17–26.20) for 37 meta champions.</p>
   </div>`;
   tip.hidden=true;
 }
