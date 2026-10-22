@@ -176,7 +176,7 @@ const SEQ=[["F","ban"],["L","ban"],["F","ban"],["L","ban"],["F","ban"],["L","ban
  ["F","pick"],["L","pick"],["L","pick"],["F","pick"],["F","pick"],["L","pick"],
  ["L","ban"],["F","ban"],["L","ban"],["F","ban"],
  ["L","pick"],["F","pick"],["F","pick"],["L","pick"]];
-const DS={me:"LYON",opp:"TSW",side:"blue",fp:"blue",fmt:"bo1",game:1,locked:[],steps:[],roleF:"ALL",q:"",ai:false,showUsed:false,fresh:-1,sim:null};
+const DS={me:"LYON",opp:"TSW",side:"blue",fp:"blue",fmt:"bo1",game:1,locked:[],steps:[],roleF:"ALL",q:"",ai:true,showUsed:false,fresh:-1,sim:null,series:null,sbo:"3",sfear:"yes"};
 const team=id=>TEAMS.find(t=>t.id===id);
 const sideOf=id=>id===DS.me?DS.side:(DS.side==="blue"?"red":"blue");
 const idOnSide=sd=>sideOf(DS.me)===sd?DS.me:DS.opp;
@@ -235,7 +235,7 @@ function doPick(c){
   DS.steps.push(st);DS.fresh=i;DS.sim=null;renderDraft();queueAI();
 }
 let aiTimer=null;
-function queueAI(){clearTimeout(aiTimer);const i=DS.steps.length;if(!DS.ai||i>=20)return;if(actorId(SEQ[i][0])===DS.me)return;
+function queueAI(){clearTimeout(aiTimer);const i=DS.steps.length;if(!DS.ai||i>=20||(!DS.tour&&!DS.series)||DS.sim)return;if(actorId(SEQ[i][0])===DS.me)return;
   aiTimer=setTimeout(()=>{const r=recs();if(!r.length)return;const w=[0.6,0.25,0.15],x=Math.random();let j=x<w[0]?0:x<w[0]+w[1]?1:2;j=Math.min(j,r.length-1);doPick(r[j].c)},2000)}
 
 /* ---- tooltips and hover cards ---- */
@@ -376,7 +376,7 @@ function analysis(){
   return `<div class="panel" style="display:grid;gap:12px"><h3 style="font-size:20px;text-transform:uppercase">Draft review</h3>
     <div class="verdict"><div><span class="notes">Before draft</span><b>${Math.round(base*100)}%</b></div><div><span class="notes">After draft</span><b>${Math.round(withD*100)}%</b></div><div class="notes">${esc(team(DS.me).name)} win chance for this game. Before = team ratings only; after = 600 simulated games using these picks (comfort, meta strength, synergy).</div></div>
     <div class="board">${col(sideOf(DS.me)==="blue"?A:B)}${col(sideOf(DS.me)==="blue"?B:A)}</div>
-    ${DS.tour?(DS.sim?"":`<div class="ctrls"><button class="btn primary" data-act="tplay">Play this game</button></div>`):`<div class="ctrls">${DS.fmt==="fearless"?`<button class="btn" data-act="next">Next game in series (lock these 10 picks)</button>`:""}<button class="btn primary" data-act="run">Run now: play this game</button></div>`}
+    ${DS.tour?(DS.sim?"":`<div class="ctrls"><button class="btn primary" data-act="tplay">Play this game</button></div>`):DS.series&&!DS.sim?`<div class="ctrls"><button class="btn primary" data-act="splay">Play game ${DS.series.games.length+1}</button></div>`:""}
     ${DS.sim?simView():""}</div>`;
 }
 
@@ -509,7 +509,7 @@ function simView(){
     <div class="board">${sb("blue")}${sb("red")}</div>
     <div><div class="eyebrow">Play-by-play</div><ol class="pbp">${g.ev.map(([t,s,x])=>`<li class="${s}"><span class="num">${t}:${String((t*37)%60).padStart(2,"0")}</span>${esc(x)}</li>`).join("")}</ol></div>
     <p class="notes" style="font-size:12px;margin:0">"This game" shows what happened in this simulation; "On paper" shows the teams' rating edges going in. Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>
-    ${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:`<button class="btn" data-act="run">Run again</button>`}</div>`;
+    ${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:DS.series?(seriesDone()?`<button class="btn primary" data-act="sview">See the series result</button>`:`<button class="btn primary" data-act="snext">Continue to game ${DS.series.games.length+1}</button>`):""}</div>`;
 }
 /* ---- render ---- */
 function teamPanel(id){
@@ -540,8 +540,68 @@ function bestMatch(q){const n=normN(q);if(!n)return null;const tk=taken(),L=allC
   if(!m&&n.length>=3){const sc=L.map(([c,k])=>[c,editDist(n,k.slice(0,Math.max(n.length,k.length)))]).sort((a,b)=>a[1]-b[1]);if(sc[0][1]<=Math.max(1,Math.floor(n.length/3)))m=sc[0]}
   return m?m[0]:null}
 function pickTyped(){const c=bestMatch(DS.q||"");if(!c)return;if(!ROLEMAP[c]){ROLEMAP[c]=new Set(CHAMP_ROLE_FALLBACK[c]||ROLES);POOL.push(c);POOL.sort()}DS.q="";doPick(c)}
+/* ===== Series mode (Champ select free play): Bo1 / Bo3 / Bo5, Fearless or standard, ends at 1 / 2 / 3 wins ===== */
+const sWins=id=>DS.series?DS.series.games.filter(g=>g.winner===id).length:0;
+const sNeed=()=>Math.ceil(DS.series.bo/2);
+function seriesDone(){return !!DS.series&&(sWins(DS.series.me)>=sNeed()||sWins(DS.series.opp)>=sNeed())}
+function seriesLocked(){const S=DS.series;return S&&S.fearless?S.games.flatMap(g=>g.steps.filter(x=>x[1]==="pick").map(x=>x[2])):[]}
+function startSeries(){clearTimeout(aiTimer);const bo=+DS.sbo||1;DS.series={bo,fearless:bo>1&&DS.sfear==="yes",me:DS.me,opp:DS.opp,side0:DS.side,ai:DS.ai,games:[]};seriesGame()}
+function seriesGame(){const S=DS.series,last=S.games[S.games.length-1];
+  DS.side=last?(last.winner===S.me?"red":"blue"):S.side0;   /* after game 1 the loser takes blue */
+  Object.assign(DS,{me:S.me,opp:S.opp,fp:"blue",fmt:S.fearless?"fearless":"bo1",locked:seriesLocked(),steps:[],sim:null,game:S.games.length+1,fresh:-1,q:"",roleF:"ALL",ai:S.ai,showUsed:false});
+  renderDraft();queueAI();window.scrollTo({top:document.getElementById("v-draft").offsetTop-60,behavior:"smooth"})}
+function playSeriesGame(){if(seriesDone())return;runGame();const g=DS.sim.g,rec=pack(g),pct=Math.round((g.winner==="blue"?DS.sim.bwin:1-DS.sim.bwin)*100);
+  Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec)}
+/* per-player series totals from the stored games */
+function seriesPlayers(id){const S=DS.series,t=team(id);return ROLES.map((r,i)=>{const o={pl:t.p[i],r,g:0,k:0,d:0,a:0,rt:0,pts:0,champs:[]};
+  S.games.forEach(gm=>{const sd=gm.blue===id?"blue":"red",p=gm.ps[sd][r];o.g++;o.k+=p.k;o.d+=p.d;o.a+=p.a;o.rt+=p.rt;o.champs.push([p.c,gm.winner===id]);if(gm.pog.team===id&&gm.pog.r===r)o.pts+=100});
+  o.avg=o.g?o.rt/o.g:0;o.kda=(o.k+o.a)/Math.max(1,o.d);return o})}
+function seriesSetup(){
+  const opts=sel=>TEAMS.map(t=>`<option value="${t.id}"${t.id===sel?" selected":""}>${esc(t.name)}</option>`).join("");
+  const seg=(name,val,pairs)=>`<div class="seg" role="group" aria-label="${name}">${pairs.map(([k,l])=>`<button data-set="${name}" data-val="${k}" aria-pressed="${val===k}">${l}</button>`).join("")}</div>`;
+  const bo=+DS.sbo;
+  return `<div class="panel ssetup"><div><span class="eyebrow">Start a series</span><h2>Champ select</h2><p class="notes" style="margin:4px 0 0">Draft a Bo1, Bo3 or Bo5 against any Worlds team. Competitive draft order; blue picks first. The series ends as soon as a team reaches ${bo===1?"1 win":bo===3?"2 wins":"3 wins"}.</p></div>
+    <div class="sopts2"><label class="field"><span class="notes">Your team</span><select id="dMe">${opts(DS.me)}</select></label><label class="field"><span class="notes">Opponent</span><select id="dOpp">${opts(DS.opp)}</select></label></div>
+    <div class="sopts3">
+      <div class="field"><span class="notes">Format</span>${seg("sbo",DS.sbo,[["1","Bo1"],["3","Bo3"],["5","Bo5"]])}<span class="notes small">Series ends at ${Math.ceil(bo/2)} win${bo>1?"s":""}.</span></div>
+      <div class="field"><span class="notes">Draft style</span>${bo>1?seg("sfear",DS.sfear,[["yes","Fearless"],["no","Standard"]]):`<span class="notes small" style="padding:8px 0">Single game — no Fearless locks.</span>`}${bo>1?`<span class="notes small">Fearless: picks lock for the rest of the series; bans don't.</span>`:""}</div>
+      <div class="field"><span class="notes">Game 1 side</span>${seg("side",DS.side,[["blue","You: blue"],["red","You: red"]])}<span class="notes small">After game 1 the loser picks side (takes blue).</span></div>
+    </div>
+    <div class="sconfirm"><b>${DS.ai?`The AI will draft for ${esc(team(DS.opp).name)}`:`You'll draft both sides`}</b>
+      <label class="tog"><input type="checkbox" id="dAI"${DS.ai?" checked":""}> AI drafts the opponent (2 seconds per pick or ban) — on by default</label>
+      <span class="notes small">Turn it off to draft both sides yourself. It can't be changed mid-series.</span>
+      <div class="ctrls"><button class="btn primary" data-act="sstart">Start ${bo===1?"Bo1 game":"Bo"+bo+" series"}</button></div></div></div>`}
+function seriesPanel(){const S=DS.series;if(!S||!S.games.length)return"";
+  const A=S.me,B=S.opp,wa=sWins(A),wb=sWins(B),done=seriesDone(),need=sNeed();
+  const pips=Array.from({length:S.bo},(_,i)=>{const gm=S.games[i];return `<i class="${gm?(gm.winner===A?"pa":"pb"):""}"></i>`}).join("");
+  const gamesT=`<div class="tscroll"><table class="tt full sgt"><colgroup><col style="width:6%"><col style="width:8%"><col style="width:10%"><col style="width:22%"><col style="width:22%"><col style="width:23%"><col style="width:9%"></colgroup><thead><tr><th>Game</th><th>Time</th><th>Winner</th><th>${esc(A)} picks</th><th>${esc(B)} picks</th><th>Player of the Game</th><th>Note</th></tr></thead><tbody>${S.games.map((gm,i)=>{const pk=id=>{const sd=gm.blue===id?"blue":"red";return ROLES.map(r=>`<span class="hov" data-tc="${esc(gm.ps[sd][r].c)}">${icon(gm.ps[sd][r].c,24)}</span>`).join("")};
+    return `<tr style="--tc:${teamCol(gm.winner)}"><td class="gno">G${i+1}</td><td>${gm.time}:${String(gm.sec).padStart(2,"0")}</td><td class="res">${esc(gm.winner)}</td><td><span class="comp">${pk(A)}</span></td><td><span class="comp">${pk(B)}</span></td><td class="pogc">${esc(gm.pog.n)} (${esc(gm.pog.c)}) ${gm.pog.rt.toFixed(1)}</td><td>${gm.up?`<span class="upset">Upset</span>`:"–"}</td></tr>`}).join("")}</tbody></table></div>`;
+  const ptable=id=>{const ps=seriesPlayers(id),w=sWins(id);return `<div class="sside" style="--sc:${teamCol(id)}"><h3>${teamTag(id)} ${esc(team(id).name)} <small>· ${w} win${w===1?"":"s"}</small></h3><div class="tscroll"><table class="tt full ctab"><thead><tr><th>Player</th><th>Champions</th><th>K/D/A</th><th>KDA</th><th>Avg rating</th><th>POG pts</th></tr></thead><tbody>${ps.map((o,i)=>`<tr><td><span class="hov" data-tp="${id}|${i}" tabindex="0"><b>${esc(o.pl.n)}</b></span> <span class="notes">${o.r}</span></td><td><span class="comp">${o.champs.map(([c,won])=>`<span class="hov${won?"":" lost"}" data-tc="${esc(c)}">${icon(c,24)}</span>`).join("")}</span></td><td class="num">${o.k}/${o.d}/${o.a}</td><td class="num">${o.kda.toFixed(1)}</td><td class="num">${o.avg.toFixed(1)}</td><td class="num pts">${o.pts?o.pts:"–"}</td></tr>`).join("")}</tbody></table></div></div>`};
+  const all=[...seriesPlayers(A).map(o=>({...o,id:A})),...seriesPlayers(B).map(o=>({...o,id:B}))].sort((x,y)=>y.pts-x.pts||y.avg-x.avg);
+  const race=all.slice(0,3),maxP=Math.max(100,race[0].pts);
+  const sum=(f)=>S.games.reduce((a,gm)=>a+f(gm),0),sd=(gm,id)=>gm.blue===id?"blue":"red";
+  const kills=id=>sum(gm=>gm.kills[sd(gm,id)]),drs=id=>sum(gm=>gm.dr[sd(gm,id)]),bas=id=>sum(gm=>gm.ba[sd(gm,id)]);
+  const g15=sum(gm=>(gm.blue===A?1:-1)*gm.g15)/S.games.length;
+  const longest=S.games.reduce((m,gm,i)=>(gm.time*60+gm.sec)>(m.t||0)?{t:gm.time*60+gm.sec,i,gm}:m,{});
+  let best=null;S.games.forEach((gm,i)=>["blue","red"].forEach(x=>ROLES.forEach((r,ri)=>{const p=gm.ps[x][r];if(!best||p.rt>best.p.rt)best={p,i,id:x==="blue"?gm.blue:gm.red,ri}})));
+  const ups=S.games.map((gm,i)=>gm.up?`G${i+1} · ${gm.winner} won at ${gm.pct}%`:null).filter(Boolean);
+  const facts=[["Kills",`${A} ${kills(A)} – ${kills(B)} ${B}`],["Gold at 15 (avg)",Math.abs(g15)<300?"even":`${g15>0?A:B} +${(Math.abs(g15)/1000).toFixed(1)}k`],["Dragons",`${drs(A)} – ${drs(B)}`],["Barons",`${bas(A)} – ${bas(B)}`],
+    ["Longest game",`G${longest.i+1} · ${longest.gm.time}:${String(longest.gm.sec).padStart(2,"0")}`],["Best single game",`${team(best.id).p[best.ri].n} ${best.p.rt.toFixed(1)} (${best.p.c})`],["Upsets",ups.length?ups.join(" · "):"none"]];
+  const winner=done?(wa>wb?A:B):null;
+  const mvp=done?all.filter(o=>o.id===winner).sort((x,y)=>y.pts-x.pts||y.avg-x.avg)[0]:null;
+  const nextSide=S.games[S.games.length-1].winner===A?B:A;
+  return `<div class="panel spanel">
+    ${done?`<div class="send"><span class="eyebrow">Series over</span><h3>${esc(team(winner).name)} win the series ${Math.max(wa,wb)}–${Math.min(wa,wb)}</h3><div class="notes">Series MVP: <b>${esc(mvp.pl.n)}</b> · ${mvp.pts} POG points · KDA ${mvp.kda.toFixed(1)} · ${[...new Set(mvp.champs.map(c=>c[0]))].map(esc).join(", ")}</div><div class="ctrls" style="justify-content:center"><button class="btn" data-act="srematch">Rematch (same settings)</button><button class="btn primary" data-act="snew">New series</button></div></div>`:""}
+    <div class="sbug"><div class="steam">${teamTag(A)} ${esc(team(A).name)}</div><div class="sscore"><b>${wa} – ${wb}</b><small>${S.bo===1?"Bo1":`Bo${S.bo} · first to ${need}`}${S.fearless?" · Fearless":""}</small><div class="pips" style="--pa:${teamCol(A)};--pb:${teamCol(B)}">${pips}</div></div><div class="steam r">${esc(team(B).name)} ${teamTag(B)}</div></div>
+    ${gamesT}
+    ${done?"":`<div class="snext"><div><b>Game ${S.games.length+1} next</b> <span class="notes">· ${esc(nextSide)} lost game ${S.games.length}, so they take blue side${S.fearless?` · ${seriesLocked().length} champions locked (Fearless)`:""}</span></div>${DS.sim?`<button class="btn primary" data-act="snext">Draft game ${S.games.length+1}</button>`:""}</div>`}
+    <div class="stwo">${ptable(A)}${ptable(B)}</div>
+    <div class="stwo"><div class="srace"><span class="eyebrow">Series MVP race · POG points</span>${race.map((o,i)=>`<div class="rc"><span class="notes">#${i+1}</span><span>${teamTag(o.id)} <b>${esc(o.pl.n)}</b></span><span class="rbar"><b style="width:${o.pts/maxP*100}%"></b></span><span class="num">${o.pts} <small>· ${o.avg.toFixed(1)}</small></span></div>`).join("")}<span class="notes small">100 points per Player of the Game; ties go to the higher average rating. The Series MVP comes from the winning team.</span></div>
+      <div><span class="eyebrow">Series so far</span><div class="sfacts">${facts.map(([k,v])=>`<span><b>${k}</b>${esc(v)}</span>`).join("")}</div></div></div>
+  </div>`}
 function renderDraft(){
   const v=document.getElementById("v-draft");if(!v)return;
+  if(!DS.tour&&!DS.series){v.innerHTML=seriesSetup();tip.hidden=true;return}
   const i=DS.steps.length,done=i>=20;
   const cur=done?null:SEQ[i],actor=done?null:actorId(cur[0]);
   const tk=taken();
@@ -555,16 +615,10 @@ function renderDraft(){
   const aiWaiting=DS.ai&&!done&&actor!==DS.me;
   v.innerHTML=`<div class="panel" style="display:grid;gap:14px">
     <div><h2>Champ select</h2><p class="notes" style="margin:4px 0 0">Competitive draft order. Blue side picks first as standard; switch only if a team used First Selection to take red side with first pick.</p></div>
-    ${DS.tour?tourDraftHeader():""}<div class="ctrls"${DS.tour?" hidden":""}>
-      <label>Your team <select id="dMe">${opts(DS.me)}</select></label>
-      <label>Opponent <select id="dOpp">${opts(DS.opp)}</select></label>
-      ${seg("side",DS.side,[["blue","You: blue"],["red","You: red"]])}
-      ${seg("fp",DS.fp,[["blue","Blue picks first"],["red","Red picks first"]])}
-      ${seg("fmt",DS.fmt,[["bo1","Bo1"],["fearless","Fearless Bo3/Bo5"]])}
-      <label class="tog"><input type="checkbox" id="dAI"${DS.ai?" checked":""}> AI drafts for opponent</label>
-      <button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button><button class="btn" data-act="reset">Reset</button>
-    </div>${DS.tour&&!done?`<div class="ctrls"><button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button></div>`:""}
-    ${DS.fmt==="fearless"&&!DS.tour?`<div class="notes">Game ${DS.game} of the series. Locked from earlier games (${DS.locked.length}): ${DS.locked.length?DS.locked.map(esc).join(", "):"none yet"}. Bans do not lock.</div>`:""}
+    ${DS.tour?tourDraftHeader():""}
+    ${!DS.tour&&DS.series?`<div class="ctrls"><span class="notes"><b>Game ${DS.series.games.length+(DS.sim?0:1)}</b> of ${DS.series.bo===1?"a Bo1":"a Bo"+DS.series.bo} · ${esc(DS.me)} on ${DS.side} · ${DS.series.ai?"AI drafts "+esc(DS.opp):"you draft both sides"}${DS.series.fearless?` · ${DS.locked.length} champions locked (Fearless)`:""}</span>${DS.sim?"":`<button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button><button class="btn" data-act="reset">Restart this draft</button>`}<button class="btn" data-act="snew">New series</button></div>`:""}
+    ${DS.tour&&!done?`<div class="ctrls"><button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button></div>`:""}
+    ${!DS.tour?seriesPanel():""}
     <div class="track" aria-label="Draft progress">${track}</div>
     <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?"<b>Draft complete</b>":`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
     <div class="board">${teamPanel(blueId)}${teamPanel(redId)}</div>
@@ -580,12 +634,16 @@ document.addEventListener("click",e=>{
   const v=document.getElementById("v-draft");if(!v||!v.contains(e.target))return;
   const b=e.target.closest("button");if(!b||b.disabled)return;
   if(b.dataset.c){doPick(b.dataset.c);return}
-  if(b.dataset.set){DS[b.dataset.set]=b.dataset.val;if(b.dataset.set!=="roleF"){DS.steps=[];DS.sim=null;if(b.dataset.set==="fmt"){DS.game=1;DS.locked=[]}}renderDraft();queueAI();return}
+  if(b.dataset.set){DS[b.dataset.set]=b.dataset.val;if(b.dataset.set!=="roleF"&&!DS.series){DS.steps=[];DS.sim=null}renderDraft();if(DS.series)queueAI();return}
   const a=b.dataset.act;
   if(a==="undo"){clearTimeout(aiTimer);DS.steps.pop();if(DS.ai)while(DS.steps.length&&actorId(SEQ[DS.steps.length][0])!==DS.me)DS.steps.pop();DS.fresh=-1;DS.sim=null;renderDraft();queueAI()}
-  else if(a==="reset"){clearTimeout(aiTimer);DS.steps=[];DS.game=1;DS.locked=[];DS.sim=null;renderDraft();queueAI()}
-  else if(a==="next"){DS.locked.push(...DS.steps.filter(s=>s.k==="pick").map(s=>s.c));DS.steps=[];DS.game++;DS.sim=null;renderDraft();queueAI()}
-  else if(a==="run"){b.textContent="Simulating…";setTimeout(()=>{runGame();renderDraft();const s=document.querySelector(".sim");if(s)s.scrollIntoView({behavior:"smooth",block:"start"})},30)}
+  else if(a==="reset"){clearTimeout(aiTimer);DS.steps=[];DS.sim=null;DS.fresh=-1;renderDraft();queueAI()}
+  else if(a==="sstart")startSeries();
+  else if(a==="splay"){b.textContent="Simulating…";setTimeout(()=>{playSeriesGame();renderDraft();const s=document.querySelector(".sim");if(s)s.scrollIntoView({behavior:"smooth",block:"start"})},30)}
+  else if(a==="snext"){if(!seriesDone())seriesGame()}
+  else if(a==="sview"){const p=document.querySelector(".spanel");if(p)p.scrollIntoView({behavior:"smooth",block:"start"})}
+  else if(a==="snew"){clearTimeout(aiTimer);if(DS.series)DS.side=DS.series.side0;DS.series=null;DS.steps=[];DS.sim=null;DS.locked=[];DS.fmt="bo1";DS.ai=true;renderDraft()}
+  else if(a==="srematch"){const S=DS.series;Object.assign(DS,{me:S.me,opp:S.opp,side:S.side0,ai:S.ai,sbo:String(S.bo),sfear:S.fearless?"yes":"no"});startSeries()}
   else if(a==="custom")pickTyped();
 });
 document.addEventListener("change",e=>{

@@ -348,7 +348,7 @@ function startUserGame(m){
   if(RUN.mode === "guest" && RUN.myTeams.includes(ctrl)) { /* your own team */ }
   const gi = m.games.length, blue = blueFor(m, gi), opp = ctrl === m.a ? m.b : m.a;
   Object.assign(DS, {me:ctrl, opp, side: ctrl === blue ? "blue" : "red", fp:"blue", fmt: m.bo > 1 ? "fearless" : "bo1",
-    locked: lockedFor(m), steps:[], ai:true, showUsed:false, fresh:-1, sim:null, q:"", roleF:"ALL", game:gi + 1,
+    locked: lockedFor(m), steps:[], ai:true, showUsed:false, fresh:-1, sim:null, q:"", roleF:"ALL", game:gi + 1, series:null,
     tour:{mid:m.id, gi, next:"Continue"}});
   show("draft"); queueAI();
 }
@@ -372,7 +372,7 @@ function tourPlay(){
 function tourNext(){
   const m = M(DS.tour.mid);
   if(m && m.status !== "done"){ startUserGame(m); return; }
-  DS.tour = null; DS.steps = []; DS.sim = null; DS.ai = false; DS.locked = []; DS.fmt = "bo1";
+  DS.tour = null; DS.steps = []; DS.sim = null; DS.ai = true; DS.locked = []; DS.fmt = "bo1";
   show("tour");
 }
 

@@ -23,7 +23,7 @@ Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages u
 | Tab | What it does |
 |---|---|
 | Tournament | Worlds 2026 from Swiss round 1 (23 Oct) to the final (14 Nov). Three modes: **My teams** (draft for 1–4 teams, AI plays the rest), **Sim run** (all AI), **My team + guest picks** (your team plus a random side in every other match, with a switch to let the AI play until your team is up). |
-| Champ select | Free-play draft in competitive order, Bo1 or Fearless, optional AI opponent (2 s per action), suggestions, draft review, and a simulated game with a Player of the Game. Hover a player for their pool, best open pick and lane risk; a team name for its comp (damage mix, plan, synergy, open roles); a champion for its pro card. After every pick a "next best" strip shows the best follow-ups. |
+| Champ select | Series mode: pick your team, opponent, Bo1/Bo3/Bo5, Fearless or standard and game 1 side; the AI drafts the opponent by default (2 s per action). Competitive draft order, suggestions, draft review and a simulated game with Player of the Game. The series ends at 1/2/3 wins; a series panel shows the score, every game, each player's champions, K/D/A, KDA, average rating and POG points, the Series MVP race and series stats. Hover a player for their pool and lane risk, a team name for its comp, or a champion for its pro card. |
 | Teams / Top–Support | Player power bars, head-to-head and tier lists. Hover a player for their champion pool. |
 | Meta | Champion tier list from blended pro pick/ban presence (26.20 + 26.16–26.20) with win rate and rising / falling / fading filters, bot-lane duo grid, best partners, counters. |
 
