@@ -430,3 +430,4 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .slot.art .st b{font-size:19px;text-shadow:0 1px 2px color-mix(in srgb,var(--panel) 80%,transparent)}
 .slot.art select{background:color-mix(in srgb,var(--panel) 85%,transparent)}
 @media (max-width:640px){.slot.art{background-position:right 20%,80% 22%}}
+.stab4 th:nth-child(n+4),.stab4 td:nth-child(n+4),.stab3 th:nth-child(n+3),.stab3 td:nth-child(n+3){text-align:center}.stab4 .cname,.stab3 .cname{gap:6px}
