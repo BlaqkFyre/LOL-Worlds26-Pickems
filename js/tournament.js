@@ -75,8 +75,10 @@ const kdaOf = s => ((s.k + s.a) / Math.max(1, s.d)).toFixed(1);
    POG rating mirrors the numbers that separate LCK POG winners:
    result, KDA and deaths, kill participation, damage share (vs role
    norm), lane lead at 15 (CS), solo kills, vision for supports and
-   objective control for junglers/supports. Only the winning side is
-   eligible, as with LCK POG votes; each POG earns 100 POG points. */
+   objective control for junglers/supports. Normally only the winning side is
+   eligible, as with LCK POG votes, unless a losing player out-rates the
+   winners' best by LOSER_POG_GAP or more. Each POG earns 100 POG points. */
+const LOSER_POG_GAP = 1.1;  // rating points a losing player must beat the winners' best by to take POG
 const ROLE_DMG = {TOP:1.0, JGL:0.8, MID:1.25, ADC:1.35, SUP:0.45};
 const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
 /* Role balance (tuned so POG shares by role look like the LCK, where supports rarely lead POG points):
@@ -84,7 +86,7 @@ const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
    count more for junglers than supports, kills earn a little on their own, and a small final role adjustment. */
 const DMG_CAP = {TOP:1.6, JGL:1.6, MID:1.6, ADC:1.6, SUP:1.3};
 const OBJ_W = {TOP:0, JGL:0.10, MID:0, ADC:0, SUP:0.10};
-const ROLE_ADJ = {TOP:1.03, JGL:0.98, MID:1, ADC:0.98, SUP:0.99};
+const ROLE_ADJ = {TOP:1.05, JGL:0.98, MID:0.98, ADC:0.98, SUP:0.97};
 function gameStats(g){
   const opp = s => s === "blue" ? "red" : "blue";
   g.ps = {blue:{}, red:{}};
@@ -117,11 +119,17 @@ function gameStats(g){
         + (r === "SUP" ? 0.5 * Math.max(0, p.vis - 2.0) : 0)
         + OBJ_W[r] * p.objs
         - 0.15 * p.d;
+      /* outliers (rated 90+, e.g. Keria, Chovy, Canyon) earn a little extra, as LCK POG voting rewards standout players */
+      const ovp = (s === "blue" ? g.B : g.R).P[r].pl.ov;
+      rt += STAR.pog * Math.max(0, ovp - 90) / 6;
       p.rt = Math.max(0, Math.min(10, rt * ROLE_ADJ[r]));
     });
   });
-  const w = g.winner, T = w === "blue" ? g.B : g.R;
-  const best = ROLES.map(r => ({r, p: g.ps[w][r]})).sort((x,y) => y.p.rt - x.p.rt)[0];
+  /* POG normally goes to the winning side; a losing player takes it only with a rating at least LOSER_POG_GAP higher than the winners' best */
+  const top = sd => ROLES.map(r => ({r, p: g.ps[sd][r]})).sort((x,y) => y.p.rt - x.p.rt)[0];
+  const lw = g.winner === "blue" ? "red" : "blue", bw = top(g.winner), bl = top(lw);
+  const w = bl.p.rt - bw.p.rt >= LOSER_POG_GAP ? lw : g.winner, T = w === "blue" ? g.B : g.R;
+  const best = w === g.winner ? bw : bl;
   const p = best.p, why = [];
   why.push(`${p.k}/${p.d}/${p.a}`);
   why.push(`${Math.round(p.kp * 100)}% KP`);
@@ -129,6 +137,7 @@ function gameStats(g){
   if(p.csd >= 8) why.push(`+${p.csd} CS at 15`);
   if(p.solo) why.push(`${p.solo} solo kill${p.solo > 1 ? "s" : ""}`);
   if(best.r === "SUP") why.push(`${p.vis} vision/min`);
+  if(w !== g.winner) why.push("from the losing side");
   g.pog = {s: w, r: best.r, n: T.P[best.r].pl.n, c: T.P[best.r].c, rt: p.rt, why: why.join(" · ")};
 }
 
@@ -291,7 +300,7 @@ function cleanGame(g, m){
   const pog = g.pog || {}, ps2 = pog.s === "blue" || pog.s === "red" ? pog.s : null, pr = ROLES.includes(pog.r) ? pog.r : null;
   if(!ps2 || !pr) throw new Error("pog");
   const pteam = ps2 === "blue" ? blue : red;
-  if(pteam !== winner) throw new Error("pog side");
+  if(pteam !== winner){ const wbest = Math.max(...ROLES.map(r => ps[winner === blue ? "blue" : "red"][r].rt)); if(ps[ps2][pr].rt - wbest < LOSER_POG_GAP - 0.01) throw new Error("pog side"); }
   return {blue, red, winner, time:num(g.time,10,80), sec:num(g.sec,0,59), kills:{blue:num(g.kills && g.kills.blue,0,80), red:num(g.kills && g.kills.red,0,80)}, steps, ps,
     pog:{s:ps2, r:pr, team:pteam, n:team(pteam).p[ROLES.indexOf(pr)].n, c:ps[ps2][pr].c, rt:ps[ps2][pr].rt, why:`${ps[ps2][pr].k}/${ps[ps2][pr].d}/${ps[ps2][pr].a} · ${Math.round(ps[ps2][pr].kp * 100)}% KP`}};
 }
@@ -563,7 +572,7 @@ function awardsView(aw){
     <div><div class="eyebrow">All-Tournament team ${aw.done ? "" : "(current)"}</div><p class="notes" style="margin:2px 0 6px">Best average game rating per role, minimum ${aw.minG} games.</p>
     <div class="team5">${aw.team5.map((r, i) => `<div><span class="role">${ROLES[i]}</span>${r ? `<b class="hov" data-tp="${r.tid}|${i}" tabindex="0">${esc(r.p.n)}</b><span class="notes">${r.tid} · ${r.avgRt.toFixed(2)}</span>` : `<span class="notes">—</span>`}</div>`).join("")}</div></div>
     <div><div class="eyebrow">POG points leaderboard</div>${lead.length ? `<table class="tt full"><thead><tr><th>#</th><th>Player</th><th>POG</th><th>Points</th><th>Avg rating</th></tr></thead><tbody>${lead.map((r, i) => `<tr><td>${i + 1}</td><td><span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.tid} ${r.p.role}</span></td><td class="num">${r.s.pog}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td></tr>`).join("")}</tbody></table>` : `<p class="notes">No games yet.</p>`}</div>
-    <p class="notes" style="font-size:12px">Game rating (0–10) weighs the numbers that make LCK Player of the Game winners stand out: the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Metric choices follow LeagueLab's metrics guide and Team Liquid's statistical-standouts piece; points follow the LCK POG system. Supports are balanced so they win POG about as rarely as in the LCK (around 10% of games; Keria in 2023 was the first support to lead a split in POG points).</p>
+    <p class="notes" style="font-size:12px">Game rating (0–10) weighs the numbers that make LCK Player of the Game winners stand out: the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Metric choices follow LeagueLab's metrics guide and Team Liquid's statistical-standouts piece; points follow the LCK POG system. POG goes to the winning side unless a losing player's rating beats the winners' best by 1.1 or more (rare, under 1% of games). Supports are balanced so they win POG about as rarely as in the LCK (around 10% of games; Keria in 2023 was the first support to lead a split in POG points).</p>
   </div>`;
 }
 function gameDetail(m, g, gi){

@@ -15,6 +15,8 @@ function iconImg(c){
 }
 /* icon(name, px): square tile with initials underneath; the image covers them when it loads */
 function icon(c, s){ return `<span class="ico" data-ic="${esc(c)}"${s ? ` style="--s:${s}px"` : ""} aria-hidden="true"><b>${esc(initials(c))}</b>${iconImg(c)}</span>`; }
+/* picked champions in champ select: Data Dragon's centred splash art (no version needed); same on/off switch */
+const splashUrl = c => ASSETS.icons ? `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${encodeURIComponent(ddId(c))}_0.jpg` : "";
 function patchIcons(){ if(!ASSETS.icons || !ASSETS.ver) return; document.querySelectorAll(".ico[data-ic]").forEach(el => { if(!el.querySelector("img")) el.insertAdjacentHTML("beforeend", iconImg(el.dataset.ic)); }); }
 (function loadDD(){
   if(!ASSETS.icons) return;

@@ -390,7 +390,9 @@ const SIMK=0.15; /* strength scale: calibrated against 711 real 2026 pro series 
 function teamStr(id){
   const t=team(id),ps=picksOf(id),P={};ROLES.forEach((r,i)=>{const pk=ps.find(p=>p.r===r);P[r]={pl:t.p[i],c:pk?pk.c:"?",m:pk?champMod(t.p[i],pk.c):0}});
   const a=(r,j)=>(P[r].pl.a[j]+P[r].m)*SIMK;let syn=0;for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const l=SYN[ps[i].c+"|"+ps[j].c];if(l!=null)syn+=l}
-  return {id,P,syn,
+  /* star factor: the best player on the team (rated 90+) can swing fights a little on their own */
+  const star=Math.max(0,...ROLES.map(r=>P[r].pl.ov-90))*STAR.fight;
+  return {id,P,syn,star,
     lane:{TOP:a("TOP",0),MID:a("MID",0),BOT:(a("ADC",0)+a("SUP",0))/2},jgl:a("JGL",0),
     obj:(a("JGL",1)+a("SUP",1)+a("MID",1))/3,
     tf:(a("TOP",1)+a("JGL",2)+a("MID",2)+a("ADC",1)+a("SUP",2))/5+syn*0.25,
@@ -399,9 +401,12 @@ function teamStr(id){
 const KW={TOP:2,JGL:2,MID:3,ADC:3.2,SUP:0.6};
 /* fight randomness and how much a gold lead counts in fights (tuned so favourites win about as often as in pro play) */
 const SIM_SD=5,SIM_GOLD=1000;
+/* star players: k = how strongly rating shifts kill share, die = how much less stars die, assist = support Playmaking → assists,
+   fight = fight bonus per rating point above 90 for a team's best player, pog = game-rating bonus for players rated 90+ (per 6 points) */
+const STAR={k:12,die:0.8,assist:85,fight:0.08,pog:0.35};
 /* late-game tuning: buff and soul fight bonus, push power, when the Nexus can fall, comeback bounty, how fast gold leads fade.
    Tuned to LCK 2026 (RFT.GG): average game ~32 min, team taking Baron wins ~85%, team taking Elder wins ~75%. */
-const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:4,soulFight:0.5,baronPush:1.2,elderPush:1.5,goldPush:5000,latePush:12,endBar:3.0,bounty:1.0,goldFade:8};
+const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:5.5,soulFight:0.5,baronPush:1.2,elderPush:1.5,goldPush:5000,latePush:12,endBar:3.0,bounty:1.0,goldFade:8};
 function wpick(o){const e=Object.entries(o);let s=e.reduce((x,[,w])=>x+w,0)*Math.random();for(const [k,w] of e){if((s-=w)<=0)return k}return e[0][0]}
 function simGame(quiet){
   const B=teamStr(idOnSide("blue")),R=teamStr(idOnSide("red")),S={blue:B,red:R},opp=s=>s==="blue"?"red":"blue";
@@ -409,8 +414,13 @@ function simGame(quiet){
   ROLES.forEach(r=>{g.kda.blue[r]=[0,0,0];g.kda.red[r]=[0,0,0]});
   const nm=(s,r)=>`${S[s].P[r].pl.n} (${S[s].P[r].c})`;
   const ev=(t,s,txt)=>{if(!quiet)g.ev.push([t,s,txt])};
-  const kill=(s,n,forced)=>{for(let i=0;i<n;i++){const kr=forced&&i===0?forced:wpick(KW),vr=wpick({TOP:2,JGL:2,MID:2,ADC:2.5,SUP:2.5});g.kda[s][kr][0]++;g.kda[opp(s)][vr][1]++;
-    ROLES.filter(r=>r!==kr&&Math.random()<0.55).forEach(r=>g.kda[s][r][2]++);g.k[s]++}};
+  /* who gets kills, deaths and assists: role first, then player quality — stars take more of the kills and die less;
+     a support's assists follow their Playmaking rating */
+  const qW=(sd,r)=>Math.exp((S[sd].P[r].pl.ov-85)/STAR.k);
+  const KWs={},VWs={};["blue","red"].forEach(sd=>{KWs[sd]={};VWs[sd]={};ROLES.forEach(r=>{KWs[sd][r]=KW[r]*qW(sd,r);VWs[sd][r]={TOP:2,JGL:2,MID:2,ADC:2.5,SUP:2.5}[r]/Math.pow(qW(sd,r),STAR.die)})});
+  const asP=(sd,r)=>{const pl=S[sd].P[r].pl,v=r==="SUP"?pl.a[0]:pl.ov;return Math.min(0.85,0.55*(1+(v-85)/STAR.assist))};
+  const kill=(s,n,forced)=>{for(let i=0;i<n;i++){const kr=forced&&i===0?forced:wpick(KWs[s]),vr=wpick(VWs[opp(s)]);g.kda[s][kr][0]++;g.kda[opp(s)][vr][1]++;
+    ROLES.filter(r=>r!==kr&&Math.random()<asP(s,r)).forEach(r=>g.kda[s][r][2]++);g.k[s]++}};
   const swing=(s,amt)=>{g.gold+=s==="blue"?amt:-amt};
   const lead=()=>g.gold>0?"blue":"red";
   let fb=false;
@@ -437,7 +447,7 @@ function simGame(quiet){
   let soul=null,dT=15,bT=24+Math.floor(Math.random()*3),eT=99;
   const fight=(t,label,wt,bonus,gf)=>{const goldW=(gf==null?1:gf)*g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade));
     const bf=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0);
-    const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+goldW+bf("blue")-bf("red")+(bonus||0)+gauss()*SIM_SD;const w=d>0?"blue":"red",l=opp(w);g.fights.push([t,w,label,g.gold]);
+    const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+goldW+bf("blue")-bf("red")+(B.star-R.star)+(bonus||0)+gauss()*SIM_SD;const w=d>0?"blue":"red",l=opp(w);g.fights.push([t,w,label,g.gold]);
     const late=t>=35,kw=2+Math.floor(Math.random()*(late?4:3)),kl=Math.floor(Math.random()*2);kill(w,kw);kill(l,kl);
     const behind=gl2(w)<0?Math.min(1,-gl2(w)/8000):0;swing(w,(600+kw*300)*(1+behind*T.bounty));
     const star=wpick({TOP:1,JGL:1,MID:2,ADC:2,SUP:0.6});ev(t,w,`${label}: ${team(S[w].id).name} win ${kw}-for-${kl}, led by ${nm(w,star)}`);g.gl.push([t,g.gold]);return {w,kw,kl}};
@@ -506,7 +516,8 @@ function teamPanel(id){
   const t=team(id),sd=sideOf(id),ps=picksOf(id),bs=bansOf(id),i=DS.steps.length,nxt=i<20?SEQ[i]:null,isNext=nxt&&actorId(nxt[0])===id;
   const fpTeam=idOnSide(DS.fp)===id,picking=isNext&&nxt[1]==="pick",nextRole=picking?openRoles(id)[0]:null;
   const byRole=ROLES.map((r,ri)=>{const p=ps.find(x=>x.r===r),pl=t.p[ri];
-    return `<div class="slot ${p?"on":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}">${p?`<span class="hov" data-tc="${esc(p.c)}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch">${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
+    const art=p&&splashUrl(p.c);
+    return `<div class="slot ${p?"on":""}${art?" art":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}"${art?` style="--splash:url('${art}')"`:""}>${p?`<span class="hov" data-tc="${esc(p.c)}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch">${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
   const banSlots=[0,1,2,3,4].map(j=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}" tabindex="0" aria-label="Banned: ${esc(b.c)}"`:""}>${b?icon(b.c,34):willBe?"<small>ban</small>":""}</span>`}).join("");
   return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh hov" data-tt="${id}" tabindex="0"><span><span class="tb" style="--tc:${teamCol(id)}">${esc(id)}</span> ${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
     <div class="bans">${banSlots}</div>${byRole}${picking?`<div class="picking">Picking… open: ${openRoles(id).join(", ")}</div>`:""}</div>`;
