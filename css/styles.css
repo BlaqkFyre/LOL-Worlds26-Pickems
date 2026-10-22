@@ -423,3 +423,4 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .hsec{display:grid;gap:6px;padding-top:8px;border-top:1px solid var(--line)}.hsec>.label{color:var(--gold);margin:0}
 .cpt{display:inline-grid;cursor:help;width:max-content;justify-self:center}.cbtn .cpt{max-width:none;overflow:visible}.rec>.cpt{grid-column:1;grid-row:1/span 3;align-self:start}
 .ctab th:not(:first-child),.ctab td:not(:first-child),.ctab td.num{text-align:center}
+.upset{display:inline-block;margin-left:10px;padding:2px 8px;font:700 13px var(--display);letter-spacing:.12em;text-transform:uppercase;background:var(--gold);color:var(--bg);vertical-align:middle}

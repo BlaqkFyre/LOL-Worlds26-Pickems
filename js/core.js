@@ -397,10 +397,12 @@ function teamStr(id){
     late:(a("TOP",2)+a("ADC",2)+a("SUP",2)+a("MID",2))/4};
 }
 const KW={TOP:2,JGL:2,MID:3,ADC:3.2,SUP:0.6};
+/* fight randomness and how much a gold lead counts in fights (tuned so favourites win about as often as in pro play) */
+const SIM_SD=5,SIM_GOLD=1000;
 function wpick(o){const e=Object.entries(o);let s=e.reduce((x,[,w])=>x+w,0)*Math.random();for(const [k,w] of e){if((s-=w)<=0)return k}return e[0][0]}
 function simGame(quiet){
   const B=teamStr(idOnSide("blue")),R=teamStr(idOnSide("red")),S={blue:B,red:R},opp=s=>s==="blue"?"red":"blue";
-  const g={solo:{blue:{},red:{}},jd:0,gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},gr:{blue:0,red:0},ev:[],gl:[[0,0]],kda:{blue:{},red:{}},lanes:{}};
+  const g={fights:[],solo:{blue:{},red:{}},jd:0,gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},gr:{blue:0,red:0},ev:[],gl:[[0,0]],kda:{blue:{},red:{}},lanes:{}};
   ROLES.forEach(r=>{g.kda.blue[r]=[0,0,0];g.kda.red[r]=[0,0,0]});
   const nm=(s,r)=>`${S[s].P[r].pl.n} (${S[s].P[r].c})`;
   const ev=(t,s,txt)=>{if(!quiet)g.ev.push([t,s,txt])};
@@ -423,7 +425,7 @@ function simGame(quiet){
     if(o==="Dragon")g.dr[w]++;else g.gr[w]++;swing(w,o==="Dragon"?250:350);ev(t,w,`${o} to ${team(S[w].id).name}${o==="Dragon"?` (${g.dr[w]} dragon${g.dr[w]>1?"s":""})`:""} — ${nm(w,"JGL")} controls the pit`)});
   g.gl.push([14,g.gold]);
   /* mid game fights */
-  const fight=(t,label,wt)=>{const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+g.gold/1600+gauss()*8;const w=d>0?"blue":"red",l=opp(w);
+  const fight=(t,label,wt)=>{const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+g.gold/SIM_GOLD+gauss()*SIM_SD;const w=d>0?"blue":"red",l=opp(w);g.fights.push([t,w,label,g.gold]);
     const kw=2+Math.floor(Math.random()*3),kl=Math.floor(Math.random()*2);kill(w,kw);kill(l,kl);g.tw[w]+=1+(Math.random()<0.5?1:0);swing(w,700+kw*300);
     const star=wpick({TOP:1,JGL:1,MID:2,ADC:2,SUP:0.6});ev(t,w,`${label}: ${team(S[w].id).name} win ${kw}-for-${kl}, led by ${nm(w,star)}`);g.gl.push([t,g.gold]);return w};
   fight(16+Math.floor(Math.random()*3),"Skirmish over mid tower",1);
@@ -456,12 +458,26 @@ function simView(){
   const sb=s=>{const id=s==="blue"?blueId:redId,T=s==="blue"?g.B:g.R;return `<div class="an ${s}"><h3>${esc(team(id).name)} <small>${s} · ${g.k[s]} kills · ${g.tw[s]} towers · ${g.dr[s]} dragons · ${g.ba[s]} barons</small></h3><table class="tt full"><thead><tr><th>Role</th><th>Player</th><th>Champion</th><th>K/D/A</th><th>DMG%</th><th>CSD@15</th><th>Rating</th></tr></thead><tbody>${ROLES.map((r,i)=>`<tr><td>${r}</td><td class="hov" data-tp="${id}|${i}" tabindex="0">${esc(T.P[r].pl.n)}</td><td class="hov" data-tc="${esc(T.P[r].c)}" tabindex="0">${esc(T.P[r].c)}</td><td class="num">${g.kda[s][r].join("/")}</td>${g.ps?`<td class="num">${Math.round(g.ps[s][r].dmgS*100)}%</td><td class="num">${g.ps[s][r].csd>0?"+":""}${g.ps[s][r].csd}</td><td class="num">${g.pog&&g.pog.s===s&&g.pog.r===r?"★ ":""}${g.ps[s][r].rt.toFixed(1)}</td>`:""}</tr>`).join("")}</tbody></table></div>`};
   const lane=L=>{const d=g.lanes[L];const s=d>0?"blue":"red";return `<span class="chip ${Math.abs(d)<2?"off":s==="blue"?"bl":"rd"}">${L}: ${Math.abs(d)<2?"even":team(s==="blue"?blueId:redId).id+" ahead"}</span>`};
   const fx=(lab,b,r)=>{const d=b-r;return `<span class="chip ${Math.abs(d)<1?"off":d>0?"bl":"rd"}">${lab}: ${Math.abs(d)<1?"even":(d>0?team(blueId).id:team(redId).id)+" +"+Math.abs(d).toFixed(1)}</span>`};
-  return `<div class="sim"><div class="result ${w}"><span class="eyebrow" style="color:inherit">Simulated game</span><b>${esc(team(wid).name)} win</b><span>${g.time}:${String(g.sec).padStart(2,"0")} · kills ${g.k.blue}–${g.k.red} · this draft wins for ${team(wid).id} in ${pct}% of simulations</span>${g.pog?`<span class="pogline">Player of the Game: <b>${esc(g.pog.n)}</b> (${esc(g.pog.c)}) · rating ${g.pog.rt.toFixed(1)} · ${esc(g.pog.why)}</span>`:""}</div>
-    <div class="ctrls"><span class="notes">Why:</span>${lane("TOP")}${lane("MID")}${lane("BOT")}${fx("Jungle early",g.B.jgl,g.R.jgl)}${fx("Objectives",g.B.obj,g.R.obj)}${fx("Teamfights",g.B.tf,g.R.tf)}${fx("Late game",g.B.late,g.R.late)}</div>
+  /* this game's story: lanes, gold at 15, objectives, fights won and the fight that ended it */
+  const tid=x=>team(x==="blue"?blueId:redId).id,sch=(lab,x)=>`<span class="chip ${x?x==="blue"?"bl":"rd":"off"}">${lab}</span>`;
+  const g15=(g.gl.find(x=>x[0]>=14)||[0,0])[1],fw={blue:g.fights.filter(f=>f[1]==="blue").length,red:g.fights.filter(f=>f[1]==="red").length};
+  const lead=(a,b)=>a>b?"blue":b>a?"red":null,mm=t=>`${t}:${String((t*37)%60).padStart(2,"0")}`;
+  const last=g.fights[g.fights.length-1];
+  const story=[sch(`Gold @15: ${Math.abs(g15)<500?"even":tid(g15>0?"blue":"red")+" +"+(Math.abs(g15)/1000).toFixed(1)+"k"}`,Math.abs(g15)<500?null:g15>0?"blue":"red"),
+    sch(`Dragons ${g.dr.blue}–${g.dr.red}`,lead(g.dr.blue,g.dr.red)),sch(`Barons ${g.ba.blue}–${g.ba.red}`,lead(g.ba.blue,g.ba.red)),sch(`Towers ${g.tw.blue}–${g.tw.red}`,lead(g.tw.blue,g.tw.red)),
+    sch(`Fights won ${fw.blue}–${fw.red}`,lead(fw.blue,fw.red)),last?sch(`Decided: ${last[2].toLowerCase()} at ${mm(last[0])} → ${tid(last[1])}`,last[1]):""].join("");
+  /* upset: the winner was under 25% to win this draft — find where it turned */
+  const upset=pct<25;let turn="";
+  if(upset){const ws=w,sg=v=>ws==="blue"?v:-v;const behind=g.fights.filter(f=>f[1]===ws&&sg(f[3])<=0);
+    const f=behind.length?behind[behind.length-1]:last;
+    if(!behind.length&&sg(g15)>=500)turn=`${esc(team(wid).name)} won the laning phase (+${(sg(g15)/1000).toFixed(1)}k gold at 15) and never gave the lead back, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`;else turn=`${esc(team(wid).name)} turned it at ${mm(f[0])}: won the ${esc(f[2].toLowerCase())}${sg(f[3])<0?` from ${(Math.abs(f[3])/1000).toFixed(1)}k gold down`:""}${f!==last?` and the deciding fight at ${mm(last[0])}`:""}, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`}
+  return `<div class="sim"><div class="result ${w}"><span class="eyebrow" style="color:inherit">Simulated game</span><b>${esc(team(wid).name)} win${upset?` <span class="upset">Upset</span>`:""}</b><span>${g.time}:${String(g.sec).padStart(2,"0")} · kills ${g.k.blue}–${g.k.red} · this draft wins for ${team(wid).id} in ${pct}% of simulations</span>${upset?`<span class="pogline">${turn}</span>`:""}${g.pog?`<span class="pogline">Player of the Game: <b>${esc(g.pog.n)}</b> (${esc(g.pog.c)}) · rating ${g.pog.rt.toFixed(1)} · ${esc(g.pog.why)}</span>`:""}</div>
+    <div class="ctrls"><span class="notes">This game:</span>${lane("TOP")}${lane("MID")}${lane("BOT")}${story}</div>
+    <div class="ctrls"><span class="notes">On paper:</span>${fx("Jungle early",g.B.jgl,g.R.jgl)}${fx("Objectives",g.B.obj,g.R.obj)}${fx("Teamfights",g.B.tf,g.R.tf)}${fx("Late game",g.B.late,g.R.late)}${sch(`Pre-game: ${tid(bwin>=.5?"blue":"red")} ${Math.round(Math.max(bwin,1-bwin)*100)}%`,bwin>=.5?"blue":"red")}</div>
     ${goldChart(g.gl,g.time)}
     <div class="board">${sb("blue")}${sb("red")}</div>
     <div><div class="eyebrow">Play-by-play</div><ol class="pbp">${g.ev.map(([t,s,x])=>`<li class="${s}"><span class="num">${t}:${String((t*37)%60).padStart(2,"0")}</span>${esc(x)}</li>`).join("")}</ol></div>
-    <p class="notes" style="font-size:12px;margin:0">Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>
+    <p class="notes" style="font-size:12px;margin:0">"This game" shows what happened in this simulation; "On paper" shows the teams' rating edges going in. Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>
     ${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:`<button class="btn" data-act="run">Run again</button>`}</div>`;
 }
 /* ---- render ---- */
