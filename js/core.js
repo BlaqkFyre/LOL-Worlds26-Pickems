@@ -386,7 +386,7 @@ const sig=x=>1/(1+Math.exp(-x));
 function champMod(pl,c){const x=poolOf(pl).find(y=>y[0]===c),pr=presOf(c),d=CHAMP_DB[c];let m=pr>=55?2:pr>=40?1.5:pr>=30?1:pr>0?0.5:0;
   const W=wrOf(c);if(W)m+=Math.max(-1.5,Math.min(1.5,(W.adj-50)/4));
   if(x)m+=(3+((x[2]||55)-55)/10)*(d&&d.fade?0.5:1);else if(pl.picks.length)m-=3;return m}
-const SIMK=0.3;
+const SIMK=0.15; /* strength scale: calibrated against 711 real 2026 pro series (research/backtest-2026.md); was 0.3, which made favourites far too sure */
 function teamStr(id){
   const t=team(id),ps=picksOf(id),P={};ROLES.forEach((r,i)=>{const pk=ps.find(p=>p.r===r);P[r]={pl:t.p[i],c:pk?pk.c:"?",m:pk?champMod(t.p[i],pk.c):0}});
   const a=(r,j)=>(P[r].pl.a[j]+P[r].m)*SIMK;let syn=0;for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const l=SYN[ps[i].c+"|"+ps[j].c];if(l!=null)syn+=l}
@@ -399,10 +399,13 @@ function teamStr(id){
 const KW={TOP:2,JGL:2,MID:3,ADC:3.2,SUP:0.6};
 /* fight randomness and how much a gold lead counts in fights (tuned so favourites win about as often as in pro play) */
 const SIM_SD=5,SIM_GOLD=1000;
+/* late-game tuning: buff and soul fight bonus, push power, when the Nexus can fall, comeback bounty, how fast gold leads fade.
+   Tuned to LCK 2026 (RFT.GG): average game ~32 min, team taking Baron wins ~85%, team taking Elder wins ~75%. */
+const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:4,soulFight:0.5,baronPush:1.2,elderPush:1.5,goldPush:5000,latePush:12,endBar:3.0,bounty:1.0,goldFade:8};
 function wpick(o){const e=Object.entries(o);let s=e.reduce((x,[,w])=>x+w,0)*Math.random();for(const [k,w] of e){if((s-=w)<=0)return k}return e[0][0]}
 function simGame(quiet){
   const B=teamStr(idOnSide("blue")),R=teamStr(idOnSide("red")),S={blue:B,red:R},opp=s=>s==="blue"?"red":"blue";
-  const g={fights:[],solo:{blue:{},red:{}},jd:0,gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},gr:{blue:0,red:0},ev:[],gl:[[0,0]],kda:{blue:{},red:{}},lanes:{}};
+  const g={fights:[],el:{blue:0,red:0},inh:{blue:0,red:0},soul:null,solo:{blue:{},red:{}},jd:0,gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},gr:{blue:0,red:0},ev:[],gl:[[0,0]],kda:{blue:{},red:{}},lanes:{}};
   ROLES.forEach(r=>{g.kda.blue[r]=[0,0,0];g.kda.red[r]=[0,0,0]});
   const nm=(s,r)=>`${S[s].P[r].pl.n} (${S[s].P[r].c})`;
   const ev=(t,s,txt)=>{if(!quiet)g.ev.push([t,s,txt])};
@@ -421,28 +424,46 @@ function simGame(quiet){
   if(Math.abs(jd)>4){const w=jd>0?"blue":"red";kill(w,1,"JGL");ev(4+Math.floor(Math.random()*4),w,`${nm(w,"JGL")} ganks ${gankLane.toLowerCase()} lane for a kill`);fb=true;swing(w,250)}
   g.gl.push([7,g.gold]);
   const objP=s=>sig(((S[s].obj-S[opp(s)].obj)+(s==="blue"?g.gold:-g.gold)/1200)/8);
-  [[6,"Void grubs"],[7,"Dragon"],[13,"Dragon"],[14,"Rift Herald"]].forEach(([t,o])=>{const w=Math.random()<objP("blue")?"blue":"red";
+  [[5,"Dragon"],[6,"Void grubs"],[10,"Dragon"],[14,"Rift Herald"]].forEach(([t,o])=>{const w=Math.random()<objP("blue")?"blue":"red";
     if(o==="Dragon")g.dr[w]++;else g.gr[w]++;swing(w,o==="Dragon"?250:350);ev(t,w,`${o} to ${team(S[w].id).name}${o==="Dragon"?` (${g.dr[w]} dragon${g.dr[w]>1?"s":""})`:""} — ${nm(w,"JGL")} controls the pit`)});
   g.gl.push([14,g.gold]);
-  /* mid game fights */
-  const fight=(t,label,wt)=>{const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+g.gold/SIM_GOLD+gauss()*SIM_SD;const w=d>0?"blue":"red",l=opp(w);g.fights.push([t,w,label,g.gold]);
-    const kw=2+Math.floor(Math.random()*3),kl=Math.floor(Math.random()*2);kill(w,kw);kill(l,kl);g.tw[w]+=1+(Math.random()<0.5?1:0);swing(w,700+kw*300);
-    const star=wpick({TOP:1,JGL:1,MID:2,ADC:2,SUP:0.6});ev(t,w,`${label}: ${team(S[w].id).name} win ${kw}-for-${kl}, led by ${nm(w,star)}`);g.gl.push([t,g.gold]);return w};
-  fight(16+Math.floor(Math.random()*3),"Skirmish over mid tower",1);
-  let t=21+Math.floor(Math.random()*2);const w2=fight(t,"Teamfight at dragon",1);if(g.dr.blue+g.dr.red<4){g.dr[w2]++;ev(t,w2,`Dragon secured (${g.dr[w2]})`)}
-  /* baron */
-  t=25+Math.floor(Math.random()*3);
-  const bp=sig(((B.obj-R.obj)*0.5+(B.tf-R.tf)*0.5+g.gold/1500+gauss()*3)/6);let bw=Math.random()<bp?"blue":"red";
-  const bf=fight(t,"Fight around Baron",0.7);bw=Math.random()<0.75?bf:bw;g.ba[bw]++;swing(bw,1500);ev(t+1,bw,`Baron Nashor to ${team(S[bw].id).name}`);g.gl.push([t+1,g.gold]);
-  let lastBaron=bw;
-  /* late game */
-  let winner=null;
-  for(let n=0;n<4&&!winner;n++){t+=3+Math.floor(Math.random()*3);
-    const w=fight(t,n===3?"Final teamfight":"Late-game teamfight",0.5);
-    const ahead=w==="blue"?g.gold:-g.gold;
-    if(w===lastBaron&&ahead>7000||n===3||ahead>12000){winner=w;g.tw[w]+=2;t+=1+Math.floor(Math.random()*2);ev(t,w,`${team(S[w].id).name} push through mid and destroy the Nexus`)}
-    else if(n===1&&t>=30){const ew=Math.random()<sig(((w==="blue"?1:-1)*(B.obj-R.obj)+ahead/800)/4)?w:opp(w);g.ba[ew]++;lastBaron=ew;swing(ew,1500);ev(t+1,ew,`Second Baron to ${team(S[ew].id).name}`)}
+  /* ---- mid and late game: objectives, fights, structures, Nexus ----
+     Fights decide objectives and structures; a team only ends the game by winning a fight while it has an
+     inhibitor down and enough push (gold lead, Baron, Elder). A gold lead counts for less as the game goes long,
+     and the team that's behind gets bounty gold when it wins a fight, so late games even out. */
+  const T=LATE;
+  const gl2=s=>s==="blue"?g.gold:-g.gold;                         /* gold lead from s's side */
+  const buff={baron:{blue:0,red:0},elder:{blue:0,red:0}};           /* minute the buff runs out */
+  let soul=null,dT=15,bT=24+Math.floor(Math.random()*3),eT=99;
+  const fight=(t,label,wt,bonus,gf)=>{const goldW=(gf==null?1:gf)*g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade));
+    const bf=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0);
+    const d=wt*(B.tf-R.tf)+(1-wt)*(B.late-R.late)+goldW+bf("blue")-bf("red")+(bonus||0)+gauss()*SIM_SD;const w=d>0?"blue":"red",l=opp(w);g.fights.push([t,w,label,g.gold]);
+    const late=t>=35,kw=2+Math.floor(Math.random()*(late?4:3)),kl=Math.floor(Math.random()*2);kill(w,kw);kill(l,kl);
+    const behind=gl2(w)<0?Math.min(1,-gl2(w)/8000):0;swing(w,(600+kw*300)*(1+behind*T.bounty));
+    const star=wpick({TOP:1,JGL:1,MID:2,ADC:2,SUP:0.6});ev(t,w,`${label}: ${team(S[w].id).name} win ${kw}-for-${kl}, led by ${nm(w,star)}`);g.gl.push([t,g.gold]);return {w,kw,kl}};
+  /* after a won fight: take towers, maybe an inhibitor, maybe the Nexus */
+  const push=(t,w,kw,kl)=>{const pw=1+(buff.baron[w]>t?T.baronPush:0)+(buff.elder[w]>t?T.elderPush:0)+Math.max(0,gl2(w))/T.goldPush+(kw-kl)*0.2+Math.max(0,t-30)/T.latePush;
+    const take=Math.min(11-g.tw[w],Math.max(1,Math.round(pw*(0.5+Math.random()*0.8))));g.tw[w]+=take;swing(w,take*300);
+    if(g.tw[w]>=7&&g.inh[w]<3&&Math.random()<sig(pw-1.6)){g.inh[w]++;swing(w,500);ev(t,w,`${team(S[w].id).name} break an inhibitor (${g.tw[w]} towers down)`)}
+    if(g.inh[w]>=1&&g.tw[w]>=9&&Math.random()<sig((pw-T.endBar)*1.4)){g.tw[w]=Math.min(11,g.tw[w]+2);return true}
+    return false};
+  let t=14,winner=null,step=0;
+  while(!winner&&t<62){step++;t+=step===1?2+Math.floor(Math.random()*3):3+Math.floor(Math.random()*2);
+    let res,obj=null;
+    const due=[["baron",bT],["elder",eT],["dragon",soul?99:dT]].filter(x=>t>=x[1]).sort((x,y)=>x[1]-y[1])[0];   /* the objective that has been up longest */
+    if(due&&due[0]==="baron"){obj="baron";res=fight(t,"Fight around Baron",0.7)}
+    else if(due&&due[0]==="elder"){obj="elder";res=fight(t,"Elder Dragon fight",0.5,0,T.elderGold)}  /* a single fight at the pit: gold matters less */
+    else if(due){obj="dragon";res=fight(t,"Teamfight at dragon",t<30?1:0.6)}
+    else res=fight(t,t<25?"Skirmish over mid tower":t<38?"Late-game teamfight":"Teamfight at the base",t<25?1:0.5);
+    const w=res.w;
+    if(obj){const take=Math.random()<(obj==="dragon"?0.95:obj==="elder"?T.elderSecure:0.88)?w:opp(w);       /* small steal chance */
+      if(obj==="baron"){g.ba[take]++;buff.baron[take]=t+3;bT=t+6+Math.floor(Math.random()*3);swing(take,1500);ev(t,take,`Baron Nashor to ${team(S[take].id).name}${take!==w?" — stolen!":""}`)}
+      else if(obj==="elder"){g.el[take]++;buff.elder[take]=t+2.5;eT=t+6;swing(take,800);ev(t,take,`Elder Dragon to ${team(S[take].id).name} — execute buff for 2:30${take!==w?" (stolen!)":""}`)}
+      else{g.dr[take]++;dT=t+5;swing(take,300);ev(t,take,`Dragon to ${team(S[take].id).name} (${g.dr[take]})`);
+        if(g.dr[take]>=4){soul=take;g.soul=take;eT=t+6;ev(t,take,`${team(S[take].id).name} claim dragon soul — Elder Dragon spawns in 6 minutes`)}}}
+    if(push(t,w,res.kw,res.kl)){winner=w;t+=1;ev(t,w,`${team(S[w].id).name} push through ${buff.elder[w]>t-1?"with Elder ":buff.baron[w]>t-1?"with Baron ":""}and destroy the Nexus`)}
   }
+  if(!winner){winner=g.gold>=0?"blue":"red";ev(t,winner,`${team(S[winner].id).name} close it out and destroy the Nexus`)}
   g.winner=winner;g.time=t;{const fk=g.ev.slice().sort((a,b)=>a[0]-b[0]).find(e=>/Solo kill|2v2|ganks/.test(e[2]));if(fk)fk[2]+=" — first blood"}g.sec=Math.floor(Math.random()*60);g.gl.push([t,g.gold]);g.B=B;g.R=R;g.ev.sort((a,b)=>a[0]-b[0]);
   if(!quiet&&typeof gameStats==="function")gameStats(g);
   return g;

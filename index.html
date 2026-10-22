@@ -7,7 +7,7 @@
 <meta name="description" content="Worlds 2026 tournament simulator, champ select drafter, player power bars and meta tools for League of Legends Pick'Em.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="css/styles.css?v=10">
+<link rel="stylesheet" href="css/styles.css?v=12">
 <script>try{var t=localStorage.getItem("lolw26-theme"),w=localStorage.getItem("lolw26-worlds");if(t)document.documentElement.dataset.theme=t;if(w&&w!=="off")document.documentElement.dataset.worlds=w}catch(e){}</script>
 </head>
 <body>
@@ -24,6 +24,7 @@
     <p><strong>How the ratings are made:</strong> these are Claude's estimates, not official numbers. Player order follows Hotspawn's Worlds 2026 role power rankings (four editors each). Ratings are then adjusted with Strafe's top-5 lists and 2026 stats (KDA, kill participation, gold/XP at 15, DPM, solo kills, deaths). Stats from the LCS, LCP and CBLOL are discounted for league strength. Top Esports' 369 replaces ZUIAN (visa) and has only a handful of 2026 games.</p>
     <p><strong>Favourite picks:</strong> each player's three most-played champions in 2026 pro play (games, win rate) from mid.gg player pages. LOS players come from their Sheep Esports player pages, with CBLOL playoff stats from Sheep's event stats.</p>
     <p><strong>Meta status and champion cards:</strong> blended pick + ban presence from NerfPlz pro tables — the Worlds patch 26.20 (25 games) weighted ×4 with patches 26.16–26.20 (465 games) for 90%, plus the 2026 season (2,723 games) for 10%. Win rates are shrunk toward 50% for small samples. Builds, roles and play-in users come from NerfPlz champion pages (Leaguepedia data). Champion cards and player cards show this tournament's own numbers first; the pro research drives draft suggestions, the AI and the simulation.</p>
+    <p><strong>Game odds:</strong> the simulator is rule-based with random rolls. Its win odds were checked against 711 real 2026 pro series (LCK, LPL, LEC, LCS, LCP, CBLOL, First Stand, MSI, EWC, Worlds play-in) and recalibrated, because it had been far too confident. Those results are used only for that test. Details: research/backtest-2026.md in the GitHub repo.</p>
     <p><strong>Images:</strong> champion square icons load from Riot's Data Dragon. Teams are shown as colour badges only — no team or Riot logos.</p>
     <p><strong>Attributes:</strong> Top — Laning, Teamfight, Consistency · Jungle — Early game, Objectives, Teamfight · Mid — Laning, Roaming, Damage · ADC — Laning, Damage, Positioning · Support — Playmaking, Map presence, Reliability.</p>
     <p><strong>Sources</strong></p>
@@ -101,11 +102,11 @@
 </div>
 
 
-<script src="js/ui.js?v=10"></script>
-<script src="js/data.js?v=10"></script>
-<script src="js/champions.js?v=10"></script>
-<script src="js/assets.js?v=10"></script>
-<script src="js/tournament.js?v=10"></script>
-<script src="js/core.js?v=10"></script>
+<script src="js/ui.js?v=12"></script>
+<script src="js/data.js?v=12"></script>
+<script src="js/champions.js?v=12"></script>
+<script src="js/assets.js?v=12"></script>
+<script src="js/tournament.js?v=12"></script>
+<script src="js/core.js?v=12"></script>
 </body>
 </html>

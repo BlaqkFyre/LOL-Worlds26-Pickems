@@ -1,0 +1,153 @@
+date,event,stage,team_a,team_b,best_of,score_a,score_b,source
+2026-01-17,LEC 2026 Versus,Regular Season,KC,KCB,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-17,LEC 2026 Versus,Regular Season,MKOI,G2,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-18,LEC 2026 Versus,Regular Season,GX,G2,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-18,LEC 2026 Versus,Regular Season,MKOI,KC,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-19,LEC 2026 Versus,Regular Season,SHFT,MKOI,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-19,LEC 2026 Versus,Regular Season,KC,LR,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-19,LEC 2026 Versus,Regular Season,SK,G2,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-01-24,LEC 2026 Versus,Regular Season,SHFT,G2,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-01-24,LEC 2026 Versus,Regular Season,KC,SK,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-24,LEC 2026 Versus,Regular Season,MKOI,FNC,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-25,LEC 2026 Versus,Regular Season,MKOI,KCB,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-25,LEC 2026 Versus,Regular Season,KC,G2,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-26,LEC 2026 Versus,Regular Season,TH,G2,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-01-26,LEC 2026 Versus,Regular Season,KC,NAVI,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-26,LEC 2026 Versus,Regular Season,MKOI,GX,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-01-31,LEC 2026 Versus,Regular Season,G2,KCB,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-31,LEC 2026 Versus,Regular Season,VIT,KC,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-01-31,LEC 2026 Versus,Regular Season,MKOI,LR,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-01,LEC 2026 Versus,Regular Season,SK,MKOI,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-01,LEC 2026 Versus,Regular Season,FNC,KC,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-01,LEC 2026 Versus,Regular Season,LR,G2,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-02-02,LEC 2026 Versus,Regular Season,VIT,G2,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-02,LEC 2026 Versus,Regular Season,TH,MKOI,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-02-02,LEC 2026 Versus,Regular Season,SHFT,KC,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-07,LEC 2026 Versus,Regular Season,G2,NAVI,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-07,LEC 2026 Versus,Regular Season,VIT,MKOI,1,1,0,https://rdy.gg/en/lol/tournaments/1279
+2026-02-07,LEC 2026 Versus,Regular Season,GX,KC,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-08,LEC 2026 Versus,Regular Season,NAVI,MKOI,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-08,LEC 2026 Versus,Regular Season,KC,TH,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-08,LEC 2026 Versus,Regular Season,FNC,G2,1,0,1,https://rdy.gg/en/lol/tournaments/1279
+2026-02-16,LEC 2026 Versus,Playoffs - Upper Bracket Quarterfinal,VIT,MKOI,3,0,2,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-17,LEC 2026 Versus,Playoffs - Upper Bracket Quarterfinal,TH,G2,3,0,2,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-17,LEC 2026 Versus,Playoffs - Upper Bracket Quarterfinal,KC,GX,3,2,0,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-20,LEC 2026 Versus,Playoffs - Upper Bracket Semifinal,NAVI,MKOI,3,0,2,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-20,LEC 2026 Versus,Playoffs - Upper Bracket Semifinal,KC,G2,3,0,2,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-22,LEC 2026 Versus,Playoffs - Lower Bracket Quarterfinal,KC,VIT,3,2,1,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-23,LEC 2026 Versus,Playoffs - Upper Bracket Final,G2,MKOI,5,3,0,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-27,LEC 2026 Versus,Playoffs - Lower Bracket Semifinal,GX,KC,5,0,3,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-02-28,LEC 2026 Versus,Playoffs - Lower Bracket Final,MKOI,KC,5,2,3,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-03-01,LEC 2026 Versus,Playoffs - Grand Final,G2,KC,5,3,2,https://liquipedia.net/leagueoflegends/LEC/2026/Versus
+2026-03-28,LEC 2026 Spring,Regular Season,VIT,KC,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-03-28,LEC 2026 Spring,Regular Season,MKOI,NAVI,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-03-29,LEC 2026 Spring,Regular Season,FNC,MKOI,3,0,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-04,LEC 2026 Spring,Regular Season,TH,G2,3,0,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-05,LEC 2026 Spring,Regular Season,G2,FNC,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-06,LEC 2026 Spring,Regular Season,MKOI,VIT,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-11,LEC 2026 Spring,Regular Season,VIT,G2,3,2,1,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-11,LEC 2026 Spring,Regular Season,MKOI,SK,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-12,LEC 2026 Spring,Regular Season,KC,TH,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-18,LEC 2026 Spring,Regular Season,SK,G2,3,0,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-19,LEC 2026 Spring,Regular Season,MKOI,TH,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-20,LEC 2026 Spring,Regular Season,G2,SHFT,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-20,LEC 2026 Spring,Regular Season,KC,SK,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-24,LEC 2026 Spring,Regular Season,KC,NAVI,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-25,LEC 2026 Spring,Regular Season,SHFT,KC,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-04-26,LEC 2026 Spring,Regular Season,KC,FNC,3,2,1,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-03,LEC 2026 Spring,Regular Season,NAVI,G2,3,0,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-04,LEC 2026 Spring,Regular Season,MKOI,SHFT,3,2,1,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-08,LEC 2026 Spring,Regular Season,G2,KC,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-08,LEC 2026 Spring,Regular Season,MKOI,GX,3,2,0,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-09,LEC 2026 Spring,Regular Season,GX,G2,3,0,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-09,LEC 2026 Spring,Regular Season,KC,MKOI,3,2,1,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-10,LEC 2026 Spring,Regular Season,GX,KC,3,2,1,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-10,LEC 2026 Spring,Regular Season,G2,MKOI,3,1,2,https://rdy.gg/pt/lol/tournaments/1159
+2026-05-23,LEC 2026 Spring,Playoffs - Upper Bracket Semifinal,G2,KC,5,3,1,https://rdy.gg/en/lol/tournaments/1165
+2026-05-24,LEC 2026 Spring,Playoffs - Upper Bracket Semifinal,MKOI,VIT,5,3,0,https://rdy.gg/en/lol/tournaments/1165
+2026-05-25,LEC 2026 Spring,Playoffs - Upper Bracket Final,MKOI,G2,5,2,3,https://rdy.gg/en/lol/tournaments/1165
+2026-05-30,LEC 2026 Spring,Playoffs - Lower Bracket Quarterfinal,NAVI,KC,5,1,3,https://rdy.gg/en/lol/tournaments/1165
+2026-06-01,LEC 2026 Spring,Playoffs - Lower Bracket Semifinal,KC,GX,5,3,0,https://rdy.gg/en/lol/tournaments/1165
+2026-06-06,LEC 2026 Spring,Playoffs - Lower Bracket Final,KC,MKOI,5,3,0,https://rdy.gg/en/lol/tournaments/1165
+2026-06-07,LEC 2026 Spring,Playoffs - Grand Final,KC,G2,5,2,3,https://rdy.gg/en/lol/tournaments/1165
+2026-07-24,LEC 2026 Summer,Regular Season,G2,MKOI,3,2,1,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-24,LEC 2026 Summer,Regular Season,VIT,KC,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-25,LEC 2026 Summer,Regular Season,VIT,G2,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-25,LEC 2026 Summer,Regular Season,KC,MKOI,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-26,LEC 2026 Summer,Regular Season,MKOI,VIT,3,1,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-26,LEC 2026 Summer,Regular Season,G2,KC,3,1,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-07-31,LEC 2026 Summer,Regular Season,MKOI,SHFT,3,2,1,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-01,LEC 2026 Summer,Regular Season,KC,NAVI,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-02,LEC 2026 Summer,Regular Season,SK,G2,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-02,LEC 2026 Summer,Regular Season,FNC,MKOI,3,1,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-03,LEC 2026 Summer,Regular Season,KC,TH,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-08,LEC 2026 Summer,Regular Season,MKOI,GX,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-09,LEC 2026 Summer,Regular Season,TH,G2,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-09,LEC 2026 Summer,Regular Season,FNC,KC,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-10,LEC 2026 Summer,Regular Season,NAVI,G2,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-15,LEC 2026 Summer,Regular Season,G2,SHFT,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-16,LEC 2026 Summer,Regular Season,MKOI,NAVI,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-16,LEC 2026 Summer,Regular Season,G2,FNC,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-17,LEC 2026 Summer,Regular Season,GX,KC,3,0,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-22,LEC 2026 Summer,Regular Season,SK,MKOI,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-23,LEC 2026 Summer,Regular Season,SHFT,KC,3,1,2,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-24,LEC 2026 Summer,Regular Season,GX,G2,3,2,1,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-29,LEC 2026 Summer,Regular Season,KC,SK,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-08-30,LEC 2026 Summer,Regular Season,MKOI,TH,3,2,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-05,LEC 2026 Summer,Playoffs - Upper Bracket Semifinal,VIT,G2,5,0,3,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-05,LEC 2026 Summer,Playoffs - Upper Bracket Semifinal,KC,GX,5,3,1,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-06,LEC 2026 Summer,Playoffs - Upper Bracket Final,KC,G2,5,1,3,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-12,LEC 2026 Summer,Playoffs - Lower Bracket Round 1,VIT,MKOI,5,2,3,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-18,LEC 2026 Summer,Playoffs - Lower Bracket Semifinal,NAVI,MKOI,5,1,3,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-19,LEC 2026 Summer,Playoffs - Lower Bracket Final,KC,MKOI,5,0,3,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-09-20,LEC 2026 Summer,Playoffs - Grand Final,G2,MKOI,5,3,0,https://www.sheepesports.com/us/all/events/lec-2026-summer/matches
+2026-01-24,LCS 2026 Lock-In,Swiss Stage,C9,TL,3,2,0,https://rdy.gg/en/lol/tournaments/1014
+2026-01-26,LCS 2026 Lock-In,Swiss Stage,DIG,LYON,3,0,2,https://rdy.gg/en/lol/tournaments/1014
+2026-01-31,LCS 2026 Lock-In,Swiss Stage,C9,LYON,3,2,0,https://rdy.gg/en/lol/tournaments/1014
+2026-02-02,LCS 2026 Lock-In,Swiss Stage,SR,TL,3,0,2,https://rdy.gg/en/lol/tournaments/1014
+2026-02-07,LCS 2026 Lock-In,Swiss Stage,TL,SEN,3,1,2,https://rdy.gg/en/lol/tournaments/1014
+2026-02-08,LCS 2026 Lock-In,Swiss Stage,DSG,LYON,3,2,1,https://rdy.gg/en/lol/tournaments/1014
+2026-02-09,LCS 2026 Lock-In,Last-Chance Tiebreaker,TL,DIG,1,1,0,https://rdy.gg/en/lol/tournaments/1014
+2026-02-20,LCS 2026 Lock-In,Playoffs - Lower Bracket Quarterfinal,TL,DSG,5,3,0,https://www.liquipedia.net/leagueoflegends/LCS/2026/Lock-In
+2026-02-21,LCS 2026 Lock-In,Playoffs - Lower Bracket Quarterfinal,LYON,FLY,5,3,0,https://www.liquipedia.net/leagueoflegends/LCS/2026/Lock-In
+2026-02-27,LCS 2026 Lock-In,Playoffs - Lower Bracket Semifinal,TL,LYON,5,1,3,https://www.liquipedia.net/leagueoflegends/LCS/2026/Lock-In
+2026-02-28,LCS 2026 Lock-In,Playoffs - Lower Bracket Final,SEN,LYON,5,1,3,https://www.liquipedia.net/leagueoflegends/LCS/2026/Lock-In
+2026-03-01,LCS 2026 Lock-In,Playoffs - Grand Final,C9,LYON,5,1,3,https://www.liquipedia.net/leagueoflegends/LCS/2026/Lock-In
+2026-04-04,LCS 2026 Spring,Regular Season,C9,LYON,3,2,1,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-05,LCS 2026 Spring,Regular Season,TL,FLY,3,2,1,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-11,LCS 2026 Spring,Regular Season,SR,TL,3,0,2,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-11,LCS 2026 Spring,Regular Season,DIG,LYON,3,1,2,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-19,LCS 2026 Spring,Regular Season,LYON,SR,3,2,0,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-19,LCS 2026 Spring,Regular Season,DIG,TL,3,1,2,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-26,LCS 2026 Spring,Regular Season,LYON,DSG,3,2,0,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-04-26,LCS 2026 Spring,Regular Season,TL,SEN,3,2,1,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-02,LCS 2026 Spring,Regular Season,TL,DSG,3,2,0,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-03,LCS 2026 Spring,Regular Season,LYON,SEN,3,2,0,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-10,LCS 2026 Spring,Regular Season,LYON,TL,3,2,1,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-16,LCS 2026 Spring,Regular Season,TL,C9,3,0,2,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-17,LCS 2026 Spring,Regular Season,FLY,LYON,3,2,1,https://www.sheepesports.com/en/all/events/lcs-2026-spring/matches
+2026-05-24,LCS 2026 Spring,Playoffs - Upper Bracket Semifinal,LYON,TL,5,3,2,https://rdy.gg/pt/lol/tournaments/1195
+2026-05-31,LCS 2026 Spring,Playoffs - Lower Bracket Quarterfinal,TL,SR,5,3,0,https://rdy.gg/pt/lol/tournaments/1195
+2026-06-06,LCS 2026 Spring,Playoffs - Lower Bracket Semifinal,FLY,TL,5,1,3,https://rdy.gg/pt/lol/tournaments/1195
+2026-06-07,LCS 2026 Spring,Playoffs - Upper Bracket Final,C9,LYON,5,0,3,https://rdy.gg/pt/lol/tournaments/1195
+2026-06-13,LCS 2026 Spring,Playoffs - Lower Bracket Final,C9,TL,5,0,3,https://rdy.gg/pt/lol/tournaments/1195
+2026-06-14,LCS 2026 Spring,Playoffs - Grand Final,LYON,TL,5,3,0,https://rdy.gg/pt/lol/tournaments/1195
+2026-07-25,LCS 2026 Summer,Regular Season,FLY,LYON,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-07-26,LCS 2026 Summer,Regular Season,TL,C9,3,2,0,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-02,LCS 2026 Summer,Regular Season,TL,SEN,3,2,0,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-02,LCS 2026 Summer,Regular Season,LYON,SR,3,2,0,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-09,LCS 2026 Summer,Regular Season,FLY,TL,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-09,LCS 2026 Summer,Regular Season,DIG,LYON,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-15,LCS 2026 Summer,Regular Season,DSG,TL,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-16,LCS 2026 Summer,Regular Season,LYON,SEN,3,1,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-29,LCS 2026 Summer,Regular Season,C9,LYON,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-29,LCS 2026 Summer,Regular Season,SR,TL,3,1,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-08-30,LCS 2026 Summer,Regular Season,LYON,TL,3,2,0,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-05,LCS 2026 Summer,Regular Season,DIG,TL,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-06,LCS 2026 Summer,Regular Season,DSG,LYON,3,0,2,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-19,LCS 2026 Summer,Playoffs - Upper Bracket Semifinal (stage inferred),LYON,C9,5,1,3,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-20,LCS 2026 Summer,Playoffs - Upper Bracket Semifinal (stage inferred),TL,FLY,5,3,0,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-26,LCS 2026 Summer,Playoffs - Lower Bracket Semifinal (stage inferred),LYON,SR,5,3,1,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-09-27,LCS 2026 Summer,Playoffs - Upper Bracket Final (stage inferred),C9,TL,5,1,3,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-10-03,LCS 2026 Summer,Playoffs - Lower Bracket Final (stage inferred),C9,LYON,5,1,3,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches
+2026-10-04,LCS 2026 Summer,Playoffs - Grand Final,TL,LYON,5,3,1,https://www.sheepesports.com/us/all/events/lcs-2026-summer/matches

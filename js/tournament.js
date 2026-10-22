@@ -84,7 +84,7 @@ const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
    count more for junglers than supports, kills earn a little on their own, and a small final role adjustment. */
 const DMG_CAP = {TOP:1.6, JGL:1.6, MID:1.6, ADC:1.6, SUP:1.3};
 const OBJ_W = {TOP:0, JGL:0.10, MID:0, ADC:0, SUP:0.10};
-const ROLE_ADJ = {TOP:1.0, JGL:0.98, MID:1, ADC:1, SUP:1.0};
+const ROLE_ADJ = {TOP:1.03, JGL:0.98, MID:1, ADC:0.98, SUP:0.99};
 function gameStats(g){
   const opp = s => s === "blue" ? "red" : "blue";
   g.ps = {blue:{}, red:{}};
