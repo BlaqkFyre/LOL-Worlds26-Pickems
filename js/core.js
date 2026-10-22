@@ -277,6 +277,27 @@ const hb=(label,inner,val,sub)=>`<div class="hb"><span>${label}</span><i>${inner
 const fill=(w,cls)=>`<b${cls?` class="${cls}"`:""} style="width:${Math.max(0,Math.min(100,w))}%"></b>`;
 const infoI=t=>`<span class="info" tabindex="0" aria-label="${esc(t)}">!<span class="tipx">${esc(t)}</span></span>`;
 function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.pin[1]:0;const st=typeof RUN!=="undefined"&&RUN&&RUN.stats.champ[c];if(st){w+=st.w;l+=st.p-st.w}return [w,l]}
+/* Worlds meta: 22 play-in games (NerfPlz top list for bans, play-in W-L for picks) plus every game of your run */
+function worldsMeta(c){const d=CHAMP_DB[c]||{},ch=CH.find(y=>y[0]===c),PG=22;let g=PG,p=0,b=0,w=0;
+  if(d.pin&&(d.pin[0]+d.pin[1])){p=d.pin[0]+d.pin[1];w=d.pin[0]}else if(ch&&ch[2]!=null)p=Math.round(ch[2]/100*PG);
+  if(ch&&ch[3]!=null)b=Math.round(ch[3]/100*PG);
+  const R=typeof RUN!=="undefined"&&RUN&&RUN.stats;if(R&&R.games){g+=R.games;const st=R.champ[c];if(st){p+=st.p;b+=st.b;w+=st.w}}
+  return {g,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/g*100),run:R?R.games:0}}
+/* champions seen on the same team at this Worlds (play-in drafts + your run): [name, wins together, games together] */
+function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||[x,0,0];e[2]++;if(won)e[1]++;m.set(x,e)};
+  COMPS.forEach(([s,g,wc,lc])=>{if(wc.includes(c))wc.forEach(x=>x!==c&&add(x,true));if(lc.includes(c))lc.forEach(x=>x!==c&&add(x,false))});
+  if(typeof RUN!=="undefined"&&RUN)RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
+  return [...m.values()].filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]||(b[1]/b[2])-(a[1]/a[2]))}
+/* five partners: measured pair lift first, then winning team-mates at this Worlds */
+function pairs5(c){const out=synOf(c).filter(x=>x[1]>0).map(([x,l])=>({x,em:"+"+l,cls:"g"}));const seen=new Set(out.map(o=>o.x));
+  worldsMates(c).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w} together`,cls:"g"})}});return out.slice(0,5)}
+/* five counters: same-lane matchups, then matchups from other lanes, then lane opponents that beat it at this Worlds */
+function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(x)).map(([x,w])=>({x,em:w+"%",cls:"b"}));const seen=new Set(out.map(o=>o.x));seen.add(c);
+  const more=[];Object.entries(CTR).forEach(([o,d])=>{d.s.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].w.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
+  more.sort((a,b)=>a[1]-b[1]).forEach(([x,w])=>{if(!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:w+"%",cls:"b",other:1})}});
+  if(out.length<5&&typeof RUN!=="undefined"&&RUN){const m=new Map();RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
+    [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`beat it ${w}-${g-w}`,cls:"b"})}})}
+  return out.slice(0,5)}
 function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
   (d&&d.pinBy||[]).forEach(([n,t,wl])=>{const [w,l]=wl.split("-").map(Number);m.set(n,{n,t,g:w+l,w})});
   if(typeof RUN!=="undefined"&&RUN)Object.entries(RUN.stats.pchamp).forEach(([key,pc])=>{const v=pc[c];if(!v)return;const [tid,i]=key.split("|"),p=team(tid).p[+i];const e=m.get(p.n)||{n:p.n,t:tid,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=tid;m.set(p.n,e)});
@@ -284,23 +305,25 @@ function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
 function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),rs=[...(ROLEMAP[c]||[])];
   const inGame=new Map();[DS.me,DS.opp].forEach(id=>picksOf(id).forEach(p=>inGame.set(p.c,id)));
-  const pb=d.rec?[d.rec,"26.16–26.20 · 465 games"]:d.p20?[d.p20,"26.20 · 25 games"]:d.sea?[d.sea,"2026 season"]:null;
-  const [ww,wl]=worldsWL(c),mp=mostPicked(c),sy=synOf(c).filter(x=>x[1]>0).slice(0,4);
-  const rel=l=>l.filter(([x])=>POOL.includes(x)||inGame.has(x));const ctr=rel(countersOf(c).loses).slice(0,3);
-  const cc=(x,em,cls)=>`<span class="cc${inGame.has(x)?" ig "+sideOf(inGame.get(x)):""}">${icon(x,22)}${esc(x)} <em class="${cls}">${em}</em></span>`;
+  const R=d.rec,RS=R?"26.16–26.20":d.sea?"2026 season":d.p20?"26.20 only":"",RT=R||d.sea||d.p20,WM=worldsMeta(c);
+  const mp=mostPicked(c),sy=pairs5(c),ctr=counters5(c);
+  const cc=o=>`<span class="cc${inGame.has(o.x)?" ig "+sideOf(inGame.get(o.x)):""}"${o.other?` title="matchup from another lane"`:""}>${icon(o.x,22)}${esc(o.x)} <em class="${o.cls}">${esc(o.em)}</em></span>`;
   const who=TEAMS.flatMap(t=>t.p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,t}))).filter(o=>inDraft(o.t.id)&&DS.steps.length);
-  const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":"",d.fade?"Fading":""].filter(Boolean);
+  const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":""].filter(Boolean);
   return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
-  <div class="hbars">${pb?hb(`Pick / ban ${infoI(`${pb[1]}. Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`)}`,fill(pb[0][0],"pk")+fill(pb[0][1],"bn"),`${pb[0][0]}% · ${pb[0][1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
-  ${d.p20?hb("Worlds patch",fill(d.p20[0]+d.p20[1]),`${d.p20[0]+d.p20[1]}%`,"26.20 · 25 games"):hb("Worlds patch","","—","not in 26.20 list")}
-  ${hb(`Recent patches ${infoI(`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues).${d.sea?` Season-wide: ${d.sea[0]+d.sea[1]}% presence.`:""}`)}`,d.rec?fill(d.rec[0]+d.rec[1]):"",d.rec?`${d.rec[0]+d.rec[1]}%`:"—",d.rec?"presence":"not in recent list")}
-  ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}
-  ${hb("Worlds W/L",ww+wl?fill(ww/(ww+wl)*100):"",`${ww}-${wl}`,"play-ins + Worlds")}</div>
+  <div class="hsec"><div class="label">Recent meta ${infoI(R?`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues). Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`:`${c} isn't in the 26.16–26.20 top list, so these are ${RS} numbers. Source: NerfPlz pro picks and bans.`)}</div><div class="hbars">
+  ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
+  ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
+  ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
+  <div class="hsec"><div class="label">Worlds meta ${infoI(`Worlds 2026 so far: the 22 play-in games (patch 26.20)${WM.run?` plus the ${WM.run} games of your run`:""} — ${WM.g} games. Play-in bans are only known for the most-contested champions.`)}</div><div class="hbars">
+  ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
+  ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
+  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div></div>
   <div class="key"><span><i style="background:var(--pick)"></i>Picked</span><span><i class="bnk"></i>Banned</span></div>
   <div><div class="label">Most picked at this Worlds ${infoI(`Bright: games on ${c} at this Worlds (play-ins and your run), then the win-loss. Dim number in brackets: that player's 2026 pro games on ${c} (mid.gg), used for draft strategy.`)}</div><div class="ccs">${mp.length?mp.map(e=>`<span class="cc" style="--tc:${teamCol(e.t)}"><span class="tm">${esc(e.t)}</span>${esc(e.n)} <em class="g">${e.g} gm</em> <span class="wl">${e.w}-${e.g-e.w}</span>${e.s?` <span class="dim">(${e.s}g)</span>`:""}</span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div></div>
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
-  <div><div class="label">Pairs with</div><div class="ccs">${sy.length?sy.map(([x,l])=>cc(x,"+"+l,"g")).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
-  <div><div class="label">Countered by</div><div class="ccs">${ctr.length?ctr.map(([x,w])=>cc(x,w+"%","b")).join(""):`<span class="notes">no matchup data</span>`}</div></div>
+  <div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at this Worlds fill the list.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
+  <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at this Worlds.")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
 function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
   let x=Math.min(Math.max(12,r.left),innerWidth-w-12),y=r.bottom+8;tip.style.left=x+"px";tip.style.top=y+"px";

@@ -420,3 +420,4 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .wrap>*,.view>*,.panel>*,.board>*{min-width:0}
 @media (max-width:640px){.board{grid-template-columns:minmax(0,1fr)}.cc{flex-wrap:wrap}}
 .track .tk.ban{min-height:0;padding:0;border:0;height:6px;background-color:currentColor}.track .tk.ban.blue{color:var(--bside)}.track .tk.ban.red{color:var(--rside)}
+.hsec{display:grid;gap:6px;padding-top:8px;border-top:1px solid var(--line)}.hsec>.label{color:var(--gold);margin:0}
