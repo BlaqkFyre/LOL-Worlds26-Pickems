@@ -326,14 +326,23 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at this Worlds.")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
 function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
+  /* portraits in the champion grid and suggestions: open beside the button (left or right, whichever has room) so the card never covers the row below */
+  const btn=e.target.dataset&&e.target.dataset.side?(e.target.closest("button")||e.target):null;
+  if(btn&&innerWidth>=700){const b=btn.getBoundingClientRect(),right=b.right+10+w<=innerWidth-8;const x=right?b.right+10:Math.max(8,b.left-10-w);let y=Math.max(8,b.top-40);tip.style.left=x+"px";tip.style.top=y+"px";
+    requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,innerHeight-h-8)+"px"});return}
   let x=Math.min(Math.max(12,r.left),innerWidth-w-12),y=r.bottom+8;tip.style.left=x+"px";tip.style.top=y+"px";
   requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,r.top-h-8)+"px"})}
 /* the card stays open while the pointer moves onto it, so its ! notes can be read */
 let tipT=null,tipEl=null;
-function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;tipEl=el;
+let tipD=null;
+function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;
+  clearTimeout(tipD);if(el.dataset.side&&e.type==="mouseover"){if(!tip.hidden){tip.hidden=true;tipEl=null}tipD=setTimeout(()=>showTip(el),300);return}showTip(el)}
+function showTip(el){tipEl=el;
   const ch=!!el.dataset.tc&&!el.dataset.tp;tip.classList.toggle("wide",ch);
   tip.innerHTML=el.dataset.tp?playerTip(...el.dataset.tp.split("|").map((v,i)=>i?+v:v)):el.dataset.tt?teamTip(el.dataset.tt):champTip(el.dataset.tc);tip.hidden=false;placeTip({target:el})}
-function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},220)}}
+function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipD);clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},el.dataset.side?120:220)}}
+/* clicking a champion (to pick or ban) always closes its card */
+document.addEventListener("click",e=>{if(!tip.contains(e.target)){clearTimeout(tipD);tip.hidden=true;tipEl=null}},true);
 tip.addEventListener("mouseenter",()=>clearTimeout(tipT));tip.addEventListener("mouseleave",()=>{tip.hidden=true;tipEl=null});
 document.addEventListener("mouseover",tipOn);document.addEventListener("mouseout",tipOff);
 document.addEventListener("focusin",tipOn);document.addEventListener("focusout",e=>{if(!tip.contains(e.relatedTarget))tipOff(e)});
@@ -470,6 +479,19 @@ function nextBest(){const last=[...DS.steps].reverse().find(s=>s.k==="pick");if(
   const tk=taken(),rs=POOL.filter(c=>!tk.has(c)).map(c=>scoreFor(c,id,"pick")).filter(x=>x&&x.s>0).sort((a,b)=>b.s-a.s).slice(0,5);if(!rs.length)return"";
   const lead=r=>r.why.find(w=>w.includes(" with "+last.c))||r.why.find(w=>/ with /.test(w))||r.why.find(w=>/beats|counters|comfort|denies/.test(w))||r.why[0]||"";
   return `<div class="nextbest"><div class="label">${icon(last.c,22)} ${esc(last.c)} locked → next best for ${esc(team(id).id)}</div><div class="ccs">${rs.map(r=>`<span class="cc hov" data-tc="${esc(r.c)}" tabindex="0">${icon(r.c,26)}${esc(r.c)} <small>${r.roles.join("/")}</small> <em class="g">${esc(lead(r))}</em></span>`).join("")}</div></div>`}
+/* typed name → the closest real champion that is still available (exact, then starts-with, then contains, then near-spelling); never a made-up name */
+const normN=x=>String(x).toLowerCase().replace(/[^a-z]/g,"");
+function editDist(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function allChamps(){return [...new Set([...POOL,...Object.keys(CHAMP_DB),...Object.keys(ASSETS.ids||{}),...Object.keys(DD_FIX)])]}
+const NICK={j4:"Jarvan IV",mf:"Miss Fortune",tf:"Twisted Fate",ww:"Warwick",gp:"Gangplank",asol:"Aurelion Sol",tk:"Tahm Kench",yi:"Master Yi",mundo:"Dr. Mundo",kog:"Kog'Maw",reksai:"Rek'Sai",cait:"Caitlyn",noc:"Nocturne",wu:"Wukong",mao:"Maokai",naut:"Nautilus",sera:"Seraphine",ori:"Orianna",kass:"Kassadin",fiddle:"Fiddlesticks",heimer:"Heimerdinger",cass:"Cassiopeia",lb:"LeBlanc",renata:"Renata Glasc",nunu:"Nunu & Willump",vlad:"Vladimir",zil:"Zilean",trist:"Tristana",lilia:"Lillia",ez:"Ezreal",bv:"Bel'Veth",ks:"K'Sante",xin:"Xin Zhao"};
+function bestMatch(q){const n=normN(q);if(!n)return null;const tk=taken(),L=allChamps().filter(c=>!tk.has(c)).map(c=>[c,normN(c)]);
+  const nk=NICK[String(q).trim().toLowerCase().replace(/\s+/g,"")];if(nk&&!tk.has(nk))return nk;
+  const pres=c=>presOf(c)||0;const by=f=>L.filter(f).sort((a,b)=>pres(b[0])-pres(a[0])||a[1].length-b[1].length)[0];
+  let m=by(([c,k])=>k===n)||by(([c,k])=>k.startsWith(n))||by(([c,k])=>k.includes(n)||c.toLowerCase().split(/[\s'.&]+/).some(w=>w.startsWith(q.trim().toLowerCase())));
+  if(!m&&n.length>=3){const sc=L.map(([c,k])=>[c,editDist(n,k.slice(0,Math.max(n.length,k.length)))]).sort((a,b)=>a[1]-b[1]);if(sc[0][1]<=Math.max(1,Math.floor(n.length/3)))m=sc[0]}
+  return m?m[0]:null}
+function pickTyped(){const c=bestMatch(DS.q||"");if(!c)return;if(!ROLEMAP[c]){ROLEMAP[c]=new Set(CHAMP_ROLE_FALLBACK[c]||ROLES);POOL.push(c);POOL.sort()}DS.q="";doPick(c)}
 function renderDraft(){
   const v=document.getElementById("v-draft");if(!v)return;
   const i=DS.steps.length,done=i>=20;
@@ -479,7 +501,7 @@ function renderDraft(){
   const opts=sel=>TEAMS.map(t=>`<option value="${t.id}"${t.id===sel?" selected":""}>${esc(t.name)}</option>`).join("");
   const seg=(name,val,pairs)=>`<div class="seg" role="group" aria-label="${name}">${pairs.map(([k,l])=>`<button data-set="${name}" data-val="${k}" aria-pressed="${val===k}">${l}</button>`).join("")}</div>`;
   const rs=done?[]:recs();
-  const usedN=POOL.filter(c=>tk.has(c)).length;
+  const usedN=POOL.filter(c=>tk.has(c)).length,typedM=DS.q.trim()?bestMatch(DS.q):null;
   const grid=POOL.filter(c=>(DS.showUsed||!tk.has(c))&&(DS.roleF==="ALL"||ROLEMAP[c].has(DS.roleF))&&(!DS.q||c.toLowerCase().includes(DS.q.toLowerCase())));
   const track=SEQ.map((x,j)=>{const sd=actorId(x[0])===DS.me?DS.side:sideOf(DS.opp);return `<span class="tk ${sd} ${x[1]} ${j<i?"done":""} ${j===i?"now":""}" title="${stepLabel(j)}${DS.steps[j]?": "+esc(DS.steps[j].c):""}"></span>`}).join("");
   const aiWaiting=DS.ai&&!done&&actor!==DS.me;
@@ -499,9 +521,9 @@ function renderDraft(){
     <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?"<b>Draft complete</b>":`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
     <div class="board">${teamPanel(blueId)}${teamPanel(redId)}</div>
     ${nextBest()}
-    ${done?analysis():`<div><div class="eyebrow">${actor===DS.me?"Suggested for you":"Likely for "+esc(team(actor).id)}</div><div class="recs">${rs.map((r,j)=>`<button class="rec ${j===0?"top":""}" data-c="${esc(r.c)}" data-tc="${esc(r.c)}"${aiWaiting?" disabled":""}>${icon(r.c,40)}<b>${esc(r.c)}</b>${r.roles?`<small>${r.roles.join("/")}</small>`:""}<span>${r.why.map(esc).join(" · ")}</span></button>`).join("")||'<span class="notes">No scored options left. Pick from the pool.</span>'}</div></div>
-    <div><div class="ctrls"><div class="seg">${[["ALL","All"],...ROLES.map(r=>[r,r])].map(([k,l])=>`<button data-set="roleF" data-val="${k}" aria-pressed="${DS.roleF===k}">${l}</button>`).join("")}</div><input id="dQ" type="search" placeholder="Search or type any champion" value="${esc(DS.q)}" aria-label="Search champions"><button class="btn" data-act="custom">Use typed name</button><label class="tog"><input type="checkbox" id="dUsed"${DS.showUsed?" checked":""}> Show banned/picked${DS.fmt==="fearless"?"/locked":""} (${usedN})</label></div>
-    <div class="cgrid">${grid.map(c=>`<button class="cbtn ${metaOf(c)[0]}" data-c="${esc(c)}" data-tc="${esc(c)}"${tk.has(c)||aiWaiting?" disabled":""}>${icon(c,40)}<span>${esc(c)}</span></button>`).join("")}</div></div>`}
+    ${done?analysis():`<div><div class="eyebrow">${actor===DS.me?"Suggested for you":"Likely for "+esc(team(actor).id)}</div><div class="recs">${rs.map((r,j)=>`<button class="rec ${j===0?"top":""}" data-c="${esc(r.c)}"${aiWaiting?" disabled":""}><span class="cpt" data-tc="${esc(r.c)}" data-side="1">${icon(r.c,40)}</span><b>${esc(r.c)}</b>${r.roles?`<small>${r.roles.join("/")}</small>`:""}<span>${r.why.map(esc).join(" · ")}</span></button>`).join("")||'<span class="notes">No scored options left. Pick from the pool.</span>'}</div></div>
+    <div><div class="ctrls"><div class="seg">${[["ALL","All"],...ROLES.map(r=>[r,r])].map(([k,l])=>`<button data-set="roleF" data-val="${k}" aria-pressed="${DS.roleF===k}">${l}</button>`).join("")}</div><input id="dQ" type="search" placeholder="Search champions (Enter picks the best match)" value="${esc(DS.q)}" aria-label="Search champions"><button class="btn" data-act="custom"${typedM?"":" disabled"}>${DS.q.trim()?(typedM?"Pick "+esc(typedM):"No champion matches"):"Pick best match"}</button><label class="tog"><input type="checkbox" id="dUsed"${DS.showUsed?" checked":""}> Show banned/picked${DS.fmt==="fearless"?"/locked":""} (${usedN})</label></div>
+    <div class="cgrid">${grid.map(c=>`<button class="cbtn ${metaOf(c)[0]}" data-c="${esc(c)}"${tk.has(c)||aiWaiting?" disabled":""}><span class="cpt" data-tc="${esc(c)}" data-side="1">${icon(c,40)}</span><span>${esc(c)}</span></button>`).join("")}</div></div>`}
     <p class="notes" style="font-size:12px;margin:0">Hover a player for their pool and lane risk, a team name for its comp, or a champion for its pro card. Suggestions score blended pro presence and win rate (26.20 + 26.16–26.20, NerfPlz), flex value in phase 1, comfort picks (mid.gg, Sheep Esports), pair lift (metabot.gg, METAsrc) and denying the other side's comfort picks. Draft order and First Selection: <a href="https://www.sheepesports.com/en/articles/new-draft-rules-have-been-introduced-with-first-selection-system-aimed-at-rebalancing-the-sides/en" target="_blank" rel="noopener">Sheep Esports</a>, <a href="https://esports.gg/news/league-of-legends/first-selection-explained/" target="_blank" rel="noopener">esports.gg</a>; first vs last pick: <a href="https://nerdbot.com/2026/09/16/blue-side-vs-red-side-what-the-draft-order-is-worth/" target="_blank" rel="noopener">Nerdbot</a>. Counters: <a href="https://www.metasrc.com/lol/champions/vi/counters" target="_blank" rel="noopener">METAsrc counter pages</a> (ranked solo queue, patches 26.17–26.20) for 37 meta champions.</p>
   </div>`;
   tip.hidden=true;
@@ -516,7 +538,7 @@ document.addEventListener("click",e=>{
   else if(a==="reset"){clearTimeout(aiTimer);DS.steps=[];DS.game=1;DS.locked=[];DS.sim=null;renderDraft();queueAI()}
   else if(a==="next"){DS.locked.push(...DS.steps.filter(s=>s.k==="pick").map(s=>s.c));DS.steps=[];DS.game++;DS.sim=null;renderDraft();queueAI()}
   else if(a==="run"){b.textContent="Simulating…";setTimeout(()=>{runGame();renderDraft();const s=document.querySelector(".sim");if(s)s.scrollIntoView({behavior:"smooth",block:"start"})},30)}
-  else if(a==="custom"){const n=(DS.q||"").trim();if(!n)return;const m=POOL.find(c=>c.toLowerCase()===n.toLowerCase());const c=m||n.replace(/\b\w/g,x=>x.toUpperCase());if(!ROLEMAP[c]){ROLEMAP[c]=new Set(ROLES);POOL.push(c);POOL.sort()}DS.q="";doPick(c)}
+  else if(a==="custom")pickTyped();
 });
 document.addEventListener("change",e=>{
   const t=e.target;
@@ -525,6 +547,7 @@ document.addEventListener("change",e=>{
   if(t.id==="dUsed"){DS.showUsed=t.checked;renderDraft()}
   if(t.dataset&&t.dataset.rs!=null){const s=DS.steps[+t.dataset.rs];const other=DS.steps.find(x=>x.k==="pick"&&x.t===s.t&&x.r===t.value);if(other)other.r=s.r;s.r=t.value;DS.sim=null;renderDraft()}
 });
+document.addEventListener("keydown",e=>{if(e.target.id==="dQ"&&e.key==="Enter"){e.preventDefault();const i=DS.steps.length;if(i<20&&!(DS.ai&&actorId(SEQ[i][0])!==DS.me))pickTyped()}});
 document.addEventListener("input",e=>{if(e.target.id==="dQ"){DS.q=e.target.value;const pos=e.target.selectionStart;renderDraft();const q=document.getElementById("dQ");if(q){q.focus();try{q.setSelectionRange(pos,pos)}catch(_){}}}});
 
 let start="tour";try{const hsh=(location.hash||"").slice(1);if(hsh)start=hsh}catch(e){}
