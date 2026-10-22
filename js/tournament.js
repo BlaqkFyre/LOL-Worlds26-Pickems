@@ -79,6 +79,12 @@ const kdaOf = s => ((s.k + s.a) / Math.max(1, s.d)).toFixed(1);
    eligible, as with LCK POG votes; each POG earns 100 POG points. */
 const ROLE_DMG = {TOP:1.0, JGL:0.8, MID:1.25, ADC:1.35, SUP:0.45};
 const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
+/* Role balance (tuned so POG shares by role look like the LCK, where supports rarely lead POG points):
+   supports' damage share caps at their role norm, vision only scores above a normal 2.0/min, objectives
+   count more for junglers than supports, kills earn a little on their own, and a small final role adjustment. */
+const DMG_CAP = {TOP:1.6, JGL:1.6, MID:1.6, ADC:1.6, SUP:1.3};
+const OBJ_W = {TOP:0, JGL:0.10, MID:0, ADC:0, SUP:0.10};
+const ROLE_ADJ = {TOP:1.0, JGL:0.98, MID:1, ADC:1, SUP:1.0};
 function gameStats(g){
   const opp = s => s === "blue" ? "red" : "blue";
   g.ps = {blue:{}, red:{}};
@@ -104,13 +110,14 @@ function gameStats(g){
       let rt = (p.won ? 1.5 : 0)
         + 2.0 * Math.min(kda, 10) / 10
         + 2.0 * p.kp
-        + 1.6 * Math.min(1.6, p.dmgS / ROLE_SHARE[r])
+        + 0.12 * Math.min(p.k, 10)
+        + 1.6 * Math.min(DMG_CAP[r], p.dmgS / ROLE_SHARE[r])
         + 0.9 * Math.max(-1, Math.min(1, p.csd / 20))
         + 0.5 * p.solo
-        + (r === "SUP" ? 0.9 * (p.vis - 1.6) : 0)
-        + ((r === "JGL" || r === "SUP") ? 0.18 * p.objs : 0)
+        + (r === "SUP" ? 0.5 * Math.max(0, p.vis - 2.0) : 0)
+        + OBJ_W[r] * p.objs
         - 0.15 * p.d;
-      p.rt = Math.max(0, Math.min(10, rt));
+      p.rt = Math.max(0, Math.min(10, rt * ROLE_ADJ[r]));
     });
   });
   const w = g.winner, T = w === "blue" ? g.B : g.R;
@@ -396,7 +403,7 @@ function renderTour(){
       <span class="notes">Day ${RUN.day + 1} of ${DAYS.length} · ${RUN.stats.games} games played · saved in this browser</span></div>
       <div class="ctrls">
         ${pendingAI.length ? `<button class="btn" data-ta="simday">Sim ${pendingAI.length} AI match${pendingAI.length > 1 ? "es" : ""}</button>` : ""}
-        ${RUN.mode !== "sim" ? `<button class="btn" data-ta="simnext">Sim to my next match</button>` : `<button class="btn" data-ta="simnext">Sim to end of event</button>`}
+        ${aw.done ? `<button class="btn primary" data-ta="new">${tourConfirmNew ? "Click again to delete this run" : "Start over"}</button>` : RUN.mode !== "sim" ? `<button class="btn" data-ta="simnext">Sim to my next match</button>` : `<button class="btn" data-ta="simnext">Sim to end of event</button>`}
         ${dayDone(RUN.day) && RUN.day < DAYS.length - 1 ? `<button class="btn primary" data-ta="advance">Next day →</button>` : ""}
         ${RUN.mode === "guest" ? `<label class="tog"><input type="checkbox" id="tGuestAI"${RUN.guestAI ? " checked" : ""}> Play guest games as AI until my team plays</label>` : ""}
       </div></div>
@@ -556,7 +563,7 @@ function awardsView(aw){
     <div><div class="eyebrow">All-Tournament team ${aw.done ? "" : "(current)"}</div><p class="notes" style="margin:2px 0 6px">Best average game rating per role, minimum ${aw.minG} games.</p>
     <div class="team5">${aw.team5.map((r, i) => `<div><span class="role">${ROLES[i]}</span>${r ? `<b class="hov" data-tp="${r.tid}|${i}" tabindex="0">${esc(r.p.n)}</b><span class="notes">${r.tid} · ${r.avgRt.toFixed(2)}</span>` : `<span class="notes">—</span>`}</div>`).join("")}</div></div>
     <div><div class="eyebrow">POG points leaderboard</div>${lead.length ? `<table class="tt full"><thead><tr><th>#</th><th>Player</th><th>POG</th><th>Points</th><th>Avg rating</th></tr></thead><tbody>${lead.map((r, i) => `<tr><td>${i + 1}</td><td><span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.tid} ${r.p.role}</span></td><td class="num">${r.s.pog}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td></tr>`).join("")}</tbody></table>` : `<p class="notes">No games yet.</p>`}</div>
-    <p class="notes" style="font-size:12px">Game rating (0–10) weighs the numbers that make LCK Player of the Game winners stand out: the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Metric choices follow LeagueLab's metrics guide and Team Liquid's statistical-standouts piece; points follow the LCK POG system.</p>
+    <p class="notes" style="font-size:12px">Game rating (0–10) weighs the numbers that make LCK Player of the Game winners stand out: the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Metric choices follow LeagueLab's metrics guide and Team Liquid's statistical-standouts piece; points follow the LCK POG system. Supports are balanced so they win POG about as rarely as in the LCK (around 10% of games; Keria in 2023 was the first support to lead a split in POG points).</p>
   </div>`;
 }
 function gameDetail(m, g, gi){
