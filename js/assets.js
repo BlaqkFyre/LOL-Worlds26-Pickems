@@ -39,3 +39,10 @@ function patchIcons(){ if(!ASSETS.icons || !ASSETS.ver) return; document.querySe
 const TEAM_COL = {GEN:"#b8860b", HLE:"#f97316", T1:"#e2012d", DK:"#0d9488", BLG:"#ec4899", AL:"#65a30d", TES:"#c2410c", IG:"#64748b",
   G2:"#9f1239", KC:"#0ea5e9", MKOI:"#7e22ce", TL:"#1e40af", CFO:"#d97706", TSW:"#dc2626", LYON:"#1d4ed8", LOS:"#16a34a"};
 const teamCol = id => TEAM_COL[id] || "#6b7280";
+
+/* Region markers: a small rounded square before team and player names. Colours are kept apart from the team badge colours. */
+const REGION_COL = {LCK:"#6366f1", LPL:"#e11d48", LEC:"#14b8a6", LCS:"#94a3b8", LCP:"#f59e0b", CBLOL:"#22c55e"};
+const REGION_NAME = {LCK:"LCK (Korea)", LPL:"LPL (China)", LEC:"LEC (Europe)", LCS:"LCS (North America)", LCP:"LCP (Pacific)", CBLOL:"CBLOL (Brazil)"};
+const regionOf = id => { const t = (typeof TEAMS !== "undefined") && TEAMS.find(x => x.id === id); return t ? String(t.reg).split(/[\s·]/)[0] : ""; };
+function regDot(id){ const r = regionOf(id); return r ? `<i class="rdot" style="--rc:${REGION_COL[r] || "#888"}" title="${esc(REGION_NAME[r] || r)}" aria-label="${esc(REGION_NAME[r] || r)}"></i>` : ""; }
+function regionKey(){ return `<span class="rkey">${Object.keys(REGION_COL).map(r => `<span><i class="rdot" style="--rc:${REGION_COL[r]}"></i>${r}</span>`).join("")}</span>`; }

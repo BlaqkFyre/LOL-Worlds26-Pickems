@@ -44,10 +44,10 @@ tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b
 
 /* team ranking */
 const ranked=[...TEAMS].sort((a,b)=>b.ov-a.ov);
-document.getElementById("trank").innerHTML=ranked.map((t,i)=>`<div class="tr"><span class="pos">${i+1}</span><span class="nm">${esc(t.name)}<small>${esc(t.reg.split(" · ")[0])}</small></span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></div>`).join("");
+document.getElementById("trank").innerHTML=ranked.map((t,i)=>`<div class="tr"><span class="pos">${i+1}</span><span class="nm">${regDot(t.id)}${esc(t.name)}<small>${esc(t.reg.split(" · ")[0])}</small></span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></div>`).join("");
 
 /* roster cards */
-document.getElementById("grid").innerHTML=ranked.map(t=>`<article class="panel team"><div class="thead"><div><h3>${esc(t.name)}</h3><small>${esc(t.reg)} · ${t.metaFit}/15 favourite picks meta</small></div><div class="tscore">${t.ov.toFixed(1)}</div></div>`+
+document.getElementById("grid").innerHTML=ranked.map(t=>`<article class="panel team"><div class="thead"><div><h3>${regDot(t.id)}${esc(t.name)}</h3><small>${esc(t.reg)} · ${t.metaFit}/15 favourite picks meta</small></div><div class="tscore">${t.ov.toFixed(1)}</div></div>`+
   t.p.map(p=>`<div><div class="prow"><span class="role">${p.role}</span><div><div class="pn"><span class="hov" data-tp="${t.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div><div style="margin-left:48px">${chips(p)}</div></div>`).join("")+`</article>`).join("");
 
 /* compare */
@@ -74,7 +74,7 @@ function roleView(role){
     const max=k?TIERS[k-1][1]:999;
     const rows=ps.filter(p=>p.ov>=min&&p.ov<max);if(!rows.length)return;
     h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:${col}">${T}</span><span class="eyebrow" style="color:var(--muted)">${label} · ${T==="D"?"under "+TIERS[3][1]:min+"+"}</span></div>`+
-    rows.map(p=>`<div class="prole"><div class="prow"><span class="role">${p.team.id}</span><div><div class="pn"><span class="hov" data-tp="${p.team.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span><small>${p.kda?"2026 KDA "+p.kda.toFixed(2):""}</small></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div>`+
+    rows.map(p=>`<div class="prole"><div class="prow"><span class="role">${regDot(p.team.id)}${p.team.id}</span><div><div class="pn"><span class="hov" data-tp="${p.team.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span><small>${p.kda?"2026 KDA "+p.kda.toFixed(2):""}</small></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div>`+
       `<div class="attrs">${p.a.map((v,j)=>`<div class="a"><span>${ATTR[role][j]}<em>${v}</em></span><div class="bar"><b style="width:${pct(v)}%;background:${tier(v)}"></b></div></div>`).join("")}</div>`+
       `<div class="sub">${chips(p)}${p.note?`<div class="notes" style="font-size:12px;margin-top:4px">${esc(p.note)}</div>`:""}</div></div>`).join("")+`</div>`;
   });
@@ -303,14 +303,23 @@ function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
   if(typeof RUN!=="undefined"&&RUN)Object.entries(RUN.stats.pchamp).forEach(([key,pc])=>{const v=pc[c];if(!v)return;const [tid,i]=key.split("|"),p=team(tid).p[+i];const e=m.get(p.n)||{n:p.n,t:tid,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=tid;m.set(p.n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
+/* a champion's status in the draft on screen: picked / banned this game, or locked by Fearless (with game and team) */
+function draftStatus(c){const dv=document.getElementById("v-draft");if(!dv||dv.hidden)return null;
+  const st=DS.steps.find(x=>x.c===c);if(st)return st.k==="ban"?{k:"ban",t:st.t,tag:"Ban",title:`Banned by ${st.t} this game`}:{k:"pick",t:st.t,tag:st.t,title:`Picked by ${st.t} this game`};
+  if(DS.fmt==="fearless"&&DS.locked.includes(c)){const gs=DS.series?DS.series.games:DS.tour&&typeof M==="function"&&M(DS.tour.mid)?M(DS.tour.mid).games:[];
+    for(let i=0;i<gs.length;i++){const x=gs[i].steps.find(y=>y[1]==="pick"&&y[2]===c);if(x)return {k:"lock",t:x[0],tag:`Locked · G${i+1}`,title:`Locked by Fearless — ${x[0]} picked it in game ${i+1}`}}
+    return {k:"lock",t:"",tag:"Locked",title:"Locked by Fearless"}}
+  return null}
 function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),rs=[...(ROLEMAP[c]||[])];
   const inGame=new Map();[DS.me,DS.opp].forEach(id=>picksOf(id).forEach(p=>inGame.set(p.c,id)));
   const R=d.rec,RS=R?"26.16–26.20":d.sea?"2026 season":d.p20?"26.20 only":"",RT=R||d.sea||d.p20,WM=worldsMeta(c);
   const mp=mostPicked(c),sy=pairs5(c),ctr=counters5(c);
-  const cc=o=>`<span class="cc${inGame.has(o.x)?" ig "+sideOf(inGame.get(o.x)):""}"${o.other?` title="matchup from another lane"`:""}>${icon(o.x,22)}${esc(o.x)} <em class="${o.cls}">${esc(o.em)}</em></span>`;
+  const stx=draftStatus,cc=o=>{const st=stx(o.x);return `<span class="cc${st?" st-"+st.k:""}"${st?` style="--tc:${teamCol(st.t)}" title="${esc(st.title)}"`:o.other?` title="matchup from another lane"`:""}>${icon(o.x,22)}${esc(o.x)} <em class="${o.cls}">${esc(o.em)}</em>${st?`<span class="stag">${esc(st.tag)}</span>`:""}</span>`};
+  const anySt=[...sy,...ctr].some(o=>stx(o.x));
   const who=TEAMS.flatMap(t=>t.p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,t}))).filter(o=>inDraft(o.t.id)&&DS.steps.length);
   const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":""].filter(Boolean);
   return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
+  ${(()=>{const st=draftStatus(c);return st?`<div class="ststat st-${st.k}" style="--tc:${teamCol(st.t)}">${esc(st.title)}</div>`:""})()}
   <div class="hsec"><div class="label">Recent meta ${infoI(R?`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues). Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`:`${c} isn't in the 26.16–26.20 top list, so these are ${RS} numbers. Source: NerfPlz pro picks and bans.`)}</div><div class="hbars">
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
@@ -324,6 +333,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
   <div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at this Worlds fill the list.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
   <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at this Worlds.")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
+  ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--muted)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban"><span class="stag">Ban</span></span> banned this game <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
 function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
   /* portraits in the champion grid and suggestions: open beside the button (left or right, whichever has room) so the card never covers the row below */
@@ -519,7 +529,7 @@ function teamPanel(id){
     const art=p&&splashUrl(p.c);
     return `<div class="slot ${p?"on":""}${art?" art":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}"${art?` style="--splash:url('${art}')"`:""}>${p?`<span class="hov" data-tc="${esc(p.c)}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch">${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
   const banSlots=[0,1,2,3,4].map(j=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}" tabindex="0" aria-label="Banned: ${esc(b.c)}"`:""}>${b?icon(b.c,34):willBe?"<small>ban</small>":""}</span>`}).join("");
-  return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh hov" data-tt="${id}" tabindex="0"><span><span class="tb" style="--tc:${teamCol(id)}">${esc(id)}</span> ${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
+  return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh hov" data-tt="${id}" tabindex="0"><span>${regDot(id)}<span class="tb" style="--tc:${teamCol(id)}">${esc(id)}</span> ${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
     <div class="bans">${banSlots}</div>${byRole}${picking?`<div class="picking">Picking… open: ${openRoles(id).join(", ")}</div>`:""}</div>`;
 }
 /* after each pick: the best follow-ups for the team that just locked in */
@@ -553,7 +563,7 @@ function seriesGame(){const S=DS.series,last=S.games[S.games.length-1];
 function playSeriesGame(){if(seriesDone())return;runGame();const g=DS.sim.g,rec=pack(g),pct=Math.round((g.winner==="blue"?DS.sim.bwin:1-DS.sim.bwin)*100);
   Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec)}
 /* per-player series totals from the stored games */
-function seriesPlayers(id){const S=DS.series,t=team(id);return ROLES.map((r,i)=>{const o={pl:t.p[i],r,g:0,k:0,d:0,a:0,rt:0,pts:0,champs:[]};
+function seriesPlayers(id,S){S=S||{games:DS.series.games};const t=team(id);return ROLES.map((r,i)=>{const o={pl:t.p[i],r,g:0,k:0,d:0,a:0,rt:0,pts:0,champs:[]};
   S.games.forEach(gm=>{const sd=gm.blue===id?"blue":"red",p=gm.ps[sd][r];o.g++;o.k+=p.k;o.d+=p.d;o.a+=p.a;o.rt+=p.rt;o.champs.push([p.c,gm.winner===id]);if(gm.pog.team===id&&gm.pog.r===r)o.pts+=100});
   o.avg=o.g?o.rt/o.g:0;o.kda=(o.k+o.a)/Math.max(1,o.d);return o})}
 function seriesSetup(){
@@ -571,34 +581,46 @@ function seriesSetup(){
       <label class="tog"><input type="checkbox" id="dAI"${DS.ai?" checked":""}> AI drafts the opponent (2 seconds per pick or ban) — on by default</label>
       <span class="notes small">Turn it off to draft both sides yourself. It can't be changed mid-series.</span>
       <div class="ctrls"><button class="btn primary" data-act="sstart">Start ${bo===1?"Bo1 game":"Bo"+bo+" series"}</button></div></div></div>`}
-function seriesPanel(){const S=DS.series;if(!S||!S.games.length)return"";
-  const A=S.me,B=S.opp,wa=sWins(A),wb=sWins(B),done=seriesDone(),need=sNeed();
+/* Series panel for any series: champ select (ctx "cs") or a tournament match (ctx "tour").
+   S = {bo, fearless, a, b, games, ctx, mid} — games are stored game records (pack()). */
+function seriesPanel(S){
+  if(!S){if(!DS.series)return"";const D=DS.series;S={bo:D.bo,fearless:D.fearless,a:D.me,b:D.opp,games:D.games,ctx:"cs"}}
+  if(!S.games.length)return"";
+  const A=S.a,B=S.b,W=id=>S.games.filter(g=>g.winner===id).length,wa=W(A),wb=W(B),need=Math.ceil(S.bo/2),done=wa>=need||wb>=need;
+  const locked=S.fearless?S.games.flatMap(g=>g.steps.filter(x=>x[1]==="pick").map(x=>x[2])):[];
   const pips=Array.from({length:S.bo},(_,i)=>{const gm=S.games[i];return `<i class="${gm?(gm.winner===A?"pa":"pb"):""}"></i>`}).join("");
+  const mm=gm=>`${gm.time}:${String(gm.sec).padStart(2,"0")}`;
   const gamesT=`<div class="tscroll"><table class="tt full sgt"><colgroup><col style="width:6%"><col style="width:8%"><col style="width:10%"><col style="width:22%"><col style="width:22%"><col style="width:23%"><col style="width:9%"></colgroup><thead><tr><th>Game</th><th>Time</th><th>Winner</th><th>${esc(A)} picks</th><th>${esc(B)} picks</th><th>Player of the Game</th><th>Note</th></tr></thead><tbody>${S.games.map((gm,i)=>{const pk=id=>{const sd=gm.blue===id?"blue":"red";return ROLES.map(r=>`<span class="hov" data-tc="${esc(gm.ps[sd][r].c)}">${icon(gm.ps[sd][r].c,24)}</span>`).join("")};
-    return `<tr style="--tc:${teamCol(gm.winner)}"><td class="gno">G${i+1}</td><td>${gm.time}:${String(gm.sec).padStart(2,"0")}</td><td class="res">${esc(gm.winner)}</td><td><span class="comp">${pk(A)}</span></td><td><span class="comp">${pk(B)}</span></td><td class="pogc">${esc(gm.pog.n)} (${esc(gm.pog.c)}) ${gm.pog.rt.toFixed(1)}</td><td>${gm.up?`<span class="upset">Upset</span>`:"–"}</td></tr>`}).join("")}</tbody></table></div>`;
-  const ptable=id=>{const ps=seriesPlayers(id),w=sWins(id);return `<div class="sside" style="--sc:${teamCol(id)}"><h3>${teamTag(id)} ${esc(team(id).name)} <small>· ${w} win${w===1?"":"s"}</small></h3><div class="tscroll"><table class="tt full ctab"><thead><tr><th>Player</th><th>Champions</th><th>K/D/A</th><th>KDA</th><th>Avg rating</th><th>POG pts</th></tr></thead><tbody>${ps.map((o,i)=>`<tr><td><span class="hov" data-tp="${id}|${i}" tabindex="0"><b>${esc(o.pl.n)}</b></span> <span class="notes">${o.r}</span></td><td><span class="comp">${o.champs.map(([c,won])=>`<span class="hov${won?"":" lost"}" data-tc="${esc(c)}">${icon(c,24)}</span>`).join("")}</span></td><td class="num">${o.k}/${o.d}/${o.a}</td><td class="num">${o.kda.toFixed(1)}</td><td class="num">${o.avg.toFixed(1)}</td><td class="num pts">${o.pts?o.pts:"–"}</td></tr>`).join("")}</tbody></table></div></div>`};
-  const all=[...seriesPlayers(A).map(o=>({...o,id:A})),...seriesPlayers(B).map(o=>({...o,id:B}))].sort((x,y)=>y.pts-x.pts||y.avg-x.avg);
+    return `<tr style="--tc:${teamCol(gm.winner)}"><td class="gno">G${i+1}</td><td>${mm(gm)}</td><td class="res">${esc(gm.winner)}</td><td><span class="comp">${pk(A)}</span></td><td><span class="comp">${pk(B)}</span></td><td class="pogc">${esc(gm.pog.n)} (${esc(gm.pog.c)}) ${(+gm.pog.rt).toFixed(1)}</td><td>${gm.up?`<span class="upset">Upset</span>`:gm.pog.team!==gm.winner?`<span class="notes small">POG from loss</span>`:"–"}</td></tr>`}).join("")}</tbody></table></div>`;
+  const ptable=id=>{const ps=seriesPlayers(id,S),w=W(id);return `<div class="sside" style="--sc:${teamCol(id)}"><h3>${teamTag(id)} ${esc(team(id).name)} <small>· ${w} win${w===1?"":"s"}</small></h3><div class="tscroll"><table class="tt full"><thead><tr><th>Player</th><th>Champions</th><th>K/D/A</th><th>KDA</th><th>Avg rating</th><th>POG pts</th></tr></thead><tbody>${ps.map((o,i)=>`<tr><td><span class="hov" data-tp="${id}|${i}" tabindex="0"><b>${esc(o.pl.n)}</b></span> <span class="notes">${o.r}</span></td><td><span class="comp">${o.champs.map(([c,won])=>`<span class="hov${won?"":" lost"}" data-tc="${esc(c)}">${icon(c,24)}</span>`).join("")}</span></td><td class="num">${o.k}/${o.d}/${o.a}</td><td class="num">${o.kda.toFixed(1)}</td><td class="num">${o.avg.toFixed(1)}</td><td class="num pts">${o.pts?o.pts:"–"}</td></tr>`).join("")}</tbody></table></div></div>`};
+  const all=[...seriesPlayers(A,S).map(o=>({...o,id:A})),...seriesPlayers(B,S).map(o=>({...o,id:B}))].sort((x,y)=>y.pts-x.pts||y.avg-x.avg);
   const race=all.slice(0,3),maxP=Math.max(100,race[0].pts);
-  const sum=(f)=>S.games.reduce((a,gm)=>a+f(gm),0),sd=(gm,id)=>gm.blue===id?"blue":"red";
+  const sum=f=>S.games.reduce((t,gm)=>t+f(gm),0),sd=(gm,id)=>gm.blue===id?"blue":"red",has=k=>S.games.every(gm=>gm[k]!=null);
   const kills=id=>sum(gm=>gm.kills[sd(gm,id)]),drs=id=>sum(gm=>gm.dr[sd(gm,id)]),bas=id=>sum(gm=>gm.ba[sd(gm,id)]);
-  const g15=sum(gm=>(gm.blue===A?1:-1)*gm.g15)/S.games.length;
   const longest=S.games.reduce((m,gm,i)=>(gm.time*60+gm.sec)>(m.t||0)?{t:gm.time*60+gm.sec,i,gm}:m,{});
-  let best=null;S.games.forEach((gm,i)=>["blue","red"].forEach(x=>ROLES.forEach((r,ri)=>{const p=gm.ps[x][r];if(!best||p.rt>best.p.rt)best={p,i,id:x==="blue"?gm.blue:gm.red,ri}})));
+  let best=null;S.games.forEach(gm=>["blue","red"].forEach(x=>ROLES.forEach((r,ri)=>{const p=gm.ps[x][r];if(!best||p.rt>best.p.rt)best={p,id:x==="blue"?gm.blue:gm.red,ri}})));
   const ups=S.games.map((gm,i)=>gm.up?`G${i+1} · ${gm.winner} won at ${gm.pct}%`:null).filter(Boolean);
-  const facts=[["Kills",`${A} ${kills(A)} – ${kills(B)} ${B}`],["Gold at 15 (avg)",Math.abs(g15)<300?"even":`${g15>0?A:B} +${(Math.abs(g15)/1000).toFixed(1)}k`],["Dragons",`${drs(A)} – ${drs(B)}`],["Barons",`${bas(A)} – ${bas(B)}`],
-    ["Longest game",`G${longest.i+1} · ${longest.gm.time}:${String(longest.gm.sec).padStart(2,"0")}`],["Best single game",`${team(best.id).p[best.ri].n} ${best.p.rt.toFixed(1)} (${best.p.c})`],["Upsets",ups.length?ups.join(" · "):"none"]];
-  const winner=done?(wa>wb?A:B):null;
-  const mvp=done?all.filter(o=>o.id===winner).sort((x,y)=>y.pts-x.pts||y.avg-x.avg)[0]:null;
-  const nextSide=S.games[S.games.length-1].winner===A?B:A;
+  const facts=[["Kills",`${A} ${kills(A)} – ${kills(B)} ${B}`]];
+  if(has("g15")){const g15=sum(gm=>(gm.blue===A?1:-1)*gm.g15)/S.games.length;facts.push(["Gold at 15 (avg)",Math.abs(g15)<300?"even":`${g15>0?A:B} +${(Math.abs(g15)/1000).toFixed(1)}k`])}
+  if(has("dr"))facts.push(["Dragons",`${drs(A)} – ${drs(B)}`],["Barons",`${bas(A)} – ${bas(B)}`]);
+  facts.push(["Longest game",`G${longest.i+1} · ${mm(longest.gm)}`],["Best single game",`${team(best.id).p[best.ri].n} ${best.p.rt.toFixed(1)} (${best.p.c})`]);
+  if(S.ctx==="cs"||ups.length)facts.push(["Upsets",ups.length?ups.join(" · "):"none"]);
+  const winner=done?(wa>wb?A:B):null,mvp=done?all.filter(o=>o.id===winner).sort((x,y)=>y.pts-x.pts||y.avg-x.avg)[0]:null;
+  const lastW=S.games[S.games.length-1].winner,nextSide=lastW===A?B:A;
+  const endBtns=S.ctx==="cs"?`<button class="btn" data-act="srematch">Rematch (same settings)</button><button class="btn primary" data-act="snew">New series</button>`:`<button class="btn primary" data-ta="back">Back to the schedule</button>`;
+  let nextBtn="";
+  if(!done){if(S.ctx==="cs")nextBtn=DS.sim?`<button class="btn primary" data-act="snext">Draft game ${S.games.length+1}</button>`:"";
+    else{const m=typeof M==="function"?M(S.mid):null,ctrl=m&&ctrlOf(m);nextBtn=DS.tour&&DS.tour.mid===S.mid?"":ctrl?`<button class="btn primary" data-ta="draft" data-m="${S.mid}">Draft game ${S.games.length+1} as ${esc(ctrl)}</button>`:`<button class="btn" data-ta="sim" data-m="${S.mid}">Sim the rest</button>`}}
   return `<div class="panel spanel">
-    ${done?`<div class="send"><span class="eyebrow">Series over</span><h3>${esc(team(winner).name)} win the series ${Math.max(wa,wb)}–${Math.min(wa,wb)}</h3><div class="notes">Series MVP: <b>${esc(mvp.pl.n)}</b> · ${mvp.pts} POG points · KDA ${mvp.kda.toFixed(1)} · ${[...new Set(mvp.champs.map(c=>c[0]))].map(esc).join(", ")}</div><div class="ctrls" style="justify-content:center"><button class="btn" data-act="srematch">Rematch (same settings)</button><button class="btn primary" data-act="snew">New series</button></div></div>`:""}
+    ${done?`<div class="send"><span class="eyebrow">Series over</span><h3>${esc(team(winner).name)} win the series ${Math.max(wa,wb)}–${Math.min(wa,wb)}</h3><div class="notes">Series MVP: <b>${esc(mvp.pl.n)}</b> · ${mvp.pts} POG points · KDA ${mvp.kda.toFixed(1)} · ${[...new Set(mvp.champs.map(c=>c[0]))].map(esc).join(", ")}</div><div class="ctrls" style="justify-content:center">${endBtns}</div></div>`:""}
     <div class="sbug"><div class="steam">${teamTag(A)} ${esc(team(A).name)}</div><div class="sscore"><b>${wa} – ${wb}</b><small>${S.bo===1?"Bo1":`Bo${S.bo} · first to ${need}`}${S.fearless?" · Fearless":""}</small><div class="pips" style="--pa:${teamCol(A)};--pb:${teamCol(B)}">${pips}</div></div><div class="steam r">${esc(team(B).name)} ${teamTag(B)}</div></div>
     ${gamesT}
-    ${done?"":`<div class="snext"><div><b>Game ${S.games.length+1} next</b> <span class="notes">· ${esc(nextSide)} lost game ${S.games.length}, so they take blue side${S.fearless?` · ${seriesLocked().length} champions locked (Fearless)`:""}</span></div>${DS.sim?`<button class="btn primary" data-act="snext">Draft game ${S.games.length+1}</button>`:""}</div>`}
+    ${done?"":`<div class="snext"><div><b>Game ${S.games.length+1} next</b> <span class="notes">· ${esc(nextSide)} lost game ${S.games.length}, so they take blue side${S.fearless?` · ${locked.length} champions locked (Fearless)`:""}</span></div>${nextBtn}</div>`}
     <div class="stwo">${ptable(A)}${ptable(B)}</div>
     <div class="stwo"><div class="srace"><span class="eyebrow">Series MVP race · POG points</span>${race.map((o,i)=>`<div class="rc"><span class="notes">#${i+1}</span><span>${teamTag(o.id)} <b>${esc(o.pl.n)}</b></span><span class="rbar"><b style="width:${o.pts/maxP*100}%"></b></span><span class="num">${o.pts} <small>· ${o.avg.toFixed(1)}</small></span></div>`).join("")}<span class="notes small">100 points per Player of the Game; ties go to the higher average rating. The Series MVP comes from the winning team.</span></div>
       <div><span class="eyebrow">Series so far</span><div class="sfacts">${facts.map(([k,v])=>`<span><b>${k}</b>${esc(v)}</span>`).join("")}</div></div></div>
   </div>`}
+
 function renderDraft(){
   const v=document.getElementById("v-draft");if(!v)return;
   if(!DS.tour&&!DS.series){v.innerHTML=seriesSetup();tip.hidden=true;return}
@@ -618,7 +640,7 @@ function renderDraft(){
     ${DS.tour?tourDraftHeader():""}
     ${!DS.tour&&DS.series?`<div class="ctrls"><span class="notes"><b>Game ${DS.series.games.length+(DS.sim?0:1)}</b> of ${DS.series.bo===1?"a Bo1":"a Bo"+DS.series.bo} · ${esc(DS.me)} on ${DS.side} · ${DS.series.ai?"AI drafts "+esc(DS.opp):"you draft both sides"}${DS.series.fearless?` · ${DS.locked.length} champions locked (Fearless)`:""}</span>${DS.sim?"":`<button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button><button class="btn" data-act="reset">Restart this draft</button>`}<button class="btn" data-act="snew">New series</button></div>`:""}
     ${DS.tour&&!done?`<div class="ctrls"><button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button></div>`:""}
-    ${!DS.tour?seriesPanel():""}
+    ${!DS.tour?seriesPanel():(()=>{const m=M(DS.tour.mid);return m&&m.bo>1?seriesPanel({bo:m.bo,fearless:true,a:m.a,b:m.b,games:m.games,ctx:"tour",mid:m.id}):""})()}
     <div class="track" aria-label="Draft progress">${track}</div>
     <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?"<b>Draft complete</b>":`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
     <div class="board">${teamPanel(blueId)}${teamPanel(redId)}</div>

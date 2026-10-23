@@ -238,7 +238,8 @@ function pack(g){
   const blue = idOnSide("blue"), red = idOnSide("red");
   const ps = {}; ["blue","red"].forEach(s => { ps[s] = {}; ROLES.forEach(r => { const p = g.ps[s][r]; ps[s][r] = {c:(s === "blue" ? g.B : g.R).P[r].c, k:p.k, d:p.d, a:p.a, kp:+p.kp.toFixed(3), dmgS:+p.dmgS.toFixed(3), csd:p.csd, vis:p.vis, solo:p.solo, rt:+p.rt.toFixed(2)}; }); });
   return {blue, red, winner: g.winner === "blue" ? blue : red, time:g.time, sec:g.sec, kills:{...g.k},
-    steps: DS.steps.map(s => [s.t, s.k, s.c, s.r || ""]), ps, pog:{...g.pog, team: g.pog.s === "blue" ? blue : red}};
+    steps: DS.steps.map(s => [s.t, s.k, s.c, s.r || ""]), ps, pog:{...g.pog, team: g.pog.s === "blue" ? blue : red},
+    dr:{...g.dr}, ba:{...g.ba}, g15:(g.gl.find(x => x[0] >= 14) || [0,0])[1]};
 }
 function playAIGame(m){
   const gi = m.games.length, blue = blueFor(m, gi), red = blue === m.a ? m.b : m.a;
@@ -301,7 +302,11 @@ function cleanGame(g, m){
   if(!ps2 || !pr) throw new Error("pog");
   const pteam = ps2 === "blue" ? blue : red;
   if(pteam !== winner){ const wbest = Math.max(...ROLES.map(r => ps[winner === blue ? "blue" : "red"][r].rt)); if(ps[ps2][pr].rt - wbest < LOSER_POG_GAP - 0.01) throw new Error("pog side"); }
-  return {blue, red, winner, time:num(g.time,10,80), sec:num(g.sec,0,59), kills:{blue:num(g.kills && g.kills.blue,0,80), red:num(g.kills && g.kills.red,0,80)}, steps, ps,
+  const ex = {};
+  if(g.dr && g.ba){ ex.dr = {blue:num(g.dr.blue,0,9), red:num(g.dr.red,0,9)}; ex.ba = {blue:num(g.ba.blue,0,9), red:num(g.ba.red,0,9)}; }
+  if(g.g15 != null) ex.g15 = num(g.g15,-20000,20000);
+  if(g.pct != null){ ex.pct = num(g.pct,0,100); ex.up = ex.pct < 25; }
+  return {...ex, blue, red, winner, time:num(g.time,10,80), sec:num(g.sec,0,59), kills:{blue:num(g.kills && g.kills.blue,0,80), red:num(g.kills && g.kills.red,0,80)}, steps, ps,
     pog:{s:ps2, r:pr, team:pteam, n:team(pteam).p[ROLES.indexOf(pr)].n, c:ps[ps2][pr].c, rt:ps[ps2][pr].rt, why:`${ps[ps2][pr].k}/${ps[ps2][pr].d}/${ps[ps2][pr].a} · ${Math.round(ps[ps2][pr].kp * 100)}% KP`}};
 }
 function sanitizeRun(r){
@@ -363,6 +368,7 @@ function tourPlay(){
   const m = M(DS.tour.mid); if(!m || DS.steps.length < 20) return;
   let bw = 0; for(let i = 0; i < 300; i++) if(simGame(true).winner === "blue") bw++;
   const g = simGame(false), rec = pack(g);
+  rec.pct = Math.round((g.winner === "blue" ? bw : 300 - bw) / 3); rec.up = rec.pct < 25;
   recordGame(m, rec);
   DS.tour.next = m.status === "done" ? "Back to the tournament" : `Next game (${team(m.a).id} ${seriesWins(m, m.a)}–${seriesWins(m, m.b)} ${team(m.b).id})`;
   DS.sim = {g, bwin: bw / 300};
@@ -399,7 +405,7 @@ function awardsData(){
 }
 
 /* ---------- UI ---------- */
-function teamTag(id){ return `<span class="ttag" style="--tc:${teamCol(id)}">${esc(id)}</span>`; }
+function teamTag(id){ return `${regDot(id)}<span class="ttag" style="--tc:${teamCol(id)}">${esc(id)}</span>`; }
 function renderTour(){
   const v = document.getElementById("v-tour"); if(!v) return;
   if(!RUN){ v.innerHTML = setupView(); return; }
@@ -412,7 +418,7 @@ function renderTour(){
       <span class="notes">Day ${RUN.day + 1} of ${DAYS.length} · ${RUN.stats.games} games played · saved in this browser</span></div>
       <div class="ctrls">
         ${pendingAI.length ? `<button class="btn" data-ta="simday">Sim ${pendingAI.length} AI match${pendingAI.length > 1 ? "es" : ""}</button>` : ""}
-        ${aw.done ? `<button class="btn primary" data-ta="new">${tourConfirmNew ? "Click again to delete this run" : "Start over"}</button>` : RUN.mode !== "sim" ? `<button class="btn" data-ta="simnext">Sim to my next match</button>` : `<button class="btn" data-ta="simnext">Sim to end of event</button>`}
+        ${aw.done ? `<button class="btn primary" data-ta="new">${tourConfirmNew ? "Click again to delete this run" : "Start over"}</button>` : RUN.mode === "sim" ? `<button class="btn" data-ta="simnext">Sim to end of event</button>` : pendingCtrl.length ? `<button class="btn primary" data-ta="draft" data-m="${pendingCtrl[0].id}">Draft game ${pendingCtrl[0].games.length + 1}: ${esc(pendingCtrl[0].a)} vs ${esc(pendingCtrl[0].b)}</button><button class="btn" data-ta="sim1" data-m="${pendingCtrl[0].id}">Sim next game</button>` : `<button class="btn" data-ta="simnext">Sim to my next match</button>`}
         ${dayDone(RUN.day) && RUN.day < DAYS.length - 1 ? `<button class="btn primary" data-ta="advance">Next day →</button>` : ""}
         ${RUN.mode === "guest" ? `<label class="tog"><input type="checkbox" id="tGuestAI"${RUN.guestAI ? " checked" : ""}> Play guest games as AI until my team plays</label>` : ""}
       </div></div>
@@ -441,29 +447,41 @@ function setupView(){
     <div class="ctrls"><button class="btn primary" data-ta="start">Start Worlds</button><label class="btn" style="cursor:pointer">Import a run file<input type="file" id="tImport" accept=".json,application/json" hidden></label><span class="notes" id="tErr"></span></div>
   </div>`;
 }
-function matchRow(m){
-  const ctrl = ctrlOf(m), wa = seriesWins(m, m.a), wb = seriesWins(m, m.b);
-  const res = m.status === "done" ? `<b>${esc(m.w)}</b> wins ${m.sc}` : m.games.length ? `${wa}–${wb} in progress` : "Not started";
-  const act = m.status === "done" ? "" : ctrl ? `<button class="btn primary" data-ta="draft" data-m="${m.id}">${m.games.length ? "Draft next game" : "Draft"} as ${esc(ctrl)}</button><button class="btn" data-ta="sim" data-m="${m.id}">Sim it</button>` : `<button class="btn" data-ta="sim" data-m="${m.id}">Sim</button>`;
-  const pogs = m.games.map(g => `G${m.games.indexOf(g) + 1} POG ${esc(g.pog.n)}`).join(" · ");
-  return `<div class="mrow ${m.status}"><div><span class="notes">${esc(stageName(m))} · Bo${m.bo}</span><div class="mteams">${teamTag(m.a)} ${esc(team(m.a).name)} <span class="vs">vs</span> ${teamTag(m.b)} ${esc(team(m.b).name)}</div><span class="notes">${res}${pogs ? " · " + pogs : ""}</span></div><div class="ctrls">${act}</div></div>`;
+let tourFocus = null;   // match to scroll to and highlight after "Sim to my next match"
+/* one match as a card: stage, both teams with score, each game's winner and POG, and its actions */
+function matchCard(m){
+  const ctrl = ctrlOf(m), wa = seriesWins(m, m.a), wb = seriesWins(m, m.b), st = m.status === "done" ? "done" : m.games.length ? "live" : "todo";
+  const line = id => `<div class="mc-team${m.w === id ? " won" : ""}">${teamTag(id)}<span class="nm">${esc(team(id).name)}</span><b class="sc">${m.games.length ? seriesWins(m, id) : ""}</b></div>`;
+  const act = m.status === "done" ? `<button class="btn" data-ta="open" data-m="${m.id}">${tourOpen[m.id] ? "Hide" : m.bo > 1 ? "Series" : "Game"}</button>`
+    : ctrl ? `<button class="btn primary" data-ta="draft" data-m="${m.id}">${m.games.length ? "Draft game " + (m.games.length + 1) : "Draft"} as ${esc(ctrl)}</button><button class="btn" data-ta="sim" data-m="${m.id}">Sim</button>`
+    : `<button class="btn" data-ta="sim" data-m="${m.id}">Sim</button>`;
+  const gl = m.games.map((g, i) => `<li><span class="gno">G${i + 1}</span>${teamTag(g.winner)}<span class="notes">POG ${esc(g.pog.n)}</span></li>`).join("");
+  return `<div class="mcard ${st}${tourFocus === m.id ? " focus" : ""}" id="mc-${m.id}"><div class="mc-head"><span class="notes">${esc(stageName(m))}</span><span class="tag dimtag">Bo${m.bo}</span></div>${line(m.a)}${line(m.b)}
+    <div class="mc-res notes">${m.status === "done" ? `<b>${esc(m.w)}</b> win ${m.sc}` : m.games.length ? `${wa}–${wb} · in progress` : ctrl ? `You draft ${esc(ctrl)}` : "AI vs AI"}</div>${gl ? `<ul class="mc-games">${gl}</ul>` : ""}<div class="ctrls">${act}</div></div>`;
+}
+/* a day: full-width date row, then up to four match cards per row; opened series show their panel underneath */
+function dayBlock(d, ms){
+  const open = ms.filter(m => tourOpen[m.id] && m.games.length);
+  return `<div class="dayblk"><div class="dayrow"><b>${esc(DAYS[d].date)}</b><span>${esc(DAYS[d].label)}</span><span class="notes">${ms.filter(m => m.status === "done").length}/${ms.length} played</span></div>
+    <div class="mgrid">${ms.map(matchCard).join("")}</div>${open.map(m => `<div class="mopen">${m.bo > 1 ? seriesPanel({bo:m.bo, fearless:true, a:m.a, b:m.b, games:m.games, ctx:"tour", mid:m.id}) : ""}${m.games.map((g, i) => gameDetail(m, g, i)).join("")}</div>`).join("")}</div>`;
 }
 function todayView(today){
   if(!today.length) return `<p class="notes">Matches for this day are drawn once the previous round finishes.</p>`;
   const next = DAYS[RUN.day + 1];
-  return `<div style="display:grid;gap:8px">${today.map(matchRow).join("")}</div>${next ? `<p class="notes">Next: ${esc(next.date)} · ${esc(next.label)}</p>` : ""}`;
+  return `${dayBlock(RUN.day, today)}${next ? `<p class="notes">Next: ${esc(next.date)} · ${esc(next.label)}</p>` : ""}`;
 }
 function standingsView(){
   const rows = TEAMS.map(t => t.id).sort((a,b) => (RUN.W[b] - RUN.L[b]) - (RUN.W[a] - RUN.L[a]) || RUN.W[b] - RUN.W[a] || team(b).ov - team(a).ov);
   const st = id => RUN.W[id] >= 3 ? `<span class="chip meta">Qualified</span>` : RUN.L[id] >= 3 ? `<span class="chip off">Eliminated</span>` : `<span class="chip mix">Alive</span>`;
   const gw = id => { let w = 0, l = 0; RUN.matches.forEach(m => m.games.forEach(g => { if(g.blue === id || g.red === id){ g.winner === id ? w++ : l++; } })); return `${w}-${l}`; };
-  return `<div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Team</th><th>Swiss record</th><th>Games</th><th>Status</th></tr></thead><tbody>${rows.map(id => `<tr class="${RUN.myTeams.includes(id) ? "me" : ""}"><td>${teamTag(id)} ${esc(team(id).name)}</td><td class="num">${RUN.W[id]}-${RUN.L[id]}</td><td class="num">${gw(id)}</td><td>${st(id)}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="ctrls" style="justify-content:space-between;margin-bottom:6px"><span class="eyebrow">Swiss standings</span>${regionKey()}</div><div style="overflow-x:auto"><table class="tt full"><thead><tr><th>Team</th><th>Swiss record</th><th>Games</th><th>Status</th></tr></thead><tbody>${rows.map(id => `<tr class="${RUN.myTeams.includes(id) ? "me" : ""}"><td>${teamTag(id)} ${esc(team(id).name)}</td><td class="num">${RUN.W[id]}-${RUN.L[id]}</td><td class="num">${gw(id)}</td><td>${st(id)}</td></tr>`).join("")}</tbody></table></div>`;
 }
 function bracketView(){
   const cell = id => { const m = M(id); if(!m) return `<div class="bcell"><span class="notes">TBD</span></div>`; return `<div class="bcell ${m.status}">${[m.a, m.b].map(t => `<div class="${m.w === t ? "bw" : ""}">${teamTag(t)} ${esc(team(t).name)} <b>${seriesWins(m, t)}</b></div>`).join("")}<span class="notes">${esc(DAYS[m.day].date)}</span></div>`; };
   return `<div class="bracket"><div><div class="eyebrow">Quarter-finals</div>${["QF1","QF2","QF3","QF4"].map(cell).join("")}</div><div><div class="eyebrow">Semi-finals</div>${["SF1","SF2"].map(cell).join("")}</div><div><div class="eyebrow">Final</div>${cell("F")}</div></div>`;
 }
 let statRole = "ALL", statSort = "pts", chRole = "ALL", chSort = "pres", chQ = "";
+let statTab = (() => { try{ return localStorage.getItem("lolw26-stat-tab") === "players" ? "players" : "champs"; }catch(e){ return "champs"; } })();
 /* the role a champion was played in most at this run (falls back to its main pro role) */
 function runRole(c){ const e = ROLES.map(r => [r, (RUN.stats.crole[c + "|" + r] || {p:0}).p]).sort((a,b) => b[1] - a[1])[0]; return e[1] ? e[0] : primaryRole(c); }
 function statsView(){
@@ -477,12 +495,14 @@ function statsView(){
   rows.sort((a,b) => f(b) - f(a));
   const th = (k, l) => `<th><button class="sortb" data-ss="${k}" aria-pressed="${statSort === k}">${l}</button></th>`;
   const tc = (k, l) => `<th><button class="sortb" data-cs="${k}" aria-pressed="${chSort === k}">${l}</button></th>`;
-  return `<div style="display:grid;gap:16px">
-    <div><div class="eyebrow">Champions at this Worlds · ${all.length} picked or banned · ${S.games} games</div><p class="notes" style="margin:2px 0 6px">Every champion picked or banned at least once. Presence = picked or banned in that share of games. Drafts blend this with the pre-Worlds pro data, weighting the tournament more as games are played.</p>
+  const pn = playerRows().length;
+  const tabs = `<div class="seg" role="group" aria-label="Stats view"><button data-st="champs" aria-pressed="${statTab === "champs"}">Champions</button><button data-st="players" aria-pressed="${statTab === "players"}">Players</button></div>`;
+  return `<div style="display:grid;gap:16px">${tabs}
+    ${statTab === "champs" ? `<div><div class="eyebrow">Champions · ${all.length} picked or banned · ${S.games} games</div><p class="notes" style="margin:2px 0 6px">Every champion picked or banned at least once. Presence = picked or banned in that share of games. Drafts blend this with the pre-Worlds pro data, weighting the tournament more as games are played.</p>
     <div class="ctrls" style="margin-bottom:6px"><div class="seg">${[["ALL","All"], ...ROLES.map(r => [r, r])].map(([k,l]) => `<button data-cr="${k}" aria-pressed="${chRole === k}">${l}</button>`).join("")}</div><input id="tChQ" type="search" placeholder="Search champions" value="${esc(chQ)}" aria-label="Search champions"><span class="notes">${ch.length} shown</span></div>
     <div style="overflow-x:auto"><table class="tt full ctab"><thead><tr><th>Champion</th><th>Role</th>${tc("pres","Presence")}${tc("p","Picks")}${tc("b","Bans")}<th>W-L</th>${tc("wr","Win rate")}</tr></thead><tbody>${ch.map(x => `<tr><td><span class="cname hov" data-tc="${esc(x.c)}" tabindex="0">${icon(x.c, 28)}${esc(x.c)}</span>${x.p + x.b <= 2 ? ` <span class="chip off" title="Picked or banned in 2 games or fewer">small sample</span>` : ""}</td><td>${x.r}</td><td class="num">${x.pres}%</td><td class="num">${x.p}</td><td class="num">${x.b}</td><td class="num">${x.w}-${x.p - x.w}</td><td class="num">${x.p ? Math.round(x.w / x.p * 100) + "%" : "–"}</td></tr>`).join("") || `<tr><td colspan="7" class="notes">No champions match.</td></tr>`}</tbody></table></div></div>
-    <div><div class="eyebrow">Players</div><div class="seg" style="margin:6px 0">${[["ALL","All"], ...ROLES.map(r => [r, r])].map(([k,l]) => `<button data-sr="${k}" aria-pressed="${statRole === k}">${l}</button>`).join("")}</div>
-    <div style="overflow-x:auto"><table class="tt full ctab"><thead><tr><th>Player</th><th>Games</th>${th("pts","POG pts")}${th("rt","Avg rating")}${th("kda","KDA")}<th>KP</th>${th("dmg","DMG%")}${th("csd","CSD@15")}</tr></thead><tbody>${rows.slice(0, 40).map(r => `<tr><td>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.p.role}</span></td><td class="num">${r.s.g}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td><td class="num">${kdaOf(r.s)}</td><td class="num">${Math.round(r.s.kp / r.s.g * 100)}%</td><td class="num">${Math.round(r.s.dmgS / r.s.g * 100)}%</td><td class="num">${(r.s.csd / r.s.g).toFixed(1)}</td></tr>`).join("")}</tbody></table></div></div>
+    </div>` : `<div><div class="eyebrow">Players · ${pn} players · ${S.games} games</div><div class="seg" style="margin:6px 0">${[["ALL","All"], ...ROLES.map(r => [r, r])].map(([k,l]) => `<button data-sr="${k}" aria-pressed="${statRole === k}">${l}</button>`).join("")}</div>
+    <div style="overflow-x:auto"><table class="tt full ctab"><thead><tr><th>Player</th><th>Games</th>${th("pts","POG pts")}${th("rt","Avg rating")}${th("kda","KDA")}<th>KP</th>${th("dmg","DMG%")}${th("csd","CSD@15")}</tr></thead><tbody>${rows.map(r => `<tr><td>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.p.role}</span></td><td class="num">${r.s.g}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td><td class="num">${kdaOf(r.s)}</td><td class="num">${Math.round(r.s.kp / r.s.g * 100)}%</td><td class="num">${Math.round(r.s.dmgS / r.s.g * 100)}%</td><td class="num">${(r.s.csd / r.s.g).toFixed(1)}</td></tr>`).join("")}</tbody></table></div></div>`}
   </div>`;
 }
 
@@ -561,7 +581,7 @@ function winnersView(aw){
   </div>`;
 }
 function awardsView(aw){
-  const card = (title, r, sub, pending) => `<div class="award"><span class="eyebrow">${title}</span>${r ? `<b><span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.tid} ${r.p.role}</span></b><span class="notes">${sub(r)}</span>` : `<span class="notes">${pending}</span>`}${pending && r && pending.startsWith("Leading") ? `<span class="notes">${pending}</span>` : ""}</div>`;
+  const card = (title, r, sub, pending) => `<div class="award"><span class="eyebrow">${title}</span>${r ? `<b>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.p.role}</span></b><span class="notes">${sub(r)}</span>` : `<span class="notes">${pending}</span>`}${pending && r && pending.startsWith("Leading") ? `<span class="notes">${pending}</span>` : ""}</div>`;
   const lead = playerRows().filter(r => r.s.pog).sort((a,b) => b.s.pts - a.s.pts || b.avgRt - a.avgRt).slice(0, 10);
   return `<div style="display:grid;gap:14px">
     <div class="awards">
@@ -570,8 +590,8 @@ function awardsView(aw){
       ${card("Finals MVP", aw.finalsMVP, r => `avg rating ${avg(r.s.finRt).toFixed(2)} across ${r.s.finRt.length} final games`, "Awarded to the best-rated player on the winning team in the final")}
     </div>
     <div><div class="eyebrow">All-Tournament team ${aw.done ? "" : "(current)"}</div><p class="notes" style="margin:2px 0 6px">Best average game rating per role, minimum ${aw.minG} games.</p>
-    <div class="team5">${aw.team5.map((r, i) => `<div><span class="role">${ROLES[i]}</span>${r ? `<b class="hov" data-tp="${r.tid}|${i}" tabindex="0">${esc(r.p.n)}</b><span class="notes">${r.tid} · ${r.avgRt.toFixed(2)}</span>` : `<span class="notes">—</span>`}</div>`).join("")}</div></div>
-    <div><div class="eyebrow">POG points leaderboard</div>${lead.length ? `<table class="tt full"><thead><tr><th>#</th><th>Player</th><th>POG</th><th>Points</th><th>Avg rating</th></tr></thead><tbody>${lead.map((r, i) => `<tr><td>${i + 1}</td><td><span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.tid} ${r.p.role}</span></td><td class="num">${r.s.pog}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td></tr>`).join("")}</tbody></table>` : `<p class="notes">No games yet.</p>`}</div>
+    <div class="team5">${aw.team5.map((r, i) => `<div><span class="role">${ROLES[i]}</span>${r ? `<b>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${i}" tabindex="0">${esc(r.p.n)}</span></b><span class="notes">avg rating ${r.avgRt.toFixed(2)}</span>` : `<span class="notes">—</span>`}</div>`).join("")}</div></div>
+    <div><div class="eyebrow">POG points leaderboard</div>${lead.length ? `<table class="tt full"><thead><tr><th>Player</th><th>Rank</th><th>POG</th><th>Points</th><th>Avg rating</th></tr></thead><tbody>${lead.map((r, i) => `<tr><td>${teamTag(r.tid)} <span class="hov" data-tp="${r.tid}|${ROLES.indexOf(r.p.role)}" tabindex="0">${esc(r.p.n)}</span> <span class="notes">${r.p.role}</span></td><td class="num">${i + 1}</td><td class="num">${r.s.pog}</td><td class="num">${r.s.pts}</td><td class="num">${r.avgRt.toFixed(2)}</td></tr>`).join("")}</tbody></table>` : `<p class="notes">No games yet.</p>`}</div>
     <p class="notes" style="font-size:12px">Game rating (0–10) weighs the numbers that make LCK Player of the Game winners stand out: the result, KDA and deaths, kill participation, damage share against the role's norm, CS lead at 15, solo kills, vision (supports) and objectives (junglers and supports). Metric choices follow LeagueLab's metrics guide and Team Liquid's statistical-standouts piece; points follow the LCK POG system. POG goes to the winning side unless a losing player's rating beats the winners' best by 1.1 or more (rare, under 1% of games). Supports are balanced so they win POG about as rarely as in the LCK (around 10% of games; Keria in 2023 was the first support to lead a split in POG points).</p>
   </div>`;
 }
@@ -580,9 +600,9 @@ function gameDetail(m, g, gi){
   return `<div class="gd"><div class="notes">Game ${gi + 1} · ${g.time}:${String(g.sec).padStart(2, "0")} · <b>${esc(team(g.winner).name)}</b> win · POG ${esc(g.pog.n)} (${esc(g.pog.c)}), ${esc(g.pog.why)}</div><div class="board">${side("blue")}${side("red")}</div></div>`;
 }
 function resultsView(){
-  const done = RUN.matches.filter(m => m.games.length).slice().reverse();
-  if(!done.length) return `<p class="notes">No results yet.</p>`;
-  return `<div style="display:grid;gap:8px">${done.map(m => `<div class="mrow ${m.status}"><div style="flex:1"><span class="notes">${esc(DAYS[m.day].date)} · ${esc(stageName(m))} · Bo${m.bo}</span><div class="mteams">${teamTag(m.a)} ${seriesWins(m, m.a)}–${seriesWins(m, m.b)} ${teamTag(m.b)} ${m.status === "done" ? `<span class="notes">${esc(team(m.w).name)} win</span>` : ""}</div>${tourOpen[m.id] ? m.games.map((g, i) => gameDetail(m, g, i)).join("") : ""}</div><div class="ctrls"><button class="btn" data-ta="open" data-m="${m.id}">${tourOpen[m.id] ? "Hide" : "Games"}</button></div></div>`).join("")}</div>`;
+  const days = [...new Set(RUN.matches.filter(m => m.games.length).map(m => m.day))].sort((a,b) => b - a);
+  if(!days.length) return `<p class="notes">No results yet.</p>`;
+  return `<div style="display:grid;gap:18px">${days.map(d => dayBlock(d, dayMatches(d).filter(m => m.games.length))).join("")}</div>`;
 }
 function playinView(){
   return `<div style="display:grid;gap:8px"><p class="notes" style="margin:0">Real play-in results (15–18 October, Los Angeles): Karmine Corp beat Cloud9 3-2 and MVK 3-0 twice to take the last Swiss spot; MVK beat FURIA 3-0 and 3-1; FURIA beat Cloud9 3-1. These games, on patch 26.20, are the starting meta pool before the tournament's own games are added.</p>
@@ -600,6 +620,7 @@ document.addEventListener("click", e => {
   if(b.dataset.ss){ statSort = b.dataset.ss; renderTour(); return; }
   if(b.dataset.cr){ chRole = b.dataset.cr; renderTour(); return; }
   if(b.dataset.cs){ chSort = b.dataset.cs; renderTour(); return; }
+  if(b.dataset.st){ statTab = b.dataset.st; try{ localStorage.setItem("lolw26-stat-tab", statTab); }catch(_){} renderTour(); return; }
   const a = b.dataset.ta; if(!a) return;
   if(a !== "new") tourConfirmNew = false;
   if(a === "start"){
@@ -613,9 +634,13 @@ document.addEventListener("click", e => {
   if(!RUN) return;
   const m = b.dataset.m ? M(b.dataset.m) : null;
   if(a === "sim" && m){ b.textContent = "Simulating…"; setTimeout(() => { simMatch(m); renderTour(); }, 20); }
+  else if(a === "sim1" && m){ b.textContent = "Simulating…"; setTimeout(() => { if(m.status !== "done") playAIGame(m); renderTour(); }, 20); }
+  else if(a === "back"){ DS.tour = null; DS.steps = []; DS.sim = null; TV = "today"; show("tour"); }
   else if(a === "draft" && m) startUserGame(m);
   else if(a === "simday"){ b.textContent = "Simulating…"; setTimeout(() => { simAIToday(); renderTour(); }, 20); }
-  else if(a === "simnext"){ b.textContent = "Simulating…"; setTimeout(() => { if(RUN.mode === "sim"){ for(let i = 0; i < 20; i++){ simAIToday(); if(!advanceDay()) break; } } else simToNext(); renderTour(); }, 20); }
+  else if(a === "simnext"){ b.textContent = "Simulating…"; setTimeout(() => { if(RUN.mode === "sim"){ for(let i = 0; i < 20; i++){ simAIToday(); if(!advanceDay()) break; } } else simToNext();
+    const nx = dayMatches(RUN.day).find(x => x.status !== "done" && ctrlOf(x)); tourFocus = nx ? nx.id : null; if(nx) TV = "today"; renderTour();
+    if(nx){ const el = document.getElementById("mc-" + nx.id); if(el) el.scrollIntoView({behavior:"smooth", block:"center"}); setTimeout(() => { tourFocus = null; const e2 = document.getElementById("mc-" + nx.id); if(e2) e2.classList.remove("focus"); }, 2600); } }, 20); }
   else if(a === "advance"){ advanceDay(); renderTour(); }
   else if(a === "resume") show("draft");
   else if(a === "open" && m){ tourOpen[m.id] = !tourOpen[m.id]; renderTour(); }
