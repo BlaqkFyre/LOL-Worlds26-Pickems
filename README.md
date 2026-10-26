@@ -27,6 +27,10 @@ Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages u
 | Teams / Top–Support | Player power bars, head-to-head and tier lists. Hover a player for their champion pool. |
 | Meta | Champion tier list from blended pro pick/ban presence (26.20 + 26.16–26.20) with win rate and rising / falling / fading filters, bot-lane duo grid, best partners, counters. |
 
+## Real Worlds data
+
+The real Swiss games played so far (`js/worlds-live.js`) feed the champion cards' Worlds meta, pairs and counters, players' champion pools, draft suggestions and a small capped "Worlds form" update to player skills. They never change simulated standings: every tournament run starts at 0-0. Details in `research/worlds-live-2026.md`.
+
 ## Themes
 
 The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in one of three event colour themes — *Hextech Gold*, *Brooklyn Final* or *Summoner's Cup*. Choices are remembered in the browser.
@@ -55,6 +59,7 @@ js/ui.js            theme toggle, Worlds mode, info popover
 js/data.js          teams, ratings, champion pools, meta, synergy, counters, play-in drafts
 js/champions.js     pro data for 165 champions (presence, win rates, roles, builds, play-in users)
 js/assets.js        champion icons (Data Dragon, with on/off switch) and team colours
+js/worlds-live.js    real Worlds 2026 Swiss games (picks, bans, player stats) for champion data, pools and player form
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation
 ```

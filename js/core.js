@@ -9,7 +9,9 @@ function metaOf(c){const d=CHAMP_DB[c],b=d&&d.bl;if(b>=30)return["meta",`Meta: $
 function wrOf(c){const d=CHAMP_DB[c];if(!d)return null;let n=0,wr=null,src="";
   if(d.rec){n=Math.round(d.rec[0]*4.65);wr=d.rec[2];src="26.16–26.20"}else if(d.p20&&!d.sea){n=Math.round(d.p20[0]*.25);wr=d.p20[2];src="26.20"}
   else if(d.sea){n=Math.round(d.sea[0]*27.23);wr=d.sea[2];src="2026 season"}else if(d.g&&d.w!=null){n=d.g;wr=Math.round(d.w/d.g*100);src="2026 pro, all leagues"}
-  if(wr==null||!n)return null;return {wr,n,src,adj:Math.round((wr/100*n+20)/(n+40)*1000)/10}}
+  const wl=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.champ[c])||{p:0,w:0};
+  if(wr==null||!n){if(!wl.p)return null;return {wr:Math.round(wl.w/wl.p*100),n:wl.p,src:"Worlds 2026",adj:Math.round((wl.w*2+20)/(wl.p*2+40)*1000)/10}}
+  return {wr,n,src,adj:Math.round((wr/100*n+wl.w*2+20)/(n+wl.p*2+40)*1000)/10}}
 function trendOf(c){const d=CHAMP_DB[c];if(!d)return"";if(d.fade)return"fading";if(d.tr>=6)return"rising";if(d.tr<=-6)return"falling";return""}
 const TREND_TXT={rising:"▲ rising",falling:"▼ falling",fading:"fading"};
 
@@ -140,7 +142,8 @@ document.getElementById("v-role").addEventListener("click",e=>{const b=e.target.
 const parseL=s=>s.split(",").map(x=>{const m=x.trim().match(/^(.*) ([\d.]+)$/);return [m[1],+m[2]]});
 const CTR={};Object.entries(CTR_RAW).forEach(([c,[r,patch,s,w,slug]])=>CTR[c]={r,patch,s:parseL(s),w:parseL(w),slug});
 /* matchup(a,b): a's win rate vs b from either page; null if no data */
-function matchup(a,b){const A=CTR[a],B=CTR[b];let x=A&&(A.s.find(y=>y[0]===b)||A.w.find(y=>y[0]===b));if(x)return x[1];let y=B&&(B.s.find(z=>z[0]===a)||B.w.find(z=>z[0]===a));if(y)return Math.round((100-y[1])*10)/10;return null}
+function matchup(a,b){const A=CTR[a],B=CTR[b];let x=A&&(A.s.find(y=>y[0]===b)||A.w.find(y=>y[0]===b));if(x)return x[1];let y=B&&(B.s.find(z=>z[0]===a)||B.w.find(z=>z[0]===a));if(y)return Math.round((100-y[1])*10)/10;
+  const L=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.lane[a+"|"+b];if(L&&L.g>=2)return Math.round((L.w+1)/(L.g+2)*1000)/10;return null}
 function countersOf(c){/* who beats c, who c beats, merged both directions */
   const beats=new Map(),loses=new Map();const A=CTR[c];
   if(A){A.s.forEach(([x,w])=>beats.set(x,w));A.w.forEach(([x,w])=>loses.set(x,w))}
@@ -166,10 +169,15 @@ DUOS.forEach(([a,s,wr,l])=>{SYN[a+"|"+s]=SYN[s+"|"+a]=l});
 PARTNERS.forEach(([c,r,s,by])=>Object.values(by).forEach(l=>l.forEach(([pc,ch])=>{SYN[c+"|"+pc]=SYN[pc+"|"+c]=Math.max(SYN[c+"|"+pc]||-99,ch)})));
 const synOf=c=>Object.entries(SYN).filter(([k])=>k.startsWith(c+"|")).map(([k,l])=>[k.split("|")[1],l]).sort((a,b)=>b[1]-a[1]);
 /* pre-tournament presence: blended pro presence; champions outside the pro tables get a small estimate from 2026 pro games */
-const basePres=c=>{const d=CHAMP_DB[c];if(!d)return 0;if(d.bl!=null)return Math.round(d.bl);return Math.min(9,Math.round((d.g||0)/120))};
+const proPres=c=>{const d=CHAMP_DB[c];if(!d)return 0;if(d.bl!=null)return Math.round(d.bl);return Math.min(9,Math.round((d.g||0)/120))};
+/* pre-tournament presence = pro presence blended with real Worlds presence (play-ins + Swiss so far), the Worlds share growing with games */
+const basePres=c=>{const W=worldsMeta(c),k=W.g/(W.g+60);return Math.round((1-k)*proPres(c)+k*(W.pk+W.bn))};
 const presOf=c=>{const b=basePres(c);return typeof tourPres==="function"?tourPres(c,b):b};
 /* a player's champion pool: 2026 favourites plus champions played at this simulated Worlds */
-function poolOf(p){return typeof tourPool==="function"?tourPool(p):p.picks}
+/* a player's champion pool: 2026 favourites, plus real Worlds games (counted double for recency; new champions added), plus your run */
+function worldsPool(p){const pc=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n];if(!pc)return p.picks;const out=p.picks.map(x=>[...x]);
+  Object.entries(pc).forEach(([c,v])=>{const e=out.find(x=>x[0]===c);if(e){const g0=e[1]||5,w0=(e[2]||50)/100*g0;e[1]=g0+v.g;e[2]=Math.round((w0+2*v.w)/(g0+2*v.g)*100)}else out.push([c,v.g,Math.round(v.w/v.g*100),"new"])});return out}
+function poolOf(p){const base=worldsPool(p);return typeof tourPool==="function"?tourPool(p,base):base}
 const tierOf=p=>p>=55?"S":p>=40?"A":p>=30?"B":p>0?"C":"–";
 /* Competitive order. F = first-pick side (blue as standard), L = the other side. */
 const SEQ=[["F","ban"],["L","ban"],["F","ban"],["L","ban"],["F","ban"],["L","ban"],
@@ -207,7 +215,8 @@ function scoreFor(c,actor,kind){
   if(DS.steps.length<12&&roles.length>=2){s+=5;why.push(`flex ${roles.join("/")}`)}
   const tr=trendOf(c);if(tr==="rising"){s+=3;why.push("▲ rising")}else if(tr==="falling")why.push("▼ falling");
   if(CHAMP_DB[c]&&CHAMP_DB[c].so)s*=0.5;
-  picksOf(actor).forEach(p=>{const l=SYN[c+"|"+p.c];if(l!=null){s+=l*4;why.push(`${l>0?"+":""}${l} with ${p.c}`)}});
+  picksOf(actor).forEach(p=>{const l=SYN[c+"|"+p.c];if(l!=null){s+=l*4;why.push(`${l>0?"+":""}${l} with ${p.c}`)}
+    const m=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.mates[[c,p.c].sort().join("|")];if(m&&m.g>=2){const net=m.w-(m.g-m.w);if(net){s+=Math.max(-3,Math.min(3,net))*2;why.push(`${m.w}-${m.g-m.w} with ${p.c} at Worlds`)}}});
   const deny=comfortIn(other,c);if(deny.length){s+=8;why.push(`denies ${deny.map(o=>o.p.n).join(", ")}`)}
   picksOf(other).filter(p=>roles.includes(p.r)).forEach(p=>{const m=matchup(c,p.c);if(m!=null){s+=(m-50)*3;why.push(m>=50?`beats ${p.c} (${m}%)`:`countered by ${p.c} (${m}%)`)}});
   return {c,s,why,roles};
@@ -247,16 +256,19 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
   /* display: this Worlds' games first (bright), 2026 pro numbers dimmed in brackets */
-  const tp=(typeof RUN!=="undefined"&&RUN&&RUN.stats.pchamp[p.key])||{};
-  const shown=[...new Set([...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
-  const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
+  const tp=(typeof RUN!=="undefined"&&RUN&&RUN.stats.pchamp[p.key])||{},hasRun=typeof RUN!=="undefined"&&!!RUN;
+  const wp=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n])||{};
+  const shown=[...new Set([...Object.keys(wp).sort((a,b)=>wp[b].g-wp[a].g),...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
+  const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c],wv=wp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
     const risk=m!=null?(m<48?`<span class="neg">countered by ${esc(enemy.c)} (${m}%)</span>`:m>=52?`<span class="pos">beats ${esc(enemy.c)} (${m}%)</span>`:""):"";
-    return `<tr class="${st?"gone":""}"><td>${icon(c,22)} ${esc(c)}${st?` <span class="notes">${st}</span>`:""}${fd&&!st?` <span class="trend fading">fading</span>`:""}${risk?" "+risk:""}</td><td>${tv?`<em class="g">${tv.g} gm</em> <span class="wl">${tv.w}-${tv.g-tv.w}</span>`:""}</td><td class="dim">${sx?`(${sx[1]?sx[1]+"g ":""}${sx[2]}%)`:""}</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`};
+    return `<tr class="${st?"gone":""}"><td>${icon(c,22)} ${esc(c)}${st?` <span class="notes">${st}</span>`:""}${fd&&!st?` <span class="trend fading">fading</span>`:""}${risk?" "+risk:""}${wv&&!sx&&!st?` <span class="tag newtag">new at Worlds</span>`:""}</td><td>${wv?`<em class="g">${wv.g} gm</em> <span class="wl">${wv.w}-${wv.g-wv.w}</span>`:"–"}</td>${hasRun?`<td class="notes small">${tv?`${tv.g} gm ${tv.w}-${tv.g-tv.w}`:"–"}</td>`:""}<td class="dim">${sx?`(${sx[1]?sx[1]+"g ":""}${sx[2]}%)`:""}</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`};
   const open=pool.filter(([c])=>!takenWhy(c));
   const best=open.slice().sort((a,b)=>{const ma=enemy?matchup(a[0],enemy.c):null,mb=enemy?matchup(b[0],enemy.c):null;return ((mb==null?50:mb)-(ma==null?50:ma))*2+((b[1]||0)-(a[1]||0))*0.3})[0];
   return `<div class="tiph" style="--tc:${teamCol(tid)}"><span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="notes">${RNAME[p.role]} · ${p.ov}</span></div><div class="notes">${ATTR[p.role].map((a,j)=>`${a} ${p.a[j]}`).join(" · ")}${p.kda?` · KDA ${p.kda}`:""}</div>`+
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
-  (shown.length?`<table class="tt">${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
+  (()=>{const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
+    return `<div class="wform"><b>Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b> <span class="notes">${ATTR[p.role].map((a,j)=>`${a} ${sg(f.d[j])}`).join(" · ")}</span><span class="notes small">KDA ${f.kda} · KP ${f.kp}% · DMG ${f.dmg}%${f.csm?` · ${f.csm} CS/min`:""}</span>${f.tags.length?`<span>${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div>`})()+
+  (shown.length?`<table class="tt"><thead><tr><th>Champion</th><th>Worlds</th>${hasRun?"<th>Your run</th>":""}<th>2026</th><th>Meta</th></tr></thead>${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
   (typeof tourPlayerLine==="function"?tourPlayerLine(p):"")+(p.note?`<div class="notes">${esc(p.note)}</div>`:"");}
 /* team card: comp so far, damage mix, plan, synergy pairs and open roles */
 const ARCH_NAME={engage:"Engage",poke:"Poke and siege",scaling:"Scaling",skirmish:"Skirmish and dive",protect:"Protect the carry"};
@@ -281,11 +293,13 @@ function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.
 function worldsMeta(c){const d=CHAMP_DB[c]||{},ch=CH.find(y=>y[0]===c),PG=22;let g=PG,p=0,b=0,w=0;
   if(d.pin&&(d.pin[0]+d.pin[1])){p=d.pin[0]+d.pin[1];w=d.pin[0]}else if(ch&&ch[2]!=null)p=Math.round(ch[2]/100*PG);
   if(ch&&ch[3]!=null)b=Math.round(ch[3]/100*PG);
-  const R=typeof RUN!=="undefined"&&RUN&&RUN.stats;if(R&&R.games){g+=R.games;const st=R.champ[c];if(st){p+=st.p;b+=st.b;w+=st.w}}
-  return {g,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/g*100),run:R?R.games:0}}
+  const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,sw=L?L.n:0;if(L){g+=sw;const x=L.champ[c];if(x){p+=x.p;b+=x.b;w+=x.w}}
+  const R=typeof RUN!=="undefined"&&RUN&&RUN.stats,rs=R&&R.champ[c];
+  return {g,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/g*100),swiss:sw,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
 /* champions seen on the same team at this Worlds (play-in drafts + your run): [name, wins together, games together] */
 function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||[x,0,0];e[2]++;if(won)e[1]++;m.set(x,e)};
   COMPS.forEach(([s,g,wc,lc])=>{if(wc.includes(c))wc.forEach(x=>x!==c&&add(x,true));if(lc.includes(c))lc.forEach(x=>x!==c&&add(x,false))});
+  if(typeof WORLDS_LIVE!=="undefined")WORLDS_LIVE.games.forEach(gm=>["blue","red"].forEach(sd=>{const cs=gm.pl[sd].map(r=>r[2]);if(cs.includes(c)){const won=gm.w===gm[sd];cs.forEach(x=>x!==c&&add(x,won))}}));
   if(typeof RUN!=="undefined"&&RUN)RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
   return [...m.values()].filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]||(b[1]/b[2])-(a[1]/a[2]))}
 /* five partners: measured pair lift first, then winning team-mates at this Worlds */
@@ -295,14 +309,17 @@ function pairs5(c){const out=synOf(c).filter(x=>x[1]>0).map(([x,l])=>({x,em:"+"+
 function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(x)).map(([x,w])=>({x,em:w+"%",cls:"b"}));const seen=new Set(out.map(o=>o.x));seen.add(c);
   const more=[];Object.entries(CTR).forEach(([o,d])=>{d.s.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].w.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
   more.sort((a,b)=>a[1]-b[1]).forEach(([x,w])=>{if(!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:w+"%",cls:"b",other:1})}});
+  if(out.length<5&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.endsWith("|"+c)&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[0];if(!seen.has(x)){seen.add(x);out.push({x,em:`won lane ${v.w}-${v.g-v.w} at Worlds`,cls:"b"})}});
   if(out.length<5&&typeof RUN!=="undefined"&&RUN){const m=new Map();RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
     [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`beat it ${w}-${g-w}`,cls:"b"})}})}
   return out.slice(0,5)}
 function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
   (d&&d.pinBy||[]).forEach(([n,t,wl])=>{const [w,l]=wl.split("-").map(Number);m.set(n,{n,t,g:w+l,w})});
-  if(typeof RUN!=="undefined"&&RUN)Object.entries(RUN.stats.pchamp).forEach(([key,pc])=>{const v=pc[c];if(!v)return;const [tid,i]=key.split("|"),p=team(tid).p[+i];const e=m.get(p.n)||{n:p.n,t:tid,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=tid;m.set(p.n,e)});
+  if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const e=m.get(n)||{n,t:WORLDS_LIVE.players[n].team,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=WORLDS_LIVE.players[n].team;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
+/* your simulated run's players on this champion (shown separately from the real Worlds numbers) */
+function mostPickedRun(c){if(typeof RUN==="undefined"||!RUN)return[];return Object.entries(RUN.stats.pchamp).map(([key,pc])=>{const v=pc[c];if(!v)return null;const [tid,i]=key.split("|");return {n:team(tid).p[+i].n,t:tid,g:v.g,w:v.w}}).filter(Boolean).sort((a,b)=>b.g-a.g).slice(0,3)}
 /* a champion's status in the draft on screen: picked / banned this game, or locked by Fearless (with game and team) */
 function draftStatus(c){const dv=document.getElementById("v-draft");if(!dv||dv.hidden)return null;
   const st=DS.steps.find(x=>x.c===c);if(st)return st.k==="ban"?{k:"ban",t:st.t,tag:"Ban",title:`Banned by ${st.t} this game`}:{k:"pick",t:st.t,tag:st.t,title:`Picked by ${st.t} this game`};
@@ -324,15 +341,15 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
-  <div class="hsec"><div class="label">Worlds meta ${infoI(`Worlds 2026 so far: the 22 play-in games (patch 26.20)${WM.run?` plus the ${WM.run} games of your run`:""} — ${WM.g} games. Play-in bans are only known for the most-contested champions.`)}</div><div class="hbars">
+  <div class="hsec"><div class="label">Worlds meta ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
-  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div></div>
+  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div>
   <div class="key"><span><i style="background:var(--pick)"></i>Picked</span><span><i class="bnk"></i>Banned</span></div>
-  <div><div class="label">Most picked at this Worlds ${infoI(`Bright: games on ${c} at this Worlds (play-ins and your run), then the win-loss. Dim number in brackets: that player's 2026 pro games on ${c} (mid.gg), used for draft strategy.`)}</div><div class="ccs">${mp.length?mp.map(e=>`<span class="cc" style="--tc:${teamCol(e.t)}"><span class="tm">${esc(e.t)}</span>${esc(e.n)} <em class="g">${e.g} gm</em> <span class="wl">${e.w}-${e.g-e.w}</span>${e.s?` <span class="dim">(${e.s}g)</span>`:""}</span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div></div>
+  <div><div class="label">Most picked at this Worlds ${infoI(`Bright: real games on ${c} at Worlds 2026 (play-ins and Swiss so far), then the win-loss. Dim number in brackets: that player's 2026 pro games on ${c} (mid.gg). Your simulated run is listed underneath.`)}</div><div class="ccs">${mp.length?mp.map(e=>`<span class="cc" style="--tc:${teamCol(e.t)}"><span class="tm">${esc(e.t)}</span>${esc(e.n)} <em class="g">${e.g} gm</em> <span class="wl">${e.w}-${e.g-e.w}</span>${e.s?` <span class="dim">(${e.s}g)</span>`:""}</span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div>${(()=>{const r=mostPickedRun(c);return r.length?`<div class="notes small" style="margin-top:4px">Your run: ${r.map(e=>`${esc(e.n)} (${e.t}) ${e.g} gm ${e.w}-${e.g-e.w}`).join(" · ")}</div>`:""})()}</div>
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
-  <div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at this Worlds fill the list.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
-  <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at this Worlds.")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
+  <div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at Worlds (real games, then your run) fill the list. Draft suggestions also add a bonus for pairs that won together at Worlds.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
+  <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at Worlds (real games, then your run).")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
   ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--muted)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban"><span class="stag">Ban</span></span> banned this game <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
 function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
@@ -413,7 +430,7 @@ const KW={TOP:2,JGL:2,MID:3,ADC:3.2,SUP:0.6};
 const SIM_SD=5,SIM_GOLD=1000;
 /* star players: k = how strongly rating shifts kill share, die = how much less stars die, assist = support Playmaking → assists,
    fight = fight bonus per rating point above 90 for a team's best player, pog = game-rating bonus for players rated 90+ (per 6 points) */
-const STAR={k:12,die:0.8,assist:85,fight:0.08,pog:0.35};
+const STAR={k:12,die:0.8,assist:85,fight:0.08,pog:0.35,supElite:0.12};
 /* late-game tuning: buff and soul fight bonus, push power, when the Nexus can fall, comeback bounty, how fast gold leads fade.
    Tuned to LCK 2026 (RFT.GG): average game ~32 min, team taking Baron wins ~85%, team taking Elder wins ~75%. */
 const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:5.5,soulFight:0.5,baronPush:1.2,elderPush:1.5,goldPush:5000,latePush:12,endBar:3.0,bounty:1.0,goldFade:8};
@@ -426,7 +443,7 @@ function simGame(quiet){
   const ev=(t,s,txt)=>{if(!quiet)g.ev.push([t,s,txt])};
   /* who gets kills, deaths and assists: role first, then player quality — stars take more of the kills and die less;
      a support's assists follow their Playmaking rating */
-  const qW=(sd,r)=>Math.exp((S[sd].P[r].pl.ov-85)/STAR.k);
+  const qW=(sd,r)=>Math.exp((Math.min(96,S[sd].P[r].pl.ov)-85)/STAR.k);
   const KWs={},VWs={};["blue","red"].forEach(sd=>{KWs[sd]={};VWs[sd]={};ROLES.forEach(r=>{KWs[sd][r]=KW[r]*qW(sd,r);VWs[sd][r]={TOP:2,JGL:2,MID:2,ADC:2.5,SUP:2.5}[r]/Math.pow(qW(sd,r),STAR.die)})});
   const asP=(sd,r)=>{const pl=S[sd].P[r].pl,v=r==="SUP"?pl.a[0]:pl.ov;return Math.min(0.85,0.55*(1+(v-85)/STAR.assist))};
   const kill=(s,n,forced)=>{for(let i=0;i<n;i++){const kr=forced&&i===0?forced:wpick(KWs[s]),vr=wpick(VWs[opp(s)]);g.kda[s][kr][0]++;g.kda[opp(s)][vr][1]++;

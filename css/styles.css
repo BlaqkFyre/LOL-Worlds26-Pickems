@@ -510,3 +510,7 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .stkey{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px;color:var(--muted)}.stkey .cc{padding:1px 4px}
 .ststat{font:700 12px var(--display);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-left:3px solid var(--tc,var(--muted));background:color-mix(in srgb,var(--muted) 12%,transparent)}
 .ststat.st-ban{border-left-color:var(--ban,#c2410c)}.ststat.st-lock{border-left-style:dashed}
+.wform{display:grid;gap:3px;padding:6px 8px;border-left:3px solid var(--teal);background:color-mix(in srgb,var(--teal) 8%,transparent)}
+.wform b{font:700 12px var(--display);letter-spacing:.06em;text-transform:uppercase}.wform .tag{margin:2px 4px 0 0}
+.newtag{border-color:var(--teal);color:var(--teal);font-size:10px;padding:0 5px}
+#tip .tt th{font-size:10px}

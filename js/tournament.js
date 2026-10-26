@@ -51,10 +51,11 @@ function tourPres(c, base){
   const tp = st ? (st.p + st.b) / G * 100 : 0;
   return Math.round((base * BASE_GAMES + tp * G) / (BASE_GAMES + G));
 }
-function tourPool(p){
-  if(!RUN) return p.picks;
-  const pc = RUN.stats.pchamp[p.key]; if(!pc) return p.picks;
-  const out = p.picks.map(x => [...x]);
+function tourPool(p, base){
+  base = base || p.picks;
+  if(!RUN) return base;
+  const pc = RUN.stats.pchamp[p.key]; if(!pc) return base;
+  const out = base.map(x => [...x]);
   Object.entries(pc).forEach(([c, v]) => {
     const e = out.find(x => x[0] === c);
     if(e){ const g0 = e[1] || 5, w0 = (e[2] || 50) / 100 * g0; e[1] = g0 + v.g; e[2] = Math.round((w0 + v.w) / (g0 + v.g) * 100); }
@@ -121,7 +122,8 @@ function gameStats(g){
         - 0.15 * p.d;
       /* outliers (rated 90+, e.g. Keria, Chovy, Canyon) earn a little extra, as LCK POG voting rewards standout players */
       const ovp = (s === "blue" ? g.B : g.R).P[r].pl.ov;
-      rt += STAR.pog * Math.max(0, ovp - 90) / 6;
+      rt += STAR.pog * Math.max(0, Math.min(96, ovp) - 90) / 6;   // capped at 96 so a hot streak cannot run away
+      if(r === "SUP" && ovp >= 94) rt += STAR.supElite;   // elite supports (e.g. Keria) are LCK POG outliers
       p.rt = Math.max(0, Math.min(10, rt * ROLE_ADJ[r]));
     });
   });
