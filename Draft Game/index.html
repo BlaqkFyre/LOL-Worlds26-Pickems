@@ -23,6 +23,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 #toolbar button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:13px}
 #toolbar button:disabled{opacity:.4;cursor:default}
 #toolbar button.on{border-color:var(--gold);color:var(--gold)}
+#toolbar button.ok{border-color:#3fb27f;color:#6fe0a8}
+#toolbar button.warn{border-color:var(--red);color:#ff8d93}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111725;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13px;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+#s-record,#r-record{font-size:13px;color:var(--muted);margin-top:6px}
 
 /* stage scales to fit the window */
 #wrap{position:relative;height:calc(100% - 44px)}
@@ -197,7 +201,11 @@ button.bigb:disabled{opacity:.5;cursor:default}
   <button id="t-auto">Auto-draft: Off</button>
   <button id="t-skip" disabled>Skip</button>
   <button id="t-new">New game</button>
+  <button id="t-folder" title="Autosave: the game saves to draft-clash-save.json in the folder you choose (pick the Draft Game folder) and loads from it when you open the game.">Save folder: choose…</button>
+  <button id="t-load" class="hidden">Load save file</button>
+  <input type="file" id="t-import" accept=".json,application/json" hidden>
 </div>
+<div id="toast" class="hidden"></div>
 <div id="wrap">
  <div id="stage">
   <div id="shake"><div id="board"></div><div id="cards"></div></div>
@@ -231,12 +239,13 @@ button.bigb:disabled{opacity:.5;cursor:default}
     <div id="s-msg">Flip the coin. The winner chooses a side.</div>
     <div class="sbtns" id="s-btns"></div>
     <div class="snote">Blue side bans and picks first. Red side gets the last pick.<br>Top half of the board is Red, bottom half is Blue.</div>
+    <div id="s-record"></div>
    </div>
   </div>
 
   <div id="result" class="hidden">
    <div class="rpanel"><div class="rhead" id="r-head"></div>
-    <div class="rbody"><div id="r-you"></div><div class="rstats" id="r-stats"></div><div id="r-pre"></div><div id="r-sim"></div>
+    <div class="rbody"><div id="r-you"></div><div class="rstats" id="r-stats"></div><div id="r-pre"></div><div id="r-sim"></div><div id="r-record"></div>
      <div class="rbtns"><button id="r-rematch">Rematch (same draft)</button><button id="r-sim100">Sim 100 games</button><button id="r-new" class="bgold">New draft</button></div>
     </div></div>
   </div>
@@ -449,13 +458,14 @@ function eligible(team,kind,cid,nf){if(G.taken.has(cid))return false;if(kind==='
 
 function newGame(){
   gameId++;if(G)stopTimer();document.getAnimations().forEach(a=>a.cancel());
-  G={id:gameId,player:'blue',step:0,bans:{blue:[],red:[]},picks:{blue:{},red:{}},taken:new Set(),busy:false,timer:null,pre:.5,sim:null,drafting:false};
+  G={id:gameId,phase:'side',player:'blue',step:0,bans:{blue:[],red:[]},picks:{blue:{},red:{}},taken:new Set(),busy:false,timer:null,pre:.5,sim:null,drafting:false};
   SKIP=false;cardsL.innerHTML='';fx.innerHTML='';buildBoard();setWin(.5,'WIN %');applySnap(zeroSnap);setWin(.5,'WIN %');
   ['#draft','#ready','#hud','#result'].forEach(hide);show('#side');$('#side').style.opacity='';
   $('#s-msg').textContent='Flip the coin. The winner chooses a side.';
   $('#s-btns').innerHTML='<button class="bigb bgold" id="flip">Flip coin</button>';$('#flip').onclick=flip;
-  $('#t-skip').disabled=true;
+  $('#t-skip').disabled=true;renderRecord();persist();
 }
+function fillBanSlot(team,k,cid){const c=CH[cid],slot=$(`#ban-${team}-${k}`);slot.innerHTML=`<div class="mini" style="background:${tileBg(c)}">${c.ini}</div>`;slot.classList.add('filled');return slot}
 
 /* ---------- side select ---------- */
 async function flip(){
@@ -474,7 +484,7 @@ async function flip(){
   }
 }
 async function chooseSide(side){
-  SFX.click();G.player=side;$('#tname-'+side).textContent='YOU';$('#tname-'+other(side)).textContent='AI';
+  SFX.click();G.player=side;G.phase='draft';persist();$('#tname-'+side).textContent='YOU';$('#tname-'+other(side)).textContent='AI';
   await A($('#side'),[{opacity:1},{opacity:0}],300,{fill:'forwards'});hide('#side');$('#side').getAnimations().forEach(a=>a.cancel());
   startDraft();
 }
@@ -549,7 +559,7 @@ async function doAction(cid){
   if(kind==='ban'){const k=G.bans[team].length;G.bans[team].push(cid);refreshTiles();await animBan(cid,team,k)}
   else{let role=roleFor(team,cid);if(role==null)role=firstOpen(team);G.picks[team][role]=cid;refreshTiles();await animPick(cid,team,role);
     if(G.id!==id)return;setSyn();const p=winChance(G.picks.blue,G.picks.red,300);G.pre=p;setDraftWin(p);setWin(p,'WIN %')}
-  if(G.id!==id)return;G.step++;G.busy=false;nextTurn();
+  if(G.id!==id)return;G.step++;G.busy=false;persist();nextTurn();
 }
 function setDraftWin(p){$('#d-wb').style.width=(p*100)+'%';$('#d-wbb').textContent=`Blue ${Math.round(p*100)}%`;$('#d-wbr').textContent=`Red ${100-Math.round(p*100)}%`}
 function info(cid){
@@ -570,8 +580,7 @@ async function animBan(cid,team,k){
   cl.classList.add('cracked');cl.style.filter='grayscale(1) brightness(.6)';SFX.whoosh();
   const dx=b.x-a.x+(b.w-a.w)/2,dy=b.y-a.y+(b.h-a.h)/2,sc=b.w/a.w;
   await A(cl,[{transform:'translate(0,0) scale(1.12) rotate(0)'},{transform:`translate(${dx*.45}px,${dy*.45-40}px) scale(.95) rotate(${team==='red'?-16:16}deg)`},{transform:`translate(${dx}px,${dy}px) scale(${sc}) rotate(0)`}],620,{easing:'ease-in'});
-  cl.remove();
-  slot.innerHTML=`<div class="mini" style="background:${tileBg(c)}">${c.ini}</div>`;slot.classList.add('filled');
+  cl.remove();fillBanSlot(team,k,cid);
   SFX.slam();A(slot,[{transform:'scale(1.35)'},{transform:'scale(1)'}],260);await sleep(120);
 }
 async function animPick(cid,team,role){
@@ -591,7 +600,7 @@ async function endDraft(){
   $('#d-turn').className='turn';$('#d-turn').textContent='DRAFT COMPLETE';$('#d-hint').textContent='';$('#d-time').textContent='';
   const id=G.id;await sleep(600);if(G.id!==id)return;
   await A($('#draft'),[{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.95)'}],400,{easing:'ease-in'});hide('#draft');
-  G.pre=winChance(G.picks.blue,G.picks.red,600);setWin(G.pre,'WIN %');showReady();
+  G.pre=winChance(G.picks.blue,G.picks.red,600);setWin(G.pre,'WIN %');G.phase='ready';persist();showReady();
 }
 function showReady(){
   const p=G.pre;$('#clashbtn').innerHTML=`CLASH!<small>Win chance (estimate): Blue ${Math.round(p*100)}% · Red ${100-Math.round(p*100)}%</small>`;
@@ -602,7 +611,7 @@ function showReady(){
 const fwd=s=>s==='red'?1:-1;          /* forward (towards the midline) direction for a side */
 function setCap(e){$('#clock').textContent=`${e.t}:${pad((e.t*37+11)%60)}`;const c=$('#cap');c.textContent=e.text;c.className=e.side||''}
 async function startClash(){
-  hide('#ready');hide('#result');SKIP=false;$('#t-skip').disabled=false;const id=G.id;
+  hide('#ready');hide('#result');SKIP=false;$('#t-skip').disabled=false;const id=G.id;G.phase='clash';
   clean(allCards());allCards().forEach(c=>c.classList.remove('dead'));fx.innerHTML='';
   applySnap(zeroSnap);G.sim=simGame(G.picks.blue,G.picks.red,false);
   show('#hud');setCap({t:0,text:'Cards ready…',side:''});
@@ -682,6 +691,9 @@ async function finish(){
   $('#r-stats').innerHTML=`<div></div><div class="b">Blue</div><div class="r">Red</div>${row('Kills','k')}${row('Towers','tw')}${row('Dragons','dr')}${row('Barons','ba')}${row('Elders','el')}`;
   const pw=w==='blue'?G.pre:1-G.pre;
   $('#r-pre').innerHTML=`Game time ${g.time}:${pad((g.time*37+11)%60)} · ${w.toUpperCase()}'s pre-game win chance was <b>${Math.round(pw*100)}%</b>${pw<.5?' — <span class="upset">UPSET!</span>':''}`;
+  SAVE.history.push({at:new Date().toISOString(),player:G.player,winner:w,pre:Math.round(pw*1000)/1000,time:g.time});
+  if(SAVE.history.length>50)SAVE.history=SAVE.history.slice(-50);
+  G.phase='result';persist();renderRecord();
   $('#r-sim').textContent='';show('#result');
   A($('#result .rpanel'),[{transform:'scale(.7)',opacity:0},{transform:'scale(1)',opacity:1}],400,{easing:'cubic-bezier(.3,1.4,.5,1)'});
 }
@@ -696,18 +708,140 @@ $('#r-rematch').onclick=()=>{SFX.click();startClash()};
 $('#r-sim100').onclick=sim100;
 $('#r-new').onclick=()=>{SFX.click();newGame()};
 $('#t-new').onclick=()=>{SFX.click();newGame()};
-$('#t-sound').onclick=e=>{SOUND=!SOUND;e.target.textContent='Sound: '+(SOUND?'On':'Off');e.target.classList.toggle('on',SOUND);if(SOUND){ac();SFX.click()}};
-$('#t-speed').onclick=e=>{SPEED=SPEED===1?2:SPEED===2?4:1;e.target.textContent=`Speed: ${SPEED}×`;e.target.classList.toggle('on',SPEED>1)};
-$('#t-auto').onclick=e=>{AUTO=!AUTO;e.target.textContent='Auto-draft: '+(AUTO?'On':'Off');e.target.classList.toggle('on',AUTO);
+function settingsUI(){
+  $('#t-sound').textContent='Sound: '+(SOUND?'On':'Off');$('#t-sound').classList.toggle('on',SOUND);
+  $('#t-speed').textContent=`Speed: ${SPEED}×`;$('#t-speed').classList.toggle('on',SPEED>1);
+  $('#t-auto').textContent='Auto-draft: '+(AUTO?'On':'Off');$('#t-auto').classList.toggle('on',AUTO);
+}
+$('#t-sound').onclick=()=>{SOUND=!SOUND;settingsUI();persist();if(SOUND){ac();SFX.click()}};
+$('#t-speed').onclick=()=>{SPEED=SPEED===1?2:SPEED===2?4:1;settingsUI();persist()};
+$('#t-auto').onclick=()=>{AUTO=!AUTO;settingsUI();persist();
   if(G&&G.drafting&&!G.busy&&G.step<20&&curTeam()===G.player)nextTurn()};
 $('#t-skip').onclick=()=>{SKIP=true;$('#t-skip').disabled=true;document.getAnimations().forEach(a=>{try{a.finish()}catch(_){}})};
 const peek=$('#peek');
 ['pointerdown'].forEach(ev=>peek.addEventListener(ev,()=>$('#draft').classList.add('peek')));
 ['pointerup','pointerleave','pointercancel'].forEach(ev=>peek.addEventListener(ev,()=>$('#draft').classList.remove('peek')));
 
+/* ================= autosave =================
+   Saves settings, the game in progress (side, bans, picks, draft step) and your results history to
+   draft-clash-save.json in the folder you choose (pick the Draft Game folder), and loads from it on start.
+   Uses the browser's File System Access API (Chrome/Edge); the chosen folder is remembered. A copy is also
+   kept in browser storage, so nothing is lost before a folder is chosen. Other browsers: Download/Load buttons. */
+const SAVE_FILE='draft-clash-save.json',LS_KEY='draftClash.save';
+const FS_OK=typeof window.showDirectoryPicker==='function';
+let SAVE={v:1,savedAt:null,settings:{sound:true,speed:1,auto:false},game:null,history:[]};
+let DIR=null,PENDING=null,saveTimer=null,BOOTED=false;
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('draftClash',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+async function idbGet(k){try{const db=await idb();return await new Promise(r=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})}catch(e){return null}}
+async function idbSet(k,v){try{const db=await idb();await new Promise(r=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=r;t.onerror=r})}catch(e){}}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add('hidden'),2600)}
+function snapshotGame(){
+  if(!G||G.phase==='side')return null;
+  if(G.busy)return SAVE.game;   /* mid-animation: keep the last committed state */
+  return {phase:G.phase==='clash'?'ready':G.phase,player:G.player,step:G.step,bans:{blue:[...G.bans.blue],red:[...G.bans.red]},picks:{blue:{...G.picks.blue},red:{...G.picks.red}},pre:G.pre};
+}
+function persist(){
+  if(!BOOTED)return;
+  SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO};SAVE.game=snapshotGame();SAVE.savedAt=new Date().toISOString();
+  try{localStorage.setItem(LS_KEY,JSON.stringify(SAVE))}catch(e){}
+  if(DIR){clearTimeout(saveTimer);saveTimer=setTimeout(writeFolder,150)}
+}
+async function writeFolder(){
+  if(!DIR)return;
+  try{const fh=await DIR.getFileHandle(SAVE_FILE,{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(SAVE,null,1));await w.close();folderStatus('ok')}
+  catch(e){folderStatus('err')}
+}
+async function readFolder(h){try{const fh=await (h||DIR).getFileHandle(SAVE_FILE);const f=await fh.getFile();if(f.size>2e6)return null;return JSON.parse(await f.text())}catch(e){return null}}
+const isEmpty=s=>!s||(!s.game&&!(s.history&&s.history.length));
+/* prefer save a over b if b has nothing in it yet, or a is more recent */
+const newer=(a,b)=>!!a&&!isEmpty(a)&&(isEmpty(b)||String(a.savedAt||'')>String(b.savedAt||''));
+/* save files are checked field by field before use */
+function sanitize(d){
+  if(!d||typeof d!=='object'||d.v!==1)return null;
+  const st=d.settings||{};
+  const out={v:1,savedAt:typeof d.savedAt==='string'?d.savedAt.slice(0,40):null,settings:{sound:st.sound!==false,speed:[1,2,4].includes(st.speed)?st.speed:1,auto:st.auto===true},game:null,history:[]};
+  const okId=x=>Number.isInteger(x)&&x>=0&&x<CH.length,g=d.game;
+  if(g&&typeof g==='object'&&['draft','ready','result'].includes(g.phase)&&['blue','red'].includes(g.player)&&Number.isInteger(g.step)&&g.step>=0&&g.step<=20){
+    const bans={blue:[],red:[]},picks={blue:{},red:{}},seen=new Set();let ok=true;
+    for(const s of ['blue','red']){
+      const b=g.bans&&g.bans[s];if(!Array.isArray(b)||b.length>5){ok=false;break}
+      for(const x of b){if(!okId(x)||seen.has(x))ok=false;seen.add(x);bans[s].push(x)}
+      const p=(g.picks&&g.picks[s])||{};
+      for(const r of ROLES){if(p[r]!=null){if(!okId(p[r])||seen.has(p[r]))ok=false;seen.add(p[r]);picks[s][r]=p[r]}}
+    }
+    if(ok){const nb={blue:0,red:0},np={blue:0,red:0};for(let i=0;i<g.step;i++){const s=ORDER[i]==='B'?'blue':'red';if(KIND(i)==='ban')nb[s]++;else np[s]++}
+      ok=['blue','red'].every(s=>nb[s]===bans[s].length&&np[s]===Object.keys(picks[s]).length)}
+    if(ok)out.game={phase:g.step<20?'draft':'ready',player:g.player,step:g.step,bans,picks,pre:(typeof g.pre==='number'&&g.pre>=0&&g.pre<=1)?g.pre:.5};
+  }
+  if(Array.isArray(d.history))out.history=d.history.slice(-50).filter(h=>h&&['blue','red'].includes(h.winner)&&['blue','red'].includes(h.player))
+    .map(h=>({at:String(h.at||'').slice(0,40),player:h.player,winner:h.winner,pre:Math.max(0,Math.min(1,+h.pre||0)),time:Math.max(0,Math.min(99,Math.round(+h.time||0)))}));
+  return out;
+}
+function renderRecord(){
+  const h=SAVE.history,w=h.filter(x=>x.winner===x.player).length,l=h.length-w,up=h.filter(x=>x.winner===x.player&&x.pre<.5).length;
+  const txt=h.length?`Your record: ${w}W – ${l}L${up?` · ${up} upset win${up>1?'s':''}`:''}`:'';
+  $('#s-record').textContent=txt;$('#r-record').textContent=txt;
+}
+function restoreGame(gm){
+  newGame();
+  G.player=gm.player;G.step=gm.step;G.bans=gm.bans;G.picks=gm.picks;G.pre=gm.pre;
+  G.bans.blue.concat(G.bans.red,Object.values(G.picks.blue),Object.values(G.picks.red)).forEach(x=>G.taken.add(x));
+  $('#tname-'+G.player).textContent='YOU';$('#tname-'+other(G.player)).textContent='AI';
+  ['blue','red'].forEach(s=>{G.bans[s].forEach((cid,k)=>fillBanSlot(s,k,cid));ROLES.forEach(r=>{if(G.picks[s][r]!=null)placeCard(G.picks[s][r],s,r)})});
+  setSyn();hide('#side');setWin(G.pre,'WIN %');
+  if(gm.phase==='draft'){G.phase='draft';buildGrid();setDraftWin(G.pre);show('#draft');G.drafting=true;nextTurn()}
+  else{G.phase='ready';showReady()}
+  persist();
+}
+function applySave(data){
+  const d=sanitize(data);if(!d){newGame();return false}
+  SAVE=d;SOUND=d.settings.sound;SPEED=d.settings.speed;AUTO=d.settings.auto;settingsUI();
+  if(d.game)restoreGame(d.game);else newGame();
+  renderRecord();return true;
+}
+function folderStatus(s){
+  const b=$('#t-folder');b.classList.remove('ok','warn');
+  if(s==='ok'){b.textContent=`Saving to: ${DIR?DIR.name:'folder'} ✓`;b.classList.add('ok')}
+  else if(s==='reconnect'){b.textContent='Reconnect save folder';b.classList.add('warn')}
+  else if(s==='err'){b.textContent='Save failed: choose folder';b.classList.add('warn')}
+  else if(s==='nofs'){b.textContent='Download save';show('#t-load')}
+  else b.textContent='Save folder: choose…';
+}
+async function useFolder(h){
+  DIR=h;PENDING=null;await idbSet('dir',h);
+  const f=await readFolder();
+  if(f&&newer(f,SAVE)&&applySave(f)){toast(`Loaded ${SAVE_FILE} from ${h.name}`);persist()}
+  else{persist();await writeFolder();toast(`Autosaving to ${h.name}\\${SAVE_FILE}`)}
+  folderStatus('ok');
+}
+$('#t-folder').onclick=async()=>{
+  if(!FS_OK){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(SAVE,null,1)],{type:'application/json'}));a.download=SAVE_FILE;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);return}
+  try{
+    if(PENDING){if(await PENDING.requestPermission({mode:'readwrite'})==='granted'){await useFolder(PENDING);return}}
+    const h=await window.showDirectoryPicker({id:'draftclash',mode:'readwrite',startIn:'documents'});await useFolder(h);
+  }catch(e){if(e&&e.name!=='AbortError')toast('Could not open that folder')}
+};
+$('#t-load').onclick=()=>$('#t-import').click();
+$('#t-import').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f||f.size>2e6)return;
+  try{if(applySave(JSON.parse(await f.text()))){persist();toast('Save loaded')}else toast('That file is not a Draft Clash save')}catch(_){toast('That file is not a Draft Clash save')}};
+async function boot(){
+  fit();let data=null;
+  try{data=JSON.parse(localStorage.getItem(LS_KEY)||'null')}catch(e){}
+  if(FS_OK){
+    const h=await idbGet('dir');
+    if(h){let perm='prompt';try{perm=await h.queryPermission({mode:'readwrite'})}catch(e){}
+      if(perm==='granted'){DIR=h;const f=await readFolder();if(newer(f,data))data=f;folderStatus('ok')}
+      else{PENDING=h;folderStatus('reconnect')}}
+    else folderStatus('none');
+  }else folderStatus('nofs');
+  BOOTED=true;
+  if(data&&applySave(data)){if(SAVE.game)toast('Resumed your saved game')}
+  else{SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO};newGame()}
+}
+
 /* debug hook for testing */
-window.__dc={CH,simGame,winChance,teamStr,matchup,syn,ROLES};
-fit();newGame();
+window.__dc={CH,simGame,winChance,teamStr,matchup,syn,ROLES,get SAVE(){return SAVE},useFolder,boot};
+boot();
 })();
 </script>
 </body>

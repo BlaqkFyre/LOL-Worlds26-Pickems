@@ -1,10 +1,17 @@
 # Draft Pick/Ban Card Game — Project Handoff
 
-*Last updated: 23 Oct 2026, after the quick concept was built. To pick up where we left off, attach this file in any new chat (main or a parallel window).*
+*Last updated: 26 Oct 2026, after adding autosave to the game. To pick up where we left off, attach this file in any new chat (main or a parallel window).*
 
 > **Resume prompt:** "Here's my handoff file for the draft pick/ban card game. The game is in `C:\Users\Ruth\Documents\GitHub\LOL-Worlds26-Pickems\Draft Game\index.html`, and I've linked that repo folder. Read this file and the game, then help me with: ___"
 
 **For the new chat:** link the `LOL-Worlds26-Pickems` folder so it can read and edit `Draft Game\index.html` directly. Read section 0 first; the sections after it are the original research and plan.
+
+> **Master copy rules (for any chat working on this project)**
+> 1. **Read from here.** The master copy of this file is `C:\Users\Ruth\Documents\GitHub\LOL-Worlds26-Pickems\Draft Game\draft-card-game-handoff.md`. At the start of a session, read it from that folder, even if a copy was attached to the chat. If the two differ, the folder copy wins.
+> 2. **Save back here.** Whenever something changes (a feature added, a decision made, a next step done), update this file **in that same folder**, at the same file name, and update "Last updated" at the top. Don't create copies with other names, and don't leave updates only in the chat.
+> 3. **Same for the game.** Edit `Draft Game\index.html` in place, then update section 0 here.
+> 4. **Re-check before saving.** If the file changed on disk since you read it (for example, another window edited it), re-read it and merge your changes rather than overwriting.
+> 5. **Commits:** give Luke a commit title and a short summary for each change.
 
 ---
 
@@ -15,9 +22,23 @@
 | File | What it is |
 |---|---|
 | `index.html` | The playable game. One file of about 56 KB, with no libraries and no assets |
-| `draft-card-game-handoff.md` | This file |
+| `draft-card-game-handoff.md` | This file (the master copy; see the rules above) |
+| `draft-clash-save.json` | The game's autosave. It appears after you choose this folder in the game (see "Autosave" below). Safe to delete; the game then starts fresh |
 
 **Running it:** double-click `index.html` to open it in Chrome. Nothing needs installing.
+
+### Autosave (added 26 Oct 2026)
+- **Setup:** click **Save folder: choose…** in the toolbar and pick the `Draft Game` folder. Chrome asks to allow editing; allow it. The button then shows **Saving to: Draft Game ✓**.
+- **What's saved:** `draft-clash-save.json` in that folder holds:
+  - settings: sound, speed, auto-draft
+  - the game in progress: your side, the draft step, bans and picks (a game that reached the board or result resumes at the CLASH! button)
+  - your results history: last 50 games, with winner, your side, pre-game odds and game length
+- **When it saves:** after every pick or ban, setting change and finished game.
+- **Your record:** shown on the side-select screen and the result screen ("Your record: 3W – 2L · 1 upset win").
+- **Loading:** when you open the game, it loads from that file. Chrome remembers the folder. If Chrome asks again after a restart, the button shows **Reconnect save folder**; one click reconnects it.
+- **Backup in browser storage:** a copy is also kept in Chrome's storage, so progress isn't lost before a folder is chosen. When you connect the folder, the newer of the two is used. An empty save never overwrites a real one.
+- **Other browsers:** browsers without folder access (e.g. Firefox) get **Download save** and **Load save file** buttons instead.
+- **Checks on loading:** save files are checked field by field (valid champion ids, no duplicates, ban/pick counts matching the draft step). An invalid game is ignored rather than loaded.
 
 ### What's in the game
 1. **Side select:** a 3D coin flip ("YOU"/"AI"). If you win the toss you pick Red (top half, last pick) or Blue (bottom half, first pick). If the AI wins, it picks for you.
@@ -97,7 +118,8 @@
 | Board | `buildBoard`, `placeCard`, `setWin`, `applySnap` |
 | Draft | `newGame`, `flip`, `chooseSide`, `startDraft`, `nextTurn`, `aiChoose` (power + synergy + matchup + flex + noise), `doAction`, `animBan`, `animPick`, `endDraft` |
 | Clash | `startClash`, `playEvent`, `clashAnim`, `nudge`, `gank`, `token`, `pushAnim`, `nexus`, `finish`, `sim100` |
-| Debug | `window.__dc` exposes `CH`, `simGame`, `winChance`, `teamStr`, `matchup`, `syn` for console testing |
+| Autosave | `SAVE` (`{v:1, savedAt, settings, game, history}`), `persist()` (called after each draft step, setting change and result; writes browser storage, then the folder after a short debounce), `writeFolder`, `readFolder`, `sanitize`, `applySave`, `restoreGame`, `useFolder`, `folderStatus`, `renderRecord`, `boot()`. The folder handle is stored in IndexedDB (`draftClash`/`kv`/`dir`). Game phases are tracked in `G.phase`: side → draft → ready → clash → result |
+| Debug | `window.__dc` exposes `CH`, `simGame`, `winChance`, `teamStr`, `matchup`, `syn` and `SAVE` for console testing |
 
 **Layout:** a fixed 1000×760 "stage" scaled to fit the window. Red cards sit at y 150, Blue cards at y 460, the midline at y 380, and the lane centres at x 225 + 150 × lane.
 
