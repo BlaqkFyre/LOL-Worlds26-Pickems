@@ -281,8 +281,8 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const open=pool.filter(([c])=>!takenWhy(c));
   const best=open.slice().sort((a,b)=>{const ma=enemy?matchup(a[0],enemy.c):null,mb=enemy?matchup(b[0],enemy.c):null;return ((mb==null?50:mb)-(ma==null?50:ma))*2+((b[1]||0)-(a[1]||0))*0.3})[0];
   const rk=TEAMS.map(x=>x.p[idx]).sort((a,b)=>b.ov-a.ov||avg(b.a)-avg(a.a)).indexOf(p)+1;
-  return `<div class="tiph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b></div>
-  <div class="pskills"><span class="ovc" title="Overall rating" style="--oc:${tier(p.ov)}">${p.ov}</span><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>`+
+  return `<div class="tiph ph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="ovc" title="Overall rating" style="--oc:${tier(p.ov)}">${p.ov}</span></div>
+  <div class="pskills"><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>`+
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
   (()=>{const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
     return `<div class="wform"><b>Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b> <span class="pskills">${ATTR[p.role].map((a,j)=>skillChip(p.role,j,sg(f.d[j]),f.d[j]>0?"up":f.d[j]<0?"down":"")).join("")}</span><span class="notes small">KDA ${f.kda} · KP ${f.kp}% · DMG ${f.dmg}%${f.csm?` · ${f.csm} CS/min`:""}</span>${f.tags.length?`<span>${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div>`})()+
@@ -370,11 +370,15 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at Worlds (real games, then your run).")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div></div>
   ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--muted)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban"><span class="stag">Ban</span></span> banned this game <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
-function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const wide=tip.classList.contains("wide");const fixed=wide||tip.classList.contains("pl");let w=Math.min(wide?620:fixed?470:440,innerWidth-24);
+function placeInfo(el){const x=el.querySelector(".tipx");if(!x)return;const r=el.getBoundingClientRect(),w=Math.min(240,innerWidth-16);
+  x.style.position="fixed";x.style.width=w+"px";let l=r.right+6;if(l+w>innerWidth-8)l=Math.max(8,r.left-6-w);x.style.left=l+"px";x.style.top=Math.max(8,r.top-6)+"px";
+  requestAnimationFrame(()=>{const h=x.offsetHeight;if(r.top-6+h>innerHeight-8)x.style.top=Math.max(8,innerHeight-h-8)+"px"})}
+document.addEventListener("mouseover",e=>{const el=e.target.closest&&e.target.closest(".info");if(el)placeInfo(el)});
+document.addEventListener("focusin",e=>{const el=e.target.closest&&e.target.closest(".info");if(el)placeInfo(el)});
+function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const wide=tip.classList.contains("wide");const fixed=wide;let w=Math.min(wide?400:400,innerWidth-24);
   const btn=e.target.dataset&&e.target.dataset.side?(e.target.closest("button")||e.target):null,bb=btn&&innerWidth>=700?btn.getBoundingClientRect():null;
   /* beside a portrait: use the wider free side so the card never covers the tile */
-  if(bb)w=Math.max(Math.min(340,w),Math.min(w,Math.max(innerWidth-bb.right-18,bb.left-18)));
-  tip.style.maxWidth=w+"px";tip.style.width=fixed?w+"px":"";tip.classList.toggle("cols",wide&&w>=560);
+    tip.style.maxWidth=w+"px";tip.style.width=fixed?w+"px":"";
   /* portraits in the champion grid and suggestions: open beside the button (left or right, whichever has room) so the card never covers the row below */
   if(bb){const b=bb,right=b.right+10+w<=innerWidth-8;const x=right?b.right+10:Math.max(8,b.left-10-w);let y=Math.max(8,b.top-40);tip.style.left=x+"px";tip.style.top=y+"px";
     requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,innerHeight-h-8)+"px"});return}

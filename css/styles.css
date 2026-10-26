@@ -529,14 +529,14 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .pchamp.isnew .ico{outline:2px solid var(--teal);outline-offset:1px}
 .pkey .pchamp i{display:inline-block;width:12px;height:12px;outline:2px solid var(--teal);outline-offset:1px;background:var(--track)}
 #tip .ptab{width:100%}#tip .ptab td.nw,#tip .ptab td{white-space:nowrap}#tip .ptab td:first-child{white-space:normal}
-#tip:not(.wide){max-width:470px}
+#tip:not(.wide){max-width:400px}
 /* region badge: same shape as the team badge, region colour, league seed */
 .rtag{display:inline-flex;align-items:center;gap:3px;flex:none;font:700 10.5px var(--display);letter-spacing:.06em;padding:1px 5px;margin-right:5px;color:#fff;background:var(--rc);border-radius:0;line-height:1.35;vertical-align:1px;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .rtag em{font-style:normal;opacity:.85}
 .rkey{gap:6px}.rkey .rtag{margin-right:0}
 .prow .role{display:inline-flex;align-items:center;gap:0;white-space:nowrap}
-.prow{grid-template-columns:104px minmax(0,1fr) 44px}
-.tr{grid-template-columns:26px 230px minmax(0,1fr) 44px}
+.prow{grid-template-columns:80px minmax(0,1fr) 44px}
+.tr{grid-template-columns:26px 190px minmax(0,1fr) 44px}
 @media (max-width:560px){.tr{grid-template-columns:22px 170px minmax(0,1fr) 40px}}
 /* hover cards: lift them off the page */
 #tip{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%,var(--fg) 8%),color-mix(in srgb,var(--pan2) 94%,var(--fg) 6%));
@@ -545,11 +545,17 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
   max-height:calc(100vh - 16px);animation:tipin .14s ease-out}
 @keyframes tipin{from{opacity:0;transform:translateY(4px) scale(.985)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#tip{animation:none}}
-/* wide champion cards: meta sections and pairs/counters side by side */
-#tip .hgrid{display:grid;gap:8px}
-#tip.cols .hgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+#tip .hgrid{display:contents}
 /* keep names lined up: badges share a width wherever teams are listed in rows */
-.rtag{min-width:66px;justify-content:center;box-sizing:border-box}
+.rtag{min-width:28px;justify-content:center;box-sizing:border-box;cursor:help}
 .mc-team .rtag{margin-right:0}
 .mc-team .ttag,.tt .ttag,.prow .ttag{min-width:44px;justify-content:center;box-sizing:border-box}
 .rkey .rtag{min-width:0}
+/* player card header: overall rating sits at the right of the name row without making it taller */
+.tiph.ph{flex-wrap:nowrap}.tiph.ph b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tiph.ph .ovc{margin:-4px 0 -4px auto;width:32px;height:32px;font-size:15px}
+.info .tipx{z-index:60}
+/* champ select rows keep one height whether or not a champion (and splash) is in them */
+.slot,.slot.art{height:66px;min-height:66px;box-sizing:border-box}
+.slot .st b,.slot.art .st b{line-height:24px}
+.slot>.hov{display:flex;align-items:center;line-height:0}

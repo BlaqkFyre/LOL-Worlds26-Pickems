@@ -79,6 +79,7 @@ const kdaOf = s => ((s.k + s.a) / Math.max(1, s.d)).toFixed(1);
    objective control for junglers/supports. Normally only the winning side is
    eligible, as with LCK POG votes, unless a losing player out-rates the
    winners' best by LOSER_POG_GAP or more. Each POG earns 100 POG points. */
+const POG_CLOSE = 0.3;     // ratings this close count as a tie; game impact decides
 const LOSER_POG_GAP = 1.1;  // rating points a losing player must beat the winners' best by to take POG
 const ROLE_DMG = {TOP:1.0, JGL:0.8, MID:1.25, ADC:1.35, SUP:0.45};
 const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
@@ -87,7 +88,7 @@ const ROLE_SHARE = {TOP:0.22, JGL:0.15, MID:0.27, ADC:0.29, SUP:0.07};
    count more for junglers than supports, kills earn a little on their own, and a small final role adjustment. */
 const DMG_CAP = {TOP:1.6, JGL:1.6, MID:1.6, ADC:1.6, SUP:1.3};
 const OBJ_W = {TOP:0, JGL:0.10, MID:0, ADC:0, SUP:0.10};
-const ROLE_ADJ = {TOP:1.05, JGL:0.98, MID:0.98, ADC:0.98, SUP:0.97};
+const ROLE_ADJ = {TOP:1.06, JGL:0.99, MID:0.975, ADC:0.965, SUP:0.985};
 function gameStats(g){
   const opp = s => s === "blue" ? "red" : "blue";
   g.ps = {blue:{}, red:{}};
@@ -128,9 +129,14 @@ function gameStats(g){
     });
   });
   /* POG normally goes to the winning side; a losing player takes it only with a rating at least LOSER_POG_GAP higher than the winners' best */
-  const top = sd => ROLES.map(r => ({r, p: g.ps[sd][r]})).sort((x,y) => y.p.rt - x.p.rt)[0];
+  /* close calls: when players are within POG_CLOSE of the side's best rating, the one with the bigger
+     game impact takes it (kill participation and kills, damage share for the role, lane lead), so a 10-kill, 34%-damage carry beats a 3/1/10 jungler on a tie */
+  const impact = (r, p) => 6 * p.kp + 0.3 * p.k + 3 * Math.min(2, p.dmgS / ROLE_SHARE[r]) + p.csd / 10 + 0.5 * p.solo - 0.5 * p.d;
+  const top = sd => { const L = ROLES.map(r => ({r, p: g.ps[sd][r]})).sort((x,y) => y.p.rt - x.p.rt);
+    return L.filter(x => L[0].p.rt - x.p.rt <= POG_CLOSE).sort((x,y) => impact(y.r, y.p) - impact(x.r, x.p))[0]; };
   const lw = g.winner === "blue" ? "red" : "blue", bw = top(g.winner), bl = top(lw);
-  const w = bl.p.rt - bw.p.rt >= LOSER_POG_GAP ? lw : g.winner, T = w === "blue" ? g.B : g.R;
+  const maxRt = sd => Math.max(...ROLES.map(r => g.ps[sd][r].rt));
+  const w = bl.p.rt - maxRt(g.winner) >= LOSER_POG_GAP ? lw : g.winner, T = w === "blue" ? g.B : g.R;
   const best = w === g.winner ? bw : bl;
   const p = best.p, why = [];
   why.push(`${p.k}/${p.d}/${p.a}`);

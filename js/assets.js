@@ -41,7 +41,7 @@ const TEAM_COL = {GEN:"#b8860b", HLE:"#f97316", T1:"#e2012d", DK:"#0d9488", BLG:
 const teamCol = id => TEAM_COL[id] || "#6b7280";
 
 /* Region badges: styled like the team badge, in the region's colour, with the team's seed from its league
-   (e.g. "LCK #1"). Colours are deep enough for white text and kept apart from the team badge colours. */
+   (e.g. "#1" in LCK colour; the region name shows on hover). Colours are deep enough for white text and kept apart from the team badge colours. */
 const REGION_COL = {LCK:"#4f46e5", LPL:"#be123c", LEC:"#0f766e", LCS:"#475569", LCP:"#b45309", CBLOL:"#15803d"};
 const REGION_NAME = {LCK:"LCK (Korea)", LPL:"LPL (China)", LEC:"LEC (Europe)", LCS:"LCS (North America)", LCP:"LCP (Pacific)", CBLOL:"CBLOL (Brazil)"};
 const teamOf = id => (typeof TEAMS !== "undefined") && TEAMS.find(x => x.id === id);
@@ -50,6 +50,6 @@ const seedOf = id => { const t = teamOf(id), m = t && String(t.reg).match(/#(\d+
 function regDot(id){
   const r = regionOf(id); if(!r) return "";
   const n = seedOf(id), lbl = `${REGION_NAME[r] || r}${n ? " seed #" + n : ""}`;
-  return `<span class="rtag" style="--rc:${REGION_COL[r] || "#555"}" title="${esc(lbl)}" aria-label="${esc(lbl)}">${esc(r)}${n ? `<em>#${n}</em>` : ""}</span>`;
+  return `<span class="rtag" style="--rc:${REGION_COL[r] || "#555"}" title="${esc(lbl)}" aria-label="${esc(lbl)}">${n ? "#" + n : esc(r)}</span>`;
 }
 function regionKey(){ return `<span class="rkey">${Object.keys(REGION_COL).map(r => `<span class="rtag" style="--rc:${REGION_COL[r]}" title="${esc(REGION_NAME[r])}">${r}</span>`).join("")}</span>`; }
