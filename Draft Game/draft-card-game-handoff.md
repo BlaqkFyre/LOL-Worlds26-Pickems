@@ -23,7 +23,7 @@
 |---|---|
 | `index.html` | The playable game. One file of about 56 KB, with no libraries and no assets |
 | `draft-card-game-handoff.md` | This file (the master copy; see the rules above) |
-| `draft-clash-save.json` | The game's autosave. It appears after you choose this folder in the game (see "Autosave" below). Safe to delete; the game then starts fresh |
+| `draft-clash-save.json` | The game's autosave. It appears after you choose this folder in the game (see "Autosave" below). Safe to delete; the game then starts fresh. It's kept out of git by the repo's `.gitignore` |
 
 **Running it:** double-click `index.html` to open it in Chrome. Nothing needs installing.
 
