@@ -563,3 +563,13 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .slot,.slot.art{height:66px;min-height:66px;box-sizing:border-box}
 .slot .st b,.slot.art .st b{line-height:24px}
 .slot>.hov{display:flex;align-items:center;line-height:0}
+/* Pairs with / Countered by: up to 6 tiles, 2 rows of 3, every tile the same width; long names end in … */
+.ccs.c3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.ccs.c3 .cc{min-width:0;gap:4px;padding:3px 5px 3px 3px;font-size:13px}
+.ccs.c3 .cc em{font-size:12px}
+@media (max-width:640px){.ccs.c3 .cc .ico{--s:18px!important}.ccs.c3{gap:4px}}
+.ccs.c3 .cc .cn{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccs.c3 .cc em,.ccs.c3 .cc .stag{flex:none}
+.ccs.c3 .cc .ico{flex:none}
+.ccs.c3>.notes{grid-column:1/-1}
+@media (max-width:640px){.ccs.c3 .cc{flex-wrap:nowrap}}
