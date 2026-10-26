@@ -253,20 +253,22 @@ function takenWhy(c){const st=DS.steps.find(x=>x.c===c);if(st)return `${st.k==="
 const inDraft=id=>id===DS.me||id===DS.opp;
 /* player card: pool with availability, best pick still open, and lane counter risk against the enemy laner already locked */
 /* skill icons: offence in yellow-orange, utility in blue-green; hover shows the skill name */
+/* Skill icons (style A): one outline icon per skill name, 24px grid. Orange = attacking, teal = utility. */
+const SWORD='<path d="M20 4v4L10 18l-4-4L16 4z"/><path d="M5 13l6 6"/><path d="M7.5 16.5 4 20"/>';
 const SKILL_SVG={
-  sword:'<path d="M14 2l-7 7-2-2-1 1 2 2-3 3 1 1 3-3 2 2 1-1-2-2 7-7V2z"/>',
-  swords:'<path d="M3 2l5 5-1 1 1 1-2 2 1 1 2-2 1 1 1-1-6-6V2zM13 2l-5 5 1 1-1 1 2 2-1 1-2-2-1 1-1-1 6-6h2v-2z"/>',
-  shield:'<path d="M8 1l6 2v4c0 4-3 7-6 8-3-1-6-4-6-8V3l6-2zm-1 9l4-4-1-1-3 3-1.5-1.5-1 1L7 10z"/>',
-  bolt:'<path d="M9 1L3 9h4l-1 6 6-8H8l1-6z"/>',
-  target:'<path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm0 2a3 3 0 100 6 3 3 0 000-6zm0 2a1 1 0 110 2 1 1 0 010-2z"/>',
-  route:'<path d="M3 13a2 2 0 110-4 2 2 0 010 4zm10-6a2 2 0 110-4 2 2 0 010 4zM4 9c0-3 3-3 5-3h2M12 7c0 3-3 3-5 3H5" stroke="currentColor" stroke-width="1.6" fill="none"/>',
-  flame:'<path d="M8 1c1 3 4 4 4 8a4 4 0 01-8 0c0-2 1-3 2-4 0 2 1 3 2 3-1-2 0-5 0-7z"/>',
-  cross:'<path d="M7 1h2v3a4 4 0 013 3h3v2h-3a4 4 0 01-3 3v3H7v-3a4 4 0 01-3-3H1V7h3a4 4 0 013-3V1zm1 5a2 2 0 100 4 2 2 0 000-4z"/>',
-  star:'<path d="M8 1l2 5h5l-4 3 2 6-5-4-5 4 2-6-4-3h5l2-5z"/>',
-  eye:'<path d="M8 3c4 0 7 5 7 5s-3 5-7 5-7-5-7-5 3-5 7-5zm0 2a3 3 0 100 6 3 3 0 000-6z"/>',
-  anchor:'<path d="M8 1a2 2 0 011 3.7V6h2v2H9v5a4 4 0 003-3h2a6 6 0 01-12 0h2a4 4 0 003 3V8H5V6h2V4.7A2 2 0 018 1z"/>'};
-const SKILL_ICON={TOP:[["sword","o"],["swords","o"],["shield","u"]],JGL:[["bolt","o"],["target","u"],["swords","o"]],MID:[["sword","o"],["route","u"],["flame","o"]],ADC:[["sword","o"],["flame","o"],["cross","u"]],SUP:[["star","o"],["eye","u"],["anchor","u"]]};
-function skillChip(role,j,val,mood){const [ic,kind]=SKILL_ICON[role][j];return `<span class="sk ${kind}${mood?" "+mood:""}" title="${esc(ATTR[role][j])}"><svg viewBox="0 0 16 16" aria-hidden="true">${SKILL_SVG[ic]}</svg>${val}</span>`}
+  laning:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M6.5 17.5 17.5 6.5"/><circle cx="12" cy="12" r="2"/>',
+  teamfight:SWORD+'<g transform="matrix(-1 0 0 1 24 0)">'+SWORD+'</g>',
+  consistency:'<path d="M12 3l8 3v6c0 4.5-3.5 7.5-8 9-4.5-1.5-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  early:'<circle cx="12" cy="13" r="7"/><path d="M12 13V9.5"/><path d="M10 3h4"/><path d="M12 3v3"/><path d="M18.5 6.5 20 5"/>',
+  objectives:'<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/>',
+  roaming:'<circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"/>',
+  damage:'<path d="M12 2l2 6 5.5-3-3 5.5 6 2-6 2 3 5.5-5.5-3-2 6-2-6-5.5 3 3-5.5-6-2 6-2-3-5.5L10 8z"/>',
+  positioning:'<path d="M12 3v18M3 12h18"/><path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>',
+  playmaking:'<path d="M13 2L4 14h7l-1 8 10-13h-7z"/>',
+  presence:'<path d="M2 12c3-5.5 6.5-7.5 10-7.5s7 2 10 7.5c-3 5.5-6.5 7.5-10 7.5S5 17.5 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  reliability:'<circle cx="12" cy="5" r="2"/><path d="M12 7v14"/><path d="M8 11h8"/><path d="M5 14c0 4 3 7 7 7s7-3 7-7"/><path d="M3 15.5l2-2 2 2M17 15.5l2-2 2 2"/>'};
+const SKILL_ICON={TOP:[["laning","o"],["teamfight","o"],["consistency","u"]],JGL:[["early","o"],["objectives","u"],["teamfight","o"]],MID:[["laning","o"],["roaming","u"],["damage","o"]],ADC:[["laning","o"],["damage","o"],["positioning","u"]],SUP:[["playmaking","o"],["presence","u"],["reliability","u"]]};
+function skillChip(role,j,val,mood){const [ic,kind]=SKILL_ICON[role][j];return `<span class="sk ${kind}${mood?" "+mood:""}" title="${esc(ATTR[role][j])}"><svg viewBox="0 0 24 24" aria-hidden="true">${SKILL_SVG[ic]}</svg>${val}</span>`}
 function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.steps.length>0;
   const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
@@ -281,7 +283,7 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const open=pool.filter(([c])=>!takenWhy(c));
   const best=open.slice().sort((a,b)=>{const ma=enemy?matchup(a[0],enemy.c):null,mb=enemy?matchup(b[0],enemy.c):null;return ((mb==null?50:mb)-(ma==null?50:ma))*2+((b[1]||0)-(a[1]||0))*0.3})[0];
   const rk=TEAMS.map(x=>x.p[idx]).sort((a,b)=>b.ov-a.ov||avg(b.a)-avg(a.a)).indexOf(p)+1;
-  return `<div class="tiph ph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="ovc" title="Overall rating" style="--oc:${tier(p.ov)}">${p.ov}</span></div>
+  return `<div class="tiph ph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="ov" title="Overall rating" style="--oc:${tier(p.ov)}"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="n">${p.ov}</span></span></div>
   <div class="pskills"><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>`+
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
   (()=>{const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
