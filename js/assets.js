@@ -40,9 +40,16 @@ const TEAM_COL = {GEN:"#b8860b", HLE:"#f97316", T1:"#e2012d", DK:"#0d9488", BLG:
   G2:"#9f1239", KC:"#0ea5e9", MKOI:"#7e22ce", TL:"#1e40af", CFO:"#d97706", TSW:"#dc2626", LYON:"#1d4ed8", LOS:"#16a34a"};
 const teamCol = id => TEAM_COL[id] || "#6b7280";
 
-/* Region markers: a small rounded square before team and player names. Colours are kept apart from the team badge colours. */
-const REGION_COL = {LCK:"#6366f1", LPL:"#e11d48", LEC:"#14b8a6", LCS:"#94a3b8", LCP:"#f59e0b", CBLOL:"#22c55e"};
+/* Region badges: styled like the team badge, in the region's colour, with the team's seed from its league
+   (e.g. "LCK #1"). Colours are deep enough for white text and kept apart from the team badge colours. */
+const REGION_COL = {LCK:"#4f46e5", LPL:"#be123c", LEC:"#0f766e", LCS:"#475569", LCP:"#b45309", CBLOL:"#15803d"};
 const REGION_NAME = {LCK:"LCK (Korea)", LPL:"LPL (China)", LEC:"LEC (Europe)", LCS:"LCS (North America)", LCP:"LCP (Pacific)", CBLOL:"CBLOL (Brazil)"};
-const regionOf = id => { const t = (typeof TEAMS !== "undefined") && TEAMS.find(x => x.id === id); return t ? String(t.reg).split(/[\s·]/)[0] : ""; };
-function regDot(id){ const r = regionOf(id); return r ? `<i class="rdot" style="--rc:${REGION_COL[r] || "#888"}" title="${esc(REGION_NAME[r] || r)}" aria-label="${esc(REGION_NAME[r] || r)}"></i>` : ""; }
-function regionKey(){ return `<span class="rkey">${Object.keys(REGION_COL).map(r => `<span><i class="rdot" style="--rc:${REGION_COL[r]}"></i>${r}</span>`).join("")}</span>`; }
+const teamOf = id => (typeof TEAMS !== "undefined") && TEAMS.find(x => x.id === id);
+const regionOf = id => { const t = teamOf(id); return t ? String(t.reg).split(/[\s·]/)[0] : ""; };
+const seedOf = id => { const t = teamOf(id), m = t && String(t.reg).match(/#(\d+)/); return m ? +m[1] : 0; };
+function regDot(id){
+  const r = regionOf(id); if(!r) return "";
+  const n = seedOf(id), lbl = `${REGION_NAME[r] || r}${n ? " seed #" + n : ""}`;
+  return `<span class="rtag" style="--rc:${REGION_COL[r] || "#555"}" title="${esc(lbl)}" aria-label="${esc(lbl)}">${esc(r)}${n ? `<em>#${n}</em>` : ""}</span>`;
+}
+function regionKey(){ return `<span class="rkey">${Object.keys(REGION_COL).map(r => `<span class="rtag" style="--rc:${REGION_COL[r]}" title="${esc(REGION_NAME[r])}">${r}</span>`).join("")}</span>`; }

@@ -46,7 +46,7 @@ tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b
 
 /* team ranking */
 const ranked=[...TEAMS].sort((a,b)=>b.ov-a.ov);
-document.getElementById("trank").innerHTML=ranked.map((t,i)=>`<div class="tr"><span class="pos">${i+1}</span><span class="nm">${regDot(t.id)}${esc(t.name)}<small>${esc(t.reg.split(" · ")[0])}</small></span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></div>`).join("");
+document.getElementById("trank").innerHTML=ranked.map((t,i)=>`<div class="tr"><span class="pos">${i+1}</span><span class="nm">${regDot(t.id)}${esc(t.name)}</span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></div>`).join("");
 
 /* roster cards */
 document.getElementById("grid").innerHTML=ranked.map(t=>`<article class="panel team"><div class="thead"><div><h3>${regDot(t.id)}${esc(t.name)}</h3><small>${esc(t.reg)} · ${t.metaFit}/15 favourite picks meta</small></div><div class="tscore">${t.ov.toFixed(1)}</div></div>`+
@@ -76,7 +76,7 @@ function roleView(role){
     const max=k?TIERS[k-1][1]:999;
     const rows=ps.filter(p=>p.ov>=min&&p.ov<max);if(!rows.length)return;
     h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:${col}">${T}</span><span class="eyebrow" style="color:var(--muted)">${label} · ${T==="D"?"under "+TIERS[3][1]:min+"+"}</span></div>`+
-    rows.map(p=>`<div class="prole"><div class="prow"><span class="role">${regDot(p.team.id)}${p.team.id}</span><div><div class="pn"><span class="hov" data-tp="${p.team.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span><small>${p.kda?"2026 KDA "+p.kda.toFixed(2):""}</small></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div>`+
+    rows.map(p=>`<div class="prole"><div class="prow"><span class="role">${regDot(p.team.id)}<span class="ttag" style="--tc:${teamCol(p.team.id)}">${esc(p.team.id)}</span></span><div><div class="pn"><span class="hov" data-tp="${p.team.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span><small>${p.kda?"2026 KDA "+p.kda.toFixed(2):""}</small></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div>`+
       `<div class="attrs">${p.a.map((v,j)=>`<div class="a"><span>${ATTR[role][j]}<em>${v}</em></span><div class="bar"><b style="width:${pct(v)}%;background:${tier(v)}"></b></div></div>`).join("")}</div>`+
       `<div class="sub">${chips(p)}${p.note?`<div class="notes" style="font-size:12px;margin-top:4px">${esc(p.note)}</div>`:""}</div></div>`).join("")+`</div>`;
   });
@@ -252,6 +252,21 @@ const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","to
 function takenWhy(c){const st=DS.steps.find(x=>x.c===c);if(st)return `${st.k==="ban"?"banned":"picked"} by ${st.t}`;if(DS.fmt==="fearless"&&DS.locked.includes(c))return "locked (Fearless)";return ""}
 const inDraft=id=>id===DS.me||id===DS.opp;
 /* player card: pool with availability, best pick still open, and lane counter risk against the enemy laner already locked */
+/* skill icons: offence in yellow-orange, utility in blue-green; hover shows the skill name */
+const SKILL_SVG={
+  sword:'<path d="M14 2l-7 7-2-2-1 1 2 2-3 3 1 1 3-3 2 2 1-1-2-2 7-7V2z"/>',
+  swords:'<path d="M3 2l5 5-1 1 1 1-2 2 1 1 2-2 1 1 1-1-6-6V2zM13 2l-5 5 1 1-1 1 2 2-1 1-2-2-1 1-1-1 6-6h2v-2z"/>',
+  shield:'<path d="M8 1l6 2v4c0 4-3 7-6 8-3-1-6-4-6-8V3l6-2zm-1 9l4-4-1-1-3 3-1.5-1.5-1 1L7 10z"/>',
+  bolt:'<path d="M9 1L3 9h4l-1 6 6-8H8l1-6z"/>',
+  target:'<path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm0 2a3 3 0 100 6 3 3 0 000-6zm0 2a1 1 0 110 2 1 1 0 010-2z"/>',
+  route:'<path d="M3 13a2 2 0 110-4 2 2 0 010 4zm10-6a2 2 0 110-4 2 2 0 010 4zM4 9c0-3 3-3 5-3h2M12 7c0 3-3 3-5 3H5" stroke="currentColor" stroke-width="1.6" fill="none"/>',
+  flame:'<path d="M8 1c1 3 4 4 4 8a4 4 0 01-8 0c0-2 1-3 2-4 0 2 1 3 2 3-1-2 0-5 0-7z"/>',
+  cross:'<path d="M7 1h2v3a4 4 0 013 3h3v2h-3a4 4 0 01-3 3v3H7v-3a4 4 0 01-3-3H1V7h3a4 4 0 013-3V1zm1 5a2 2 0 100 4 2 2 0 000-4z"/>',
+  star:'<path d="M8 1l2 5h5l-4 3 2 6-5-4-5 4 2-6-4-3h5l2-5z"/>',
+  eye:'<path d="M8 3c4 0 7 5 7 5s-3 5-7 5-7-5-7-5 3-5 7-5zm0 2a3 3 0 100 6 3 3 0 000-6z"/>',
+  anchor:'<path d="M8 1a2 2 0 011 3.7V6h2v2H9v5a4 4 0 003-3h2a6 6 0 01-12 0h2a4 4 0 003 3V8H5V6h2V4.7A2 2 0 018 1z"/>'};
+const SKILL_ICON={TOP:[["sword","o"],["swords","o"],["shield","u"]],JGL:[["bolt","o"],["target","u"],["swords","o"]],MID:[["sword","o"],["route","u"],["flame","o"]],ADC:[["sword","o"],["flame","o"],["cross","u"]],SUP:[["star","o"],["eye","u"],["anchor","u"]]};
+function skillChip(role,j,val,mood){const [ic,kind]=SKILL_ICON[role][j];return `<span class="sk ${kind}${mood?" "+mood:""}" title="${esc(ATTR[role][j])}"><svg viewBox="0 0 16 16" aria-hidden="true">${SKILL_SVG[ic]}</svg>${val}</span>`}
 function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.steps.length>0;
   const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
@@ -261,14 +276,17 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const shown=[...new Set([...Object.keys(wp).sort((a,b)=>wp[b].g-wp[a].g),...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
   const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c],wv=wp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
     const risk=m!=null?(m<48?`<span class="neg">countered by ${esc(enemy.c)} (${m}%)</span>`:m>=52?`<span class="pos">beats ${esc(enemy.c)} (${m}%)</span>`:""):"";
-    return `<tr class="${st?"gone":""}"><td>${icon(c,22)} ${esc(c)}${st?` <span class="notes">${st}</span>`:""}${fd&&!st?` <span class="trend fading">fading</span>`:""}${risk?" "+risk:""}${wv&&!sx&&!st?` <span class="tag newtag">new at Worlds</span>`:""}</td><td>${wv?`<em class="g">${wv.g} gm</em> <span class="wl">${wv.w}-${wv.g-wv.w}</span>`:"–"}</td>${hasRun?`<td class="notes small">${tv?`${tv.g} gm ${tv.w}-${tv.g-tv.w}`:"–"}</td>`:""}<td class="dim">${sx?`(${sx[1]?sx[1]+"g ":""}${sx[2]}%)`:""}</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`};
+    const isNew=wv&&!sx;
+    return `<tr class="${st?"gone":""}"><td><span class="pchamp${isNew?" isnew":""}"${isNew?` title="New at Worlds — not in their 2026 top picks"`:""}>${icon(c,22)}</span> ${esc(c)}${st?` <span class="notes">${st}</span>`:""}${fd&&!st?` <span class="trend fading">fading</span>`:""}${risk?" "+risk:""}</td><td>${wv?`<em class="g">${wv.g} gm</em> <span class="wl">${wv.w}-${wv.g-wv.w}</span>`:"–"}</td>${hasRun?`<td class="notes small">${tv?`${tv.g} gm ${tv.w}-${tv.g-tv.w}`:"–"}</td>`:""}<td class="dim nw">${sx?`(${sx[1]?sx[1]+"g ":""}${sx[2]}%)`:"–"}</td><td><span class="chip ${metaOf(c)[0]}">${metaOf(c)[0]==="meta"?"Meta":metaOf(c)[0]==="mix"?"In the mix":"Not seen"}</span></td></tr>`};
   const open=pool.filter(([c])=>!takenWhy(c));
   const best=open.slice().sort((a,b)=>{const ma=enemy?matchup(a[0],enemy.c):null,mb=enemy?matchup(b[0],enemy.c):null;return ((mb==null?50:mb)-(ma==null?50:ma))*2+((b[1]||0)-(a[1]||0))*0.3})[0];
-  return `<div class="tiph" style="--tc:${teamCol(tid)}"><span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="notes">${RNAME[p.role]} · ${p.ov}</span></div><div class="notes">${ATTR[p.role].map((a,j)=>`${a} ${p.a[j]}`).join(" · ")}${p.kda?` · KDA ${p.kda}`:""}</div>`+
+  const rk=TEAMS.map(x=>x.p[idx]).sort((a,b)=>b.ov-a.ov||avg(b.a)-avg(a.a)).indexOf(p)+1;
+  return `<div class="tiph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b></div>
+  <div class="pskills"><span class="ovc" title="Overall rating" style="--oc:${tier(p.ov)}">${p.ov}</span><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>`+
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
   (()=>{const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
-    return `<div class="wform"><b>Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b> <span class="notes">${ATTR[p.role].map((a,j)=>`${a} ${sg(f.d[j])}`).join(" · ")}</span><span class="notes small">KDA ${f.kda} · KP ${f.kp}% · DMG ${f.dmg}%${f.csm?` · ${f.csm} CS/min`:""}</span>${f.tags.length?`<span>${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div>`})()+
-  (shown.length?`<table class="tt"><thead><tr><th>Champion</th><th>Worlds</th>${hasRun?"<th>Your run</th>":""}<th>2026</th><th>Meta</th></tr></thead>${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
+    return `<div class="wform"><b>Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b> <span class="pskills">${ATTR[p.role].map((a,j)=>skillChip(p.role,j,sg(f.d[j]),f.d[j]>0?"up":f.d[j]<0?"down":"")).join("")}</span><span class="notes small">KDA ${f.kda} · KP ${f.kp}% · DMG ${f.dmg}%${f.csm?` · ${f.csm} CS/min`:""}</span>${f.tags.length?`<span>${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div>`})()+
+  (shown.length?`<div class="pkey"><span class="pchamp isnew"><i></i></span> New at Worlds (not in their 2026 top picks)</div><table class="tt ptab"><thead><tr><th>Champion</th><th>Worlds</th>${hasRun?"<th>Your run</th>":""}<th>2026</th><th>Meta</th></tr></thead>${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
   (typeof tourPlayerLine==="function"?tourPlayerLine(p):"")+(p.note?`<div class="notes">${esc(p.note)}</div>`:"");}
 /* team card: comp so far, damage mix, plan, synergy pairs and open roles */
 const ARCH_NAME={engage:"Engage",poke:"Poke and siege",scaling:"Scaling",skirmish:"Skirmish and dive",protect:"Protect the carry"};
@@ -337,25 +355,28 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":""].filter(Boolean);
   return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
   ${(()=>{const st=draftStatus(c);return st?`<div class="ststat st-${st.k}" style="--tc:${teamCol(st.t)}">${esc(st.title)}</div>`:""})()}
-  <div class="hsec"><div class="label">Recent meta ${infoI(R?`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues). Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`:`${c} isn't in the 26.16–26.20 top list, so these are ${RS} numbers. Source: NerfPlz pro picks and bans.`)}</div><div class="hbars">
+  <div class="hgrid"><div class="hsec"><div class="label">Recent meta ${infoI(R?`Patches 26.16, 26.17, 26.18, 26.19 and 26.20 — 465 pro games (Worlds, MSI, EWC and major leagues). Solid = picked, striped = banned. Source: NerfPlz pro picks and bans.`:`${c} isn't in the 26.16–26.20 top list, so these are ${RS} numbers. Source: NerfPlz pro picks and bans.`)}</div><div class="hbars">
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
   <div class="hsec"><div class="label">Worlds meta ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
-  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div>
+  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div></div>
   <div class="key"><span><i style="background:var(--pick)"></i>Picked</span><span><i class="bnk"></i>Banned</span></div>
   <div><div class="label">Most picked at this Worlds ${infoI(`Bright: real games on ${c} at Worlds 2026 (play-ins and Swiss so far), then the win-loss. Dim number in brackets: that player's 2026 pro games on ${c} (mid.gg). Your simulated run is listed underneath.`)}</div><div class="ccs">${mp.length?mp.map(e=>`<span class="cc" style="--tc:${teamCol(e.t)}"><span class="tm">${esc(e.t)}</span>${esc(e.n)} <em class="g">${e.g} gm</em> <span class="wl">${e.w}-${e.g-e.w}</span>${e.s?` <span class="dim">(${e.s}g)</span>`:""}</span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div>${(()=>{const r=mostPickedRun(c);return r.length?`<div class="notes small" style="margin-top:4px">Your run: ${r.map(e=>`${esc(e.n)} (${e.t}) ${e.g} gm ${e.w}-${e.g-e.w}`).join(" · ")}</div>`:""})()}</div>
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
-  <div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at Worlds (real games, then your run) fill the list. Draft suggestions also add a bonus for pairs that won together at Worlds.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
-  <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at Worlds (real games, then your run).")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
+  <div class="hgrid"><div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than five, winning team-mates at Worlds (real games, then your run) fill the list. Draft suggestions also add a bonus for pairs that won together at Worlds.")}</div><div class="ccs">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
+  <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at Worlds (real games, then your run).")}</div><div class="ccs">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div></div>
   ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--muted)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban"><span class="stag">Ban</span></span> banned this game <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
-function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const w=Math.min(tip.classList.contains("wide")?400:340,innerWidth-24);tip.style.maxWidth=w+"px";tip.style.width=tip.classList.contains("wide")?w+"px":"";
+function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBoundingClientRect():{left:0,bottom:0,top:0};const wide=tip.classList.contains("wide");const fixed=wide||tip.classList.contains("pl");let w=Math.min(wide?620:fixed?470:440,innerWidth-24);
+  const btn=e.target.dataset&&e.target.dataset.side?(e.target.closest("button")||e.target):null,bb=btn&&innerWidth>=700?btn.getBoundingClientRect():null;
+  /* beside a portrait: use the wider free side so the card never covers the tile */
+  if(bb)w=Math.max(Math.min(340,w),Math.min(w,Math.max(innerWidth-bb.right-18,bb.left-18)));
+  tip.style.maxWidth=w+"px";tip.style.width=fixed?w+"px":"";tip.classList.toggle("cols",wide&&w>=560);
   /* portraits in the champion grid and suggestions: open beside the button (left or right, whichever has room) so the card never covers the row below */
-  const btn=e.target.dataset&&e.target.dataset.side?(e.target.closest("button")||e.target):null;
-  if(btn&&innerWidth>=700){const b=btn.getBoundingClientRect(),right=b.right+10+w<=innerWidth-8;const x=right?b.right+10:Math.max(8,b.left-10-w);let y=Math.max(8,b.top-40);tip.style.left=x+"px";tip.style.top=y+"px";
+  if(bb){const b=bb,right=b.right+10+w<=innerWidth-8;const x=right?b.right+10:Math.max(8,b.left-10-w);let y=Math.max(8,b.top-40);tip.style.left=x+"px";tip.style.top=y+"px";
     requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,innerHeight-h-8)+"px"});return}
   let x=Math.min(Math.max(12,r.left),innerWidth-w-12),y=r.bottom+8;tip.style.left=x+"px";tip.style.top=y+"px";
   requestAnimationFrame(()=>{const h=tip.offsetHeight;if(y+h>innerHeight-8)tip.style.top=Math.max(8,r.top-h-8)+"px"})}
@@ -365,7 +386,7 @@ let tipD=null;
 function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;
   clearTimeout(tipD);if(el.dataset.side&&e.type==="mouseover"){if(!tip.hidden){tip.hidden=true;tipEl=null}tipD=setTimeout(()=>showTip(el),300);return}showTip(el)}
 function showTip(el){tipEl=el;
-  const ch=!!el.dataset.tc&&!el.dataset.tp;tip.classList.toggle("wide",ch);
+  const ch=!!el.dataset.tc&&!el.dataset.tp;tip.classList.toggle("wide",ch);tip.classList.toggle("pl",!!el.dataset.tp);
   tip.innerHTML=el.dataset.tp?playerTip(...el.dataset.tp.split("|").map((v,i)=>i?+v:v)):el.dataset.tt?teamTip(el.dataset.tt):champTip(el.dataset.tc);tip.hidden=false;placeTip({target:el})}
 function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipD);clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},el.dataset.side?120:220)}}
 /* clicking a champion (to pick or ban) always closes its card */
