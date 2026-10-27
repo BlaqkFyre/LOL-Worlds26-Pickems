@@ -314,9 +314,10 @@ function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.
 function worldsMeta(c){const d=CHAMP_DB[c]||{},ch=CH.find(y=>y[0]===c),PG=22;let g=PG,p=0,b=0,w=0;
   if(d.pin&&(d.pin[0]+d.pin[1])){p=d.pin[0]+d.pin[1];w=d.pin[0]}else if(ch&&ch[2]!=null)p=Math.round(ch[2]/100*PG);
   if(ch&&ch[3]!=null)b=Math.round(ch[3]/100*PG);
-  const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,sw=L?L.n:0;if(L){g+=sw;const x=L.champ[c];if(x){p+=x.p;b+=x.b;w+=x.w}}
+  const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,sw=L?L.n:0;let gb=PG+(L?(L.nb!=null?L.nb:sw):0);if(L){g+=sw;const x=L.champ[c];if(x){p+=x.p;b+=x.b;w+=x.w}}
   const R=typeof RUN!=="undefined"&&RUN&&RUN.stats,rs=R&&R.champ[c];
-  return {g,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/g*100),swiss:sw,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
+  /* ban rate only over games whose bans are published */
+  return {g,gb,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/gb*100),swiss:sw,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
 /* champions seen on the same team at this Worlds (play-in drafts + your run): [name, wins together, games together] */
 function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||[x,0,0];e[2]++;if(won)e[1]++;m.set(x,e)};
   COMPS.forEach(([s,g,wc,lc])=>{if(wc.includes(c))wc.forEach(x=>x!==c&&add(x,true));if(lc.includes(c))lc.forEach(x=>x!==c&&add(x,false))});
@@ -362,7 +363,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
-  <div class="hsec"><div class="label">Worlds meta ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
+  <div class="hsec"><div class="label">Worlds meta ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions${WM.gb<WM.g?`, and bans for ${WM.g-WM.gb} Swiss games aren't published yet, so the ban rate covers ${WM.gb} games`:""}. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
   ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div></div>
