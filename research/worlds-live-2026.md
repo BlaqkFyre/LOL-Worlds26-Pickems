@@ -10,9 +10,9 @@ Updated 27 Oct 2026: **29 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24
 
 ## 26 Oct games (added 27 Oct)
 - **Source:** pickorban.com match pages (LoL Esports match feed): sides, winner, picks, K/D/A, CS, gold, damage share, kill participation, kills, towers, dragons, Barons.
-- **Not published yet:** bans, CS difference at 15, Heralds/voidgrubs. gol.gg pages for these games are still empty placeholders (one even shows the wrong winner), so they weren't used.
-  - These 6 games are stored with `bans: null` and left out of ban rates. Ban rates cover the 45 games whose bans are known (22 play-in + 23 Swiss); pick rates cover all 51.
-- **Lengths:** LOS–TSW 40:04 and 37:23, TL–AL 33:00 and 47:00 (riftdaily.com), BLG–KC 36:20 (gol.gg summary). T1–CFO is estimated at 28:00 from CS and the match report (flagged `lenEst`).
+- **Bans, CS difference at 15, Heralds and voidgrubs** came from the Oracle's Elixir 2026 data file (27 Oct), and the TL–AL bans match the Reddit post-match thread. Ban rates again cover all 51 games. (gol.gg's pages for these games were still empty placeholders, one showing the wrong winner, so they weren't used.)
+- **Lengths:** taken from the Oracle's Elixir file for all 29 games. That corrected two earlier lengths (IG–GEN 26:01, not 31:27; TSW–IG 30:20, not 31:52) and replaced the T1–CFO estimate (27:23). Others moved by a few seconds.
+- **Cross-check:** every player's champion and K/D/A in all 29 games matches the Oracle's Elixir file. One objective differed: T1 took 1 Baron against CFO (Pickorban said 2); the file's figure is used.
 - **Player of the Game:** still not published by any source I could reach. Pickorban's "top performer" is its own pick (best KDA and kill participation), not the official award, so it isn't used.
 
 ## Out-of-sample check, 26 Oct (the app before this update)

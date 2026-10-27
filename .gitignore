@@ -1,2 +1,5 @@
 # Draft Clash autosave (changes every game; keep it local)
 Draft Game/draft-clash-save.json
+
+# Large raw data (Oracle's Elixir) - kept locally, not committed
+research/*OraclesElixir*.csv
