@@ -31,26 +31,30 @@ function chips(p){
    (and a draft started from the tournament). Everywhere else the app shows real data only. */
 let CUR="tour";
 const runCtx=()=>(typeof RUN!=="undefined"&&RUN&&(CUR==="tour"||(CUR==="draft"&&DS.tour)))?RUN:null;
-/* tabs */
-const VIEWS=[["tour","Tournament"],["draft","Champ select"],["teams","Teams"],["top","Top"],["jungle","Jungle"],["mid","Mid"],["adc","ADC"],["support","Support"],["meta","Meta"]];
-const VROLE={top:"TOP",jungle:"JGL",mid:"MID",adc:"ADC",support:"SUP"};
-const tabs=document.getElementById("tabs");
-tabs.innerHTML=VIEWS.map(([k,l])=>`<button role="tab" id="tab-${k}" data-v="${k}" aria-selected="false">${l}</button>`).join("");
+/* main menu: three sections (Play, Game Details, Teams), each with its own pages as sub-tabs */
+const SECTIONS=[["play","Play"],["details","Game Details"],["teams","Teams"]];
+const VIEWS=[["tour","Worlds 2026","play"],["custom","Custom","play"],["draft","Champ Select","play"],
+  ["meta","Meta","details"],["ctop","Top","details"],["cjungle","Jungle","details"],["cmid","Mid","details"],["cadc","ADC","details"],["csupport","Support","details"],
+  ["power","Power Rankings","teams"],["rosters","Rosters","teams"],["top","Top","teams"],["jungle","Jungle","teams"],["mid","Mid","teams"],["adc","ADC","teams"],["support","Support","teams"]];
+const VROLE={top:"TOP",jungle:"JGL",mid:"MID",adc:"ADC",support:"SUP"},CROLE={ctop:"TOP",cjungle:"JGL",cmid:"MID",cadc:"ADC",csupport:"SUP"};
+const GAPBEFORE=new Set(["draft","ctop","top"]),LASTV={play:"tour",details:"meta",teams:"power"},OLDV={teams:"power"};
+const tabs=document.getElementById("tabs"),subtabs=document.getElementById("subtabs");
+function drawNav(v){const sec=(VIEWS.find(x=>x[0]===v)||VIEWS[0])[2];
+  tabs.innerHTML=SECTIONS.map(([k,l])=>`<button role="tab" data-sec="${k}" aria-selected="${k===sec}">${l}</button>`).join("");
+  subtabs.innerHTML=VIEWS.filter(x=>x[2]===sec).map(([k,l])=>`<button role="tab" data-v="${k}" aria-selected="${k===v}" class="${GAPBEFORE.has(k)?"gap":""}${k==="custom"?" soon":""}">${l}${k==="custom"?"<small>soon</small>":""}</button>`).join("")}
 function show(v){
-  if(!VIEWS.some(x=>x[0]===v))v="tour";CUR=v;
+  v=OLDV[v]||v;if(!VIEWS.some(x=>x[0]===v))v="tour";CUR=v;LASTV[VIEWS.find(x=>x[0]===v)[2]]=v;drawNav(v);
   const tv=document.getElementById("v-tour");if(tv){tv.hidden=v!=="tour";if(v==="tour"&&typeof renderTour==="function")renderTour()}
-  tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false"));
-  document.getElementById("v-teams").hidden=v!=="teams";
+  const teamsV=v==="power"||v==="rosters";document.getElementById("v-teams").hidden=!teamsV;
+  if(teamsV){document.getElementById("powerPanel").hidden=v!=="power";document.getElementById("cmpPanel").hidden=v!=="power";document.getElementById("rosterPanel").hidden=v!=="rosters";if(v==="power")drawPower()}
   document.getElementById("v-draft").hidden=v!=="draft";if(v==="draft")renderDraft();
-  const rv=document.getElementById("v-role");rv.hidden=v==="teams"||v==="draft"||v==="tour";
-  if(v==="meta")rv.innerHTML=metaView();else if(v!=="teams"&&v!=="draft"&&v!=="tour")rv.innerHTML=roleView(VROLE[v]);
+  const rv=document.getElementById("v-role"),inRole=!teamsV&&v!=="draft"&&v!=="tour";rv.hidden=!inRole;
+  if(inRole)rv.innerHTML=v==="meta"?metaView():v==="custom"?customView():CROLE[v]?champRoleView(CROLE[v]):roleView(VROLE[v]);
   try{history.replaceState(null,"","#"+v)}catch(e){}
 }
-tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.v)});
-
-/* team ranking */
+tabs.addEventListener("click",e=>{const b=e.target.closest("button[data-sec]");if(b)show(LASTV[b.dataset.sec])});
+subtabs.addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b)show(b.dataset.v)});
 const ranked=[...TEAMS].sort((a,b)=>b.ov-a.ov);
-document.getElementById("trank").innerHTML=ranked.map((t,i)=>`<div class="tr"><span class="pos">${i+1}</span><span class="nm">${regDot(t.id)}${esc(t.name)}</span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></div>`).join("");
 
 /* roster cards */
 document.getElementById("grid").innerHTML=ranked.map(t=>`<article class="panel team"><div class="thead"><div><h3>${regDot(t.id)}${esc(t.name)}</h3><small>${esc(t.reg)} · ${t.metaFit}/15 favourite picks meta</small></div><div class="tscore">${t.ov.toFixed(1)}</div></div>`+
@@ -71,21 +75,52 @@ sA.addEventListener("change",drawCmp);sB.addEventListener("change",drawCmp);draw
 
 /* role tier lists */
 const TIERS=[["S",93,"Elite","var(--gold)"],["A",89,"World class","var(--teal)"],["B",84,"Strong","var(--blue)"],["C",78,"Solid","var(--grey)"],["D",0,"Underdog","var(--grey)"]];
+/* ---- card pages (same look as the hover cards) ---- */
+const ovBox=v=>`<span class="ov" title="Overall rating" style="--oc:${tier(v)}"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="n">${v}</span></span>`;
+const ticker=t=>t?`<div class="tick"><b>Note</b><div class="rail${t.length>46?" run":""}"><span>${esc(t)}</span></div></div>`:"";
+function playerCard(p,rk){const idx=ROLES.indexOf(p.role),tid=p.team.id;
+  const wp=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n])||{},seen=new Set(),tiles=[];
+  Object.entries(wp).sort((a,b)=>b[1].g-a[1].g||b[1].w-a[1].w).forEach(([c,v])=>{seen.add(c);const isNew=!p.picks.some(x=>x[0]===c);
+    tiles.push(`<span class="cc" data-tc="${esc(c)}" title="${esc(`${c} · ${v.g} Worlds game${v.g>1?"s":""}, ${v.w}-${v.g-v.w}${isNew?" · new at Worlds":""}`)}"><span class="pchamp${isNew?" isnew":""}">${icon(c,22)}</span><span class="cn">${esc(c)}</span><em class="${v.w*2<v.g?"b":"g"}">${v.w}-${v.g-v.w}</em></span>`)});
+  p.picks.forEach(([c,g,w])=>{if(seen.has(c))return;seen.add(c);tiles.push(`<span class="cc" data-tc="${esc(c)}" title="${esc(`${c} · ${g?g+" games in 2026":"2026 pick"}${w!=null?", "+w+"% wins":""}`)}"><span class="pchamp">${icon(c,22)}</span><span class="cn">${esc(c)}</span><span class="dim">${g?g+"g":""}</span></span>`)});
+  return `<article class="pcard"><div class="tiph ph" style="--tc:${teamCol(tid)}"><span class="rkn">${rk}</span>${regDot(tid)}<span class="tm">${esc(tid)}</span><b class="hov" data-tp="${tid}|${idx}" tabindex="0">${esc(p.n)}</b>${ovBox(p.ov)}</div>
+  <div class="pskills skrow"><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>
+  ${wformBox(p)}
+  <div class="ccs c3">${tiles.slice(0,6).join("")||`<span class="notes">No 2026 champion data</span>`}</div>
+  ${ticker(p.note)}</article>`}
 function roleView(role){
-  const i=ROLES.indexOf(role);
-  const ps=TEAMS.map(t=>t.p[i]).sort((a,b)=>b.ov-a.ov||avg(b.a)-avg(a.a));
-  const metaCount=ps.reduce((s,p)=>s+p.picks.filter(c=>metaOf(c[0])[0]==="meta").length,0);
-  let h=`<div class="panel" style="display:grid;gap:16px"><div><h2>${RNAME[role]} tier list · all 16 Swiss teams</h2><p class="notes" style="margin:4px 0 0">Attributes: ${ATTR[role].join(" · ")}. ${metaCount} of the listed favourite picks are currently meta at Worlds. Hover a champion for its 26.20 presence.</p></div>`;
-  TIERS.forEach(([T,min,label,col],k)=>{
-    const max=k?TIERS[k-1][1]:999;
-    const rows=ps.filter(p=>p.ov>=min&&p.ov<max);if(!rows.length)return;
-    h+=`<div class="tier"><div class="tierh"><span class="badge" style="background:${col}">${T}</span><span class="eyebrow" style="color:var(--muted)">${label} · ${T==="D"?"under "+TIERS[3][1]:min+"+"}</span></div>`+
-    rows.map(p=>`<div class="prole"><div class="prow"><span class="role">${regDot(p.team.id)}<span class="ttag" style="--tc:${teamCol(p.team.id)}">${esc(p.team.id)}</span></span><div><div class="pn"><span class="hov" data-tp="${p.team.id}|${ROLES.indexOf(p.role)}" tabindex="0">${esc(p.n)}</span><small>${p.kda?"2026 KDA "+p.kda.toFixed(2):""}</small></div>${bar(p.ov,p.n)}</div><span class="num">${p.ov}</span></div>`+
-      `<div class="attrs">${p.a.map((v,j)=>`<div class="a"><span>${ATTR[role][j]}<em>${v}</em></span><div class="bar"><b style="width:${pct(v)}%;background:${tier(v)}"></b></div></div>`).join("")}</div>`+
-      `<div class="sub">${chips(p)}${p.note?`<div class="notes" style="font-size:12px;margin-top:4px">${esc(p.note)}</div>`:""}</div></div>`).join("")+`</div>`;
-  });
-  return h+`</div>`;
-}
+  const i=ROLES.indexOf(role),ps=TEAMS.map(t=>t.p[i]).sort((a,b)=>b.ov-a.ov||avg(b.a)-avg(a.a));
+  return `<div class="panel" style="display:grid;gap:14px"><div><h2>${RNAME[role]} · all 16 Worlds teams</h2><p class="notes" style="margin:4px 0 0">Ranked by overall rating. Skills: ${ATTR[role].join(" · ")}. Worlds champions come first with their record (teal frame = new at Worlds), then 2026 picks. Hover or tap a name or champion for its full card.</p></div>
+  <div class="pgrid">${ps.map((p,k)=>playerCard(p,k+1)).join("")}</div></div>`}
+function champCard(c,role){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),WM=worldsMeta(c),mp=mostPicked(c,6);
+  const R=d.rec,RS=R?"26.16–26.20":d.sea?"2026 season":d.p20?"26.20 only":"",RT=R||d.sea||d.p20,rs=[...(ROLEMAP[c]||[])];
+  return `<article class="pcard ccardp"><div class="chead">${icon(c,46)}<div><b class="hov" data-tc="${esc(c)}" tabindex="0">${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||RNAME[role]}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}</div></div></div>
+  <div class="hsec"><div class="label">Recent pro</div><div class="hbars">
+  ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
+  ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
+  <div class="hsec"><div class="label"><span class="hl">Worlds · ${WM.g} games</span></div><div class="hbars">
+  ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
+  ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${WM.w}-${WM.l}`:"—",WM.p?`${Math.round(WM.w/WM.p*100)}%${WM.p<5?" · small sample":""}`:"not played")}</div></div>
+  <div><div class="label">Played at Worlds by</div><div class="ccs c3">${mp.length?mp.map(e=>{const T=team(e.t),pi=T?T.p.findIndex(x=>x.n===e.n):-1;return `<span class="cc mp" style="--tc:${teamCol(e.t)}"${pi>=0?` data-tp="${e.t}|${pi}" tabindex="0"`:""} title="${esc(`${e.n} (${e.t}) · ${e.g} game${e.g>1?"s":""} on ${c} at Worlds, ${e.w}-${e.g-e.w}`)}"><span class="tm">${esc(e.t)}</span><span class="cn">${esc(e.n)}</span><em class="${e.w*2<e.g?"b":"g"}">${e.w}-${e.g-e.w}</em></span>`}).join(""):`<span class="notes">Not played at Worlds yet</span>`}</div></div></article>`}
+function champRoleView(role){
+  const cs=POOL.filter(c=>primaryRole(c)===role).map(c=>[c,presOf(c)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  const shown=cs.filter(c=>presOf(c)>0||worldsMeta(c).p+worldsMeta(c).b>0);
+  return `<div class="panel" style="display:grid;gap:14px"><div><h2>${RNAME[role]} champions</h2><p class="notes" style="margin:4px 0 0">Every ${RNAME[role].toLowerCase()} champion seen in recent pro play or at Worlds, by blended presence. Recent pro = patches 26.16–26.20; Worlds = real play-in and Swiss games. Hover or tap a champion for its full card.</p></div>
+  <div class="pgrid">${shown.map(c=>champCard(c,role)).join("")}</div></div>`}
+function customView(){return `<div class="panel" style="display:grid;gap:10px;max-width:640px"><h2>Custom tournament</h2><p class="notes" style="margin:0">Coming soon: pick your own teams, format and draw, then play it out with the same draft and sim. For now, use <b>Worlds 2026</b> for the full event or <b>Champ Select</b> for a single Bo1, Bo3 or Bo5.</p><div><button class="btn primary" data-goto="tour">Go to Worlds 2026</button> <button class="btn" data-goto="draft">Go to Champ Select</button></div></div>`}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-goto]");if(b)show(b.dataset.goto)});
+/* power rankings with real 2026 head-to-head (never simulated games) */
+let pwSel=null;
+function drawPower(){const el=document.getElementById("powerPanel");if(!el)return;pwSel=pwSel||ranked[0].id;
+  const H=(typeof H2H_2026!=="undefined"&&H2H_2026.g)||{},h=H[pwSel]||{},T=team(pwSel);
+  const rows=ranked.filter(t=>t.id!==pwSel&&h[t.id]);
+  const top8=ranked.slice(0,8).map(t=>t.id);
+  el.innerHTML=`<div><h2>Power rankings</h2><p class="notes" style="margin:4px 0 12px">Team power = the five starters' average overall rating. Pick a team to see its real 2026 record against the other Worlds teams, counted in games (domestic, international and Worlds so far; data to ${typeof H2H_2026!=="undefined"?H2H_2026.asof:"—"}).</p></div>
+  <div class="pwgrid"><div class="pwlist">${ranked.map((t,i)=>`<button class="pwrow${t.id===pwSel?" on":""}" data-pw="${t.id}"><span class="rkn">${i+1}</span>${regDot(t.id)}<span class="ttag" style="--tc:${teamCol(t.id)}">${esc(t.id)}</span><span class="nm">${esc(t.name)}</span>${bar(t.ov,t.name)}<span class="num">${t.ov.toFixed(1)}</span></button>`).join("")}</div>
+  <div class="pwh2h"><div class="tiph"><span class="ttag" style="--tc:${teamCol(pwSel)}">${esc(pwSel)}</span><b>${esc(T.name)}</b></div><div class="notes">2026 games against other Worlds teams</div>
+  <table class="tt full"><thead><tr><th>Opponent</th><th>Games</th><th>W-L</th><th>Met at</th></tr></thead><tbody>${rows.map(t=>{const [w,l,ev]=h[t.id];return `<tr><td>${teamTag(t.id)} ${esc(t.name)}</td><td class="num">${w+l}</td><td class="num"><b class="${w>l?"pos":w<l?"neg":""}">${w}-${l}</b></td><td class="notes small">${ev.map(esc).join(", ")}</td></tr>`}).join("")||`<tr><td colspan="4" class="notes">No 2026 games against other Worlds teams</td></tr>`}</tbody></table></div></div>
+  <div style="margin-top:14px"><div class="label">Top eight · games won-lost, row against column</div><div style="overflow-x:auto"><table class="h2hm"><tr><th></th>${top8.map(t=>`<th>${esc(t)}</th>`).join("")}</tr>${top8.map(a=>`<tr><th>${esc(a)}</th>${top8.map(b=>{if(a===b)return'<td class="self"></td>';const x=(H[a]||{})[b];if(!x)return'<td class="none">–</td>';const [w,l]=x,sc=(w-l)/(w+l);return `<td style="--s:${Math.round(Math.abs(sc)*45)}%" class="${sc>0?"w":sc<0?"l":"e"}" title="${esc(`${a} ${w}-${l} ${b}`)}">${w}-${l}</td>`}).join("")}</tr>`).join("")}</table></div></div>`}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-pw]");if(b){pwSel=b.dataset.pw;drawPower()}});
 const MTIERS=[["S",55,"Must-ban / must-pick","var(--gold)"],["A",40,"Priority","var(--teal)"],["B",30,"Meta","var(--blue)"],["C",1,"Situational","var(--grey)"]];
 const ALLP=TEAMS.flatMap(t=>t.p);
 function comfort(c){return ALLP.filter(p=>p.picks.some(x=>x[0]===c));}
@@ -273,6 +308,9 @@ const SKILL_SVG={
   reliability:'<circle cx="12" cy="5" r="2"/><path d="M12 7v14"/><path d="M8 11h8"/><path d="M5 14c0 4 3 7 7 7s7-3 7-7"/><path d="M3 15.5l2-2 2 2M17 15.5l2-2 2 2"/>'};
 const SKILL_ICON={TOP:[["laning","o"],["teamfight","o"],["consistency","u"]],JGL:[["early","o"],["objectives","u"],["teamfight","o"]],MID:[["laning","o"],["roaming","u"],["damage","o"]],ADC:[["laning","o"],["damage","o"],["positioning","u"]],SUP:[["playmaking","o"],["presence","u"],["reliability","u"]]};
 function skillChip(role,j,val,mood){const [ic,kind]=SKILL_ICON[role][j];return `<span class="sk ${kind}${mood?" "+mood:""}" title="${esc(ATTR[role][j])}"><svg viewBox="0 0 24 24" aria-hidden="true">${SKILL_SVG[ic]}</svg>${val}</span>`}
+function wformBox(p){const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
+    const st=[["KDA",f.kda],["KP",f.kp+"%"],["DMG",f.dmg+"%"],...(f.csm?[["CS/min",f.csm]]:[])];
+    return `<div class="wform"><div class="wf-l"><b class="hl">Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b><span class="pskills" title="Change to skill ratings from Worlds games">${ATTR[p.role].map((a,j)=>skillChip(p.role,j,sg(f.d[j]),f.d[j]>0?"up":f.d[j]<0?"down":"")).join("")}</span>${f.tags.length?`<span class="wf-tags">${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div><div class="wf-stats">${st.map(([l,v])=>`<span><small>${l}</small><b>${v}</b></span>`).join("")}</div></div>`}
 function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.steps.length>0;
   const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
@@ -290,9 +328,7 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   return `<div class="tiph ph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="ov" title="Overall rating" style="--oc:${tier(p.ov)}"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="n">${p.ov}</span></span></div>
   <div class="pskills"><span class="prank"><b>${rk}/16</b> ${RNAME[p.role]}</span>${ATTR[p.role].map((a,j)=>skillChip(p.role,j,p.a[j])).join("")}${p.kda?`<span class="sk" title="2026 KDA"><small>KDA</small>${p.kda}</span>`:""}</div>`+
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
-  (()=>{const f=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.form[p.n];if(!f)return"";const sg=v=>v>0?"+"+v:v<0?String(v):"±0";
-    const st=[["KDA",f.kda],["KP",f.kp+"%"],["DMG",f.dmg+"%"],...(f.csm?[["CS/min",f.csm]]:[])];
-    return `<div class="wform"><div class="wf-l"><b>Worlds form · ${f.g} game${f.g>1?"s":""} (${f.w}-${f.g-f.w})</b><span class="pskills" title="Change to skill ratings from Worlds games">${ATTR[p.role].map((a,j)=>skillChip(p.role,j,sg(f.d[j]),f.d[j]>0?"up":f.d[j]<0?"down":"")).join("")}</span>${f.tags.length?`<span class="wf-tags">${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>`:""}</div><div class="wf-stats">${st.map(([l,v])=>`<span><small>${l}</small><b>${v}</b></span>`).join("")}</div></div>`})()+
+  wformBox(p)+
   (shown.length?`<div class="pkey"><span class="pchamp isnew"><i></i></span> New at Worlds (not in their 2026 top picks)</div><table class="tt ptab"><thead><tr><th>Champion</th><th>Worlds</th>${hasRun?"<th>Your run</th>":""}<th>2026</th><th>Meta</th></tr></thead>${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
   (typeof tourPlayerLine==="function"?tourPlayerLine(p):"")+(p.note?`<div class="notes">${esc(p.note)}</div>`:"");}
 /* team card: comp so far, damage mix, plan, synergy pairs and open roles */
@@ -339,10 +375,10 @@ function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(
   if(out.length<6&&runCtx()){const m=new Map();runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
     [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"b",note:`beat it ${w}-${g-w} in your run`})}})}
   return out.slice(0,6)}
-function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
+function mostPicked(c,n=3){const m=new Map(),d=CHAMP_DB[c];
     if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const P=WORLDS_LIVE.players[n],t=P?P.team:(WORLDS_LIVE.pinTeam||{})[n]||"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
-  return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
+  return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,n).map(e=>({...e,s:sea(e.n)}))}
 /* your simulated run's players on this champion (shown separately from the real Worlds numbers) */
 function mostPickedRun(c){const RX=runCtx();if(!RX)return[];return Object.entries(RX.stats.pchamp).map(([key,pc])=>{const v=pc[c];if(!v)return null;const [tid,i]=key.split("|");return {n:team(tid).p[+i].n,t:tid,g:v.g,w:v.w}}).filter(Boolean).sort((a,b)=>b.g-a.g).slice(0,3)}
 /* a champion's status in the draft on screen: picked / banned this game, or locked by Fearless (with game and team) */
@@ -366,7 +402,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
-  <div class="hsec"><div class="label">Worlds meta ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions${WM.gb<WM.g?`, and bans for ${WM.g-WM.gb} Swiss games aren't published yet, so the ban rate covers ${WM.gb} games`:""}. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
+  <div class="hsec"><div class="label"><span class="hl">Worlds meta</span> ${infoI(`Real Worlds 2026 games: the 22 play-in games plus ${WM.swiss} Swiss games so far — ${WM.g} games (patch 26.20). Play-in bans are only known for the most-contested champions${WM.gb<WM.g?`, and bans for ${WM.g-WM.gb} Swiss games aren't published yet, so the ban rate covers ${WM.gb} games`:""}. Your simulated run is shown separately below the bars.`)}</div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
   ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div></div>

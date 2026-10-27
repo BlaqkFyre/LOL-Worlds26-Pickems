@@ -18,14 +18,22 @@ No build step and no server: it's plain HTML, CSS and JavaScript.
 
 Later changes: edit files, commit in GitHub Desktop, **Push origin** — Pages updates automatically.
 
-## Tabs
+## Menu
 
-| Tab | What it does |
+Three sections, each with its own pages:
+
+| Page | What it does |
 |---|---|
-| Tournament | Worlds 2026 from Swiss round 1 (23 Oct) to the final (14 Nov). Three modes: **My teams** (draft for 1–4 teams, AI plays the rest), **Sim run** (all AI), **My team + guest picks** (your team plus a random side in every other match, with a switch to let the AI play until your team is up). The schedule shows each day as a date row with up to four match cards; "Sim to my next match" brings your match into view and turns into "Draft game N" / "Sim next game". Bo3/Bo5 matches have a series panel (score, games, player K/D/A, KDA, rating, POG points, MVP race). Stats switches between Champions and Players. A small coloured square marks each team's region (LCK, LPL, LEC, LCS, LCP, CBLOL). |
-| Champ select | Series mode: pick your team, opponent, Bo1/Bo3/Bo5, Fearless or standard and game 1 side; the AI drafts the opponent by default (2 s per action). Competitive draft order, suggestions, draft review and a simulated game with Player of the Game. The series ends at 1/2/3 wins; a series panel shows the score, every game, each player's champions, K/D/A, KDA, average rating and POG points, the Series MVP race and series stats. Hover a player for their pool and lane risk, a team name for its comp, or a champion for its pro card. |
-| Teams / Top–Support | Player power bars, head-to-head and tier lists. Hover a player for their champion pool. |
-| Meta | Champion tier list from blended pro pick/ban presence (26.20 + 26.16–26.20) with win rate and rising / falling / fading filters, bot-lane duo grid, best partners, counters. |
+| Play → Worlds 2026 | Worlds 2026 from Swiss round 1 (23 Oct) to the final (14 Nov). Three modes: **My teams** (draft for 1–4 teams, AI plays the rest), **Sim run** (all AI), **My team + guest picks** (your team plus a random side in every other match, with a switch to let the AI play until your team is up). The schedule shows each day as a date row with up to four match cards; "Sim to my next match" brings your match into view and turns into "Draft game N" / "Sim next game". Bo3/Bo5 matches have a series panel (score, games, player K/D/A, KDA, rating, POG points, MVP race). Stats switches between Champions and Players. A small coloured square marks each team's region (LCK, LPL, LEC, LCS, LCP, CBLOL). |
+| Play → Custom | Placeholder for custom tournaments (coming soon). |
+| Play → Champ Select | Series mode: pick your team, opponent, Bo1/Bo3/Bo5, Fearless or standard and game 1 side; the AI drafts the opponent by default (2 s per action). Competitive draft order, suggestions, draft review and a simulated game with Player of the Game. The series ends at 1/2/3 wins; a series panel shows the score, every game, each player's champions, K/D/A, KDA, average rating and POG points, the Series MVP race and series stats. Hover a player for their pool and lane risk, a team name for its comp, or a champion for its pro card. |
+| Game Details → Meta | Champion tier list from blended pro pick/ban presence (26.20 + 26.16–26.20) with win rate and rising / falling / fading filters, bot-lane duo grid, best partners, counters. |
+| Game Details → Top…Support | Champion cards by role, styled like the hover cards: tier, trend, recent pro and Worlds pick/ban bars, win rate and up to six players who have played it at Worlds. |
+| Teams → Power Rankings | Team power ranking with real 2026 head-to-head (games, events met at) for any team, a top-eight matrix, and the attribute head-to-head compare. |
+| Teams → Rosters | All 16 rosters with champion pools. |
+| Teams → Top…Support | Player cards by role: overall rating, role rank, skills, Worlds form, Worlds and 2026 champions, and a note ticker. |
+
+Simulated games stay in their own mode: numbers from a tournament run show only on tournament screens (and drafts started from the tournament); everything else shows real data only. On phones and tablets, tapping a champion or player opens its card as a sheet; in champ select the sheet has the Pick/Ban button.
 
 ## Real Worlds data
 
@@ -33,7 +41,7 @@ The real Swiss games played so far (`js/worlds-live.js`) feed the champion cards
 
 ## Themes
 
-The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in one of three event colour themes — *Hextech Gold*, *Brooklyn Final* or *Summoner's Cup*. Choices are remembered in the browser.
+The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in an event theme — *Hextech Gold*, *Brooklyn Final*, *Summoner's Cup*, or one of three city editions: *Brooklyn · Subway* (station-sign black and white, Helvetica, real route colours), *Texas · Lone Star* (flag navy and red on limestone cream) and *LA · Sunset* (golden-hour sky over Pacific dusk blue). Choices are remembered in the browser.
 
 Champion square icons load from Riot's Data Dragon CDN; set `ASSETS.icons = false` in `js/assets.js` to turn them off (tiles then show initials). Teams are shown as colour badges; the app uses no team or Riot logos. The trophy on the winners screen is an original design.
 
@@ -60,6 +68,7 @@ js/data.js          teams, ratings, champion pools, meta, synergy, counters, pla
 js/champions.js     pro data for 165 champions (presence, win rates, roles, builds, play-in users)
 js/assets.js        champion icons (Data Dragon, with on/off switch) and team colours
 js/worlds-live.js    real Worlds 2026 Swiss games (picks, bans, player stats) for champion data, pools and player form
+js/h2h.js            real 2026 head-to-head between the 16 Worlds teams (games), for Power Rankings
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation
 ```

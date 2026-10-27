@@ -11,12 +11,17 @@
 <meta name="description" content="Worlds 2026 tournament simulator, champ select drafter, player power bars and meta tools for League of Legends Pick'Em.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="css/styles.css?v=29">
+<link rel="stylesheet" href="css/styles.css?v=30">
 <script>try{var t=localStorage.getItem("lolw26-theme"),w=localStorage.getItem("lolw26-worlds");if(t)document.documentElement.dataset.theme=t;if(w&&w!=="off")document.documentElement.dataset.worlds=w}catch(e){}</script>
 </head>
 <body>
 <div class="wrap">
   <header>
+    <div class="cityband" aria-hidden="true">
+      <div class="cb-subway"><i style="background:#ee352e">2</i><i style="background:#ee352e">3</i><i style="background:#00933c">4</i><i style="background:#00933c">5</i><i style="background:#ff6319">B</i><i style="background:#ff6319">D</i><i style="background:#fccc0a" class="y">N</i><i style="background:#fccc0a" class="y">Q</i><i style="background:#fccc0a" class="y">R</i><span>Atlantic Av–Barclays Ctr</span></div>
+      <div class="cb-lonestar"><b><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z" fill="#fff"/></svg></b><i></i><i></i></div>
+      <div class="cb-sunset"><svg viewBox="0 0 800 90" preserveAspectRatio="xMidYMax slice"><path d="M0 90V70q120-18 260-6t280 4 260-10V90z" fill="var(--bg)" opacity=".55"/><g fill="var(--bg)"><g transform="translate(470 0)"><path d="M118 90l3-58h3l3 58z"/><path d="M122 32c-14-2-26 4-34 12 10-6 22-8 33-6-12 2-22 9-27 18 8-8 19-12 30-12-8 5-13 13-14 22 5-8 11-14 18-18 2 7 2 14 0 22 4-7 6-15 5-23 7 3 13 9 17 16-1-9-6-16-13-20 10 0 20 4 27 11-5-9-14-15-25-17 10-2 21 0 30 5-8-8-20-12-32-11 9-4 19-5 28-3-10-5-22-5-32 0 4-6 10-10 17-12-9 0-17 4-23 10-4-5-10-8-17-8z"/></g><g transform="translate(560 18) scale(.8)"><path d="M118 90l3-58h3l3 58z"/><path d="M122 32c-14-2-26 4-34 12 10-6 22-8 33-6-12 2-22 9-27 18 8-8 19-12 30-12-8 5-13 13-14 22 5-8 11-14 18-18 2 7 2 14 0 22 4-7 6-15 5-23 7 3 13 9 17 16-1-9-6-16-13-20 10 0 20 4 27 11-5-9-14-15-25-17 10-2 21 0 30 5-8-8-20-12-32-11 9-4 19-5 28-3-10-5-22-5-32 0 4-6 10-10 17-12-9 0-17 4-23 10-4-5-10-8-17-8z"/></g><path d="M700 90l2-36h2l2 36z"/></g></svg></div>
+    </div>
     <div class="topbar">
       <div class="eyebrow">Worlds 2026 · Patch 26.20 · Pick'Em scouting</div>
       <div class="tools">
@@ -58,6 +63,9 @@
             <option value="hextech">Hextech Gold</option>
             <option value="brooklyn">Brooklyn Final</option>
             <option value="cup">Summoner's Cup</option>
+            <option value="subway">Brooklyn · Subway</option>
+            <option value="lonestar">Texas · Lone Star</option>
+            <option value="sunset">LA · Sunset</option>
           </select>
         </label>
       </div>
@@ -75,19 +83,18 @@
     </div>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="Views" id="tabs"></nav>
+  <nav class="mainnav" aria-label="Main">
+    <div class="tabs" role="tablist" aria-label="Sections" id="tabs"></div>
+    <div class="subtabs" role="tablist" aria-label="Pages" id="subtabs"></div>
+  </nav>
 
   <section class="view" id="v-tour" aria-label="Tournament"></section>
 
   <section class="view" id="v-draft" aria-label="Champ select" hidden></section>
 
   <section class="view" id="v-teams" aria-label="Teams" hidden>
-    <div class="panel">
-      <h2>Team power</h2>
-      <p class="notes" style="margin:4px 0 12px">Average of the five starters' overall ratings.</p>
-      <div class="trank" id="trank"></div>
-    </div>
-    <div class="panel">
+    <div class="panel" id="powerPanel"></div>
+    <div class="panel" id="cmpPanel">
       <h2>Head to head</h2>
       <div class="cmp-head">
         <label for="tA" class="eyebrow" style="color:var(--muted)">Team A</label>
@@ -96,7 +103,7 @@
       </div>
       <div class="cmp" id="cmp"></div>
     </div>
-    <div style="display:grid;gap:12px">
+    <div style="display:grid;gap:12px" id="rosterPanel">
       <h2>Rosters</h2>
       <div class="grid" id="grid"></div>
     </div>
@@ -108,12 +115,13 @@
 </div>
 
 
-<script src="js/ui.js?v=29"></script>
-<script src="js/data.js?v=29"></script>
-<script src="js/champions.js?v=29"></script>
-<script src="js/assets.js?v=29"></script>
-<script src="js/worlds-live.js?v=29"></script>
-<script src="js/tournament.js?v=29"></script>
-<script src="js/core.js?v=29"></script>
+<script src="js/ui.js?v=30"></script>
+<script src="js/data.js?v=30"></script>
+<script src="js/champions.js?v=30"></script>
+<script src="js/assets.js?v=30"></script>
+<script src="js/worlds-live.js?v=30"></script>
+<script src="js/h2h.js?v=30"></script>
+<script src="js/tournament.js?v=30"></script>
+<script src="js/core.js?v=30"></script>
 </body>
 </html>

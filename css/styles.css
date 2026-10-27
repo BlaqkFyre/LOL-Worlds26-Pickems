@@ -608,3 +608,136 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .hb .v small{white-space:normal;line-height:1.15}
 #tip.sheet .hb{grid-template-columns:96px minmax(0,1fr) 92px}
 #tip .sheetbar{background:var(--panel)}
+
+/* ===== Main menu: sections + sub-tabs ===== */
+.mainnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:grid;gap:0;border-bottom:1px solid var(--line);padding-top:8px}
+.mainnav .tabs{position:static;border:0;padding:0 0 0;gap:4px}
+.mainnav .tabs button{font-size:14px}
+.subtabs{display:flex;flex-wrap:wrap;gap:5px;padding:8px 0 10px}
+.subtabs button{font:700 12.5px var(--display);letter-spacing:.07em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);padding:6px 12px;cursor:pointer;border-radius:0}
+.subtabs button[aria-selected="true"]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.subtabs button.gap{margin-left:12px}
+.subtabs button.soon{opacity:.6}.subtabs button small{font:600 10px var(--body);margin-left:5px;text-transform:none;letter-spacing:0}
+@media (max-width:640px){.subtabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.subtabs button{white-space:nowrap}.subtabs button.gap{margin-left:6px}}
+/* ===== Card pages ===== */
+.hl{display:inline-block;width:fit-content;background:color-mix(in srgb,#f2c94c 34%,transparent);color:var(--fg);padding:1px 7px}
+.wform b.hl{padding:2px 7px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px;align-items:start}
+.pcard{display:grid;gap:8px;padding:10px 12px;min-width:0;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%,var(--fg) 8%),color-mix(in srgb,var(--pan2) 94%,var(--fg) 6%));border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));border-top:3px solid var(--gold)}
+.pcard .rkn,.pwrow .rkn{font:700 13px var(--display);color:var(--muted);min-width:18px}
+.pcard .tiph b{font-size:18px}
+.skrow{padding:5px 8px;background:color-mix(in srgb,var(--bg) 60%,transparent);flex-wrap:wrap;row-gap:4px}
+.pcard .ccs.c3{margin-top:0}
+.pcard .cc .dim{color:var(--muted);font-size:11.5px;flex:none}
+.tick{display:flex;align-items:center;gap:8px;background:color-mix(in srgb,#f2c94c 26%,transparent);font-size:12.5px;font-weight:600;padding:4px 8px;overflow:hidden}
+.tick b{flex:none;font:700 10px var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:1px 5px}
+.tick .rail{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
+.tick .rail.run{mask-image:linear-gradient(90deg,transparent,#000 10px,#000 calc(100% - 10px),transparent)}
+.tick .rail.run span{display:inline-block;padding-left:100%;animation:tickr 16s linear infinite}
+.tick .rail:not(.run) span{white-space:normal}
+@keyframes tickr{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.tick .rail.run span{animation:none;padding-left:0;white-space:normal}.tick .rail{white-space:normal}}
+.ccardp .chead b{font-size:20px}
+.ccardp .hsec:first-of-type{border-top:0;padding-top:0}
+/* power rankings */
+.pwgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.pwgrid{grid-template-columns:minmax(0,1fr)}}
+.pwlist{display:grid;gap:4px}
+.pwrow{display:grid;grid-template-columns:22px 34px 50px minmax(0,1fr) minmax(60px,1fr) 44px;gap:8px;align-items:center;padding:5px 8px;background:var(--pan2);border:0;border-left:3px solid transparent;color:var(--fg);font:600 15px var(--body);text-align:left;cursor:pointer}
+.pwrow .rtag{min-width:0;margin-right:0}.pwrow .ttag{min-width:44px;justify-content:center}
+.pwrow .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.pwrow .num{font:700 15px var(--display);text-align:right}
+.pwrow.on{border-left-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--pan2))}
+.pwrow:hover{background:color-mix(in srgb,var(--gold) 7%,var(--pan2))}
+.pwh2h{display:grid;gap:8px;align-content:start;padding:12px;background:var(--pan2);border:1px solid var(--line)}
+.pwh2h .tiph b{font:700 18px var(--display);text-transform:uppercase}
+.h2hm{border-collapse:collapse;font:700 12px var(--display);font-variant-numeric:tabular-nums}
+.h2hm th,.h2hm td{width:46px;height:28px;text-align:center;border:1px solid var(--line)}
+.h2hm th{font-size:11px;color:var(--muted)}
+.h2hm td.w{background:color-mix(in srgb,var(--meta) var(--s),transparent)}.h2hm td.l{background:color-mix(in srgb,var(--lose) var(--s),transparent)}
+.h2hm td.self{background:var(--track)}.h2hm td.none{color:var(--muted);font-weight:500}
+.pcard .wform b.hl{font-size:11px;letter-spacing:.03em;white-space:nowrap;padding:2px 5px}
+
+/* =====================================================================
+   City editions (Worlds mode): Brooklyn Subway, Texas Lone Star, LA Sunset.
+   Colours and street-furniture cues only; no team or city logos.
+   ===================================================================== */
+.cityband{display:none}
+html:root[data-worlds="subway"] .cityband,html:root[data-worlds="lonestar"] .cityband,html:root[data-worlds="sunset"] .cityband{display:block;margin:-6px 0 14px}
+.cityband>div{display:none}
+html:root[data-worlds="subway"] .cb-subway,html:root[data-worlds="lonestar"] .cb-lonestar,html:root[data-worlds="sunset"] .cb-sunset{display:flex}
+
+/* --- Brooklyn · Subway: station signage — white on black under a black band, Helvetica, real route colours.
+       A slight vertical gradient on the blacks gives a gloss like enamel sign panels. --- */
+html:root[data-worlds="subway"]{
+  --bg:#111214; --panel:#1d1e21; --line:#3a3c40; --fg:#ffffff; --muted:#a7a9ac;
+  --gold:#fccc0a; --teal:#6cbe45; --blue:#4d8bff; --grey:#808183; --track:#2a2c2f;
+  --lose:#ee352e; --bside:#4d8bff; --bsidebg:#0b1d3d; --rside:#ee352e; --rsidebg:#3a1110;
+  --meta:#6cbe45; --metabg:#16301a; --mix:#fccc0a; --mixbg:#332a05; --off:#a7a9ac; --offbg:#1f2023;
+  --pan2:#18191b; --glow:#26272a; --chip:#1d1e21; --pick:#6cbe45; --ban:#ee352e; --cupA:#808183; --cupB:#ffffff; --cupC:#fccc0a; --gemD:#2a2c2f;
+  --display:"Helvetica Neue",Helvetica,Arial,sans-serif; --body:"Helvetica Neue",Helvetica,Arial,sans-serif; --mono:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+html:root[data-worlds="subway"] body{background:linear-gradient(180deg,#1a1b1e 0,#111214 340px,#0d0e0f 100%) fixed}
+html:root[data-worlds="subway"] .panel,html:root[data-worlds="subway"] .side,html:root[data-worlds="subway"] .an,html:root[data-worlds="subway"] .pcard,html:root[data-worlds="subway"] #tip{background:linear-gradient(180deg,#26272b 0%,#1d1e21 38%,#17181a 100%);border-color:#3a3c40;box-shadow:inset 0 1px 0 #fff;border-top:6px solid #000}
+html:root[data-worlds="subway"] .panel::before{display:none}
+html:root[data-worlds="subway"] h1,html:root[data-worlds="subway"] h2,html:root[data-worlds="subway"] h3{text-transform:none;letter-spacing:-.01em}
+html:root[data-worlds="subway"] h1 span{color:#fff}
+html:root[data-worlds="subway"] .cb-subway{align-items:center;gap:6px;height:36px;padding:0 12px;background:linear-gradient(180deg,#1b1c1e,#000 70%);border-bottom:1px solid #fff;font:700 13px var(--body)}
+html:root[data-worlds="subway"] .cb-subway i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);font-style:normal;color:#fff}
+html:root[data-worlds="subway"] .cb-subway i.y{color:#111}
+html:root[data-worlds="subway"] .cb-subway span{margin-left:8px}
+html:root[data-worlds="subway"] .tabs button{clip-path:none;text-transform:none;letter-spacing:0;background:transparent;border:0;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+html:root[data-worlds="subway"] .tabs button::before{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);color:#fff}
+html:root[data-worlds="subway"] .tabs button[data-sec="play"]::before{content:"P";background:#ee352e}
+html:root[data-worlds="subway"] .tabs button[data-sec="details"]::before{content:"G";background:#0039a6}
+html:root[data-worlds="subway"] .tabs button[data-sec="teams"]::before{content:"T";background:#00933c}
+html:root[data-worlds="subway"] .tabs button[aria-selected="true"]{background:transparent;color:#fff;box-shadow:inset 0 -3px 0 #fff}
+html:root[data-worlds="subway"] .subtabs button{text-transform:none;letter-spacing:0;font-size:13px;border-color:#3a3c40;background:linear-gradient(180deg,#1f2023,#141516)}
+html:root[data-worlds="subway"] .subtabs button[aria-selected="true"]{background:#fccc0a;color:#111;border-color:#fccc0a}
+html:root[data-worlds="subway"] .hl,html:root[data-worlds="subway"] .tick{background:#fccc0a;color:#111}
+html:root[data-worlds="subway"] .tick b{background:#111;color:#fccc0a}
+html:root[data-worlds="subway"] .btn.primary{background:#fccc0a;color:#111;border-color:#fccc0a}
+
+/* --- Texas · Lone Star: light daytime theme — flag navy (PMS 281) and red (PMS 193) on limestone cream --- */
+html:root[data-worlds="lonestar"]{
+  color-scheme:light;
+  --bg:#f1eadb; --panel:#fffdf7; --line:#dacdb3; --fg:#1d1a16; --muted:#6f665a;
+  --gold:#bf0d3e; --teal:#002868; --blue:#4a6fa5; --grey:#9a8f7e; --track:#ebe1cc;
+  --lose:#bf0d3e; --bside:#002868; --bsidebg:#e3e8f2; --rside:#bf0d3e; --rsidebg:#f8e3e8;
+  --meta:#1f6b3a; --metabg:#e3efe3; --mix:#8a5a12; --mixbg:#f5e9c9; --off:#6f665a; --offbg:#efe7d6;
+  --pan2:#f8f2e4; --glow:#fffdf7; --chip:#fffaf0; --pick:#002868; --ban:#bf0d3e; --cupA:#002868; --cupB:#ffffff; --cupC:#bf0d3e; --gemD:#002868;
+}
+html:root[data-worlds="lonestar"] body{background:linear-gradient(180deg,#e9e0cc 0,#f1eadb 280px) fixed}
+html:root[data-worlds="lonestar"] .cb-lonestar{height:56px;display:grid!important;grid-template-columns:120px 1fr;grid-template-rows:1fr 1fr}
+html:root[data-worlds="lonestar"] .cb-lonestar b{grid-row:1/3;background:#002868;display:grid;place-items:center}
+html:root[data-worlds="lonestar"] .cb-lonestar b svg{width:32px;height:32px}
+html:root[data-worlds="lonestar"] .cb-lonestar i:nth-of-type(1){background:#fff;border-bottom:1px solid #e3dccd}
+html:root[data-worlds="lonestar"] .cb-lonestar i:nth-of-type(2){background:#bf0d3e}
+html:root[data-worlds="lonestar"] header{border-bottom:3px double #bf0d3e;padding-bottom:12px}
+html:root[data-worlds="lonestar"] h1 span{color:#bf0d3e}
+html:root[data-worlds="lonestar"] .eyebrow{color:#002868}
+html:root[data-worlds="lonestar"] .panel,html:root[data-worlds="lonestar"] .pcard{border-top-color:#002868}
+html:root[data-worlds="lonestar"] .panel h2::before{content:"★ ";color:#002868}
+html:root[data-worlds="lonestar"] .hl,html:root[data-worlds="lonestar"] .tick{background:#f3e2b0;color:#5a3d06}
+html:root[data-worlds="lonestar"] .tick b{background:#5a3d06;color:#f3e2b0}
+html:root[data-worlds="lonestar"] .tabs button[aria-selected="true"],html:root[data-worlds="lonestar"] .btn.primary{background:#bf0d3e;color:#fff;border-color:#bf0d3e}
+html:root[data-worlds="lonestar"] .subtabs button[aria-selected="true"]{background:#002868;border-color:#002868;color:#fff}
+
+/* --- LA · Sunset: golden-hour sky (gold, amber, coral, rose) into Pacific dusk blue; palm silhouettes --- */
+html:root[data-worlds="sunset"]{
+  --bg:#0f2232; --panel:#173246; --line:#2b4a62; --fg:#fff6ec; --muted:#a6b6c4;
+  --gold:#f9b44a; --teal:#3fb8af; --blue:#4cc9f0; --grey:#6b7f91; --track:#20405a;
+  --lose:#ff8f80; --bside:#4cc9f0; --bsidebg:#10324a; --rside:#f2725b; --rsidebg:#3a1f22;
+  --meta:#3fb8af; --metabg:#0f3436; --mix:#f9b44a; --mixbg:#3a2c12; --off:#a6b6c4; --offbg:#173246;
+  --pan2:#132a3c; --glow:#2a3f55; --chip:#173246; --pick:#3fb8af; --ban:#e05780; --cupA:#f3722c; --cupB:#ffe2bd; --cupC:#f9c74f; --gemD:#20405a;
+}
+html:root[data-worlds="sunset"] body{background:radial-gradient(1100px 420px at 50% -80px,rgba(242,114,91,.28),transparent 70%),var(--bg)}
+html:root[data-worlds="sunset"] .cb-sunset{height:96px;position:relative;overflow:hidden;background:linear-gradient(180deg,#f9c74f 0%,#f8961e 26%,#f3722c 46%,#e05780 66%,#48607a 86%,var(--bg) 100%)}
+html:root[data-worlds="sunset"] .cb-sunset svg{position:absolute;inset:auto 0 0 0;width:100%;height:78px}
+html:root[data-worlds="sunset"] h1 span{background:linear-gradient(180deg,#f9c74f,#f3722c 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html:root[data-worlds="sunset"] .panel,html:root[data-worlds="sunset"] .pcard{border-top-color:#f2725b;border-radius:6px}
+html:root[data-worlds="sunset"] .bar b{background-image:linear-gradient(90deg,transparent,rgba(255,255,255,.12))}
+html:root[data-worlds="sunset"] .hl,html:root[data-worlds="sunset"] .tick{background:#ffd7ad;color:#6b2e0e}
+html:root[data-worlds="sunset"] .tick b{background:#6b2e0e;color:#ffd7ad}
+html:root[data-worlds="sunset"] .tabs button[aria-selected="true"],html:root[data-worlds="sunset"] .btn.primary{background:linear-gradient(90deg,#f9b44a,#f2725b);color:#2a1606;border-color:transparent}
+html:root[data-worlds="sunset"] .subtabs button[aria-selected="true"]{background:#f9b44a;border-color:#f9b44a;color:#2a1606}
