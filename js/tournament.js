@@ -46,14 +46,14 @@ function clearRun(){ RUN = null; try{ localStorage.removeItem(SAVE_KEY); }catch(
 
 /* ---------- live stats pool ---------- */
 function tourPres(c, base){
-  if(!RUN || !RUN.stats.games) return base;
+  if(!RUN || !RUN.stats.games || (typeof runCtx === "function" && !runCtx())) return base;
   const st = RUN.stats.champ[c], G = RUN.stats.games;
   const tp = st ? (st.p + st.b) / G * 100 : 0;
   return Math.round((base * BASE_GAMES + tp * G) / (BASE_GAMES + G));
 }
 function tourPool(p, base){
   base = base || p.picks;
-  if(!RUN) return base;
+  if(!RUN || (typeof runCtx === "function" && !runCtx())) return base;
   const pc = RUN.stats.pchamp[p.key]; if(!pc) return base;
   const out = base.map(x => [...x]);
   Object.entries(pc).forEach(([c, v]) => {
@@ -64,11 +64,11 @@ function tourPool(p, base){
   return out;
 }
 function tourPlayerLine(p){
-  if(!RUN) return "";
+  if(!RUN || (typeof runCtx === "function" && !runCtx())) return "";
   const s = RUN.stats.players[p.key]; if(!s || !s.g) return "";
   const pc = RUN.stats.pchamp[p.key] || {};
   const champs = Object.entries(pc).sort((a,b) => b[1].g - a[1].g).map(([c,v]) => `${esc(c)} ${v.w}-${v.g - v.w}`).join(", ");
-  return `<div class="here">At this Worlds: ${s.g} games · KDA ${kdaOf(s)} · rating ${(s.rt / s.g).toFixed(1)} · ${s.pog} POG${champs ? `<br><span class="notes">${champs}</span>` : ""}</div>`;
+  return `<div class="here">In your run: ${s.g} games · KDA ${kdaOf(s)} · rating ${(s.rt / s.g).toFixed(1)} · ${s.pog} POG${champs ? `<br><span class="notes">${champs}</span>` : ""}</div>`;
 }
 const kdaOf = s => ((s.k + s.a) / Math.max(1, s.d)).toFixed(1);
 

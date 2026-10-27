@@ -27,13 +27,17 @@ function chips(p){
   return `<div class="chips">${p.picks.map(([c,g,w])=>{const[m,t]=metaOf(c);return `<span class="chip ${m}" data-tc="${esc(c)}" tabindex="0">${icon(c,18)}${esc(c)} <em>${g?g+"g ":""}${w}%</em></span>`}).join("")}</div>`;
 }
 
+/* Simulated games stay inside their own mode: a tournament run's numbers show only on tournament screens
+   (and a draft started from the tournament). Everywhere else the app shows real data only. */
+let CUR="tour";
+const runCtx=()=>(typeof RUN!=="undefined"&&RUN&&(CUR==="tour"||(CUR==="draft"&&DS.tour)))?RUN:null;
 /* tabs */
 const VIEWS=[["tour","Tournament"],["draft","Champ select"],["teams","Teams"],["top","Top"],["jungle","Jungle"],["mid","Mid"],["adc","ADC"],["support","Support"],["meta","Meta"]];
 const VROLE={top:"TOP",jungle:"JGL",mid:"MID",adc:"ADC",support:"SUP"};
 const tabs=document.getElementById("tabs");
 tabs.innerHTML=VIEWS.map(([k,l])=>`<button role="tab" id="tab-${k}" data-v="${k}" aria-selected="false">${l}</button>`).join("");
 function show(v){
-  if(!VIEWS.some(x=>x[0]===v))v="tour";
+  if(!VIEWS.some(x=>x[0]===v))v="tour";CUR=v;
   const tv=document.getElementById("v-tour");if(tv){tv.hidden=v!=="tour";if(v==="tour"&&typeof renderTour==="function")renderTour()}
   tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false"));
   document.getElementById("v-teams").hidden=v!=="teams";
@@ -273,7 +277,7 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const enemy=inDraft(tid)?picksOf(otherId(tid)).find(x=>x.r===p.role):null;
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
   /* display: this Worlds' games first (bright), 2026 pro numbers dimmed in brackets */
-  const tp=(typeof RUN!=="undefined"&&RUN&&RUN.stats.pchamp[p.key])||{},hasRun=typeof RUN!=="undefined"&&!!RUN;
+  const RX=runCtx(),tp=(RX&&RX.stats.pchamp[p.key])||{},hasRun=!!RX;
   const wp=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n])||{};
   const shown=[...new Set([...Object.keys(wp).sort((a,b)=>wp[b].g-wp[a].g),...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
   const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c],wv=wp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
@@ -309,20 +313,20 @@ function teamTip(id){const t=team(id),ps=picksOf(id),open=openRoles(id),C=compOf
 const hb=(label,inner,val,sub)=>`<div class="hb"><span>${label}</span><i>${inner}</i><span class="v">${val}<small>${sub}</small></span></div>`;
 const fill=(w,cls)=>`<b${cls?` class="${cls}"`:""} style="width:${Math.max(0,Math.min(100,w))}%"></b>`;
 const infoI=t=>`<span class="info" tabindex="0" aria-label="${esc(t)}">!<span class="tipx">${esc(t)}</span></span>`;
-function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.pin[1]:0;const st=typeof RUN!=="undefined"&&RUN&&RUN.stats.champ[c];if(st){w+=st.w;l+=st.p-st.w}return [w,l]}
+function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.pin[1]:0;const RX=runCtx(),st=RX&&RX.stats.champ[c];if(st){w+=st.w;l+=st.p-st.w}return [w,l]}
 /* Worlds meta: 22 play-in games (NerfPlz top list for bans, play-in W-L for picks) plus every game of your run */
 function worldsMeta(c){const d=CHAMP_DB[c]||{},ch=CH.find(y=>y[0]===c),PG=22;let g=PG,p=0,b=0,w=0;
   if(d.pin&&(d.pin[0]+d.pin[1])){p=d.pin[0]+d.pin[1];w=d.pin[0]}else if(ch&&ch[2]!=null)p=Math.round(ch[2]/100*PG);
   if(ch&&ch[3]!=null)b=Math.round(ch[3]/100*PG);
   const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,sw=L?L.n:0;let gb=PG+(L?(L.nb!=null?L.nb:sw):0);if(L){g+=sw;const x=L.champ[c];if(x){p+=x.p;b+=x.b;w+=x.w}}
-  const R=typeof RUN!=="undefined"&&RUN&&RUN.stats,rs=R&&R.champ[c];
+  const RX=runCtx(),R=RX&&RX.stats,rs=R&&R.champ[c];
   /* ban rate only over games whose bans are published */
   return {g,gb,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/gb*100),swiss:sw,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
 /* champions seen on the same team at this Worlds (play-in drafts + your run): [name, wins together, games together] */
 function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||[x,0,0];e[2]++;if(won)e[1]++;m.set(x,e)};
   COMPS.forEach(([s,g,wc,lc])=>{if(wc.includes(c))wc.forEach(x=>x!==c&&add(x,true));if(lc.includes(c))lc.forEach(x=>x!==c&&add(x,false))});
   if(typeof WORLDS_LIVE!=="undefined")WORLDS_LIVE.games.forEach(gm=>["blue","red"].forEach(sd=>{const cs=gm.pl[sd].map(r=>r[2]);if(cs.includes(c)){const won=gm.w===gm[sd];cs.forEach(x=>x!==c&&add(x,won))}}));
-  if(typeof RUN!=="undefined"&&RUN)RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
+  if(runCtx())runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
   return [...m.values()].filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]||(b[1]/b[2])-(a[1]/a[2]))}
 /* five partners: measured pair lift first, then winning team-mates at this Worlds */
 function pairs5(c){const out=synOf(c).filter(x=>x[1]>0).map(([x,l])=>({x,em:"+"+l,cls:"g"}));const seen=new Set(out.map(o=>o.x));
@@ -332,16 +336,15 @@ function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(
   const more=[];Object.entries(CTR).forEach(([o,d])=>{d.s.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].w.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
   more.sort((a,b)=>a[1]-b[1]).forEach(([x,w])=>{if(!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"b",other:1})}});
   if(out.length<6&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.endsWith("|"+c)&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[0];if(!seen.has(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"b",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
-  if(out.length<6&&typeof RUN!=="undefined"&&RUN){const m=new Map();RUN.matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
+  if(out.length<6&&runCtx()){const m=new Map();runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
     [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"b",note:`beat it ${w}-${g-w} in your run`})}})}
   return out.slice(0,6)}
 function mostPicked(c){const m=new Map(),d=CHAMP_DB[c];
-  (d&&d.pinBy||[]).forEach(([n,t,wl])=>{const [w,l]=wl.split("-").map(Number);m.set(n,{n,t,g:w+l,w})});
-  if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const e=m.get(n)||{n,t:WORLDS_LIVE.players[n].team,g:0,w:0};e.g+=v.g;e.w+=v.w;e.t=WORLDS_LIVE.players[n].team;m.set(n,e)});
+    if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const P=WORLDS_LIVE.players[n],t=P?P.team:(WORLDS_LIVE.pinTeam||{})[n]||"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,3).map(e=>({...e,s:sea(e.n)}))}
 /* your simulated run's players on this champion (shown separately from the real Worlds numbers) */
-function mostPickedRun(c){if(typeof RUN==="undefined"||!RUN)return[];return Object.entries(RUN.stats.pchamp).map(([key,pc])=>{const v=pc[c];if(!v)return null;const [tid,i]=key.split("|");return {n:team(tid).p[+i].n,t:tid,g:v.g,w:v.w}}).filter(Boolean).sort((a,b)=>b.g-a.g).slice(0,3)}
+function mostPickedRun(c){const RX=runCtx();if(!RX)return[];return Object.entries(RX.stats.pchamp).map(([key,pc])=>{const v=pc[c];if(!v)return null;const [tid,i]=key.split("|");return {n:team(tid).p[+i].n,t:tid,g:v.g,w:v.w}}).filter(Boolean).sort((a,b)=>b.g-a.g).slice(0,3)}
 /* a champion's status in the draft on screen: picked / banned this game, or locked by Fearless (with game and team) */
 function draftStatus(c){const dv=document.getElementById("v-draft");if(!dv||dv.hidden)return null;
   const st=DS.steps.find(x=>x.c===c);if(st)return st.k==="ban"?{k:"ban",t:st.t,tag:"Ban",title:`Banned by ${st.t} this game`}:{k:"pick",t:st.t,tag:st.t,title:`Picked by ${st.t} this game`};
@@ -391,18 +394,34 @@ function placeTip(e){const r=e.target.getBoundingClientRect?e.target.getBounding
 /* the card stays open while the pointer moves onto it, so its ! notes can be read */
 let tipT=null,tipEl=null;
 let tipD=null;
-function tipOn(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;
+function tipOn(e){if(TOUCH)return;const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(!el||tip.contains(el))return;clearTimeout(tipT);if(el===tipEl&&!tip.hidden)return;
   clearTimeout(tipD);if(el.dataset.side&&e.type==="mouseover"){if(!tip.hidden){tip.hidden=true;tipEl=null}tipD=setTimeout(()=>showTip(el),300);return}showTip(el)}
 function showTip(el){tipEl=el;
   const ch=!!el.dataset.tc&&!el.dataset.tp;tip.classList.toggle("wide",ch);tip.classList.toggle("pl",!!el.dataset.tp);
   tip.innerHTML=el.dataset.tp?playerTip(...el.dataset.tp.split("|").map((v,i)=>i?+v:v)):el.dataset.tt?teamTip(el.dataset.tt):champTip(el.dataset.tc);tip.hidden=false;placeTip({target:el})}
-function tipOff(e){const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipD);clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},el.dataset.side?120:220)}}
+function tipOff(e){if(TOUCH)return;const el=e.target.closest&&e.target.closest("[data-tp],[data-tc],[data-tt]");if(el&&!tip.contains(el)){clearTimeout(tipD);clearTimeout(tipT);tipT=setTimeout(()=>{tip.hidden=true;tipEl=null},el.dataset.side?120:220)}}
+/* touch screens (phones, tablets): no hover, so a tap opens the card as a sheet from the bottom instead of picking.
+   In champ select the sheet carries the Pick / Ban button. Desktop keeps hover cards and click-to-pick. */
+const touchMQ=matchMedia("(hover: none) and (pointer: coarse)");let TOUCH=touchMQ.matches;
+try{touchMQ.addEventListener("change",e=>{TOUCH=e.matches})}catch(e){}
+const tipBg=document.createElement("div");tipBg.className="tipbg";tipBg.hidden=true;document.body.appendChild(tipBg);
+function closeTip(){clearTimeout(tipD);clearTimeout(tipT);tip.hidden=true;tipEl=null;tip.classList.remove("sheet");tipBg.hidden=true}
+function openSheet(el,pickC){showTip(el);tip.classList.add("sheet");tip.style.left=tip.style.top=tip.style.width=tip.style.maxWidth="";tipBg.hidden=false;
+  const nx=SEQ[DS.steps.length],act=pickC?(nx&&nx[1]==="ban"?"Ban":"Pick"):"";
+  tip.insertAdjacentHTML("afterbegin",`<div class="sheetbar">${pickC?`<button class="btn pri" data-sheetpick="${esc(pickC)}">${act} ${esc(pickC)}</button>`:""}<button class="btn" data-sheetclose aria-label="Close">Close</button></div>`)}
+tipBg.addEventListener("click",closeTip);
+tip.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.hasAttribute("data-sheetclose")){closeTip();return}
+  if(b.dataset.sheetpick){const c=b.dataset.sheetpick;closeTip();doPick(c)}});
+document.addEventListener("click",e=>{if(!TOUCH||tip.contains(e.target))return;
+  const btn=e.target.closest("button[data-c]"),inDraftV=btn&&document.getElementById("v-draft").contains(btn);
+  if(inDraftV&&!btn.disabled){e.preventDefault();e.stopPropagation();openSheet(btn.querySelector("[data-tc]")||btn,btn.dataset.c);return}
+  const el=e.target.closest("[data-tp],[data-tc],[data-tt]");if(el){e.preventDefault();e.stopPropagation();openSheet(el,null)}},true);
 /* clicking a champion (to pick or ban) always closes its card */
-document.addEventListener("click",e=>{if(!tip.contains(e.target)){clearTimeout(tipD);tip.hidden=true;tipEl=null}},true);
+document.addEventListener("click",e=>{if(!TOUCH&&!tip.contains(e.target)){clearTimeout(tipD);tip.hidden=true;tipEl=null}},true);
 tip.addEventListener("mouseenter",()=>clearTimeout(tipT));tip.addEventListener("mouseleave",()=>{tip.hidden=true;tipEl=null});
 document.addEventListener("mouseover",tipOn);document.addEventListener("mouseout",tipOff);
 document.addEventListener("focusin",tipOn);document.addEventListener("focusout",e=>{if(!tip.contains(e.relatedTarget))tipOff(e)});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!tip.hidden){tip.hidden=true;tipEl=null}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!tip.hidden)closeTip()});
 window.addEventListener("scroll",()=>{tip.hidden=true;tipEl=null},{passive:true});
 
 /* ---- analysis ---- */

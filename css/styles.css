@@ -593,3 +593,18 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 #tip .ptab td{padding-top:4px;padding-bottom:4px}
 #tip .ptab .chip{min-width:62px;justify-content:center}
 #tip .ptab .chip.off{background:transparent;color:var(--muted);border-color:var(--muted)}
+/* touch screens: cards open as a bottom sheet; long-press doesn't select text or open the copy menu */
+.tipbg{position:fixed;inset:0;z-index:49;background:rgba(0,0,0,.45)}
+#tip.sheet{left:0!important;right:0;top:auto!important;bottom:0;width:auto!important;max-width:none!important;max-height:78vh;overflow:auto;
+  padding:0 14px calc(14px + env(safe-area-inset-bottom,0px));border-left:0;border-right:0;border-bottom:0;animation:sheetin .18s ease-out}
+@keyframes sheetin{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+#tip .sheetbar{position:sticky;top:0;z-index:1;display:flex;gap:8px;justify-content:flex-end;padding:10px 0;margin-bottom:2px;background:inherit;background:color-mix(in srgb,var(--panel) 96%,transparent);border-bottom:1px solid var(--line)}
+#tip .sheetbar .btn{min-height:40px;padding:0 16px}
+#tip .sheetbar .btn.pri{margin-right:auto;background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700}
+@media (hover:none) and (pointer:coarse){
+  .hov,[data-tp],[data-tc],[data-tt],.cbtn,.rec{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+}
+@media (prefers-reduced-motion:reduce){#tip.sheet{animation:none}}
+.hb .v small{white-space:normal;line-height:1.15}
+#tip.sheet .hb{grid-template-columns:96px minmax(0,1fr) 92px}
+#tip .sheetbar{background:var(--panel)}
