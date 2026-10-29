@@ -1,6 +1,26 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 27 Oct 2026: **29 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL). Data: `js/worlds-live.js`.
+Updated 29 Oct 2026: **34 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) plus Swiss round 4 day 1 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON). Data: `js/worlds-live.js`.
+
+## 28 Oct games (added 29 Oct)
+- **Source:** the Oracle's Elixir 2026 data file downloaded 29 Oct (data to 28 Oct): sides, winner, length, bans, picks, K/D/A, CS, CS difference at 15, damage share, objectives, first pick. Kill participation is calculated from kills and assists over team kills.
+- **Cross-check:** every player's champion and K/D/A in all 5 games, plus CS, damage share and towers for T1–MKOI, match pickorban.com's match pages (ps-1711003, ps-1711002). Pickorban showed T1–MKOI game 1 as 20:10; the file says 40:00, which fits the CS and gold, so the file is used. gol.gg, NerfPlz and dpm.lol pages couldn't be reached this time.
+- **Check script:** `research/build/build_from_oe.py` (run on a scratch copy) reports all 34 Swiss games OK against the file (`research/model/oe_check.txt`), and rebuilt `js/h2h.js` to 28 Oct. Its only other changes were list order, so `worlds-live.js` was edited by hand.
+- **Player of the Game:** still not published by any source checked.
+
+## Out-of-sample check, 28 Oct (the app before this update, 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| T1 vs MKOI G1 (T1 blue) | T1 75% | T1 won |
+| T1 vs MKOI G2 (T1 blue) | T1 85% | T1 won |
+| LYON vs IG G1 (IG red) | IG 49% | IG won |
+| IG vs LYON G2 (LYON red) | LYON 51% | LYON won |
+| LYON vs IG G3 (IG red) | IG 49% | IG won |
+
+- Favourite won 3 of 5; log loss 0.508 and Brier 0.168. The IG–LYON games were coin flips to the app (49–51%), so they say little either way.
+- T1 G2 at 85% is above the ~80% ceiling the calibration aims for (same issue as T1–CFO on 26 Oct: form plus star bonuses stack).
+- Running total across all real Swiss games scored before their data was added (23 + 6 + 5): favourite won 20 of 34 (59%).
+- The real-vs-simulator table below has not been re-run with these games.
 
 ## What was collected per game
 - **All games:** sides, winner, length, all 10 bans and 10 picks with roles, and each player's K/D/A, CS, damage share and kill participation (kill participation is calculated from kills where a source didn't list it).
@@ -43,8 +63,8 @@ Updated 27 Oct 2026: **29 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24
 - Length, objectives and who gets the kills are close. The sim produces about 20% too few kills.
 
 ## How the app uses it (never for simulated standings)
-- **Champion cards (Worlds meta):** play-ins (22 games) plus the real Swiss games, so 51 games now (bans over 45). Your simulated run is shown on a separate line.
-- **Draft presence:** the blended pro presence is mixed with real Worlds presence. The Worlds share is games / (games + 60), so about 46% now, rising as more games are added.
+- **Champion cards (Worlds meta):** play-ins (22 games) plus the real Swiss games, so 56 games now (bans over all 56; checked in the app, 29 Oct). Your simulated run is shown on a separate line.
+- **Draft presence:** the blended pro presence is mixed with real Worlds presence. The Worlds share is games / (games + 60), so about 48% now (56 games), rising as more games are added.
 - **Win rate:** real Worlds wins are folded into the sample-adjusted win rate, counted double for recency.
 - **Pairs with:** team-mates who won together at Worlds. Draft suggestions add a bonus for pairs with 2+ games together.
 - **Countered by:** lane opponents that beat a champion at Worlds. Lane matchups with 2+ games are also used where METAsrc has no number.
@@ -66,8 +86,12 @@ Updated 27 Oct 2026: **29 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24
 
 ## Updating after each match day
 Add the new games to `js/worlds-live.js` (same row format) and bump the cache version. Everything else recalculates on load.
+With a newer Oracle's Elixir file in `research/`: run `research/build/build_from_oe.py` on a scratch copy to rebuild `js/h2h.js` and check every game, then copy back only the files that really changed (see CLAUDE.md).
 
 ## Sources
+- Oracle's Elixir 2026 match data file (downloaded 29 Oct, data to 28 Oct; kept local in `research/`)
+- https://pickorban.com/matches/ps-1711003 (MKOI vs T1, 28 Oct)
+- https://pickorban.com/matches/ps-1711002 (IG vs LYON, 28 Oct)
 - https://dotesports.com/league-of-legends/news/worlds-2026-swiss-day-1-results
 - https://dpm.lol/esports/matches/139806-anyones-legend-vs-karmine-corp
 - https://dpm.lol/esports/matches/139807

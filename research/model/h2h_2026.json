@@ -19,7 +19,7 @@
 6,
 [
 "LPL",
-"WLDs"
+"Worlds"
 ]
 ],
 "DK": [
@@ -41,14 +41,14 @@
 3,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "TL": [
 0,
 2,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -72,28 +72,35 @@
 10,
 [
 "LPL",
-"WLDs"
+"Worlds"
 ]
 ],
 "GEN": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "TSW": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "HLE": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
+]
+],
+"LYON": [
+2,
+1,
+[
+"Worlds"
 ]
 ]
 },
@@ -123,15 +130,15 @@
 6,
 1,
 [
-"FST"
+"First Stand"
 ]
 ],
 "T1": [
 4,
 2,
 [
-"EWC",
-"MSI"
+"MSI",
+"EWC"
 ]
 ],
 "LYON": [
@@ -153,7 +160,7 @@
 1,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "DK": [
@@ -167,14 +174,14 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "KC": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -191,7 +198,7 @@
 8,
 [
 "LPL",
-"WLDs"
+"Worlds"
 ]
 ],
 "AL": [
@@ -199,7 +206,7 @@
 9,
 [
 "LPL",
-"WLDs"
+"Worlds"
 ]
 ],
 "G2": [
@@ -207,7 +214,7 @@
 3,
 [
 "MSI",
-"WLDs"
+"Worlds"
 ]
 ],
 "TSW": [
@@ -221,7 +228,7 @@
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -230,28 +237,28 @@
 18,
 10,
 [
+"LCK",
 "EWC",
 "KeSPA Cup",
-"LCK",
-"WLDs"
+"Worlds"
 ]
 ],
 "GEN": [
 9,
 9,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "HLE": [
 14,
 17,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "TL": [
@@ -265,16 +272,16 @@
 4,
 2,
 [
-"EWC",
-"MSI"
+"MSI",
+"EWC"
 ]
 ],
 "BLG": [
 2,
 4,
 [
-"EWC",
-"MSI"
+"MSI",
+"EWC"
 ]
 ],
 "G2": [
@@ -288,14 +295,21 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "CFO": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
+]
+],
+"MKOI": [
+2,
+0,
+[
+"Worlds"
 ]
 ]
 },
@@ -304,27 +318,27 @@
 10,
 18,
 [
+"LCK",
 "EWC",
 "KeSPA Cup",
-"LCK",
-"WLDs"
+"Worlds"
 ]
 ],
 "HLE": [
 4,
 12,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "GEN": [
 9,
 9,
 [
-"EWC",
-"LCK"
+"LCK",
+"EWC"
 ]
 ],
 "AL": [
@@ -339,7 +353,7 @@
 0,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "BLG": [
@@ -360,7 +374,7 @@
 2,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -369,41 +383,41 @@
 17,
 11,
 [
-"KeSPA Cup",
 "LCK",
-"WLDs"
+"KeSPA Cup",
+"Worlds"
 ]
 ],
 "LYON": [
 5,
 1,
 [
-"FST",
-"WLDs"
+"First Stand",
+"Worlds"
 ]
 ],
 "G2": [
 0,
 3,
 [
-"FST"
+"First Stand"
 ]
 ],
 "T1": [
 9,
 9,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "DK": [
 9,
 9,
 [
-"EWC",
-"LCK"
+"LCK",
+"EWC"
 ]
 ],
 "KC": [
@@ -417,7 +431,7 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -426,27 +440,27 @@
 11,
 17,
 [
-"KeSPA Cup",
 "LCK",
-"WLDs"
+"KeSPA Cup",
+"Worlds"
 ]
 ],
 "DK": [
 12,
 4,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "T1": [
 17,
 14,
 [
+"LCK",
 "EWC",
-"KeSPA Cup",
-"LCK"
+"KeSPA Cup"
 ]
 ],
 "TSW": [
@@ -488,14 +502,14 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "IG": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -511,21 +525,21 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "MKOI": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "T1": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -541,7 +555,7 @@
 0,
 3,
 [
-"FST"
+"First Stand"
 ]
 ],
 "HLE": [
@@ -563,21 +577,21 @@
 4,
 [
 "MSI",
-"WLDs"
+"Worlds"
 ]
 ],
 "IG": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "LOS": [
 0,
 2,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -586,21 +600,21 @@
 3,
 0,
 [
-"FST"
+"First Stand"
 ]
 ],
 "BLG": [
 1,
 6,
 [
-"FST"
+"First Stand"
 ]
 ],
 "GEN": [
 3,
 0,
 [
-"FST"
+"First Stand"
 ]
 ],
 "TES": [
@@ -608,7 +622,7 @@
 3,
 [
 "MSI",
-"WLDs"
+"Worlds"
 ]
 ],
 "HLE": [
@@ -644,22 +658,22 @@
 3,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "LOS": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "KC": [
 20,
 9,
 [
-"EWC",
-"LEC"
+"LEC",
+"EWC"
 ]
 ],
 "MKOI": [
@@ -675,16 +689,16 @@
 1,
 5,
 [
-"FST",
-"WLDs"
+"First Stand",
+"Worlds"
 ]
 ],
 "TL": [
 14,
 9,
 [
-"EWC",
-"LCS"
+"LCS",
+"EWC"
 ]
 ],
 "BLG": [
@@ -699,7 +713,7 @@
 0,
 [
 "MSI",
-"WLDs"
+"Worlds"
 ]
 ],
 "G2": [
@@ -727,7 +741,14 @@
 1,
 0,
 [
-"WLDs"
+"Worlds"
+]
+],
+"IG": [
+1,
+2,
+[
+"Worlds"
 ]
 ]
 },
@@ -736,8 +757,8 @@
 9,
 14,
 [
-"EWC",
-"LCS"
+"LCS",
+"EWC"
 ]
 ],
 "T1": [
@@ -758,21 +779,21 @@
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "BLG": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "AL": [
 2,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 },
@@ -789,8 +810,8 @@
 2,
 4,
 [
-"EWC",
-"MSI"
+"MSI",
+"EWC"
 ]
 ],
 "TL": [
@@ -812,7 +833,7 @@
 0,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "DK": [
@@ -826,22 +847,22 @@
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "BLG": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "G2": [
 9,
 20,
 [
-"EWC",
-"LEC"
+"LEC",
+"EWC"
 ]
 ]
 },
@@ -859,21 +880,28 @@
 1,
 [
 "EWC",
-"WLDs"
+"Worlds"
 ]
 ],
 "CFO": [
 1,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "DK": [
 0,
 2,
 [
-"WLDs"
+"Worlds"
+]
+],
+"T1": [
+0,
+2,
+[
+"Worlds"
 ]
 ],
 "G2": [
@@ -903,21 +931,21 @@
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "G2": [
 0,
 1,
 [
-"WLDs"
+"Worlds"
 ]
 ],
 "TSW": [
 2,
 0,
 [
-"WLDs"
+"Worlds"
 ]
 ]
 }

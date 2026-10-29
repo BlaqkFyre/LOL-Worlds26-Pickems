@@ -41,7 +41,7 @@ The real Swiss games played so far (`js/worlds-live.js`) feed the champion cards
 
 ## Themes
 
-The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in an event theme — *Hextech Gold*, *Brooklyn Final*, *Summoner's Cup*, or one of three city editions: *Brooklyn · Subway* (station-sign black and white, Helvetica, real route colours), *Texas · Lone Star* (flag navy and red on limestone cream) and *LA · Sunset* (golden-hour sky over Pacific dusk blue). Choices are remembered in the browser.
+The look is an "Arena HUD" style (Chakra Petch and Rajdhani type, clipped panels, thick stat bars). Top-right of the page: the **ⓘ** icon shows how ratings are made and every source; the sun/moon button switches light and dark mode; **Worlds mode** swaps in an event theme — *Hextech Gold*, *Arcade Smash* (neon violet with CRT scanlines, pixel-type title and arcade-yellow highlights; formerly Brooklyn Final), *Summoner's Cup*, or one of three city editions: *Brooklyn · Subway* (station-sign black and white, Helvetica, route-sign green buttons, and the route bullets of the lines at Atlantic Av–Barclays Ctr), *Texas · Lone Star* (flag navy and red on limestone cream) and *LA · Sunset* (golden-hour sky over Pacific dusk blue). Choices are remembered in the browser.
 
 Champion square icons load from Riot's Data Dragon CDN; set `ASSETS.icons = false` in `js/assets.js` to turn them off (tiles then show initials). Teams are shown as colour badges; the app uses no team or Riot logos. The trophy on the winners screen is an original design.
 

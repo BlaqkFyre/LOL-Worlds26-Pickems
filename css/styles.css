@@ -254,12 +254,13 @@ html:root[data-worlds="hextech"] h1 span{background:linear-gradient(180deg,#f0d3
 html:root[data-worlds="hextech"] .tabs button[aria-selected="true"],html:root[data-worlds="hextech"] .btn.primary{background:linear-gradient(180deg,#e2bd6a,#a67a2a);color:#0b0f15;border-color:#c89b3c}
 html:root[data-worlds="hextech"] h1{letter-spacing:.04em}
 
-/* 2. Brooklyn Final — night-city violet with neon magenta and cyan, tall condensed type */
+/* 2. Arcade Smash (value "brooklyn", was Brooklyn Final) — night-city violet with neon magenta and cyan, plus arcade touches:
+      CRT scanlines, a pixel-type title, neon glow and arcade-yellow highlights */
 html:root[data-worlds="brooklyn"]{
   --bg:#0b0616; --panel:#140c25; --line:#2f2150; --fg:#f4effe; --muted:#a898c9;
   --gold:#ff4fa3; --teal:#38e1ff; --blue:#8f7cff; --grey:#5c527a; --track:#211538;
   --lose:#ff7a7a; --bside:#38e1ff; --bsidebg:#0d1d33; --rside:#ff4fa3; --rsidebg:#2e0d24;
-  --meta:#38e1ff; --metabg:#0b2333; --mix:#ffcf4f; --mixbg:#2e2410; --off:#9a8fbb; --offbg:#1a1130;
+  --meta:#38e1ff; --metabg:#0b2333; --mix:#ffd60a; --mixbg:#2e2410; --off:#9a8fbb; --offbg:#1a1130;
   --pan2:#120a22; --glow:#2a1350; --chip:#1a1030; --pick:#38e1ff; --ban:#ff4fa3; --cupA:#7b2a7f; --cupB:#ffc2f0; --cupC:#38e1ff; --gemD:#5b1250;
 }
 html:root[data-worlds="brooklyn"] body{background:
@@ -267,9 +268,19 @@ html:root[data-worlds="brooklyn"] body{background:
   repeating-linear-gradient(90deg,rgba(143,124,255,.06) 0 1px,transparent 1px 56px),
   repeating-linear-gradient(0deg,rgba(143,124,255,.05) 0 1px,transparent 1px 56px),var(--bg)}
 html:root[data-worlds="brooklyn"] h1{font-weight:900;letter-spacing:.02em;font-size:clamp(36px,6vw,60px)}
-html:root[data-worlds="brooklyn"] h1 span{color:var(--gold);text-shadow:0 0 18px rgba(255,79,163,.55)}
-html:root[data-worlds="brooklyn"] .panel{box-shadow:0 0 0 1px rgba(255,79,163,.15),0 10px 30px rgba(0,0,0,.35)}
-html:root[data-worlds="brooklyn"] .tabs button[aria-selected="true"],html:root[data-worlds="brooklyn"] .btn.primary{background:linear-gradient(90deg,#ff4fa3,#8f7cff);color:#fff;border-color:transparent;box-shadow:0 0 14px rgba(255,79,163,.45)}
+html:root[data-worlds="brooklyn"] h1 span{color:var(--gold);font-family:"Press Start 2P",monospace;font-size:.6em;letter-spacing:0;vertical-align:.15em;text-shadow:0 0 6px #ff4fa3,0 0 18px rgba(255,79,163,.7),3px 3px 0 #38e1ff}
+html:root[data-worlds="brooklyn"] .panel{box-shadow:inset 0 0 0 1px rgba(255,79,163,.35),inset 0 0 28px rgba(56,225,255,.06)}
+html:root[data-worlds="brooklyn"] .tabs button[aria-selected="true"],html:root[data-worlds="brooklyn"] .btn.primary{background:linear-gradient(90deg,#ff4fa3,#8f7cff);color:#fff;border-color:transparent;box-shadow:0 0 14px rgba(255,79,163,.45);text-shadow:0 0 6px rgba(255,255,255,.7)}
+/* CRT scanlines over the page (no pointer events), a blinking INSERT COIN, glowing numbers */
+html:root[data-worlds="brooklyn"] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+@keyframes coinblink{50%{opacity:0}}
+html:root[data-worlds="brooklyn"] .topbar .eyebrow::after{content:"  ·  INSERT COIN";color:#38e1ff;animation:coinblink 1.2s steps(1) infinite}
+@media (prefers-reduced-motion:reduce){html:root[data-worlds="brooklyn"] .topbar .eyebrow::after{animation:none}}
+html:root[data-worlds="brooklyn"] .num{color:#38e1ff;text-shadow:0 0 6px rgba(56,225,255,.45)}
+/* arcade yellow for highlight labels and note bars; "In the mix" stays a duller, unlit amber */
+html:root[data-worlds="brooklyn"] .hl,html:root[data-worlds="brooklyn"] .tick{background:#ffd60a;color:#140c25}
+html:root[data-worlds="brooklyn"] .tick b{background:#140c25;color:#ffd60a}
+html:root[data-worlds="brooklyn"] .chip.mix{background:#3d3410;color:#e0b83a;border-color:#7a6418}
 
 /* 3. Summoner's Cup — light platinum broadcast look, silver gradients and ice blue */
 html:root[data-worlds="cup"]{
@@ -505,11 +516,15 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 /* ---- champion status chips (pick / ban / Fearless lock) ---- */
 .cc .stag{font:700 10px var(--display);letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;margin-left:2px}
 .cc.st-pick{border-color:var(--tc)}.cc.st-pick .stag{background:var(--tc);color:#fff}
-.cc.st-ban{opacity:.6}.cc.st-ban .ico{filter:grayscale(1)}.cc.st-ban>em{text-decoration:line-through}.cc.st-ban .stag{background:var(--ban,#c2410c);color:#fff}
+.cc.st-ban{opacity:.6}.cc.st-ban .ico{filter:grayscale(1)}.cc.st-ban>em{text-decoration:line-through}.cc.st-ban .stag{background:var(--tc,var(--ban,#c2410c));color:#fff}
 .cc.st-lock{opacity:.6;border-style:dashed}.cc.st-lock .ico{filter:grayscale(1)}.cc.st-lock .stag{border:1px solid var(--muted);color:var(--muted)}
 .stkey{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px;color:var(--muted)}.stkey .cc{padding:1px 4px}
 .ststat{font:700 12px var(--display);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-left:3px solid var(--tc,var(--muted));background:color-mix(in srgb,var(--muted) 12%,transparent)}
-.ststat.st-ban{border-left-color:var(--ban,#c2410c)}.ststat.st-lock{border-left-style:dashed}
+.ststat.st-lock{border-left-style:dashed}
+/* role-page hover: Worlds game log */
+.glog th,.glog td{padding:3px 5px;font-size:13px}
+.glog .gch{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.glog .gch .ico{--s:20px}
 .wform{display:grid;gap:3px;padding:6px 8px;border-left:3px solid var(--teal);background:color-mix(in srgb,var(--teal) 8%,transparent)}
 .wform b{font:700 12px var(--display);letter-spacing:.06em;text-transform:uppercase}.wform .tag{margin:2px 4px 0 0}
 .newtag{border-color:var(--teal);color:var(--teal);font-size:10px;padding:0 5px}
@@ -634,7 +649,6 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .tick .rail{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
 .tick .rail.run{mask-image:linear-gradient(90deg,transparent,#000 10px,#000 calc(100% - 10px),transparent)}
 .tick .rail.run span{display:inline-block;padding-left:100%;animation:tickr 16s linear infinite}
-.tick .rail:not(.run) span{white-space:normal}
 @keyframes tickr{to{transform:translateX(-100%)}}
 @media (prefers-reduced-motion:reduce){.tick .rail.run span{animation:none;padding-left:0;white-space:normal}.tick .rail{white-space:normal}}
 .ccardp .chead b{font-size:20px}
@@ -668,7 +682,8 @@ html:root[data-worlds="subway"] .cityband,html:root[data-worlds="lonestar"] .cit
 html:root[data-worlds="subway"] .cb-subway,html:root[data-worlds="lonestar"] .cb-lonestar,html:root[data-worlds="sunset"] .cb-sunset{display:flex}
 
 /* --- Brooklyn · Subway: station signage — white on black under a black band, Helvetica, real route colours.
-       A slight vertical gradient on the blacks gives a gloss like enamel sign panels. --- */
+       Buttons keep the same clipped shapes as the other themes: route-sign green when not selected, a white sign for the
+       selected section, N/Q/R yellow for the selected page and main actions. Light gradients and edges give an enamel gloss. --- */
 html:root[data-worlds="subway"]{
   --bg:#111214; --panel:#1d1e21; --line:#3a3c40; --fg:#ffffff; --muted:#a7a9ac;
   --gold:#fccc0a; --teal:#6cbe45; --blue:#4d8bff; --grey:#808183; --track:#2a2c2f;
@@ -677,26 +692,41 @@ html:root[data-worlds="subway"]{
   --pan2:#18191b; --glow:#26272a; --chip:#1d1e21; --pick:#6cbe45; --ban:#ee352e; --cupA:#808183; --cupB:#ffffff; --cupC:#fccc0a; --gemD:#2a2c2f;
   --display:"Helvetica Neue",Helvetica,Arial,sans-serif; --body:"Helvetica Neue",Helvetica,Arial,sans-serif; --mono:"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
-html:root[data-worlds="subway"] body{background:linear-gradient(180deg,#1a1b1e 0,#111214 340px,#0d0e0f 100%) fixed}
+html:root[data-worlds="subway"] body{background:radial-gradient(1200px 420px at 50% -80px,#2c2e33,transparent 70%),linear-gradient(180deg,#1a1b1e 0,#111214 340px,#0d0e0f 100%) fixed}
 html:root[data-worlds="subway"] .panel,html:root[data-worlds="subway"] .side,html:root[data-worlds="subway"] .an,html:root[data-worlds="subway"] .pcard,html:root[data-worlds="subway"] #tip{background:linear-gradient(180deg,#26272b 0%,#1d1e21 38%,#17181a 100%);border-color:#3a3c40;box-shadow:inset 0 1px 0 #fff;border-top:6px solid #000}
+/* panels: black sign band with a thin white rule under it */
+html:root[data-worlds="subway"] .panel{border-top:8px solid #000;padding-top:22px}
+html:root[data-worlds="subway"] .panel::after{width:100%;height:2px;top:7px;background:#fff;opacity:.9}
+html:root[data-worlds="subway"] .panel,html:root[data-worlds="subway"] .pcard{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.05)}
 html:root[data-worlds="subway"] .panel::before{display:none}
 html:root[data-worlds="subway"] h1,html:root[data-worlds="subway"] h2,html:root[data-worlds="subway"] h3{text-transform:none;letter-spacing:-.01em}
 html:root[data-worlds="subway"] h1 span{color:#fff}
+html:root[data-worlds="subway"] .eyebrow,html:root[data-worlds="subway"] .label{text-transform:none;letter-spacing:0}
+html:root[data-worlds="subway"] .eyebrow{color:#fff}
+html:root[data-worlds="subway"] .eyebrow::before{content:"";display:inline-block;width:.85em;height:.85em;border-radius:50%;background:#fccc0a;margin-right:7px;vertical-align:-1px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 0 0 1px rgba(0,0,0,.4)}
+/* station band: the route bullets of the lines that stop at Atlantic Av–Barclays Ctr, with a caption saying so */
 html:root[data-worlds="subway"] .cb-subway{align-items:center;gap:6px;height:36px;padding:0 12px;background:linear-gradient(180deg,#1b1c1e,#000 70%);border-bottom:1px solid #fff;font:700 13px var(--body)}
-html:root[data-worlds="subway"] .cb-subway i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);font-style:normal;color:#fff}
+html:root[data-worlds="subway"] .cb-subway i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);font-style:normal;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.3),inset 0 -2px 0 rgba(0,0,0,.25)}
 html:root[data-worlds="subway"] .cb-subway i.y{color:#111}
 html:root[data-worlds="subway"] .cb-subway span{margin-left:8px}
-html:root[data-worlds="subway"] .tabs button{clip-path:none;text-transform:none;letter-spacing:0;background:transparent;border:0;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
-html:root[data-worlds="subway"] .tabs button::before{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);color:#fff}
+html:root[data-worlds="subway"] .cb-subway em{font:400 12px var(--body);font-style:normal;color:#a7a9ac;margin-left:10px}
+@media (max-width:640px){html:root[data-worlds="subway"] .cb-subway{flex-wrap:wrap;height:auto;row-gap:4px;padding:6px 12px}html:root[data-worlds="subway"] .cb-subway em{flex-basis:100%;margin-left:0}}
+/* buttons: same clipped shapes as the other themes; route-sign green with an enamel gloss when not selected */
+html:root[data-worlds="subway"] .tabs button,html:root[data-worlds="subway"] .subtabs button,html:root[data-worlds="subway"] .btn,html:root[data-worlds="subway"] .seg button{background:linear-gradient(180deg,#19b152 0%,#00933c 55%,#007a32 100%);border-color:#00933c;color:#fff;text-transform:none;letter-spacing:0;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.22)}
+html:root[data-worlds="subway"] .tabs button{display:inline-flex;align-items:center;gap:8px;padding:7px 16px 7px 9px}
+html:root[data-worlds="subway"] .btn:disabled{opacity:.45}
+html:root[data-worlds="subway"] .tabs button::before{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);color:#fff;box-shadow:0 0 0 2px #fff}
 html:root[data-worlds="subway"] .tabs button[data-sec="play"]::before{content:"P";background:#ee352e}
 html:root[data-worlds="subway"] .tabs button[data-sec="details"]::before{content:"G";background:#0039a6}
 html:root[data-worlds="subway"] .tabs button[data-sec="teams"]::before{content:"T";background:#00933c}
-html:root[data-worlds="subway"] .tabs button[aria-selected="true"]{background:transparent;color:#fff;box-shadow:inset 0 -3px 0 #fff}
-html:root[data-worlds="subway"] .subtabs button{text-transform:none;letter-spacing:0;font-size:13px;border-color:#3a3c40;background:linear-gradient(180deg,#1f2023,#141516)}
-html:root[data-worlds="subway"] .subtabs button[aria-selected="true"]{background:#fccc0a;color:#111;border-color:#fccc0a}
+html:root[data-worlds="subway"] .tabs button[aria-selected="true"]{background:linear-gradient(180deg,#ffffff 0%,#f1f1f1 55%,#d9d9d9 100%);color:#111;border-color:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+html:root[data-worlds="subway"] .subtabs button{font-size:13px}
+html:root[data-worlds="subway"] .subtabs button[aria-selected="true"],html:root[data-worlds="subway"] .seg button[aria-pressed="true"],html:root[data-worlds="subway"] .btn.primary{background:linear-gradient(180deg,#ffdc45 0%,#fccc0a 55%,#e3b500 100%);color:#111;border-color:#fccc0a;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2),0 0 14px rgba(252,204,10,.25)}
+html:root[data-worlds="subway"] .modecard,html:root[data-worlds="subway"] .pickteam,html:root[data-worlds="subway"] .award,html:root[data-worlds="subway"] .mcard{background:linear-gradient(180deg,#26282c,#191a1d);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+html:root[data-worlds="subway"] .pickteam:has(input:checked){background:linear-gradient(180deg,#3a3206,#262105)}
+html:root[data-worlds="subway"] .modecard:has(input:checked){box-shadow:inset 0 3px 0 var(--gold)}
 html:root[data-worlds="subway"] .hl,html:root[data-worlds="subway"] .tick{background:#fccc0a;color:#111}
 html:root[data-worlds="subway"] .tick b{background:#111;color:#fccc0a}
-html:root[data-worlds="subway"] .btn.primary{background:#fccc0a;color:#111;border-color:#fccc0a}
 
 /* --- Texas · Lone Star: light daytime theme — flag navy (PMS 281) and red (PMS 193) on limestone cream --- */
 html:root[data-worlds="lonestar"]{
