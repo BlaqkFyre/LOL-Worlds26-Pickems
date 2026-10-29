@@ -18,7 +18,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 | Task | Status/blocker |
 |---|---|
-| **Sim session 1:** ratings and the "who wins" model | Not started. Read `research/sim-plan.md` first. Needs open decision 1 (below) before ratings replace anything on screen |
+| **Sim session 1:** ratings and the "who wins" model | Not started. Read `research/sim-plan.md` first. Starts with planning the ratings foundation with Luke (skills per role, what each is fitted from, the overall, how they feed the sim) before any fitting or code |
 | Sim sessions 2–5 | After session 1, in order (see the plan) |
 | Add Swiss round 4 games (28–30 Oct) to `js/worlds-live.js` | Not started. Steps in `research/worlds-live-2026.md`; bump the cache version |
 | Add Swiss round 5 (31 Oct), then knockouts (3–14 Nov) | Waits for the games |
@@ -31,15 +31,15 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Open decisions (Luke)
 
-From this session (29 Oct):
-1. **Ratings:** when sim session 1 fits ratings from results, do they replace the ratings shown on player cards, power rankings and tier lists, or only feed the sim?
-2. **Draft AI:** rebuild `scoreFor()` (hand-weighted) from data as part of the plan, or keep it?
-3. **Draft review:** move "Before draft" (`winP` on the rating gap) and "After draft" to the new who-wins model?
+None open right now.
 
-From `research/sim-plan.md`:
-4. Keep the old engine as a "Classic" mode, or remove it once the new one passes its tests?
-5. Show the match-day scorecard in the app, or keep it in the research notes?
-6. Confirm the minor leagues stay out of fitting.
+Decided 29 Oct (details in `research/sim-plan.md`):
+- **Ratings:** fitted ratings replace what's shown on the cards. Keep the idea: readable role skills + overall that are interesting and feed the match sim. **Plan the foundation with Luke first** (sim session 1).
+- **Draft AI:** rebuilt from data (comfort, team composition, meta, synergy, counters, plus whatever else the data shows).
+- **Draft review:** based on the new model. **Plan the foundation with Luke first** (sim session 4).
+- **Old engine:** kept. The app uses it until the new one passes its tests, then it stays as a reference, fallback and possible simple mode.
+- **Minor leagues:** out of fitting for now; used for player history and pools (e.g. 369).
+- **Scorecard:** not in the app for now. Show it to Luke as an artifact in the chat each session or match-day update; keep the numbers in the research notes.
 
 ---
 
@@ -51,7 +51,7 @@ From `research/sim-plan.md`:
 | `build_from_oe.py` labels every "WLDs" row as "Worlds" in the H2H "Met at" list, including the 17–19 Sep qualifier rows its own header says aren't Worlds. Game counts aren't affected | Before the script becomes the match-day routine (sim session 5) |
 | `build_from_oe.py` always overwrites `js/h2h.js` and `js/worlds-live.js`; an option to write to another folder would make test runs safer | Same as above |
 | How Swiss round 4 splits across 28–30 Oct is assumed in `js/tournament.js` (`DAYS`), not published | A published day-by-day schedule |
-| Old sim quirks, left alone because the sim is being replaced: odds use 300 runs (tournament), 600 (draft review) or 1500 (series); supports' CS diff is scaled by 0.3 twice in `gameStats` | Only if the old engine is kept as "Classic" |
+| Old sim quirks, left alone: odds use 300 runs (tournament), 600 (draft review) or 1500 (series); supports' CS diff is scaled by 0.3 twice in `gameStats` | If the old engine becomes a simple mode, decide with Luke whether to tidy these |
 
 ---
 
@@ -62,7 +62,7 @@ From `research/sim-plan.md`:
 - Added `CLAUDE.md`: start/end-of-session steps, NEVER-DO rules, repo rules, sim engine rules, files, code map. A first draft went out in Luke's commit `0929636`; this session fixed it (points at `research/sim-plan.md`, WLDs exclusion rule, build-script rule, code map).
 - Added `research/build/build_from_oe.py`, saved unchanged as pasted from the claude.ai chat that wrote it. Not run on this PC.
 - Added this file.
-- Decisions: `research/sim-plan.md` is the master copy of the plan; work stays in Code sessions; Custom tournament is parked.
+- Decisions: `research/sim-plan.md` is the master copy of the plan; work stays in Code sessions; Custom tournament is parked; the draft AI gets rebuilt from data; fitted ratings replace the shown ones (concept kept); the draft review uses the new model. Ratings and draft review foundations are planned with Luke first. All added to the plan's decisions.
 - No app files changed, no cache bump (still v30). How checked: text check only; the app wasn't loaded.
 
 ---

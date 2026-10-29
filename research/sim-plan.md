@@ -146,9 +146,16 @@ The biggest risk is overfitting: about 2,800 major-league games is enough for a 
 
 Open decisions for Luke:
 
-- [ ] Keep the old engine as a "Classic" mode, or remove it once the new one passes its tests?
-- [ ] Should the app show the scorecard (a small "how accurate is this" panel), or keep it in the research notes?
-- [ ] Confirm the minor leagues stay out of fitting (they're useful for player history only).
+None open right now.
+
+Decided:
+
+- [x] **Minor leagues stay out of fitting for now** (Luke, 29 Oct). Ratings, the who-wins model and event chances are fitted on the major leagues and internationals only. Minor-league games are used for player history and champion pools, e.g. a player with few major-league games such as TES's stand-in 369.
+- [x] **The scorecard is not shown in the app for now** (Luke, 29 Oct). Each session or match-day update shows it to Luke as an artifact in the Claude Code chat, and the running numbers are kept in the research notes.
+- [x] **The old engine stays** (Luke, 29 Oct). The app keeps using it until the new one passes its tests, and afterwards it's kept as a reference, a fallback, and possibly a simple-mode simulator. So session 5's "remove the old hand-set constants" doesn't apply: the old engine's code stays, and only the screens that use the new engine describe it.
+- [x] **Fitted ratings replace the ratings shown** on player cards, power rankings and tier lists (Luke, 29 Oct). What stays is the idea behind them: each player has role skills and an overall rating that are easy to read, mean something, are interesting to compare, and feed the match sim. **The foundation is planned with Luke before anything is built** (sim session 1): which skills each role has, what each is fitted from, how the overall is made, and how they feed the sim. Today's skills per role are in `ATTR` in `js/core.js`.
+- [x] **The draft review is based on the new model** (Luke, 29 Oct). Both "Before draft" and "After draft" move off the current formulas (`winP` on the rating gap; 600 runs of the old `simGame`). **The foundation is planned with Luke before anything is built** (sim session 4, once sessions 1–3 have produced the who-wins model and the simulator): what the review shows, how the draft changes the odds, and how each part is explained.
+- [x] **Draft AI is rebuilt from data** (Luke, 29 Oct). The hand-weighted `scoreFor()` in `js/core.js` is replaced. The new draft AI weighs comfort, team composition, meta, synergy and counters, plus anything else the data shows matters. Measuring each part's effect belongs with session 2; wiring it into the app belongs with session 4. Candidates to test in the data (not yet checked): pick and ban order (what pro teams take first, flex picks early, counter-picks late), side, target bans on a player's comfort picks, champion pool depth, damage mix, and Fearless locks in Bo3/Bo5.
 
 ## Related files
 

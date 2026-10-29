@@ -60,13 +60,15 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 
 ## Sim engine rules (master plan: `research/sim-plan.md`)
 
+- **Plan each foundation with Luke before building it** (ratings, draft AI, draft review, the simulator): agree what it shows, what it's built from and how it feeds the rest, with a worked example, then build.
 - **The app only changes in sim session 4.** Sessions 1–3 produce research reports and fitted tables, not app edits.
 - **Count each real game once,** matched by game ID. Once the Oracle's Elixir file covers a day, it is the source of record over `js/worlds-live.js`. Same rule for the NerfPlz patch tables (they already include play-in games).
 - **Judge only on held-out games** (train before 1 Sep, test after, plus Worlds games as they're played). The new sim ships only if it beats the current one on those games.
 - **Few parameters, shrink toward averages.** About 2,800 major-league games supports a simple model, not hundreds of free parameters.
 - **Ship small tables only.** The raw file stays local; the app gets small JS tables built from it.
 - **Seeded randomness:** the same seed must replay the same game.
-- **Minor leagues stay out of fitting** (player history only) unless Luke decides otherwise.
+- **Minor leagues stay out of fitting** (player history and champion pools only, e.g. 369) unless Luke decides otherwise.
+- **Scorecard as an artifact:** once the new model exists, each session or match-day update shows Luke the scorecard as an artifact in the chat (not in the app for now).
 - **Exclude the file's "WLDs" rows dated before 1 Oct** (17–19 Sep): they are a regional qualifier, not Worlds. Worlds play-ins are 15–18 Oct, Swiss from 23 Oct (the file's dates are UTC, a few hours ahead).
 - **The sim is one replaceable part of the app.** Draft, series, tournament, awards and stats screens only read the game record `pack()` stores (see Code map). Keep that shape, or change those readers on purpose.
 
