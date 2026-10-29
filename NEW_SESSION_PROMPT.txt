@@ -1,0 +1,5 @@
+I'm continuing work on my Worlds 2026 Pick'Em Lab. My repo is at C:\Users\Ruth\Documents\GitHub\LOL-Worlds26-Pickems (GitHub BlaqkFyre/LOL-Worlds26-Pickems, live on GitHub Pages).
+
+Before doing anything, read CLAUDE.md in that folder and follow it exactly, including its NEVER-DO rules. Then do its start-of-session steps: read SESSION_NOTES.md, README.md and research/worlds-live-2026.md, check git status and the last 8 commits, and reply with (a) a table of open tasks (Task | Status/blocker), (b) the open decisions waiting on me, (c) anything uncommitted, (d) the current cache version (?v=N in index.html).
+
+Then wait for what I want to work on. Don't run scripts, edit files, commit or push without my OK.
