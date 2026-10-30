@@ -106,7 +106,8 @@ function champCard(c,role){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=
   <div class="hsec"><div class="label"><span class="hl">Worlds · ${WM.g} games</span></div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${WM.w}-${WM.l}`:"—",WM.p?`${Math.round(WM.w/WM.p*100)}%${WM.p<5?" · small sample":""}`:"not played")}</div></div>
-  <div><div class="label">Played at Worlds by</div><div class="ccs c3">${mp.length?mp.map(e=>{const T=team(e.t),pi=T?T.p.findIndex(x=>x.n===e.n):-1;return `<span class="cc mp" style="--tc:${teamCol(e.t)}"${pi>=0?` data-tp="${e.t}|${pi}" tabindex="0"`:""} title="${esc(`${e.n} (${e.t}) · ${e.g} game${e.g>1?"s":""} on ${c} at Worlds, ${e.w}-${e.g-e.w}`)}"><span class="tm">${esc(e.t)}</span><span class="cn">${esc(e.n)}</span><em class="${e.w*2<e.g?"b":"g"}">${e.w}-${e.g-e.w}</em></span>`}).join(""):`<span class="notes">Not played at Worlds yet</span>`}</div></div></article>`}
+  <div><div class="label">Played at Worlds by</div><div class="ccs c3">${mp.length?mp.map(e=>{const T=team(e.t),pi=T?T.p.findIndex(x=>x.n===e.n):-1;return `<span class="cc mp" style="--tc:${teamCol(e.t)}"${pi>=0?` data-tp="${e.t}|${pi}" tabindex="0"`:""} title="${esc(`${e.n} (${e.t}) · ${e.g} game${e.g>1?"s":""} on ${c} at Worlds, ${e.w}-${e.g-e.w}`)}"><span class="tm">${esc(e.t)}</span><span class="cn">${esc(e.n)}</span><em class="${e.w*2<e.g?"b":"g"}">${e.w}-${e.g-e.w}</em></span>`}).join(""):`<span class="notes">Not played at Worlds yet</span>`}</div></div>
+  <div><div class="label">Counters ${infoI(BEATS_INFO)}</div><div class="ccs c3">${(bt=>bt.length?bt.map(o=>`<span class="cc" data-tc="${esc(o.x)}" tabindex="0" title="${esc(`${o.x} · ${o.note}${o.other?" · matchup from another lane":""}`)}">${icon(o.x,22)}<span class="cn">${esc(o.x)}</span><em class="g">${esc(o.em)}</em></span>`).join(""):`<span class="notes">no matchup data</span>`)(beats3(c))}</div></div></article>`}
 function champRoleView(role){
   const cs=POOL.filter(c=>primaryRole(c)===role).map(c=>[c,presOf(c)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
   const shown=cs.filter(c=>presOf(c)>0||worldsMeta(c).p+worldsMeta(c).b>0);
@@ -394,6 +395,13 @@ function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(
   if(out.length<6&&runCtx()){const m=new Map();runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
     [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"b",note:`beat it ${w}-${g-w} in your run`})}})}
   return out.slice(0,6)}
+/* three champions it counters: same-lane matchups it wins, then wins from other lanes, then lane opponents it beat at this Worlds */
+const BEATS_INFO="Champions it beats (above 50%), with its win rate in the matchup (METAsrc counter pages, ranked solo queue). Same lane first; then matchups from other lanes; then lane opponents it beat at Worlds (real games). Only champions seen in pro play are listed.";
+function beats3(c){const out=countersOf(c).beats.filter(([x,w])=>w>=50.5&&POOL.includes(x)).map(([x,w])=>({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"g"}));const seen=new Set(out.map(o=>o.x));seen.add(c);
+  const more=[];Object.entries(CTR).forEach(([o,d])=>{d.w.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].s.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
+  more.sort((a,b)=>b[1]-a[1]).forEach(([x,w])=>{if(w>=50.5&&!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"g",other:1})}});
+  if(out.length<3&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.startsWith(c+"|")&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[1];if(!seen.has(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"g",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
+  return out.slice(0,3)}
 function mostPicked(c,n=3){const m=new Map(),d=CHAMP_DB[c];
     if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const P=WORLDS_LIVE.players[n],t=P?P.team:(WORLDS_LIVE.pinTeam||{})[n]||"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
@@ -412,9 +420,9 @@ function draftStatus(c){const dv=document.getElementById("v-draft");if(!dv||dv.h
 function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),rs=[...(ROLEMAP[c]||[])];
   const inGame=new Map();[DS.me,DS.opp].forEach(id=>picksOf(id).forEach(p=>inGame.set(p.c,id)));
   const R=d.rec,RS=R?"26.16–26.20":d.sea?"2026 season":d.p20?"26.20 only":"",RT=R||d.sea||d.p20,WM=worldsMeta(c);
-  const mp=mostPicked(c),sy=pairs5(c),ctr=counters5(c);
+  const mp=mostPicked(c),sy=pairs5(c),ctr=counters5(c),bt=beats3(c);
   const stx=draftStatus,cc=o=>{const st=stx(o.x),tl=st?st.title:`${o.x}${o.note?" · "+o.note:""}${o.other?" · matchup from another lane":""}`;return `<span class="cc${st?" st-"+st.k:""}"${st?` style="--tc:${sideCol(st.sd)}"`:""} title="${esc(tl)}">${icon(o.x,22)}<span class="cn">${esc(o.x)}</span><em class="${o.cls}">${esc(o.em)}</em>${st?`<span class="stag">${esc(st.tag)}</span>`:""}</span>`};
-  const anySt=[...sy,...ctr].some(o=>stx(o.x));
+  const anySt=[...sy,...ctr,...bt].some(o=>stx(o.x));
   const who=TEAMS.flatMap(t=>t.p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,t}))).filter(o=>inDraft(o.t.id)&&DS.steps.length);
   const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":""].filter(Boolean);
   return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
@@ -432,6 +440,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
   <div class="hgrid"><div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, patch 26.20); where there are fewer than six, winning team-mates at Worlds (real games, then your run) fill the list. Draft suggestions also add a bonus for pairs that won together at Worlds.")}</div><div class="ccs c3">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
   <div><div class="label">Countered by ${infoI("Its win rate in the matchup (METAsrc counter pages). Same lane first; then matchups from other lanes; then lane opponents that beat it at Worlds (real games, then your run).")}</div><div class="ccs c3">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div></div>
+  <div><div class="label">Counters ${infoI(BEATS_INFO)}</div><div class="ccs c3">${bt.length?bt.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
   ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--bside)"><span class="stag">TEAM</span></span><span class="cc st-pick" style="--tc:var(--rside)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban" style="--tc:var(--bside)"><span class="stag">Ban</span></span><span class="cc st-ban" style="--tc:var(--rside)"><span class="stag">Ban</span></span> banned this game (tag colour = blue or red side) <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}
 function placeInfo(el){const x=el.querySelector(".tipx");if(!x)return;const r=el.getBoundingClientRect(),w=Math.min(240,innerWidth-16);

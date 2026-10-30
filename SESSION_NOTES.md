@@ -6,7 +6,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Where we are
 
-- **App:** v32 (30 Oct 2026): Swiss round 4 day 2 data, subway band restyled as an aged station sign (caption removed). App data and code are correct as they stand.
+- **App:** v33 (30 Oct 2026): "Counters" row on champion cards. v32 (same day): Swiss round 4 day 2 data, subway band restyled as an aged station sign (caption removed). App data and code are correct as they stand.
 - **Real data:** Swiss rounds 1–3 plus round 4 days 1–2, 39 games, in `js/worlds-live.js` (data to 29 Oct). H2H in `js/h2h.js` (data to 29 Oct). **TES 2-1 BLG is from Leaguepedia and pickorban, not yet the Oracle's Elixir file:** re-check it when the next file arrives.
 - **Sim engine plan:** written 27 Oct, committed `0929636` (29 Oct). Status: planned, not started. See `research/sim-plan.md`.
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
@@ -65,6 +65,8 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - **Subway band:** caption removed; the band now looks like an aged enamel station sign (grain texture, top white stripe, off-white Helvetica, faded bullets with scuffs, screw heads). CSS only, in `css/styles.css`.
 - Cache v31 → v32. How checked: local server in a new browser-pane tab at desktop and 375 px, console clean, data counts and H2H read in the console, role-page game log for 369 renders with the missing CS@15 shown as a dash. The temporary `.claude/launch.json` was removed afterwards.
 - Download link for the Oracle's Elixir file is now in the Sources section of `research/worlds-live-2026.md`.
+- Committed `4fe2ab1` and pushed.
+- **v33, Counters row:** champion page cards (`champCard`) and the hover card (`champTip`) now show "Counters": 3 champions this one beats (`beats3` in `js/core.js`). Order: same-lane METAsrc matchups at 50.5%+ (so the shown % rounds to 51%+), then other-lane matchups, then lane opponents it beat at Worlds; only champions seen in pro play (`POOL`). Example: Nocturne shows Rengar 55%, Locke 54%, Qiyana 54%. Champions with no qualifying matchup show "no matchup data" (27 of 163 before the 50.5% cut-off; not recounted after it). How checked: local server in a new browser-pane tab, every pool champion's row checked in the console (none at 50% or below), all 15 jungle cards show the row, hover card renders, a Counters chip opens that champion's hover card, 375 px with no sideways scroll, console clean. Not committed yet.
 
 ### Session (29 Oct 2026, later) — v31: themes, role-page hover, ticker fix, side colours, round 4 day 1
 - **Themes:** Brooklyn · Subway now uses the same clipped buttons as the other themes: route-sign green with an enamel gloss, white selected section, N/Q/R yellow selected page and main buttons, black sign band on panels, explained station band. "Brooklyn Final" renamed **Arcade Smash** (saved value still `brooklyn`): CRT scanlines, pixel-type title (Press Start 2P), neon glow, INSERT COIN, arcade-yellow labels and note bars, dull amber "In the mix".
