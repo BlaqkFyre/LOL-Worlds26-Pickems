@@ -1,6 +1,26 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 29 Oct 2026: **34 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) plus Swiss round 4 day 1 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON). Data: `js/worlds-live.js`.
+Updated 30 Oct 2026: **39 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) plus Swiss round 4 days 1–2 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG). Data: `js/worlds-live.js`.
+
+## 29 Oct games (added 30 Oct)
+- **KC 2-0 CFO:** from the Oracle's Elixir file downloaded 30 Oct (data to 29 Oct, 21:00 UTC). Every champion, K/D/A, CS, kill participation and damage share matches pickorban.com (ps-1711004); bans, length, towers, dragons, Barons, Heralds and voidgrubs match Leaguepedia's round 4 scoreboards.
+- **TES 2-1 BLG: not in the file yet** (the file ends before it). Taken from Leaguepedia's round 4 scoreboards (sides, winner, length, bans, champions, K/D/A, CS, all objectives) with damage share from pickorban (ps-1711001, whole %); kill participation is calculated from kills. Champions, K/D/A, CS, towers, dragons and Barons match on both sites in all 3 games. CS difference at 15 is not published on either, so it is null; first pick (`fp`) is left out (Leaguepedia's "pick selection" team is not always the first-pick team: KC had pick selection in KC–CFO game 2 but the file shows CFO picking first). **Re-check all 3 games against the next Oracle's Elixir file** and fill in CS@15 and `fp`.
+- **H2H:** `build_from_oe.py` (scratch copy) rebuilt `js/h2h.js` to 29 Oct (only change: KC 2-0 CFO at Worlds) and still reports 34/34 Swiss games OK. TES 2-1 BLG was then added by hand (TES v BLG 6-10 → 8-11, met at LPL and Worlds); the next rebuild should reproduce it. `research/model/h2h_2026.json` is the file's own output, so it does not have TES–BLG yet.
+- **Pick/ban check:** after the update, the app's Swiss pick, ban and win counts for all 84 champions match Leaguepedia's Main Event champion statistics (39 games) exactly. pickorban's statistics page came up empty and dpm.lol showed a bot check, so they weren't used.
+- Leaguepedia's checks of the 28 Oct games also match: the same lengths, including T1–MKOI game 1 at 40:00.
+
+## Out-of-sample check, 29 Oct (the app at v31, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| KC vs CFO G1 (KC blue) | KC 52% | KC won |
+| CFO vs KC G2 (KC red) | KC 78% | KC won |
+| BLG vs TES G1 (BLG blue) | BLG 89% | BLG won |
+| BLG vs TES G2 (BLG blue) | TES 10% | TES won |
+| TES vs BLG G3 (TES blue) | TES 24% | TES won |
+
+- Favourite won 3 of 5; log loss 0.945 and Brier 0.334, worse than a coin flip. The app had BLG at 76–90% in all three TES games, above the ~80% ceiling, and TES won the series.
+- Running total across all real Swiss games scored before their data was added (23 + 6 + 5 + 5): favourite won 23 of 39 (59%).
+- After the update (in-sample, only shows the direction): BLG is still 66–88% in the TES games and KC 61% / 88% against CFO. The form update can't fix the ratings gap, which is a job for the new sim (`research/sim-plan.md`).
 
 ## 28 Oct games (added 29 Oct)
 - **Source:** the Oracle's Elixir 2026 data file downloaded 29 Oct (data to 28 Oct): sides, winner, length, bans, picks, K/D/A, CS, CS difference at 15, damage share, objectives, first pick. Kill participation is calculated from kills and assists over team kills.
@@ -63,8 +83,8 @@ Updated 29 Oct 2026: **34 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24
 - Length, objectives and who gets the kills are close. The sim produces about 20% too few kills.
 
 ## How the app uses it (never for simulated standings)
-- **Champion cards (Worlds meta):** play-ins (22 games) plus the real Swiss games, so 56 games now (bans over all 56; checked in the app, 29 Oct). Your simulated run is shown on a separate line.
-- **Draft presence:** the blended pro presence is mixed with real Worlds presence. The Worlds share is games / (games + 60), so about 48% now (56 games), rising as more games are added.
+- **Champion cards (Worlds meta):** play-ins (22 games) plus the real Swiss games, so 61 games now (bans over all 61). Your simulated run is shown on a separate line.
+- **Draft presence:** the blended pro presence is mixed with real Worlds presence. The Worlds share is games / (games + 60), so about 50% now (61 games), rising as more games are added.
 - **Win rate:** real Worlds wins are folded into the sample-adjusted win rate, counted double for recency.
 - **Pairs with:** team-mates who won together at Worlds. Draft suggestions add a bonus for pairs with 2+ games together.
 - **Countered by:** lane opponents that beat a champion at Worlds. Lane matchups with 2+ games are also used where METAsrc has no number.
@@ -89,7 +109,12 @@ Add the new games to `js/worlds-live.js` (same row format) and bump the cache ve
 With a newer Oracle's Elixir file in `research/`: run `research/build/build_from_oe.py` on a scratch copy to rebuild `js/h2h.js` and check every game, then copy back only the files that really changed (see CLAUDE.md).
 
 ## Sources
-- Oracle's Elixir 2026 match data file (downloaded 29 Oct, data to 28 Oct; kept local in `research/`)
+- Oracle's Elixir 2026 match data file (downloaded 30 Oct, data to 29 Oct 21:00 UTC; kept local in `research/`). Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event (schedule, results, pick/side selection, 30 Oct)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_4 (TES vs BLG and KC vs CFO, 30 Oct)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (39 games, 30 Oct)
+- https://pickorban.com/matches/ps-1711001 (TES vs BLG, 29 Oct)
+- https://pickorban.com/matches/ps-1711004 (KC vs CFO, 29 Oct)
 - https://pickorban.com/matches/ps-1711003 (MKOI vs T1, 28 Oct)
 - https://pickorban.com/matches/ps-1711002 (IG vs LYON, 28 Oct)
 - https://dotesports.com/league-of-legends/news/worlds-2026-swiss-day-1-results

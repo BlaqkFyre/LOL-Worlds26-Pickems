@@ -6,8 +6,8 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Where we are
 
-- **App:** v31 (29 Oct 2026): Subway and Arcade Smash themes, role-page game-log hover, ticker fix, side-coloured pick/ban tags. App data and code are correct as they stand.
-- **Real data:** Swiss rounds 1–3 plus round 4 day 1, 34 games, in `js/worlds-live.js` (data to 28 Oct). H2H in `js/h2h.js` (data to 28 Oct).
+- **App:** v32 (30 Oct 2026): Swiss round 4 day 2 data, subway band restyled as an aged station sign (caption removed). App data and code are correct as they stand.
+- **Real data:** Swiss rounds 1–3 plus round 4 days 1–2, 39 games, in `js/worlds-live.js` (data to 29 Oct). H2H in `js/h2h.js` (data to 29 Oct). **TES 2-1 BLG is from Leaguepedia and pickorban, not yet the Oracle's Elixir file:** re-check it when the next file arrives.
 - **Sim engine plan:** written 27 Oct, committed `0929636` (29 Oct). Status: planned, not started. See `research/sim-plan.md`.
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
 - **Where work happens:** Claude Code sessions only. The claude.ai chats that built the app no longer write to the repo.
@@ -20,9 +20,9 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 |---|---|
 | **Sim session 1:** ratings and the "who wins" model | Not started. Read `research/sim-plan.md` first. Starts with planning the ratings foundation with Luke (skills per role, what each is fitted from, the overall, how they feed the sim) before any fitting or code |
 | Sim sessions 2–5 | After session 1, in order (see the plan) |
-| Add Swiss round 4 games to `js/worlds-live.js` | Day 1 (28 Oct, 5 games) added in v31. Days 2–3 (29–30 Oct: KC–CFO, TES–BLG, TL–LOS, HLE–G2) wait for a newer Oracle's Elixir file; steps in `research/worlds-live-2026.md` |
+| Confirm TES–BLG (29 Oct) against the next Oracle's Elixir file | Waits for a file with data past 29 Oct 21:00 UTC. Compare all 3 games field by field, fill in CS@15 and `fp`, rerun `build_from_oe.py` on a scratch copy (H2H should still show TES v BLG 8-11) |
+| Add Swiss round 4 day 3 (30 Oct: TL–LOS, HLE–G2) | Being played 30 Oct; then the next Oracle's Elixir file. Steps in `research/worlds-live-2026.md` |
 | Add Swiss round 5 (31 Oct), then knockouts (3–14 Nov) | Waits for the games |
-| Theme top band wording | Subway band says "the subway lines that stop at this Brooklyn station". If Luke confirms the final is at Barclays Center, it can name the venue |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
 
 **Parked:** Custom tournament (Play → Custom). Planned feature, not being worked on yet (Luke, 29 Oct).
@@ -47,15 +47,24 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 
 | Watch-item | Trigger |
 |---|---|
-| Player of the Game isn't published by any source checked so far, so real POG isn't used | A source for official POG appears (also needed for sim session 4) |
+| Player of the Game isn't published by any source checked so far, so real POG isn't used. **New lead (30 Oct):** Leaguepedia's Main Event page now has an "MVP" column per series and "MVP Standings" (e.g. TES–BLG: Tian; several series show "None"). Not checked: where it comes from or whether it is the official award | Luke decides whether to look into it (also needed for sim session 4) |
+| Old sim overrates BLG against TES (76–90% in all 3 games, TES won 2-1); the ceiling issue keeps showing | The new sim (sim sessions 1–4) |
 | `build_from_oe.py` labels every "WLDs" row as "Worlds" in the H2H "Met at" list, including the 17–19 Sep qualifier rows its own header says aren't Worlds. Game counts aren't affected | Before the script becomes the match-day routine (sim session 5) |
 | `build_from_oe.py` always overwrites `js/h2h.js` and `js/worlds-live.js`; an option to write to another folder would make test runs safer | Same as above |
-| How Swiss round 4 splits across 28–30 Oct is assumed in `js/tournament.js` (`DAYS`), not published | A published day-by-day schedule |
+| How Swiss round 4 splits across 28–30 Oct is assumed in `js/tournament.js` (`DAYS`). Leaguepedia now publishes it: 2 series a day (28: MKOI–T1, IG–LYON; 29: KC–CFO, TES–BLG; 30: TL–LOS, HLE–G2). The days in `DAYS` match; how the code assigns series to days was not checked | Check when convenient |
 | Old sim quirks, left alone: odds use 300 runs (tournament), 600 (draft review) or 1500 (series); supports' CS diff is scaled by 0.3 twice in `gameStats` | If the old engine becomes a simple mode, decide with Luke whether to tidy these |
 
 ---
 
 ## Recent updates
+
+### Session (30 Oct 2026) — v32: Swiss round 4 day 2, aged subway sign
+- **Data:** KC 2-0 CFO from Luke's new Oracle's Elixir file (data to 29 Oct 21:00 UTC). It matches pickorban and Leaguepedia on every field checked. TES 2-1 BLG isn't in the file yet, so it came from Leaguepedia's scoreboards with pickorban for damage share (CS@15 null, `fp` left out). `js/worlds-live.js` now has 39 games. `build_from_oe.py` was run on a scratch copy: 34/34 OK, `js/h2h.js` rebuilt to 29 Oct, then TES–BLG added by hand. Details and sources in `research/worlds-live-2026.md`.
+- **Pick/ban check:** the app's pick, ban and win counts for all 84 champions match Leaguepedia's Main Event champion statistics (39 games).
+- **Out-of-sample (v31 before the update):** favourite 3 of 5, log loss 0.945, Brier 0.334. BLG was 76–90% in all three TES games. Running total: 23 of 39 (59%).
+- **Subway band:** caption removed; the band now looks like an aged enamel station sign (grain texture, top white stripe, off-white Helvetica, faded bullets with scuffs, screw heads). CSS only, in `css/styles.css`.
+- Cache v31 → v32. How checked: local server in a new browser-pane tab at desktop and 375 px, console clean, data counts and H2H read in the console, role-page game log for 369 renders with the missing CS@15 shown as a dash. The temporary `.claude/launch.json` was removed afterwards.
+- Download link for the Oracle's Elixir file is now in the Sources section of `research/worlds-live-2026.md`.
 
 ### Session (29 Oct 2026, later) — v31: themes, role-page hover, ticker fix, side colours, round 4 day 1
 - **Themes:** Brooklyn · Subway now uses the same clipped buttons as the other themes: route-sign green with an enamel gloss, white selected section, N/Q/R yellow selected page and main buttons, black sign band on panels, explained station band. "Brooklyn Final" renamed **Arcade Smash** (saved value still `brooklyn`): CRT scanlines, pixel-type title (Press Start 2P), neon glow, INSERT COIN, arcade-yellow labels and note bars, dull amber "In the mix".

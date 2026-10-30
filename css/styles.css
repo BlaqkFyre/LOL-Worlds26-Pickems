@@ -704,13 +704,23 @@ html:root[data-worlds="subway"] h1 span{color:#fff}
 html:root[data-worlds="subway"] .eyebrow,html:root[data-worlds="subway"] .label{text-transform:none;letter-spacing:0}
 html:root[data-worlds="subway"] .eyebrow{color:#fff}
 html:root[data-worlds="subway"] .eyebrow::before{content:"";display:inline-block;width:.85em;height:.85em;border-radius:50%;background:#fccc0a;margin-right:7px;vertical-align:-1px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 0 0 1px rgba(0,0,0,.4)}
-/* station band: the route bullets of the lines that stop at Atlantic Av–Barclays Ctr, with a caption saying so */
-html:root[data-worlds="subway"] .cb-subway{align-items:center;gap:6px;height:36px;padding:0 12px;background:linear-gradient(180deg,#1b1c1e,#000 70%);border-bottom:1px solid #fff;font:700 13px var(--body)}
-html:root[data-worlds="subway"] .cb-subway i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--body);font-style:normal;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.3),inset 0 -2px 0 rgba(0,0,0,.25)}
-html:root[data-worlds="subway"] .cb-subway i.y{color:#111}
-html:root[data-worlds="subway"] .cb-subway span{margin-left:8px}
-html:root[data-worlds="subway"] .cb-subway em{font:400 12px var(--body);font-style:normal;color:#a7a9ac;margin-left:10px}
-@media (max-width:640px){html:root[data-worlds="subway"] .cb-subway{flex-wrap:wrap;height:auto;row-gap:4px;padding:6px 12px}html:root[data-worlds="subway"] .cb-subway em{flex-basis:100%;margin-left:0}}
+/* station band: an aged enamel station sign for Atlantic Av–Barclays Ctr (Barclays Center hosts the final) — route bullets of the
+   lines that stop there, worn black enamel with grain, the thin white stripe along the top, faded bullets and screw heads at each end */
+html:root[data-worlds="subway"] .cb-subway{position:relative;align-items:center;gap:6px;height:40px;padding:4px 28px 0;border-radius:3px;color:#e9e3d2;font:700 14px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.01em;
+  background:linear-gradient(#d9d3c1,#d9d3c1) 0 5px/100% 1.5px no-repeat,
+    radial-gradient(90% 160% at 18% -20%,rgba(255,255,255,.08),transparent 60%),
+    radial-gradient(60% 120% at 85% 120%,rgba(92,70,36,.28),transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .62 0 0 0 0 .58 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E"),
+    linear-gradient(180deg,#252525,#141414);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),inset 0 -8px 14px rgba(70,52,22,.22),0 1px 0 rgba(0,0,0,.5)}
+html:root[data-worlds="subway"] .cb-subway::before,html:root[data-worlds="subway"] .cb-subway::after{content:"";position:absolute;top:50%;width:7px;height:7px;margin-top:-1px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#bdb7a8,#5d584e 70%);box-shadow:0 0 0 1px rgba(0,0,0,.55)}
+html:root[data-worlds="subway"] .cb-subway::before{left:10px}
+html:root[data-worlds="subway"] .cb-subway::after{right:10px}
+html:root[data-worlds="subway"] .cb-subway i{position:relative;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12.5px "Helvetica Neue",Helvetica,Arial,sans-serif;font-style:normal;color:#f4efe2;filter:saturate(.8) brightness(.92);box-shadow:0 0 0 1px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.22)}
+html:root[data-worlds="subway"] .cb-subway i::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 28% 24%,rgba(255,255,255,.2),transparent 42%),radial-gradient(circle at 74% 80%,rgba(40,28,10,.3),transparent 46%),radial-gradient(circle at 82% 30%,rgba(0,0,0,.14) 0 1.5px,transparent 2px)}
+html:root[data-worlds="subway"] .cb-subway i.y{color:#1a1a1a}
+html:root[data-worlds="subway"] .cb-subway span{margin-left:10px;text-shadow:0 0 1px rgba(0,0,0,.4)}
+@media (max-width:640px){html:root[data-worlds="subway"] .cb-subway{flex-wrap:wrap;height:auto;row-gap:5px;padding:10px 28px 6px}}
 /* buttons: same clipped shapes as the other themes; route-sign green with an enamel gloss when not selected */
 html:root[data-worlds="subway"] .tabs button,html:root[data-worlds="subway"] .subtabs button,html:root[data-worlds="subway"] .btn,html:root[data-worlds="subway"] .seg button{background:linear-gradient(180deg,#19b152 0%,#00933c 55%,#007a32 100%);border-color:#00933c;color:#fff;text-transform:none;letter-spacing:0;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.22)}
 html:root[data-worlds="subway"] .tabs button{display:inline-flex;align-items:center;gap:8px;padding:7px 16px 7px 9px}
