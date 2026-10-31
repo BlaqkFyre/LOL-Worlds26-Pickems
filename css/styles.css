@@ -131,7 +131,7 @@ input[type=search]{font:500 14px var(--body);background:var(--bg);color:var(--fg
 .recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:6px}
 .rec{text-align:left;display:grid;gap:2px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;cursor:pointer;font:inherit}
 .rec:hover{border-color:var(--gold)}.rec b{font-size:15px}.rec small{color:var(--muted);font-family:var(--mono);font-size:11px}.rec span{font-size:12px;color:var(--muted)}
-.rec .whys{font-size:12.5px;color:var(--fg);line-height:1.4}.rec .whys b{font:700 12.5px var(--body);text-transform:none}.rec .whys .wm{color:var(--meta)}.rec .whys .wx{color:var(--mix)}.rec .whys .wp{color:var(--gold)}.rec .whys .sep{font-style:normal;color:var(--muted)}
+.rec .whys{font-size:12.5px;color:var(--fg);line-height:1.4}.rec .whys b{font:700 12.5px var(--body);text-transform:none}.rec .whys .wp{color:var(--gold)}.rec .whys .sep{font-style:normal;color:var(--muted)}
 .cgrid{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .cbtn{font:500 12px var(--body);padding:5px 8px;border-radius:3px;border:1px solid var(--line);cursor:pointer;background:var(--panel);color:var(--fg)}
 .cbtn.meta{border-color:var(--meta)}.cbtn.mix{border-color:var(--mix)}
@@ -143,9 +143,18 @@ em.pos{font-style:normal;font-family:var(--mono);color:var(--meta)}em.neg{font-s
 .hov{cursor:help;text-decoration:underline dotted var(--muted);text-underline-offset:3px}
 .tt{border-collapse:collapse;font-size:12px}.tt.full{width:100%;font-size:13px}.tt th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px}.tt.full td{padding:5px 6px;border-top:1px solid var(--line)}
 .tt tr.me td{background:var(--mixbg)}
-.track{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px}
-.tk{height:8px;border-radius:2px;opacity:.35}.tk.blue{background:var(--bside)}.tk.red{background:var(--rside)}.tk.ban{height:5px;align-self:end}
-.tk.done{opacity:1}.tk.now{opacity:1;height:12px;outline:2px solid var(--gold);outline-offset:1px}
+/* draft order bar: 2 rows of 10 fixed tiles; colour = side that acts, B/P = ban/pick, a done step shows its champion */
+.track{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px 4px;max-width:420px}
+.tk{--sc:var(--muted);display:grid;justify-items:center;gap:2px}.tk.blue{--sc:var(--bside)}.tk.red{--sc:var(--rside)}
+.tk .tkb{width:28px;height:28px;box-sizing:border-box;display:grid;place-items:center;font:700 12px var(--display);color:var(--sc);box-shadow:inset 0 0 0 1px var(--sc);position:relative;overflow:hidden}
+.tk .tkb .ico{width:28px!important;height:28px!important;border:0}
+.tk.kp.done .tkb{box-shadow:inset 0 0 0 2px var(--sc)}.tk.kp.done .tkb .ico{width:24px!important;height:24px!important}
+/* desktop: one row of 20 across the full width, taller tiles */
+@media (min-width:641px){.track{grid-template-columns:repeat(20,minmax(0,1fr));max-width:none;gap:4px}.tk .tkb{width:100%;height:40px;font-size:14px}
+  .tk .tkb .ico{width:100%!important;height:100%!important}.tk.kp.done .tkb .ico{width:calc(100% - 4px)!important;height:36px!important}}
+.tk.kb.done .tkb .ico{filter:grayscale(1);opacity:.6}.tk.kb.done .tkb::after{content:"";position:absolute;inset:0;background:linear-gradient(45deg,transparent 45%,var(--ban) 46% 54%,transparent 55%)}
+.tk.now .tkb{box-shadow:inset 0 0 0 2px var(--gold);color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,transparent)}
+.tk small{font:700 10px/1 var(--display);color:var(--sc);letter-spacing:.02em}.tk.done small{opacity:.7}.tk.now small{color:var(--gold);opacity:1}
 .turn .big{font:700 20px var(--display);letter-spacing:.03em;text-transform:uppercase}
 .side.active{box-shadow:0 0 0 2px var(--gold),0 6px 20px rgba(0,0,0,.12)}
 .slot.on{box-shadow:inset 3px 0 0 currentColor}.side.blue .slot.on{color:var(--bside)}.side.red .slot.on{color:var(--rside)}
@@ -153,7 +162,7 @@ em.pos{font-style:normal;font-family:var(--mono);color:var(--meta)}em.neg{font-s
 .fresh{animation:flash 1.2s ease-out}
 @keyframes flash{0%{background:var(--gold);color:var(--bg)}100%{}}
 .ban.on{color:var(--fg);border-style:solid}.ban.next{border-color:var(--gold);color:var(--gold);text-decoration:none;animation:pulse 1.2s ease-in-out infinite}
-.picking{font-size:12px;color:var(--gold);font-weight:600;animation:pulse 1.2s ease-in-out infinite}
+.picking{font-size:12px;line-height:16px;height:16px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--gold);font-weight:600;animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.45}}
 .rec{transition:transform .12s,border-color .12s}.rec:hover:not(:disabled){transform:translateY(-2px)}.rec.top{border-color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}.rec:disabled{opacity:.5;cursor:default}
 .cbtn{transition:transform .1s}.cbtn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--gold)}
@@ -358,6 +367,7 @@ select,input[type=search]{font-family:var(--body);font-weight:600;border-radius:
 .bans .ban.on{border-style:solid}.bans .ban.on .ico{--s:34px;filter:grayscale(1);opacity:.65;border:0}
 .bans .ban.on::after{content:"";position:absolute;inset:0;background:linear-gradient(45deg,transparent 45%,var(--ban) 46% 54%,transparent 55%);pointer-events:none}
 .bans .ban small{font:700 10px var(--display);text-transform:uppercase}
+.bans .bdiv{width:2px;align-self:stretch;background:var(--line);margin:0 3px;flex:none}
 .slot{grid-template-columns:44px minmax(0,1fr) auto;gap:10px;padding:6px;border-radius:0;background:color-mix(in srgb,var(--panel) 70%,transparent);border-left:3px solid transparent;transition:transform .15s,border-color .15s;box-shadow:none!important}
 .slot:hover{transform:translateX(3px);border-left-color:var(--gold)}
 .slot .st{min-width:0;display:grid}.slot .st b{font:700 17px var(--display);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--fg)}
@@ -367,7 +377,9 @@ select,input[type=search]{font-family:var(--body);font-weight:600;border-radius:
 @keyframes glow{50%{background:color-mix(in srgb,var(--teal) 3%,transparent)}}
 .side.active{box-shadow:0 0 0 2px var(--gold),0 0 22px color-mix(in srgb,var(--gold) 30%,transparent)}
 .turn{border-radius:0}.turn .big{font:700 22px var(--display);letter-spacing:.04em}
-.track .tk{border-radius:0;height:10px}.track .tk.ban{height:6px}.track .tk.now{height:14px}
+/* fixed line boxes so the banner keeps one height every step and the board below never jumps */
+.turn .big{line-height:28px;height:28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.turn .notes{line-height:18px;height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.turn .big{font-size:18px;line-height:24px;height:48px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.turn .notes{height:36px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
 .recs{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
 .rec{grid-template-columns:40px minmax(0,1fr);column-gap:10px;border-radius:0;align-items:center}
 .rec>.ico{grid-column:1;grid-row:1/span 3;align-self:start}.rec>b,.rec>small,.rec>span{grid-column:2;min-width:0}.rec b{font:700 16px var(--display);text-transform:uppercase}
@@ -437,7 +449,18 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 /* keep wide content (tables, chip rows) from stretching the page on phones */
 .wrap>*,.view>*,.panel>*,.board>*{min-width:0}
 @media (max-width:640px){.board{grid-template-columns:minmax(0,1fr)}.cc{flex-wrap:wrap}}
-.track .tk.ban{min-height:0;padding:0;border:0;height:6px;background-color:currentColor}.track .tk.ban.blue{color:var(--bside)}.track .tk.ban.red{color:var(--rside)}
+/* phones: both teams side by side so the draft compares on one screen; compact fixed-height rows, no splash, role change from the champion's tap sheet */
+@media (max-width:640px){
+  .board.pb{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .board.pb .side{padding:6px;gap:4px}
+  .board.pb .sideh{font-size:14px;flex-wrap:nowrap;height:22px;overflow:hidden}.board.pb .sideh small{display:none}.board.pb .sideh>span{gap:4px;min-width:0}
+  .board.pb .bans{gap:2px;min-height:24px}.board.pb .bans .ban{width:24px;height:24px}.board.pb .bans .ban.on .ico{width:22px!important;height:22px!important}.board.pb .bans .bdiv{margin:0 1px}
+  .board.pb .side .slot,.board.pb .side .slot.art{height:50px;min-height:50px;grid-template-columns:36px minmax(0,1fr);gap:6px;padding:4px;background:color-mix(in srgb,var(--panel) 70%,transparent)}
+  .board.pb .slot .ico{width:36px!important;height:36px!important}.board.pb .slot select{display:none}.board.pb .slot:hover{transform:none}
+  .board.pb .slot .st b,.board.pb .slot.art .st b{font-size:13px;line-height:18px;text-shadow:none}.board.pb .slot .st small{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .board.pb .picking{font-size:11px}
+}
+#tip .sheetroles{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}#tip .sheetroles .btn{min-height:36px;padding:0 10px}#tip .sheetroles .btn.pri{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 .hsec{display:grid;gap:6px;padding-top:8px;border-top:1px solid var(--line)}.hsec>.label{color:var(--gold);margin:0}
 .cpt{display:inline-grid;cursor:help;width:max-content;justify-self:center}.cbtn .cpt{max-width:none;overflow:visible}.rec>.cpt{grid-column:1;grid-row:1/span 3;align-self:start}
 .ctab th:not(:first-child),.ctab td:not(:first-child),.ctab td.num{text-align:center}

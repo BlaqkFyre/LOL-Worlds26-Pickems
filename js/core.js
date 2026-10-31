@@ -100,7 +100,7 @@ function roleView(role){
   <div class="pgrid">${ps.map((p,k)=>playerCard(p,k+1)).join("")}</div></div>`}
 function champCard(c,role){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c),WM=worldsMeta(c),mp=mostPicked(c,6);
   const R=d.rec,RS=R?"26.16–26.20":d.sea?"2026 season":d.p20?"26.20 only":"",RT=R||d.sea||d.p20,rs=[...(ROLEMAP[c]||[])];
-  return `<article class="pcard ccardp"><div class="chead">${icon(c,46)}<div><b class="hov" data-tc="${esc(c)}" tabindex="0">${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||RNAME[role]}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}</div></div></div>
+  return `<article class="pcard ccardp"><div class="chead">${icon(c,46)}<div><b class="hov" data-tc="${esc(c)}" tabindex="0">${esc(c)}</b><div><span class="tag">${pr?`<b class="tcol" style="color:${tierCol(tierOf(pr))}">${tierOf(pr)}-tier</b> · `:""}${rs.map(r=>RNAME[r]).join("/")||RNAME[role]}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}</div></div></div>
   <div class="hsec"><div class="label">Recent pro</div><div class="hbars">
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
@@ -129,6 +129,7 @@ function drawPower(){const el=document.getElementById("powerPanel");if(!el)retur
   <div style="margin-top:14px"><div class="label">Top eight · games won-lost, row against column</div><div style="overflow-x:auto"><table class="h2hm"><tr><th></th>${top8.map(t=>`<th>${esc(t)}</th>`).join("")}</tr>${top8.map(a=>`<tr><th>${esc(a)}</th>${top8.map(b=>{if(a===b)return'<td class="self"></td>';const x=(H[a]||{})[b];if(!x)return'<td class="none">–</td>';const [w,l]=x,sc=(w-l)/(w+l);return `<td style="--s:${Math.round(Math.abs(sc)*45)}%" class="${sc>0?"w":sc<0?"l":"e"}" title="${esc(`${a} ${w}-${l} ${b}`)}">${w}-${l}</td>`}).join("")}</tr>`).join("")}</table></div></div>`}
 document.addEventListener("click",e=>{const b=e.target.closest("button[data-pw]");if(b){pwSel=b.dataset.pw;drawPower()}});
 const MTIERS=[["S",55,"Must-ban / must-pick","var(--gold)"],["A",40,"Priority","var(--teal)"],["B",30,"Meta","var(--blue)"],["C",1,"Situational","var(--grey)"]];
+const tierCol=T=>T==="C"?"var(--muted)":(MTIERS.find(x=>x[0]===T)||[0,0,0,"var(--muted)"])[3]; /* tier colour for text (as on the Meta page; C uses the lighter muted grey so it stays readable) */
 const ALLP=TEAMS.flatMap(t=>t.p);
 function comfort(c){return ALLP.filter(p=>p.picks.some(x=>x[0]===c));}
 let metaRole="ALL",metaSub="tiers";
@@ -267,9 +268,9 @@ function scoreFor(c,actor,kind){
   picksOf(other).filter(p=>roles.includes(p.r)).forEach(p=>{const m=matchup(c,p.c);if(m!=null){s+=(m-50)*3;why.push(m>=50?`beats ${p.c} (${m}%)`:`countered by ${p.c} (${m}%)`)}});
   return {c,s,why,roles};
 }
-/* one suggestion reason as HTML: meta tier in the legend's Meta / In the mix colour, player names in gold */
+/* one suggestion reason as HTML: meta tier in its tier colour (as on the Meta page), player names in gold */
 function fmtWhy(w){let m;
-  if((m=w.match(/^([SABC])-tier meta(.*)$/)))return `<b class="${m[1]==="C"?"wx":"wm"}">${m[1]}-tier meta</b>${esc(m[2])}`;
+  if((m=w.match(/^([SABC])-tier meta(.*)$/)))return `<b style="color:${tierCol(m[1])}">${m[1]}-tier meta</b>${esc(m[2])}`;
   if((m=w.match(/^(.+?)'s comfort(.*)$/)))return `<b class="wp">${esc(m[1])}</b>'s comfort${esc(m[2])}`;
   if((m=w.match(/^(your|denies) (.+?)( plays it)?$/)))return `${m[1]} <b class="wp">${esc(m[2])}</b>${m[3]||""}`;
   return esc(w)}
@@ -432,7 +433,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   const anySt=[...sy,...ctr,...bt].some(o=>stx(o.x));
   const who=TEAMS.flatMap(t=>t.p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,t}))).filter(o=>inDraft(o.t.id)&&DS.steps.length);
   const flags=[d.po?"Pro-only pick":"",d.so?"Solo-queue pick":""].filter(Boolean);
-  return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?tierOf(pr)+"-tier · ":""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
+  return `<div class="ccard"><div class="chead">${icon(c,52)}<div><b>${esc(c)}</b><div><span class="tag">${pr?`<b class="tcol" style="color:${tierCol(tierOf(pr))}">${tierOf(pr)}-tier</b> · `:""}${rs.map(r=>RNAME[r]).join("/")||"—"}</span>${tr?`<span class="trend ${tr}">${TREND_TXT[tr]}</span>`:""}${flags.map(f=>`<span class="tag dimtag">${f}</span>`).join("")}</div></div></div>
   ${(()=>{const st=draftStatus(c);return st?`<div class="ststat st-${st.k}" style="--tc:${sideCol(st.sd)}">${esc(st.title)}</div>`:""})()}
   <div class="hgrid"><div class="hsec"><div class="label">Recent meta ${infoI(R?`465 pro games, patches 26.16–26.20 (NerfPlz). Solid = picked, striped = banned.`:`Not in the 26.16–26.20 list, so these are ${RS} numbers (NerfPlz).`)}</div><div class="hbars">
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
@@ -482,10 +483,14 @@ const tipBg=document.createElement("div");tipBg.className="tipbg";tipBg.hidden=t
 function closeTip(){clearTimeout(tipD);clearTimeout(tipT);tip.hidden=true;tipEl=null;tip.classList.remove("sheet");tipBg.hidden=true}
 function openSheet(el,pickC){showTip(el);tip.classList.add("sheet");tip.style.left=tip.style.top=tip.style.width=tip.style.maxWidth="";tipBg.hidden=false;
   const nx=SEQ[DS.steps.length],act=pickC?(nx&&nx[1]==="ban"?"Ban":"Pick"):"";
-  tip.insertAdjacentHTML("afterbegin",`<div class="sheetbar">${pickC?`<button class="btn pri" data-sheetpick="${esc(pickC)}">${act} ${esc(pickC)}</button>`:""}<button class="btn" data-sheetclose aria-label="Close">Close</button></div>`)}
+  /* a champion already picked on the board (data-si = its draft step): its role can be changed here, as the row's role menu does on desktop */
+  const si=el.dataset.si!=null?+el.dataset.si:null,ps=si!=null?DS.steps[si]:null;
+  const roleBar=ps&&ps.k==="pick"?`<div class="sheetroles"><span class="notes">Role</span>${ROLES.map(r=>`<button class="btn${r===ps.r?" pri":""}" data-sheetrole="${si}|${r}" aria-pressed="${r===ps.r}">${r}</button>`).join("")}</div>`:"";
+  tip.insertAdjacentHTML("afterbegin",`<div class="sheetbar">${pickC?`<button class="btn pri" data-sheetpick="${esc(pickC)}">${act} ${esc(pickC)}</button>`:""}<button class="btn" data-sheetclose aria-label="Close">Close</button></div>${roleBar}`)}
 tipBg.addEventListener("click",closeTip);
 tip.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.hasAttribute("data-sheetclose")){closeTip();return}
-  if(b.dataset.sheetpick){const c=b.dataset.sheetpick;closeTip();doPick(c)}});
+  if(b.dataset.sheetpick){const c=b.dataset.sheetpick;closeTip();doPick(c)}
+  if(b.dataset.sheetrole){const [si,r]=b.dataset.sheetrole.split("|");closeTip();setPickRole(+si,r)}});
 document.addEventListener("click",e=>{if(!TOUCH||tip.contains(e.target))return;
   const btn=e.target.closest("button[data-c]"),inDraftV=btn&&document.getElementById("v-draft").contains(btn);
   if(inDraftV&&!btn.disabled){e.preventDefault();e.stopPropagation();openSheet(btn.querySelector("[data-tc]")||btn,btn.dataset.c);return}
@@ -517,7 +522,7 @@ function analysis(){
   const base=winP(team(DS.me).ov,team(DS.opp).ov);let mw=0;const meBlue=sideOf(DS.me)==="blue";for(let q=0;q<600;q++){const r=simGame(true);if((r.winner==="blue")===meBlue)mw++}const withD=mw/600;
   const col=d=>{const t=team(d.id);return `<div class="an ${sideOf(d.id)}"><h3>${esc(t.name)} <small>${sideOf(d.id)} side</small></h3>
     <div class="kpis"><span><b>${d.comf}/5</b>comfort picks</span><span><b>${d.meta}%</b>avg meta presence</span><span><b>${d.syn>0?"+":""}${d.syn}</b>synergy lift</span><span><b>${d.bans.filter(b=>b.hit.length).length}/5</b>bans on comfort</span></div>
-    <table class="tt full"><thead><tr><th>Role</th><th>Player</th><th>Champion</th><th>Fit</th></tr></thead><tbody>${d.rows.sort((a,b)=>ROLES.indexOf(a.r)-ROLES.indexOf(b.r)).map(r=>`<tr><td>${r.r}</td><td data-tp="${d.id}|${ROLES.indexOf(r.r)}" tabindex="0" class="hov">${esc(r.pl.n)}</td><td data-tc="${esc(r.c)}" tabindex="0" class="hov">${esc(r.c)}</td><td>${r.x?`<span class="chip meta">Comfort ${r.x[1]?r.x[1]+"g ":""}${r.x[2]}%</span>`:`<span class="chip off">Off-pool</span>`} <span class="notes">${tierOf(r.pr)}</span></td></tr>`).join("")}</tbody></table>
+    <table class="tt full"><thead><tr><th>Role</th><th>Player</th><th>Champion</th><th>Fit</th></tr></thead><tbody>${d.rows.sort((a,b)=>ROLES.indexOf(a.r)-ROLES.indexOf(b.r)).map(r=>`<tr><td>${r.r}</td><td data-tp="${d.id}|${ROLES.indexOf(r.r)}" tabindex="0" class="hov">${esc(r.pl.n)}</td><td data-tc="${esc(r.c)}" tabindex="0" class="hov">${esc(r.c)}</td><td>${r.x?`<span class="chip meta">Comfort ${r.x[1]?r.x[1]+"g ":""}${r.x[2]}%</span>`:`<span class="chip off">Off-pool</span>`} <span class="notes tcol" style="color:${tierCol(tierOf(r.pr))}">${tierOf(r.pr)}</span></td></tr>`).join("")}</tbody></table>
     <div class="notes"><b>Synergies:</b> ${d.pairs.length?d.pairs.map(([a,b,l])=>`${esc(a)} + ${esc(b)} (${l>0?"+":""}${l})`).join("; "):"none in the data"}</div>
     <div class="notes"><b>Bans:</b> ${d.bans.map(b=>`${esc(b.c)} ${b.hit.length?"→ hit "+b.hit.map(o=>o.p.n).join(", "):b.pr?"(meta only)":"(no comfort or meta target)"}`).join("; ")}</div>
     <div class="notes"><b>Denied:</b> ${d.denied.length?d.denied.map(x=>`${esc(x.c)} from ${x.who.map(o=>o.p.n).join(", ")}`).join("; "):"none"}</div>
@@ -666,10 +671,10 @@ function teamPanel(id){
   const fpTeam=idOnSide(DS.fp)===id,picking=isNext&&nxt[1]==="pick",nextRole=picking?openRoles(id)[0]:null;
   const byRole=ROLES.map((r,ri)=>{const p=ps.find(x=>x.r===r),pl=t.p[ri];
     const art=p&&splashUrl(p.c);
-    return `<div class="slot ${p?"on":""}${art?" art":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}"${art?` style="--splash:url('${art}')"`:""}>${p?`<span class="hov" data-tc="${esc(p.c)}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch">${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
-  const banSlots=[0,1,2,3,4].map(j=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}" tabindex="0" aria-label="Banned: ${esc(b.c)}"`:""}>${b?icon(b.c,34):willBe?"<small>ban</small>":""}</span>`}).join("");
+    return `<div class="slot ${p?"on":""}${art?" art":""} ${p&&p.i===DS.fresh?"fresh":""} ${!p&&picking&&r===nextRole?"now":""}"${art?` style="--splash:url('${art}')"`:""}>${p?`<span class="hov" data-tc="${esc(p.c)}" data-si="${p.i}" tabindex="0">${icon(p.c,44)}</span>`:`<span class="ico empty" style="--s:44px"><b>${r}</b></span>`}<div class="st"><b class="ch"${p?` data-tc="${esc(p.c)}" data-si="${p.i}"`:""}>${p?esc(p.c):picking&&r===nextRole?"Picking…":"—"}</b><small><span class="role">${r}</span> · <span class="pl hov" data-tp="${id}|${ri}" tabindex="0">${esc(pl.n)}</span></small></div>${p?`<select data-rs="${p.i}" aria-label="Role for ${esc(p.c)}">${ROLES.map(x=>`<option${x===p.r?" selected":""}>${x}</option>`).join("")}</select>`:""}</div>`}).join("");
+  const banSlots=[0,1,2,3,4].map(j=>(j===3?`<span class="bdiv" aria-hidden="true"></span>`:"")+(()=>{const b=bs[j];const willBe=!b&&isNext&&nxt[1]==="ban"&&j===bs.length;return `<span class="ban ${b?"on":""} ${b&&b.i===DS.fresh?"fresh":""} ${willBe?"next":""}" ${b?`data-tc="${esc(b.c)}" tabindex="0" aria-label="Banned: ${esc(b.c)}"`:""}>${b?icon(b.c,34):willBe?"<small>ban</small>":""}</span>`})()).join(""); /* phase 1 bans (first 3) | phase 2 bans (last 2) */
   return `<div class="side ${sd} ${isNext?"active":""}"><div class="sideh hov" data-tt="${id}" tabindex="0"><span>${regDot(id)}<span class="tb" style="--tc:${teamCol(id)}">${esc(id)}</span> ${esc(t.name)}</span><small>${sd==="blue"?"Blue":"Red"} side · ${fpTeam?"first pick":"last pick"}${id===DS.me?" · you":DS.ai?" · AI":""}</small></div>
-    <div class="bans">${banSlots}</div>${byRole}${picking?`<div class="picking">Picking… open: ${openRoles(id).join(", ")}</div>`:""}</div>`;
+    <div class="bans">${banSlots}</div>${byRole}<div class="picking">${picking?`Picking… open: ${openRoles(id).join(", ")}`:""}</div></div>`; /* always there at a fixed height so rows below don't jump */
 }
 /* after each pick: the best follow-ups for the team that just locked in */
 function nextBest(){const last=[...DS.steps].reverse().find(s=>s.k==="pick");if(!last||DS.steps.length>=20)return"";const id=last.t;if(!openRoles(id).length)return"";
@@ -772,7 +777,8 @@ function renderDraft(){
   const rs=done?[]:recs();
   const usedN=POOL.filter(c=>tk.has(c)).length,typedM=DS.q.trim()?bestMatch(DS.q):null;
   const grid=POOL.filter(c=>(DS.showUsed||!tk.has(c))&&(DS.roleF==="ALL"||ROLEMAP[c].has(DS.roleF))&&(!DS.q||c.toLowerCase().includes(DS.q.toLowerCase())));
-  const track=SEQ.map((x,j)=>{const sd=actorId(x[0])===DS.me?DS.side:sideOf(DS.opp);return `<span class="tk ${sd} ${x[1]} ${j<i?"done":""} ${j===i?"now":""}" title="${stepLabel(j)}${DS.steps[j]?": "+esc(DS.steps[j].c):""}"></span>`}).join("");
+  /* order bar: 20 fixed-size tiles in draft order, side colour of who acts, B(an)/P(ick) + step number; a done step shows its champion */
+  const track=SEQ.map((x,j)=>{const sd=actorId(x[0])===DS.me?DS.side:sideOf(DS.opp),s=DS.steps[j],L=x[1]==="ban"?"B":"P";return `<span class="tk ${sd} ${x[1]==="ban"?"kb":"kp"} ${j<i?"done":""} ${j===i?"now":""}" title="${stepLabel(j)}${s?": "+esc(s.c):""}"><span class="tkb">${s?icon(s.c,28):L}</span><small>${L}${j+1}</small></span>`}).join("");
   const aiWaiting=DS.ai&&!done&&actor!==DS.me;
   v.innerHTML=`<div class="panel" style="display:grid;gap:14px">
     <div><h2>Champ select</h2><p class="notes" style="margin:4px 0 0">Competitive draft order. Blue side picks first as standard; switch only if a team used First Selection to take red side with first pick.</p></div>
@@ -781,8 +787,8 @@ function renderDraft(){
     ${DS.tour&&!done?`<div class="ctrls"><button class="btn" data-act="undo"${i?"":" disabled"}>Undo</button></div>`:""}
     ${!DS.tour?seriesPanel():(()=>{const m=M(DS.tour.mid);return m&&m.bo>1?seriesPanel({bo:m.bo,fearless:true,a:m.a,b:m.b,games:m.games,ctx:"tour",mid:m.id}):""})()}
     <div class="track" aria-label="Draft progress">${track}</div>
-    <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?"<b>Draft complete</b>":`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
-    <div class="board">${teamPanel(blueId)}${teamPanel(redId)}</div>
+    <div class="turn ${done?"":(actor===DS.me?DS.side:sideOf(DS.opp))}" aria-live="polite">${done?`<span class="big">Draft complete</span><span class="notes">Draft review below.</span>`:`<span class="big">${stepLabel(i)} · <b>${esc(team(actor).name)}</b> ${cur[1]==="ban"?"bans":"picks"}${actor===DS.me?" (you)":aiWaiting?" (AI thinking…)":" (opponent)"}</span><span class="notes">Step ${i+1} of 20 · ${stepTip()}</span>`}</div>
+    <div class="board pb">${teamPanel(blueId)}${teamPanel(redId)}</div>
     ${nextBest()}
     ${done?analysis():`<div><div class="eyebrow">${actor===DS.me?"Suggested for you":"Likely for "+esc(team(actor).id)}</div><div class="recs">${rs.map((r,j)=>`<button class="rec ${j===0?"top":""}" data-c="${esc(r.c)}"${aiWaiting?" disabled":""}><span class="cpt" data-tc="${esc(r.c)}" data-side="1">${icon(r.c,40)}</span><b>${esc(r.c)}</b>${r.roles?`<small>${r.roles.join("/")}</small>`:""}<span class="whys">${r.why.map(fmtWhy).join(`<i class="sep"> · </i>`)}</span></button>`).join("")||'<span class="notes">No scored options left. Pick from the pool.</span>'}</div></div>
     <div><div class="ctrls"><div class="seg">${[["ALL","All"],...ROLES.map(r=>[r,r])].map(([k,l])=>`<button data-set="roleF" data-val="${k}" aria-pressed="${DS.roleF===k}">${l}</button>`).join("")}</div><input id="dQ" type="search" placeholder="Search champions (Enter picks the best match)" value="${esc(DS.q)}" aria-label="Search champions"><button class="btn" data-act="custom"${typedM?"":" disabled"}>${DS.q.trim()?(typedM?"Pick "+esc(typedM):"No champion matches"):"Pick best match"}</button><label class="tog"><input type="checkbox" id="dUsed"${DS.showUsed?" checked":""}> Show banned/picked${DS.fmt==="fearless"?"/locked":""} (${usedN})</label></div>
@@ -812,8 +818,10 @@ document.addEventListener("change",e=>{
   if(t.id==="dMe"||t.id==="dOpp"){const k=t.id==="dMe"?"me":"opp";DS[k]=t.value;if(DS.me===DS.opp){const o=TEAMS.find(x=>x.id!==DS.me);DS[k==="me"?"opp":"me"]=o.id}DS.steps=[];DS.game=1;DS.locked=[];DS.sim=null;renderDraft();queueAI()}
   if(t.id==="dAI"){DS.ai=t.checked;renderDraft();queueAI()}
   if(t.id==="dUsed"){DS.showUsed=t.checked;renderDraft()}
-  if(t.dataset&&t.dataset.rs!=null){const s=DS.steps[+t.dataset.rs];const other=DS.steps.find(x=>x.k==="pick"&&x.t===s.t&&x.r===t.value);if(other)other.r=s.r;s.r=t.value;DS.sim=null;renderDraft()}
+  if(t.dataset&&t.dataset.rs!=null)setPickRole(+t.dataset.rs,t.value);
 });
+/* move a picked champion to another role; a team-mate already in that role swaps into the old one */
+function setPickRole(si,r){const s=DS.steps[si];if(!s||s.k!=="pick"||s.r===r)return;const other=DS.steps.find(x=>x.k==="pick"&&x.t===s.t&&x.r===r);if(other)other.r=s.r;s.r=r;DS.sim=null;renderDraft()}
 document.addEventListener("keydown",e=>{if(e.target.id==="dQ"&&e.key==="Enter"){e.preventDefault();const i=DS.steps.length;if(i<20&&!(DS.ai&&actorId(SEQ[i][0])!==DS.me))pickTyped()}});
 document.addEventListener("input",e=>{if(e.target.id==="dQ"){DS.q=e.target.value;const pos=e.target.selectionStart;renderDraft();const q=document.getElementById("dQ");if(q){q.focus();try{q.setSelectionRange(pos,pos)}catch(_){}}}});
 
