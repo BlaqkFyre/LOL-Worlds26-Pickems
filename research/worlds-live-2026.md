@@ -1,6 +1,27 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 30 Oct 2026: **39 games**, all of Swiss rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) plus Swiss round 4 days 1–2 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG). Data: `js/worlds-live.js`.
+Updated 31 Oct 2026: **44 games**, all of Swiss rounds 1–4: rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) and round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2). Data: `js/worlds-live.js`.
+
+## 30 Oct games, and TES–BLG confirmed (added 31 Oct)
+- **New Oracle's Elixir file** (downloaded 31 Oct): 9,831 games, data to 30 Oct 22:00 UTC. It has TES–BLG and LOS–TL but not HLE–G2.
+- **TES 2-1 BLG confirmed:** all 3 games in the file match what was entered from Leaguepedia and pickorban on every field (sides, winner, length, bans, champions, K/D/A, CS, objectives; damage share and kill participation within rounding). CS@15 and first pick (`fp`) were filled in from the file. The H2H rebuild now produces TES v BLG 8-11 on its own.
+- **LOS 2-1 TL:** from the file. K/D/A, CS, kill participation and damage share for game 3 match pickorban (ps-1711005). In game 3 the file and pickorban both give Josedeodo 1/3/5 with TL on 5 kills, so his kill participation is 1.2 (pickorban shows 120%). It's kept as the sources give it; it is the only value above 1.0 in the data.
+- **HLE 2-0 G2: not in the file yet.** Picks, bans, K/D/A, length, objectives and first pick from the r/leagueoflegends post-match thread (pasted by Luke). All of these match Leaguepedia's round 4 scoreboards. CS from Leaguepedia; damage share from pickorban (ps-1711006, whole %). Kill participation is calculated from kills. CS@15 is null. Pickorban has Hans Sama on 211 CS in game 2 (Leaguepedia 212); 212 is used. In game 2 HLE died 8 times but G2 got 7 kills on both sources (one death wasn't a G2 kill). First pick: the thread says HLE in game 1 and G2 in game 2, which fits the pick order it shows. The thread's "Player of the Series: Kanavi" is not used (POG still isn't). **Re-check both games against the next Oracle's Elixir file** and fill in CS@15.
+- **H2H:** `build_from_oe.py` (scratch copy) rebuilt `js/h2h.js` to 30 Oct (only change: LOS v TL 2-1 at Worlds; the pair had not met before in 2026) and reports 42 of 44 Swiss games OK, with the 2 HLE–G2 games "not in file (yet)". HLE 2-0 G2 was then added by hand (HLE v G2 3-0 → 5-0, met at MSI and Worlds). `research/model/h2h_2026.json` is the file's own output, so it does not have HLE–G2 yet. Its `worlds-live.js` output differed only in the play-in team list order, so that file was edited from a scratch merge instead.
+- **Pick/ban check:** after the update, the app's pick, ban and win counts for all 86 champions match Leaguepedia's Main Event champion statistics (44 games) exactly.
+
+## Out-of-sample check, 30 Oct (the app at v33, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| LOS vs TL G1 (LOS blue) | LOS 59% | LOS won |
+| LOS vs TL G2 (LOS blue) | TL 80% | TL won |
+| TL vs LOS G3 (TL blue) | LOS 28% | LOS won |
+| G2 vs HLE G1 (G2 blue) | HLE 65% | HLE won |
+| HLE vs G2 G2 (HLE blue) | HLE 66% | HLE won |
+
+- Favourite won 4 of 5; log loss 0.573 and Brier 0.192. The miss was LOS winning game 3 at 28%. TL G2 at 80% is at the ceiling.
+- Running total across all real Swiss games scored before their data was added (23 + 6 + 5 + 5 + 5): favourite won 27 of 44 (61%).
+- Simulations are not seeded, so these numbers move by about a point if re-run.
 
 ## 29 Oct games (added 30 Oct)
 - **KC 2-0 CFO:** from the Oracle's Elixir file downloaded 30 Oct (data to 29 Oct, 21:00 UTC). Every champion, K/D/A, CS, kill participation and damage share matches pickorban.com (ps-1711004); bans, length, towers, dragons, Barons, Heralds and voidgrubs match Leaguepedia's round 4 scoreboards.
@@ -109,7 +130,12 @@ Add the new games to `js/worlds-live.js` (same row format) and bump the cache ve
 With a newer Oracle's Elixir file in `research/`: run `research/build/build_from_oe.py` on a scratch copy to rebuild `js/h2h.js` and check every game, then copy back only the files that really changed (see CLAUDE.md).
 
 ## Sources
-- Oracle's Elixir 2026 match data file (downloaded 30 Oct, data to 29 Oct 21:00 UTC; kept local in `research/`). Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)
+- Oracle's Elixir 2026 match data file (downloaded 31 Oct, data to 30 Oct 22:00 UTC; kept local in `research/`). Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)
+- r/leagueoflegends post-match thread, HLE 2-0 G2 (pasted by Luke, 31 Oct)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_4 (HLE vs G2: CS, objectives, bans, lengths; 31 Oct)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (44 games, 31 Oct)
+- https://pickorban.com/matches/ps-1711006 (G2 vs HLE, damage share; 31 Oct)
+- https://pickorban.com/matches/ps-1711005 (TL vs LOS, game 3; 31 Oct)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event (schedule, results, pick/side selection, 30 Oct)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_4 (TES vs BLG and KC vs CFO, 30 Oct)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (39 games, 30 Oct)

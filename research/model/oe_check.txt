@@ -1,4 +1,4 @@
-Oracle's Elixir check of js/worlds-live.js · 2026-10-30 · 2026_LoL_esports_match_data_from_OraclesElixir.csv
+Oracle's Elixir check of js/worlds-live.js · 2026-10-31 · 2026_LoL_esports_match_data_from_OraclesElixir.csv
 
 2026-10-23 IG vs GEN g1: OK
 2026-10-23 TL vs CFO g1: OK
@@ -34,3 +34,13 @@ Oracle's Elixir check of js/worlds-live.js · 2026-10-30 · 2026_LoL_esports_mat
 2026-10-28 LYON vs IG g1: OK
 2026-10-28 IG vs LYON g2: OK
 2026-10-28 LYON vs IG g3: OK
+2026-10-29 KC vs CFO g1: OK
+2026-10-29 CFO vs KC g2: OK
+2026-10-29 BLG vs TES g1: OK
+2026-10-29 BLG vs TES g2: OK
+2026-10-29 TES vs BLG g3: OK
+2026-10-30 LOS vs TL g1: OK
+2026-10-30 LOS vs TL g2: OK
+2026-10-30 TL vs LOS g3: OK
+2026-10-30 G2 vs HLE g1: NOT IN FILE (yet)
+2026-10-30 HLE vs G2 g2: NOT IN FILE (yet)
