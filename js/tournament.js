@@ -447,9 +447,9 @@ function renderTour(){
   </div>`;
 }
 function setupView(){
-  const opt = TEAMS.map(t => `<label class="pickteam"><input type="checkbox" name="tTeam" value="${t.id}"> ${esc(t.name)} <small>${t.ov.toFixed(1)}</small></label>`).join("");
+  const opt = ranked.map((t, i) => `<label class="pickteam"><input type="checkbox" name="tTeam" value="${t.id}"><span class="rkn">${i + 1}</span>${regDot(t.id)}<span class="ttag" style="--tc:${teamCol(t.id)}">${esc(t.id)}</span><span class="nm">${esc(t.name)}</span><small>${t.ov.toFixed(1)}</small></label>`).join("");
   return `<div class="panel" style="display:grid;gap:14px">
-    <div><h2>Tournament mode</h2><p class="notes" style="margin:4px 0 0">Play Worlds 2026 from Swiss round 1 (23 October) to the Brooklyn final (14 November) on the real format and draw. Every game feeds a live data pool — champion presence, win rates and each player's Worlds champion pool — that later drafts use. LCK-style Player of the Game, MVP points and awards run all event.</p></div>
+    <div><h2>Tournament mode</h2><p class="notes" style="margin:4px 0 0;max-width:none">Play Worlds 2026 from Swiss round 1 (23 October) to the Brooklyn final (14 November) on the real format and draw. Every game feeds a live data pool — champion presence, win rates and each player's Worlds champion pool — that later drafts use. LCK-style Player of the Game, MVP points and awards run all event.</p></div>
     <div class="modes">${Object.entries(MODES).map(([k, m], i) => `<label class="modecard"><input type="radio" name="tMode" value="${k}"${i === 0 ? " checked" : ""}><b>${m.name}</b><span class="notes">${m.desc}</span></label>`).join("")}</div>
     <div><div class="eyebrow">Your team(s)</div><p class="notes" style="margin:2px 0 8px">My teams: choose 1–4. Guest picks: choose 1. Sim run: none needed.</p><div class="teamgrid">${opt}</div></div>
     <div class="ctrls"><button class="btn primary" data-ta="start">Start Worlds</button><label class="btn" style="cursor:pointer">Import a run file<input type="file" id="tImport" accept=".json,application/json" hidden></label><span class="notes" id="tErr"></span></div>

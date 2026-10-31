@@ -100,6 +100,12 @@ Five sessions, each ending with something you can check before the next starts; 
     - Comp profile per draft: early vs late, siege (early towers and plates) vs teamfight (objective fights) vs pick (kills), learned from what teams with each champion actually did.
     - Player–champion comfort from games played and results on that champion.
     - Synergy and counter adjustments: solo-queue (METAsrc) values as the starting point, adjusted only as far as pro results support.
+    - **Matchup grid (Luke, 31 Oct):** a champion-by-champion grid (row champion's record against column champion), per role plus "any role", was previewed in chat from the 44 Worlds Swiss games as an entry point to this data. Ideas to carry into session 2:
+        - Bot lane should be judged as a duo (ADC + support against ADC + support), not only ADC v ADC and support v support.
+        - Separate lane result from game result ("win lane, lose game"): use gold/XP/CS difference at 10 and 15 from the Oracle's Elixir file for the lane, and the result for the game.
+        - Samples are thin at Worlds (44 games: 139 lane pairings, 47 seen 2+ times), so the grid should be built from the full major-league file, with Worlds games as the test set.
+        - Team strength leaks into a champion's record (the stronger team's pick looks better), so matchup effects should be measured after the session 1 ratings are taken out.
+        - Today the app uses Worlds lane records only as a fallback when METAsrc has no number (`matchup()` in `js/core.js`, 2+ games, shrunk as (w+1)/(g+2)), and on champion cards ("Countered by" and "Counters").
     - Deliverable: a report on how much each part moves win odds, tested the same way.
 3. **The game-state simulator**
     - State per step: gold and XP lead, kills, towers per lane, dragons by type and soul point, grubs, Herald, Baron and Elder timers.

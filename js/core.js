@@ -44,6 +44,7 @@ function drawNav(v){const sec=(VIEWS.find(x=>x[0]===v)||VIEWS[0])[2];
   subtabs.innerHTML=VIEWS.filter(x=>x[2]===sec).map(([k,l])=>`<button role="tab" data-v="${k}" aria-selected="${k===v}" class="${GAPBEFORE.has(k)?"gap":""}${k==="custom"?" soon":""}">${l}${k==="custom"?"<small>soon</small>":""}</button>`).join("")}
 function show(v){
   v=OLDV[v]||v;if(!VIEWS.some(x=>x[0]===v))v="tour";CUR=v;LASTV[VIEWS.find(x=>x[0]===v)[2]]=v;drawNav(v);
+  const lg=document.querySelector("header .legend");if(lg)lg.hidden=v==="tour"||v==="custom"; /* ratings and meta tags aren't used on these pages; the tournament reuses the tag colours for Qualified/Alive/Eliminated */
   const tv=document.getElementById("v-tour");if(tv){tv.hidden=v!=="tour";if(v==="tour"&&typeof renderTour==="function")renderTour()}
   const teamsV=v==="power"||v==="rosters";document.getElementById("v-teams").hidden=!teamsV;
   if(teamsV){document.getElementById("powerPanel").hidden=v!=="power";document.getElementById("cmpPanel").hidden=v!=="power";document.getElementById("rosterPanel").hidden=v!=="rosters";if(v==="power")drawPower()}

@@ -27,7 +27,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:.0
 h1{font-size:clamp(30px,5vw,46px);font-weight:800;text-transform:uppercase;line-height:1}
 h1 span{color:var(--gold)}
 h2{font-size:22px;text-transform:uppercase}
-.lede{color:var(--muted);max-width:70ch;margin:8px 0 0}
+.lede{color:var(--muted);margin:8px 0 0}
 .eyebrow{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--gold);font-weight:700}
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin-top:12px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
@@ -189,9 +189,12 @@ img{max-width:100%}
 .modecard{display:grid;gap:4px;padding:12px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:var(--bg)}
 .modecard:has(input:checked){border-color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}
 .modecard input{justify-self:start}
-.teamgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}
+.teamgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:6px}
 .pickteam{display:flex;gap:6px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:4px;font-size:14px;cursor:pointer}
 .pickteam small{margin-left:auto;font-family:var(--mono);color:var(--muted)}
+.pickteam .rkn{font:700 13px var(--display);color:var(--muted);min-width:18px;text-align:right}
+.pickteam .rtag{margin-right:0}.pickteam .ttag{min-width:44px;justify-content:center;flex:none}
+.pickteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .pickteam:has(input:checked){border-color:var(--gold);background:var(--mixbg)}
 .mrow{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg)}
 .mrow.done{opacity:.85}
@@ -297,7 +300,7 @@ html:root[data-worlds="cup"] h1 span{background:linear-gradient(180deg,#5c6f88,#
 html:root[data-worlds="cup"] .tabs button[aria-selected="true"],html:root[data-worlds="cup"] .btn.primary{background:linear-gradient(180deg,#2a8be0,#165fa8);color:#fff;border-color:#165fa8}
 html:root[data-worlds="cup"] .panel{border-color:#cdd6e1;box-shadow:0 2px 10px rgba(14,26,43,.05)}
 
-.legal{margin:8px 0 0;font-size:11px;line-height:1.5;color:var(--muted);max-width:90ch}
+.legal{margin:8px 0 0;font-size:11px;line-height:1.5;color:var(--muted)}
 
 /* =====================================================================
    Arena HUD layer (direction A): Chakra Petch display, Rajdhani body,
@@ -632,7 +635,7 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .subtabs button{font:700 12.5px var(--display);letter-spacing:.07em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);padding:6px 12px;cursor:pointer;border-radius:0}
 .subtabs button[aria-selected="true"]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 .subtabs button.gap{margin-left:12px}
-.subtabs button.soon{opacity:.6}.subtabs button small{font:600 10px var(--body);margin-left:5px;text-transform:none;letter-spacing:0}
+.subtabs button.soon:not([aria-selected="true"]){background:var(--offbg);color:var(--muted);border-color:transparent}.subtabs button small{font:600 10px var(--body);margin-left:5px;text-transform:none;letter-spacing:0}
 @media (max-width:640px){.subtabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.subtabs button{white-space:nowrap}.subtabs button.gap{margin-left:6px}}
 /* ===== Card pages ===== */
 .hl{display:inline-block;width:fit-content;background:color-mix(in srgb,#f2c94c 34%,transparent);color:var(--fg);padding:1px 7px}
@@ -731,6 +734,7 @@ html:root[data-worlds="subway"] .tabs button[data-sec="details"]::before{content
 html:root[data-worlds="subway"] .tabs button[data-sec="teams"]::before{content:"T";background:#00933c}
 html:root[data-worlds="subway"] .tabs button[aria-selected="true"]{background:linear-gradient(180deg,#ffffff 0%,#f1f1f1 55%,#d9d9d9 100%);color:#111;border-color:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
 html:root[data-worlds="subway"] .subtabs button{font-size:13px}
+html:root[data-worlds="subway"] .subtabs button.soon:not([aria-selected="true"]){background:var(--offbg);border-color:transparent;color:var(--muted);box-shadow:none}
 html:root[data-worlds="subway"] .subtabs button[aria-selected="true"],html:root[data-worlds="subway"] .seg button[aria-pressed="true"],html:root[data-worlds="subway"] .btn.primary{background:linear-gradient(180deg,#ffdc45 0%,#fccc0a 55%,#e3b500 100%);color:#111;border-color:#fccc0a;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2),0 0 14px rgba(252,204,10,.25)}
 html:root[data-worlds="subway"] .modecard,html:root[data-worlds="subway"] .pickteam,html:root[data-worlds="subway"] .award,html:root[data-worlds="subway"] .mcard{background:linear-gradient(180deg,#26282c,#191a1d);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 html:root[data-worlds="subway"] .pickteam:has(input:checked){background:linear-gradient(180deg,#3a3206,#262105)}

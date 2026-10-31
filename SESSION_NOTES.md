@@ -6,7 +6,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Where we are
 
-- **App:** v34 (31 Oct 2026): Swiss round 4 day 3 data, TES–BLG confirmed from the Oracle's Elixir file. v33 (30 Oct): "Counters" row on champion cards. App data and code are correct as they stand.
+- **App:** v35 (31 Oct 2026): display tidy-ups from Luke's notes (header, legend, tournament setup). v34 (same day): Swiss round 4 day 3 data, TES–BLG confirmed from the Oracle's Elixir file. App data and code are correct as they stand.
 - **Real data:** all of Swiss rounds 1–4, 44 games, in `js/worlds-live.js` (data to 30 Oct). H2H in `js/h2h.js` (data to 30 Oct). **HLE 2-0 G2 is from the Reddit post-match thread, Leaguepedia and pickorban, not yet the Oracle's Elixir file:** re-check it when the next file arrives.
 - **Sim engine plan:** written 27 Oct, committed `0929636` (29 Oct). Status: planned, not started. See `research/sim-plan.md`.
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
@@ -65,7 +65,14 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - **Out-of-sample (v33 before the update):** favourite 4 of 5, log loss 0.573, Brier 0.192. Running total: 27 of 44 (61%).
 - `build_from_oe.py` run on a scratch copy: 42/44 OK (the 2 HLE–G2 games not in the file yet), `js/h2h.js` rebuilt to 30 Oct (new: LOS v TL 2-1), then HLE v G2 5-0 added by hand. Pick, ban and win counts for all 86 champions match Leaguepedia (44 games).
 - Cache v33 → v34. How checked: local server in a new browser-pane tab, data counts, H2H and player form read in the console, jungle, top, meta, champion and power pages at desktop and 375 px (no sideways scroll), console clean. Server stopped, tabs closed, temporary `.claude/launch.json` removed.
-- Not committed yet.
+- Committed `889b55d` and pushed.
+- **Matchup grid:** a champion-v-champion grid of the Worlds games was previewed in chat; the idea (bot lane as a duo, lane result v game result) is noted under session 2 in `research/sim-plan.md`.
+- **v35, display tidy-ups:** Luke left 5 notes on the running app through a temporary note overlay in the browser pane (not part of the app). Changes:
+  - Intro text, legal line and the Tournament mode description now use the full page width.
+  - Tournament setup team picker lists teams in power-ranking order with rank, region seed tag and team colour badge (same pieces as Power Rankings); boxes widened so names don't cut off (3 per row on desktop, 1 on a phone).
+  - "Custom · soon" button: flat muted fill and muted text instead of 60% opacity, including the Subway theme.
+  - Header legend: shorter Meta / In the mix / Not seen text with "!" hovers for the patch detail; hidden on Play → Worlds 2026 and Custom (those pages use neither ratings nor meta tags, and the tournament reuses the tag colours for Qualified / Alive / Eliminated).
+  - Cache v34 → v35. How checked: local server in a new browser-pane tab; legend shown/hidden per page read in the console; team picker order, ticking a team, no cut-off names; all 7 Worlds mode themes plus light mode looked at; "!" hovers at desktop and 375 px (inside the screen); no sideways scroll on 6 pages at 375 px; console clean. Server stopped, tabs closed, `.claude/launch.json` removed, test theme settings and notes cleared from localhost storage. Not committed yet.
 
 ### Session (30 Oct 2026) — v32: Swiss round 4 day 2, aged subway sign
 - **Data:** KC 2-0 CFO from Luke's new Oracle's Elixir file (data to 29 Oct 21:00 UTC). It matches pickorban and Leaguepedia on every field checked. TES 2-1 BLG isn't in the file yet, so it came from Leaguepedia's scoreboards with pickorban for damage share (CS@15 null, `fp` left out). `js/worlds-live.js` now has 39 games. `build_from_oe.py` was run on a scratch copy: 34/34 OK, `js/h2h.js` rebuilt to 29 Oct, then TES–BLG added by hand. Details and sources in `research/worlds-live-2026.md`.
