@@ -58,6 +58,15 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 - **`research/build/build_from_oe.py` overwrites app files** (`js/h2h.js`, `js/worlds-live.js`) on every run, even without `--fix`. Run it only on a scratch copy of the repo, with Luke's OK, and compare its output with the current files before anything is copied back. Needs Python 3.9+ and pandas.
 - **Work stays in Claude Code sessions.** The earlier claude.ai chats that built the app don't write to this repo any more.
 
+## Notes sessions (display review)
+
+When Luke wants to leave notes on the app ("notes session", "notes window"):
+1. Make a temporary `.claude/launch.json` (python `http.server` on port 8765, `--directory` the repo root), start it with `preview_start`, and open the app in a new tab at the page Luke names. For phone width use `resize_window` preset mobile, and tell Luke to pick Mobile in the pane's Viewport menu so it stays after the turn ends.
+2. Paste `tools/qol-notes-overlay.js` into that tab with `javascript_tool`. Re-paste it if the page is reloaded (notes survive in localStorage `qol-review-notes`).
+3. Tell Luke how it works (Note mode on → click → type → Save; Notes (N) lists them) and wait for "notes are done".
+4. Read all notes, look at each spot and its code, then give ONE grouped change list (note → change → files, plus anything that's a bigger job). Build nothing until Luke OKs it.
+5. Build the whole batch, one cache bump, check in a new tab (all Worlds mode themes, light mode, desktop and 375 px, console), then clean up: stop the server, close tabs, delete `.claude/launch.json`, clear `qol-review-notes` and any theme settings the test changed from localhost storage.
+
 ## Sim engine rules (master plan: `research/sim-plan.md`)
 
 - **Plan each foundation with Luke before building it** (ratings, draft AI, draft review, the simulator): agree what it shows, what it's built from and how it feeds the rest, with a worked example, then build.
@@ -91,6 +100,7 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 | `research/build/build_from_oe.py` | Rebuilds `js/h2h.js`, `research/model/h2h_2026.json` and the play-in tables in `js/worlds-live.js` from the Oracle's Elixir CSV, and checks the Swiss games (see Repo rules before running) |
 | `research/model/` | Tables built from the Oracle's Elixir file (`h2h_2026.json`) |
 | `Draft Game/` | Separate pick/ban card game (`index.html`) and its handoff file |
+| `tools/qol-notes-overlay.js` | Note-taking overlay for notes sessions (pasted into a browser tab; not loaded by the app) |
 | `SESSION_NOTES.md` | Live state, recent updates, what's next, open decisions |
 
 ## Code map

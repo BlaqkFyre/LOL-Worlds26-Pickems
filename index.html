@@ -11,7 +11,7 @@
 <meta name="description" content="Worlds 2026 tournament simulator, champ select drafter, player power bars and meta tools for League of Legends Pick'Em.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&family=Press+Start+2P&display=swap">
-<link rel="stylesheet" href="css/styles.css?v=35">
+<link rel="stylesheet" href="css/styles.css?v=36">
 <script>try{var t=localStorage.getItem("lolw26-theme"),w=localStorage.getItem("lolw26-worlds");if(t)document.documentElement.dataset.theme=t;if(w&&w!=="off")document.documentElement.dataset.worlds=w}catch(e){}</script>
 </head>
 <body>
@@ -73,13 +73,15 @@
     <h1>Worlds 2026 <span>Pick'Em Lab</span></h1>
     <p class="lede">Play Worlds 2026 on the real format and draw, draft every game with live meta, synergy and counter data, and track Player of the Game, MVP points and awards. Player ratings and tier lists for all 16 Swiss teams sit alongside.</p>
     <div class="legend" aria-label="Legend">
+      <div class="lgroup"><b class="lgl">Players</b>
       <span><i style="background:var(--gold)"></i>95+ elite</span>
       <span><i style="background:var(--teal)"></i>90–94 world class</span>
       <span><i style="background:var(--blue)"></i>85–89 strong</span>
-      <span><i style="background:var(--grey)"></i>under 85</span>
+      <span><i style="background:var(--grey)"></i>under 85</span></div>
+      <div class="lgroup"><b class="lgl">Champions</b>
       <span><span class="chip meta">Meta</span> 30%+ pick/ban presence <span class="info" tabindex="0" aria-label="Pick/ban presence in recent pro play: patch 26.20 blended with patches 26.16–26.20.">!<span class="tipx">Pick/ban presence in recent pro play: patch 26.20 blended with patches 26.16–26.20.</span></span></span>
       <span><span class="chip mix">In the mix</span> picked or banned, under 30% <span class="info" tabindex="0" aria-label="Seen in recent pro pick/ban tables (26.20 + 26.16–26.20), but under 30% presence.">!<span class="tipx">Seen in recent pro pick/ban tables (26.20 + 26.16–26.20), but under 30% presence.</span></span></span>
-      <span><span class="chip off">Not seen</span> outside the recent meta</span>
+      <span><span class="chip off">Not seen</span> outside the recent meta</span></div>
     </div>
   </header>
 
@@ -115,13 +117,13 @@
 </div>
 
 
-<script src="js/ui.js?v=35"></script>
-<script src="js/data.js?v=35"></script>
-<script src="js/champions.js?v=35"></script>
-<script src="js/assets.js?v=35"></script>
-<script src="js/worlds-live.js?v=35"></script>
-<script src="js/h2h.js?v=35"></script>
-<script src="js/tournament.js?v=35"></script>
-<script src="js/core.js?v=35"></script>
+<script src="js/ui.js?v=36"></script>
+<script src="js/data.js?v=36"></script>
+<script src="js/champions.js?v=36"></script>
+<script src="js/assets.js?v=36"></script>
+<script src="js/worlds-live.js?v=36"></script>
+<script src="js/h2h.js?v=36"></script>
+<script src="js/tournament.js?v=36"></script>
+<script src="js/core.js?v=36"></script>
 </body>
 </html>
