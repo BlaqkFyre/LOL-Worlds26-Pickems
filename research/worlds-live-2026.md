@@ -1,6 +1,27 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 31 Oct 2026: **44 games**, all of Swiss rounds 1–4: rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL) and round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2). Data: `js/worlds-live.js`.
+Updated 2 Nov 2026 (AEST): **51 games**, the whole Swiss stage: rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+
+## Swiss round 5, and HLE–G2 confirmed (added 2 Nov)
+- **New Oracle's Elixir file** (downloaded 2 Nov AEST): 9,857 games, data to 1 Nov 11:42 UTC; last Worlds game 31 Oct 23:05 UTC. It has HLE–G2 and all of round 5 (7 games); no knockout games yet.
+- **HLE 2-0 G2 confirmed:** the file matches what was entered from the Reddit post-match thread, Leaguepedia and pickorban on every field (sides, winner, length, bans in order, champions, K/D/A, CS including Hans Sama's 212, kill participation, objectives including grubs, first pick; damage share within rounding). Rows replaced with the file's, which adds CS@15.
+- **Round 5:** KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE, taken from the file. Lengths, bans, objectives, champions, K/D/A and CS match Leaguepedia's Round 5 scoreboards in all 7 games. Cho'Gath (LOS's Curse, game 3) is new at Worlds.
+- **H2H:** `build_from_oe.py` (scratch copy) reports 51/51 Swiss games OK and rebuilt `js/h2h.js` to 31 Oct. Changes: BLG v HLE 5-4 → 7-4, KC v MKOI 15-8 → 17-8, LOS v LYON 2-0 → 3-2 (each now met at Worlds). It reproduces HLE v G2 5-0 on its own. As before, its `worlds-live.js` output differed only in the play-in team list order, so that file was built from a scratch merge.
+- **Pick/ban check:** the app's pick, ban and win counts for all 90 champions match Leaguepedia's Main Event champion statistics (51 games) exactly.
+
+## Out-of-sample check, Swiss round 5 (the app at v37, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| KC vs MKOI G1 (KC blue) | KC 89% | KC won |
+| KC vs MKOI G2 (KC blue) | KC 62% | KC won |
+| LYON vs LOS G1 (LYON blue) | LOS 11% | LOS won |
+| LOS vs LYON G2 (LOS blue) | LYON 86% | LYON won |
+| LYON vs LOS G3 (LYON blue) | LYON 71% | LYON won |
+| BLG vs HLE G1 (BLG blue) | BLG 66% | BLG won |
+| BLG vs HLE G2 (BLG blue) | BLG 51% | BLG won |
+
+- Favourite won 6 of 7; log loss 0.629 and Brier 0.201. The miss was LOS winning game 1 at 11%. KC 89% and LYON 89% / 86% are above the ~80% ceiling.
+- Running total across all real Swiss games scored before their data was added (23 + 6 + 5 + 5 + 5 + 7): favourite won 33 of 51 (65%).
 
 ## 30 Oct games, and TES–BLG confirmed (added 31 Oct)
 - **New Oracle's Elixir file** (downloaded 31 Oct): 9,831 games, data to 30 Oct 22:00 UTC. It has TES–BLG and LOS–TL but not HLE–G2.
@@ -130,7 +151,9 @@ Add the new games to `js/worlds-live.js` (same row format) and bump the cache ve
 With a newer Oracle's Elixir file in `research/`: run `research/build/build_from_oe.py` on a scratch copy to rebuild `js/h2h.js` and check every game, then copy back only the files that really changed (see CLAUDE.md).
 
 ## Sources
-- Oracle's Elixir 2026 match data file (downloaded 31 Oct, data to 30 Oct 22:00 UTC; kept local in `research/`). Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)
+- Oracle's Elixir 2026 match data file (downloaded 2 Nov AEST, data to 1 Nov 11:42 UTC; kept local in `research/`).
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_5 (all 7 round 5 games, 2 Nov)
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (51 games, 2 Nov) Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)
 - r/leagueoflegends post-match thread, HLE 2-0 G2 (pasted by Luke, 31 Oct)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_4 (HLE vs G2: CS, objectives, bans, lengths; 31 Oct)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (44 games, 31 Oct)
