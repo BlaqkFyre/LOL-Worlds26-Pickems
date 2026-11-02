@@ -65,7 +65,7 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - `build_from_oe.py` on a scratch copy: 51/51 OK; `js/h2h.js` rebuilt to 31 Oct (BLG v HLE 7-4, KC v MKOI 17-8, LOS v LYON 3-2); HLE v G2 5-0 now comes from the file. Pick, ban and win counts for all 90 champions match Leaguepedia (51 games).
 - Cache v37 → v38. How checked: local server in a new browser-pane tab, data counts and H2H read in the console, 8 pages render at desktop, no sideways scroll on 5 pages at 375 px, console clean. Server stopped, tabs closed, `.claude/launch.json` removed.
 - Also: v37 committed `bd396b3` and pushed. Luke's time zone (AEST) saved in Claude's memory and noted above.
-- Not committed yet.
+- Committed `b1ed266` and pushed.
 
 ### Session (31 Oct 2026) — v34–v37: Swiss round 4 day 3, display tidy-ups, pick/ban board
 - **New Oracle's Elixir file** (9,831 games, data to 30 Oct 22:00 UTC): has TES–BLG and LOS–TL, not HLE–G2.
