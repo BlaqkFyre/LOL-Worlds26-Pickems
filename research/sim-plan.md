@@ -156,6 +156,35 @@ None open right now.
 
 Decided:
 
+- [x] **Sim session 1 foundation: ratings and the who-wins model** (Luke, 2 Nov 2026 AEST, 8 decisions):
+    1. **Team strength is fitted from game results**: a team rating with a league-strength term (linked through First Stand, MSI, EWC and Worlds meetings), a side term and recency weighting. Player ratings explain it role by role; a team's strength uses its current five, so stand-ins (e.g. 369) are handled. Luke's note: judge bot lane as a duo (ADC + support against ADC + support), not only ADC v ADC and support v support; there is more nuance across the map and roles, but start from here.
+    2. **Role skills**: 3 per role, today's names (`ATTR` in `js/core.js`) kept where the data measures them, measurable replacements proposed for the rest. Claude drafts a role-by-role table (skill, stats used, why) for Luke to approve before fitting.
+       Draft table (Luke, 2 Nov; data columns checked in the Oracle's Elixir file: 2,845 major-league games). Values per game, against the lane opponent or role average, adjusted for game length, weighted for recency and Worlds:
+       | Role | Skill | Stats |
+       | --- | --- | --- |
+       | Top | Laning | gold, XP, CS lead at 15 (10 as a check) |
+       | Top | Teamfight | kill participation, damage share |
+       | Top | Consistency | Luke: covers the different jobs a top laner is given. Three parts: steadiness (game-to-game spread of laning, damage and KDA), side pressure (damage to towers, lead at 20–25) and durability (damage taken and mitigated per minute, few deaths). Judged against top laners on similar champion types (tank v carry). Overlap to watch: durability's frontline stats were first drafted under Teamfight, so they move here and Teamfight keeps kill participation and damage share |
+       | Jungle | Early game | kills + assists by 15, first blood involvement, XP lead at 15 v enemy jungler |
+       | Jungle | Objectives | team's share of dragons, Heralds, grubs, Barons (team rows) |
+       | Jungle | Teamfight | kill participation, damage share, deaths |
+       | Mid | Laning | gold, XP, CS lead at 15 |
+       | Mid | Map impact (was Roaming) | share of the team's kills by 15 the mid took part in, first blood involvement |
+       | Mid | Damage | damage share, damage per minute |
+       | ADC | Laning | the ADC's own gold, XP, CS lead at 15, informed by the bot duo's combined lead (ADC + support v enemy duo); the support's skills don't include the duo score |
+       | ADC | Damage | damage share, damage per minute |
+       | ADC | Positioning or Late game | test both and keep the one that adds more (predicts winning beyond Damage): Positioning = deaths per game and damage per death; Late game = gold/XP lead at 20–25 and damage share in long games |
+       | Support | Playmaking | kill participation, assists, first blood involvement, kills + assists by 15 |
+       | Support | Map presence | vision score per minute, wards placed and cleared, control wards |
+       | Support | Reliability | deaths per game, deaths before 15 |
+       Not in the file: pick order (pick1–5 empty), player-row objectives, enemy-jungle CS (5%). Timeline stats at 10–25 min are about 95% complete (which leagues are missing: not checked).
+    3. **Card scale**: each skill is a role percentile among major-league players, shrunk toward the role average for small samples, shown on today's 50–99 scale. Luke's note: be smart about it so the numbers don't end up like today's (not accurate). Agreed approach: the card number is display only; the sim uses the underlying fitted effect in game terms (e.g. gold at 15 v role average, and what it is worth in win chance), never the percentile. The report shows both side by side.
+    4. **Overall**: weighted by how much each skill predicts winning (a handful of fitted weights per role, shown in the report), not a plain average.
+    5. **Recency**: chosen by the held-out test (compare half-lives such as 60, 90 and 180 days) and reported.
+    6. **Worlds games get extra weight** on top of recency (same event and patch). The ±1 per game / ±3 total form rule is not part of the new model. How much extra (e.g. ×2) is checked and reported; Worlds games used to test that choice must not also be in its training data.
+    7. **No hand cap on odds**: the model sets its own confidence, a calibration table checks it, and one fitted "temperature" softens it if it is still too sure.
+    8. **Testing: all three kinds**: (a) train on major leagues and internationals before 1 Sep, test on games from 1 Sep; (b) Worlds games only (22 play-in + 51 Swiss so far, then knockouts as played; small and noisy, reported as such); (c) a rolling test that refits month by month and predicts the next month. The new model ships only if it beats the current app on the same games.
+
 - [x] **Minor leagues stay out of fitting for now** (Luke, 29 Oct). Ratings, the who-wins model and event chances are fitted on the major leagues and internationals only. Minor-league games are used for player history and champion pools, e.g. a player with few major-league games such as TES's stand-in 369.
 - [x] **The scorecard is not shown in the app for now** (Luke, 29 Oct). Each session or match-day update shows it to Luke as an artifact in the Claude Code chat, and the running numbers are kept in the research notes.
 - [x] **The old engine stays** (Luke, 29 Oct). The app keeps using it until the new one passes its tests, and afterwards it's kept as a reference, a fallback, and possibly a simple-mode simulator. So session 5's "remove the old hand-set constants" doesn't apply: the old engine's code stays, and only the screens that use the new engine describe it.
