@@ -9,7 +9,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 - **App:** v38 (2 Nov 2026 AEST): Swiss round 5 data, HLE–G2 confirmed from the Oracle's Elixir file. v37 (31 Oct): new champ select pick/ban board and tier colours. App data and code are correct as they stand.
 - **Real data:** the whole Swiss stage, 51 games, in `js/worlds-live.js` (data to 31 Oct), every game confirmed against the Oracle's Elixir file. H2H in `js/h2h.js` (data to 31 Oct). Knockouts start 3 Nov (US).
 - **Time zones:** Luke's dates are AEST; Worlds game days are US dates; the Oracle's Elixir file is UTC. Check a game's UTC time against the file before saying it has been played.
-- **Sim engine plan:** written 27 Oct, committed `0929636` (29 Oct). Status: planned, not started. See `research/sim-plan.md`.
+- **Sim engine:** session 1 (ratings and who-wins model) **fitted and tested, report not written yet**. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`.
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
 - **Where work happens:** Claude Code sessions only. The claude.ai chats that built the app no longer write to the repo.
 
@@ -19,7 +19,8 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 | Task | Status/blocker |
 |---|---|
-| **Sim session 1:** ratings and the "who wins" model | Not started. Read `research/sim-plan.md` first. Starts with planning the ratings foundation with Luke (skills per role, what each is fitted from, the overall, how they feed the sim) before any fitting or code |
+| **Sim session 1 report (next)** | Fitting and tests done 3 Nov. Write `research/sim1-report.md` from `research/sim1/README.md`, the JSON/CSV results in `research/model/sim1/` and the decisions in `research/sim-plan.md`; show Luke the scorecard as an artifact; then propose a commit (the new folders are not committed yet). No app change |
+| Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat |
 | Sim sessions 2–5 | After session 1, in order (see the plan) |
 | Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
@@ -66,6 +67,7 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - Cache v37 → v38. How checked: local server in a new browser-pane tab, data counts and H2H read in the console, 8 pages render at desktop, no sideways scroll on 5 pages at 375 px, console clean. Server stopped, tabs closed, `.claude/launch.json` removed.
 - Also: v37 committed `bd396b3` and pushed. Luke's time zone (AEST) saved in Claude's memory and noted above.
 - Committed `b1ed266` and pushed.
+- **Sim session 1 (same day, later):** planned with Luke (8 decisions + role skills table, committed `c845ba7`), then fitted and tested in scratch: team ratings from results (league, side, 90-day recency), player skills with a league shift per role, S5 card scale adopted, extra Worlds weight dropped (test), experience tested (not adopted yet), sources checked against Leaguepedia and gol.gg, fixed ID lookup built, new model beats the app on the 51 Swiss games (0.639 v 0.679). Copied to `research/sim1/` and `research/model/sim1/` for the next session; `research/sim-plan.md` updated. **Not committed yet.** Report moved to a new chat because this one reached 93% context.
 
 ### Session (31 Oct 2026) — v34–v37: Swiss round 4 day 3, display tidy-ups, pick/ban board
 - **New Oracle's Elixir file** (9,831 games, data to 30 Oct 22:00 UTC): has TES–BLG and LOS–TL, not HLE–G2.

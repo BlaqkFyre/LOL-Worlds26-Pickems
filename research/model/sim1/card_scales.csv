@@ -1,0 +1,81 @@
+role,name,team,home,games,S0,S1,S2,S3,S4
+ADC,Peyz,T1,LCK,155,98.0,99.0,96.0,98.0,99.0
+ADC,Smash,Dplus Kia,LCK,150,97.0,92.0,95.0,98.0,96.0
+ADC,Ruler,Gen.G,LCK,124,96.0,89.0,91.0,97.0,92.0
+ADC,JiaQi,Invictus Gaming,LPL,112,98.0,96.0,95.0,96.0,89.0
+ADC,Gumayusi,Hanwha Life Esports,LCK,142,95.0,83.0,87.0,96.0,86.0
+ADC,Viper,Bilibili Gaming,LPL,185,96.0,86.0,89.0,95.0,83.0
+ADC,Berserker,LYON,LCS,133,86.0,66.0,75.0,93.0,79.0
+ADC,Yeon,Team Liquid,LCS,108,91.0,79.0,82.0,93.0,76.0
+ADC,Hans Sama,G2 Esports,LEC,136,87.0,70.0,78.0,91.0,73.0
+ADC,Caliste,Karmine Corp,LEC,156,89.0,76.0,79.0,91.0,70.0
+ADC,Hope,Anyone's Legend,LPL,146,88.0,73.0,78.0,88.0,66.0
+ADC,Eddie,Team Secret Whales,LCP,114,82.0,63.0,75.0,86.0,63.0
+ADC,JackeyLove,Top Esports,LPL,99,81.0,60.0,74.0,84.0,60.0
+ADC,Supa,Movistar KOI,LEC,119,79.0,57.0,73.0,84.0,57.0
+ADC,Duduhh,LØS,CBLOL,125,70.0,53.0,67.0,74.0,53.0
+ADC,Doggo,CTBC Flying Oyster,LCP,92,65.0,50.0,64.0,65.0,50.0
+JGL,Canyon,Gen.G,LCK,124,98.0,96.0,85.0,98.0,99.0
+JGL,Kanavi,Hanwha Life Esports,LCK,142,98.0,99.0,86.0,98.0,96.0
+JGL,Xun,Bilibili Gaming,LPL,185,96.0,92.0,82.0,96.0,92.0
+JGL,Tarzan,Anyone's Legend,LPL,146,94.0,83.0,80.0,95.0,89.0
+JGL,Oner,T1,LCK,152,90.0,79.0,79.0,94.0,86.0
+JGL,Lucid,Dplus Kia,LCK,147,96.0,89.0,81.0,93.0,83.0
+JGL,SkewMond,G2 Esports,LEC,136,86.0,76.0,75.0,92.0,79.0
+JGL,Tian,Top Esports,LPL,99,84.0,73.0,75.0,90.0,76.0
+JGL,Inspired,LYON,LCS,124,71.0,53.0,68.0,90.0,73.0
+JGL,Josedeodo,Team Liquid,LCS,108,83.0,70.0,74.0,88.0,70.0
+JGL,Yike,Karmine Corp,LEC,156,80.0,63.0,72.0,88.0,66.0
+JGL,Hizto,Team Secret Whales,LCP,114,82.0,66.0,74.0,86.0,63.0
+JGL,Wei,Invictus Gaming,LPL,122,95.0,86.0,81.0,85.0,60.0
+JGL,Elyoya,Movistar KOI,LEC,119,76.0,60.0,71.0,79.0,57.0
+JGL,Shad0w,CTBC Flying Oyster,LCP,92,72.0,57.0,68.0,74.0,53.0
+JGL,Curse,LØS,CBLOL,116,57.0,50.0,62.0,64.0,50.0
+MID,Knight,Bilibili Gaming,LPL,185,98.0,99.0,97.0,98.0,99.0
+MID,Chovy,Gen.G,LCK,124,98.0,96.0,93.0,98.0,96.0
+MID,Caps,G2 Esports,LEC,136,93.0,79.0,82.0,97.0,92.0
+MID,Creme,Top Esports,LPL,142,96.0,89.0,85.0,96.0,89.0
+MID,Saint,LYON,LCS,133,89.0,73.0,77.0,96.0,86.0
+MID,Zeka,Hanwha Life Esports,LCK,142,95.0,86.0,85.0,95.0,83.0
+MID,ShowMaker,Dplus Kia,LCK,150,95.0,83.0,84.0,94.0,79.0
+MID,Rookie,Invictus Gaming,LPL,84,96.0,92.0,88.0,93.0,76.0
+MID,Shanks,Anyone's Legend,LPL,146,91.0,76.0,80.0,93.0,73.0
+MID,kyeahoo,Karmine Corp,LEC,156,86.0,70.0,76.0,91.0,70.0
+MID,Feisty,LØS,CBLOL,125,81.0,66.0,73.0,88.0,66.0
+MID,Quid,Team Liquid,LCS,108,80.0,63.0,72.0,86.0,63.0
+MID,Faker,T1,LCK,155,79.0,60.0,72.0,86.0,60.0
+MID,Jojopyun,Movistar KOI,LEC,119,76.0,57.0,70.0,83.0,57.0
+MID,Dire,Team Secret Whales,LCP,114,65.0,53.0,64.0,70.0,53.0
+MID,Pout,CTBC Flying Oyster,LCP,66,64.0,50.0,64.0,65.0,50.0
+SUP,Keria,T1,LCK,155,98.0,99.0,79.0,98.0,99.0
+SUP,Isles,LYON,LCS,133,82.0,70.0,71.0,97.0,96.0
+SUP,Duro,Gen.G,LCK,124,97.0,96.0,78.0,97.0,92.0
+SUP,Kael,Anyone's Legend,LPL,146,97.0,92.0,77.0,95.0,89.0
+SUP,Delight,Hanwha Life Esports,LCK,136,93.0,83.0,75.0,93.0,86.0
+SUP,Career,Dplus Kia,LCK,150,96.0,89.0,77.0,93.0,83.0
+SUP,Alvaro,Movistar KOI,LEC,119,86.0,76.0,73.0,92.0,79.0
+SUP,Ackerman,LØS,CBLOL,125,87.0,79.0,73.0,90.0,76.0
+SUP,ON,Bilibili Gaming,LPL,185,93.0,86.0,75.0,89.0,73.0
+SUP,Bie,Team Secret Whales,LCP,114,84.0,73.0,72.0,88.0,70.0
+SUP,Busio,Karmine Corp,LEC,156,74.0,63.0,70.0,87.0,66.0
+SUP,Zhuo,Top Esports,LPL,114,77.0,66.0,71.0,86.0,63.0
+SUP,CoreJJ,Team Liquid,LCS,108,74.0,60.0,70.0,83.0,60.0
+SUP,Labrov,G2 Esports,LEC,136,60.0,50.0,66.0,82.0,57.0
+SUP,Kino,CTBC Flying Oyster,LCP,66,64.0,53.0,68.0,67.0,53.0
+SUP,Meiko,Invictus Gaming,LPL,79,67.0,57.0,69.0,60.0,50.0
+TOP,Kiin,Gen.G,LCK,124,98.0,99.0,97.0,98.0,99.0
+TOP,Bin,Bilibili Gaming,LPL,155,98.0,96.0,93.0,98.0,96.0
+TOP,Zeus,Hanwha Life Esports,LCK,142,97.0,92.0,90.0,97.0,92.0
+TOP,Zest,LØS,CBLOL,125,96.0,89.0,88.0,96.0,89.0
+TOP,Doran,T1,LCK,155,95.0,79.0,88.0,96.0,86.0
+TOP,Siwoo,Dplus Kia,LCK,150,96.0,86.0,88.0,95.0,83.0
+TOP,Canna,Karmine Corp,LEC,156,91.0,76.0,81.0,94.0,79.0
+TOP,Morgan,Team Liquid,LCS,108,90.0,73.0,81.0,93.0,76.0
+TOP,TheShy,Invictus Gaming,LPL,41,95.0,83.0,88.0,92.0,73.0
+TOP,369,Top Esports,LPL,49,87.0,70.0,78.0,89.0,70.0
+TOP,BrokenBlade,G2 Esports,LEC,136,80.0,66.0,74.0,88.0,66.0
+TOP,Breathe,Anyone's Legend,LPL,94,75.0,63.0,71.0,78.0,63.0
+TOP,Dhokla,LYON,LCS,130,60.0,53.0,61.0,73.0,60.0
+TOP,Pun,Team Secret Whales,LCP,113,70.0,60.0,67.0,72.0,57.0
+TOP,Myrwn,Movistar KOI,LEC,119,61.0,57.0,61.0,64.0,53.0
+TOP,Rest,CTBC Flying Oyster,LCP,92,56.0,50.0,58.0,56.0,50.0

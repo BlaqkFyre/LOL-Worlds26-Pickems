@@ -1,0 +1,287 @@
+{
+ "validation_grid": [
+  [
+   80,
+   "lategame",
+   0.6364
+  ],
+  [
+   80,
+   "positioning",
+   0.6365
+  ],
+  [
+   80,
+   "positioning+lategame",
+   0.6365
+  ],
+  [
+   80,
+   "neither",
+   0.6365
+  ],
+  [
+   160,
+   "lategame",
+   0.6367
+  ],
+  [
+   160,
+   "positioning+lategame",
+   0.6367
+  ],
+  [
+   20,
+   "lategame",
+   0.6368
+  ],
+  [
+   160,
+   "positioning",
+   0.6368
+  ],
+  [
+   160,
+   "neither",
+   0.6368
+  ],
+  [
+   20,
+   "neither",
+   0.6369
+  ],
+  [
+   320,
+   "lategame",
+   0.6371
+  ],
+  [
+   320,
+   "positioning+lategame",
+   0.6371
+  ],
+  [
+   320,
+   "positioning",
+   0.6372
+  ],
+  [
+   320,
+   "neither",
+   0.6372
+  ],
+  [
+   20,
+   "positioning",
+   0.6373
+  ],
+  [
+   20,
+   "positioning+lategame",
+   0.6373
+  ],
+  [
+   640,
+   "positioning",
+   0.6375
+  ],
+  [
+   640,
+   "lategame",
+   0.6375
+  ],
+  [
+   640,
+   "positioning+lategame",
+   0.6375
+  ],
+  [
+   640,
+   "neither",
+   0.6375
+  ],
+  [
+   5,
+   "lategame",
+   0.6382
+  ],
+  [
+   5,
+   "neither",
+   0.6384
+  ],
+  [
+   5,
+   "positioning+lategame",
+   0.6392
+  ],
+  [
+   5,
+   "positioning",
+   0.6393
+  ],
+  [
+   1,
+   "lategame",
+   0.6396
+  ],
+  [
+   1,
+   "neither",
+   0.6398
+  ],
+  [
+   1,
+   "positioning+lategame",
+   0.6409
+  ],
+  [
+   1,
+   "positioning",
+   0.6411
+  ]
+ ],
+ "chosen": {
+  "player_ridge": 80,
+  "adc_third_skill": "lategame"
+ },
+ "adc_compare": {
+  "positioning": {
+   "validation": {
+    "n": 712,
+    "logloss": 0.6365,
+    "brier": 0.2228,
+    "fav_won": 0.629
+   },
+   "test_from_sep": {
+    "n": 311,
+    "logloss": 0.6485,
+    "brier": 0.2287,
+    "fav_won": 0.64
+   }
+  },
+  "lategame": {
+   "validation": {
+    "n": 712,
+    "logloss": 0.6364,
+    "brier": 0.2228,
+    "fav_won": 0.625
+   },
+   "test_from_sep": {
+    "n": 311,
+    "logloss": 0.6468,
+    "brier": 0.2279,
+    "fav_won": 0.646
+   }
+  },
+  "both": {
+   "validation": {
+    "n": 712,
+    "logloss": 0.6365,
+    "brier": 0.2229,
+    "fav_won": 0.628
+   },
+   "test_from_sep": {
+    "n": 311,
+    "logloss": 0.6477,
+    "brier": 0.2283,
+    "fav_won": 0.64
+   }
+  },
+  "neither": {
+   "validation": {
+    "n": 712,
+    "logloss": 0.6365,
+    "brier": 0.2227,
+    "fav_won": 0.629
+   },
+   "test_from_sep": {
+    "n": 311,
+    "logloss": 0.6476,
+    "brier": 0.2283,
+    "fav_won": 0.63
+   }
+  }
+ },
+ "team_only": {
+  "validation": {
+   "n": 712,
+   "logloss": 0.638,
+   "brier": 0.2229,
+   "fav_won": 0.626
+  },
+  "test_from_sep": {
+   "n": 311,
+   "logloss": 0.6529,
+   "brier": 0.231,
+   "fav_won": 0.63
+  },
+  "worlds": {
+   "n": 73,
+   "logloss": 0.6512,
+   "brier": 0.2316,
+   "fav_won": 0.63
+  }
+ },
+ "players_only": {
+  "validation": {
+   "n": 712,
+   "logloss": 0.6549,
+   "brier": 0.2313,
+   "fav_won": 0.617
+  },
+  "test_from_sep": {
+   "n": 311,
+   "logloss": 0.6561,
+   "brier": 0.232,
+   "fav_won": 0.601
+  },
+  "worlds": {
+   "n": 73,
+   "logloss": 0.6773,
+   "brier": 0.2422,
+   "fav_won": 0.548
+  }
+ },
+ "team_plus_players": {
+  "validation": {
+   "n": 712,
+   "logloss": 0.6364,
+   "brier": 0.2228,
+   "fav_won": 0.625
+  },
+  "test_from_sep": {
+   "n": 311,
+   "logloss": 0.6468,
+   "brier": 0.2279,
+   "fav_won": 0.646
+  },
+  "worlds": {
+   "n": 73,
+   "logloss": 0.6473,
+   "brier": 0.2294,
+   "fav_won": 0.658
+  }
+ },
+ "weights": {
+  "team_logit_scale": 0.889,
+  "top_laning": 0.043,
+  "top_teamfight": -0.004,
+  "top_cons_side": 0.139,
+  "top_cons_dur": 0.041,
+  "top_cons_steady": -0.001,
+  "jng_early": 0.068,
+  "jng_objectives": 0.086,
+  "jng_teamfight": 0.027,
+  "mid_laning": 0.122,
+  "mid_mapimpact": -0.002,
+  "mid_damage": 0.082,
+  "bot_lane_own": 0.034,
+  "bot_lane_duo": 0.036,
+  "bot_damage": -0.006,
+  "sup_playmaking": 0.032,
+  "sup_mappresence": 0.044,
+  "sup_reliability": 0.034,
+  "bot_lategame": 0.107
+ }
+}

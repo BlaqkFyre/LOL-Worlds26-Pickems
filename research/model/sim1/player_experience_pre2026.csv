@@ -1,0 +1,443 @@
+playerid,name,team,role,games,lp_link,worlds_appearances,worlds_games,msi_games,worlds_titles,msi_titles,intl_games
+oe:player:6e6a78244523ed9e54731d07d1f79f4,DuDu,DN SOOPers,top,95,,0,0,0,0,0,0
+oe:player:a2357eb17578485c2ba736db36cbc42,Pyosik,DN SOOPers,jng,75,pyosik,3,37,0,1,0,37
+oe:player:6adb46561c24655e0455d9b3fdc5698,Clozer,DN SOOPers,mid,95,,0,0,0,0,0,0
+oe:player:18bdb3898e7fecb3bb0be7ff075d509,deokdam,DN SOOPers,bot,91,deokdam,2,28,0,0,0,28
+oe:player:dea5251e486aed942e1bc06e1d5c116,Life,DN SOOPers,sup,25,life,2,25,0,0,0,25
+oe:player:29bef8f5895e5e4fef8ff0945e68567,PerfecT,KT Rolster,top,106,perfect (lee seung-min),1,16,0,0,0,16
+oe:player:f9fe6d28d5b67bf9ac673b2cc8edf15,Cuzz,KT Rolster,jng,106,cuzz,3,37,3,0,0,40
+oe:player:30361653a485a9609fb2d3aa073282c,Bdd,KT Rolster,mid,106,bdd,5,62,18,0,0,80
+oe:player:85104684d1eb7f4c0ce393441a0b669,Aiming,Kiwoom DRX,bot,84,aiming,2,21,0,0,0,21
+oe:player:3126bca5d4d2555ba3b460699508e16,Pollu,KT Rolster,sup,6,,0,0,0,0,0,0
+oe:player:78081d0b3c01f1f295d52d53744261a,Ghost,KT Rolster,sup,11,ghost (jang yong-jun),2,36,26,1,0,62
+oe:player:38e0af7278d6769d0c81d7c4b47ac1e,Soboro,Fnatic,top,65,,0,0,0,0,0,0
+oe:player:b61e517b1a6027160aafaf56e9867c0,Wei,Invictus Gaming,jng,122,wei (yan yang-wei),4,38,51,0,2,89
+oe:player:1213778b5c6d69dcb26aa89f7d0aaa9,Rookie,Invictus Gaming,mid,84,rookie,4,42,14,1,0,56
+oe:player:1c42d9266c8b391c7870b7a39f25a12,Photic,Ninjas in Pyjamas,bot,76,,0,0,0,0,0,0
+oe:player:dfe5b204f04f40a84019af080662259,Jwei,Weibo Gaming,sup,73,,0,0,0,0,0,0
+oe:player:65ed20b21e2993fb00dbd21a2fd991b,Zika,Weibo Gaming,top,100,zika,2,19,0,0,0,19
+oe:player:88bba3108e62145a9780becd3eb553d,Jiejie,EDward Gaming,jng,112,jiejie,2,32,0,1,0,32
+oe:player:beea9fe15bff6a7ab0b3913d3d5fde6,Xiaohu,Weibo Gaming,mid,100,xiaohu,8,109,83,0,3,192
+oe:player:a58a0d41103cdc5b58cbb547eeaca2d,Elk,Weibo Gaming,bot,100,elk,3,46,69,0,0,115
+oe:player:a7128975a782c11d8c34525be8e1b6c,Erha,Team WE,sup,141,,0,0,0,0,0,0
+oe:player:da9f969a7ab3819b9e528072aa4d5e6,Siwoo,Dplus Kia,top,150,,0,0,0,0,0,0
+oe:player:10b86429ce8048aba673d802632e358,Lucid,Dplus Kia,jng,147,lucid (choi yong-hyeok),1,9,0,0,0,9
+oe:player:5f8ff49cd56eae61d635966b183a451,ShowMaker,Dplus Kia,mid,150,showmaker,6,83,26,1,0,109
+oe:player:eaebb7118d7bd83eabac513053e1f6c,Smash,Dplus Kia,bot,150,,0,0,0,0,0,0
+oe:player:99e732def3601275db892c84fb85a0c,Career,Dplus Kia,sup,150,,0,0,0,0,0,0
+oe:player:86a59ad7ba2334ad7505f303d3f2ab6,Casting,HANJIN BRION,top,99,,0,0,0,0,0,0
+oe:player:60b1614a632775c97a37a57bda799f2,GIDEON,HANJIN BRION,jng,99,,0,0,0,0,0,0
+oe:player:ea58943d300b14d684bb05b3975fe15,Roamer,HANJIN BRION,mid,82,,0,0,0,0,0,0
+oe:player:2b5fa564a1259b97bc238fbfa719b07,Teddy,HANJIN BRION,bot,99,teddy,1,14,15,0,0,29
+oe:player:97cae9bbdbfe09bafe83c5a7bda0727,Namgung,HANJIN BRION,sup,99,,0,0,0,0,0,0
+oe:player:8007ba25dee37ac1e4445a6e9f8d252,Xiaoxu,JD Gaming,top,158,,0,0,0,0,0,0
+oe:player:a22a6d1fe8786cf83675e2d932fbffe,JunJia,JD Gaming,jng,152,junjia,3,34,37,0,0,71
+oe:player:a179853ac2a0832657b9de8b9ba0020,HongQ,JD Gaming,mid,158,hongq,1,12,13,0,0,25
+oe:player:867e8957fae1cb59f0808dbcc3aada2,GALA,JD Gaming,bot,158,gala,5,54,51,0,2,105
+oe:player:41ad87cfc159526f62529db61162a2a,Vampire,JD Gaming,sup,158,,0,0,0,0,0,0
+oe:player:0c74b7f78409a4022a2c4c5a5ca3ee1,369,Top Esports,top,49,369,5,66,31,0,1,97
+oe:player:a7b51467f09577883d7150f37393964,naiyou,Top Esports,jng,43,,0,0,0,0,0,0
+oe:player:6e7908512cb309a43388bb464a312a2,Creme,Top Esports,mid,142,creme,2,24,16,0,0,40
+oe:player:d971df9441d60af93a87545e6a8f884,JiaQi,Invictus Gaming,bot,112,,0,0,0,0,0,0
+oe:player:b777313deced54da2d2c1aa88f52e50,fengyue,Ninjas in Pyjamas,sup,121,,0,0,0,0,0,0
+oe:player:76a48b285de2308d5de60668d021ed5,Liangchen,Ultra Prime,top,13,,0,0,0,0,0,0
+oe:player:655c522b43d1444e55a0a4615c2b59b,Grizzly,Ultra Prime,jng,13,,0,0,0,0,0,0
+oe:player:da42b9f18367dc6c30476ec117c29de,Saber,Ultra Prime,mid,23,,0,0,0,0,0,0
+oe:player:9712524dc88851032bd53054f8b49b4,Hena,paiN Gaming,bot,53,,0,0,0,0,0,0
+oe:player:403937c97942cb4634ef8907077ede5,Xiaoxia,Ultra Prime,sup,25,,0,0,0,0,0,0
+oe:player:e85e46c5f3d3fcce55af9ca6a4cb45c,sasi,Ultra Prime,top,29,,0,0,0,0,0,0
+oe:player:92f0831b560a15d8be3be25275adb08,Heng,LGD Gaming,jng,97,,0,0,0,0,0,0
+oe:player:3c93fcbfb525315f6412904e5b9abbd,Tangyuan,LGD Gaming,mid,97,,0,0,0,0,0,0
+oe:player:6d734e1e86b978852d95cfd63d6a643,Shaoye,LGD Gaming,bot,97,,0,0,0,0,0,0
+oe:player:397bcf46311de3cf780469b2a842b67,Ycx,LNG Esports,sup,53,,0,0,0,0,0,0
+oe:player:6fbf57b984dbf130701e09ea4110bb8,Rich,Kiwoom DRX,top,80,,0,0,0,0,0,0
+oe:player:baf26814ef7b2f10fac33a00c3d53a3,Willer,Kiwoom DRX,jng,99,willer,1,17,0,0,0,17
+oe:player:bd6a2e6aaeb993fd29f43790265297f,Ucal,Kiwoom DRX,mid,99,ucal,1,11,0,0,0,11
+oe:player:8643b56ba8000250b81fdaca1d7f06e,Jiwoo,KT Rolster,bot,64,,0,0,0,0,0,0
+oe:player:5ef70ecd799a70ebbda239cd9a9f1e7,Andil,Kiwoom DRX,sup,98,,0,0,0,0,0,0
+oe:player:03daae1844b9ad257324c3eedf41e28,Kiin,Gen.G,top,124,kiin,4,48,35,0,2,83
+oe:player:92544d7a994bd6841cccd9f6e42e3de,Canyon,Gen.G,jng,124,canyon,7,101,61,1,2,162
+oe:player:fb6e61b8acb05df17b7e5ad4ae7c800,Chovy,Gen.G,mid,124,chovy,7,89,50,0,2,139
+oe:player:eada4723af6f51cf2391d85b5fde49b,Ruler,Gen.G,bot,124,ruler,8,106,34,1,2,140
+oe:player:605821ebcf6a2e53f03ec6e8e463d1b,Duro,Gen.G,sup,124,duro,1,13,19,0,1,32
+oe:player:aad3806ef26a116c73b11efa07e9bd8,Flandre,Bilibili Gaming,top,100,flandre,3,42,21,1,0,63
+oe:player:62922f2b370657a966de4d84f5586bf,Tarzan,Anyone's Legend,jng,146,tarzan (lee seung-yong),5,59,21,0,0,80
+oe:player:0e2f0d3ded24c190dd6a4b3d6f89f04,Shanks,Anyone's Legend,mid,146,shanks,1,10,21,0,0,31
+oe:player:7cf68f44e5dc31827b1d3f0a3b4a28e,Hope,Anyone's Legend,bot,146,hope (wang jie),2,24,21,0,0,45
+oe:player:d24f38ec30ce6f7577066f80e43e4bf,Kael,Anyone's Legend,sup,146,kael (kim jin-hong),1,10,21,0,0,31
+oe:player:618a87d272773f68239d8ce5555f39d,Kingen,Nongshim RedForce,top,95,kingen,2,35,0,1,0,35
+oe:player:3f4027dc08a489bd4d5390913f5dc71,Sponge,Nongshim RedForce,jng,95,,0,0,0,0,0,0
+oe:player:71e79ef80600d398d90cfebe3b0b758,Scout,Nongshim RedForce,mid,95,scout,7,81,0,1,0,81
+oe:player:4047b7fecd736a6924aa13b05f42897,Taeyoon,BNK FEARX,bot,107,,0,0,0,0,0,0
+oe:player:e4e24b8656e4e6a74b939af730b0148,Lehends,Nongshim RedForce,sup,88,lehends,4,53,16,0,1,69
+oe:player:d87853a5c1c5463889d70a62cdbcffc,Clear,BNK FEARX,top,129,,0,0,0,0,0,0
+oe:player:637ed20b1e41be1c51bd1a4cb211357,Raptor,BNK FEARX,jng,129,,0,0,0,0,0,0
+oe:player:d709285b163a94af9d819e568c592ba,VicLa,BNK FEARX,mid,119,,0,0,0,0,0,0
+oe:player:178ec186b0d43d2669342596c2808cd,Diable,Nongshim RedForce,bot,115,,0,0,0,0,0,0
+oe:player:b0ec3df39d61f953e7af0afd8eb8c4a,Kellin,BNK FEARX,sup,129,kellin,2,20,0,0,0,20
+oe:player:fb66ef5885b4be9323905b821dc3a42,Bin,Bilibili Gaming,top,155,bin (chen ze-bin),4,65,93,0,1,158
+oe:player:fbdc4428b2d095c83aebeed5da4e4b2,Xun,Bilibili Gaming,jng,185,xun,2,35,48,0,0,83
+oe:player:ed29043422e3c515e1cb292464b990b,Knight,Bilibili Gaming,mid,185,knight (zhuo ding),5,62,58,0,1,120
+oe:player:9573154ad8bc9459b4c0d940315054f,Viper,Bilibili Gaming,bot,185,viper (park do-hyeon),5,64,0,1,0,64
+oe:player:90651ebea9a35ec4e018c8157492e17,ON,Bilibili Gaming,sup,185,on,3,45,69,0,0,114
+oe:player:2cec4b6803b4678250233ae79205f2e,1Jiang,Ground Zero Gaming,top,68,,0,0,0,0,0,0
+oe:player:21e6493dca56a03bd0ccbdef211d187,Husha,Ground Zero Gaming,jng,68,husha,2,18,0,0,0,18
+oe:player:70e6d96860b77bb3e87663215b42a1f,JimieN,Ground Zero Gaming,mid,53,jimien,1,7,0,0,0,7
+oe:player:56cf99d5b59755569fa366c07c18f38,Shunn,Ground Zero Gaming,bot,53,shunn,2,12,0,0,0,12
+oe:player:060a269b0eb445a1b5075034787f0cc,Orca,Ground Zero Gaming,sup,53,,0,0,0,0,0,0
+oe:player:6644a7352d32c9c4443017798130b61,Pun,Team Secret Whales,top,113,pun,1,2,0,0,0,2
+oe:player:043e89cd3b06bc1a0555024d475c9d2,Hizto,Team Secret Whales,jng,114,hizto,1,6,0,0,0,6
+oe:player:b7a3b6176406a92dd089fe2f82a1d3f,Dire,Team Secret Whales,mid,114,dire,1,6,0,0,0,6
+oe:player:e5f6c83e6e97c74fc9e9760fc8972ae,Eddie,Team Secret Whales,bot,114,eddie,1,6,0,0,0,6
+oe:player:1f7d70f56b608b3137df2493949fdd0,Bie,Team Secret Whales,sup,114,bie,3,20,0,0,0,20
+oe:player:407b2b8fcb2fd977fc766d5df3f4dff,Hery,Oh My God,top,34,,0,0,0,0,0,0
+oe:player:3ee0c18b85e7bb8eaad86d58498e27d,Juhan,Oh My God,jng,13,juhan,1,3,16,1,0,19
+oe:player:f886838ee1808c2f217208267a829ce,haichao,Oh My God,mid,34,,0,0,0,0,0,0
+oe:player:0be01924125adebc1a95bbb09d0c4d1,Starry,Oh My God,bot,27,,0,0,0,0,0,0
+oe:player:dfc279de8d7bd571aa8edfd7eb89c03,Moham,Weibo Gaming,sup,45,moham,1,9,0,0,0,9
+oe:player:3ce68cf813bc34243279fd7fe3cecbb,sheer,LNG Esports,top,53,,0,0,0,0,0,0
+oe:player:5c6f901a83ec448d51703aebba0ca64,Croco,LNG Esports,jng,39,,0,0,0,0,0,0
+oe:player:317aeb74a6dd16bea711bbad361ca44,BuLLDoG,EDward Gaming,mid,71,,0,0,0,0,0,0
+oe:player:d2b317a92a71a850ae3da1e0d83e883,1xn,LNG Esports,bot,53,,0,0,0,0,0,0
+oe:player:10d1208b485425756fcc932229386b0,MISSING,LNG Esports,sup,45,missing,2,27,15,0,1,42
+oe:player:376d5e3b1257e6972228d458943f74c,Evi,Fukuoka SoftBank HAWKS gaming,top,70,evi,6,45,24,0,0,69
+oe:player:29de9c9016ef68693b02dea19357c78,Van1,Fukuoka SoftBank HAWKS gaming,jng,70,,0,0,0,0,0,0
+oe:player:2e82913920d8a6d0efa480bc35f1ba8,Aria,Fukuoka SoftBank HAWKS gaming,mid,70,aria (lee ga-eul),2,15,10,0,0,25
+oe:player:7fb26875c639817a59912a87be6f738,Marble,Fukuoka SoftBank HAWKS gaming,bot,70,marble,1,4,0,0,0,4
+oe:player:16c1637b4b44b008b4d6627f68ae30a,Vsta,Fukuoka SoftBank HAWKS gaming,sup,70,vsta,2,21,0,0,0,21
+oe:player:8debac77f7c6101af768dc729323a67,Flauren,Deep Cross Gaming,top,107,,0,0,0,0,0,0
+oe:player:32aa62568603d99d16591ee5dd52a8a,Pop9,Deep Cross Gaming,jng,107,,0,0,0,0,0,0
+oe:player:32ddd24ac02f57871c631c66265d2f6,HongSuo,Deep Cross Gaming,mid,106,,0,0,0,0,0,0
+oe:player:e9a0da5ca2d009aeedf5afcfccffde5,Feng,Deep Cross Gaming,bot,107,,0,0,0,0,0,0
+oe:player:5d7f415cbf04b549c235a8a3d83a763,ShiauC,Deep Cross Gaming,sup,107,shiauc,1,7,14,0,0,21
+oe:player:57acacc1f182893280e7400073a3dd1,Doran,T1,top,155,doran (choi hyeon-jun),5,70,38,1,0,108
+oe:player:f8b68f268106124fc4bc1c946adc9b0,Oner,T1,jng,152,oner,5,88,89,3,0,177
+oe:player:e1edfc5cea461399a63cb813cf795cc,Faker,T1,mid,155,faker,10,171,148,6,2,319
+oe:player:5bbc2b92348d930ebd500cb9ce71bb7,Peyz,T1,bot,155,peyz,2,23,31,0,1,54
+oe:player:db79ce6ad35451c938fbe2995dabd37,Keria,T1,sup,155,keria,6,97,89,3,0,186
+oe:player:98dd15c330fb5abb4508347265a7f76,Zeus,Hanwha Life Esports,top,142,zeus,4,59,66,2,0,125
+oe:player:41deab55354f57a94135989133f9968,Kanavi,Hanwha Life Esports,jng,142,kanavi,4,53,15,0,1,68
+oe:player:f9cd2ef9afea5cda0eb3263a025cec1,Zeka,Hanwha Life Esports,mid,142,zeka (kim geon-woo),3,47,0,1,0,47
+oe:player:c7319736816efe935787b4381c6f321,Gumayusi,Hanwha Life Esports,bot,142,gumayusi,5,88,89,3,0,177
+oe:player:051ca2e31ba25123961b3df95fdef4c,Delight,Hanwha Life Esports,sup,136,delight,3,30,15,0,0,45
+oe:player:132ee4b29ebeac294a420dcebe64bdc,Zdz,EDward Gaming,top,78,,0,0,0,0,0,0
+oe:player:58771d428ade54dd5983bbe70ce0383,Xiaohao,Weibo Gaming,jng,66,,0,0,0,0,0,0
+oe:player:542b1268b090a5fc82442efbd8d8165,Angel,EDward Gaming,mid,31,angel (xiang tao),1,19,0,0,0,19
+oe:player:a52945dbe283de2f7e9d63ca3417f36,Leave,EDward Gaming,bot,78,,0,0,0,0,0,0
+oe:player:13166913111075999f2adeb687548eb,Parukia,EDward Gaming,sup,53,,0,0,0,0,0,0
+oe:player:b6603b64c5cabad210826735469838b,Cube,Team WE,top,128,,0,0,0,0,0,0
+oe:player:a23b45071ea855f85e43db4b5a1683d,Monki,Team WE,jng,124,,0,0,0,0,0,0
+oe:player:498246d6c44175256a07ed5f322c817,Karis,Team WE,mid,128,,0,0,0,0,0,0
+oe:player:8f7f4c1ce7a4f933663d10543562b09,About,Team WE,bot,128,,0,0,0,0,0,0
+oe:player:0ac2fd09745c0d79a8c9d159d265a6c,yaoyao,Team WE,sup,31,,0,0,0,0,0,0
+oe:player:55276c10d84e1df7713b441e76e141f,Rest,CTBC Flying Oyster,top,92,rest,4,26,6,0,0,32
+oe:player:c332dc879e14f1feb266190c7f396fd,Shad0w,CTBC Flying Oyster,jng,92,shad0w,2,16,0,0,0,16
+oe:player:1c3f29080dd3dd4f666adbd6448cef4,Pungyeon,CTBC Flying Oyster,mid,26,,0,0,0,0,0,0
+oe:player:95082306f78780da5686f118c993366,Doggo,CTBC Flying Oyster,bot,92,doggo,2,25,33,0,0,58
+oe:player:95f8d9901ca8878e291552f001f6769,2274,CTBC Flying Oyster,sup,26,,0,0,0,0,0,0
+oe:player:73e08f7701a4316284cbe884b5d7e56,Kiaya,GAM Esports,top,95,kiaya,4,41,25,0,0,66
+oe:player:df6940da41ba9a3df7055e75f3daac9,Draktharr,GAM Esports,jng,95,,0,0,0,0,0,0
+oe:player:f6d8ec0afe458e19c057c1407d7da27,Aress,GAM Esports,mid,61,aress,0,0,8,0,0,8
+oe:player:9d2474b953a3a0be93880409ccceb4e,Artemis,GAM Esports,bot,95,artemis (tran quoc hung),1,10,13,0,0,23
+oe:player:1b90b5086aa57992143a92a2899b8e0,Taki,GAM Esports,sup,95,taki (dinh anh tai),2,15,16,0,0,31
+oe:player:fdc16c7495d2f61f9f116432b4a1f1a,RayFarky,DetonatioN FocusMe,top,2,,0,0,0,0,0,0
+oe:player:ad173d59265cf2cbe796b2af2554da3,Citrus,DetonatioN FocusMe,jng,50,,0,0,0,0,0,0
+oe:player:1b26a8bba6e841f1c375b283db5c1c6,Keine,paiN Gaming,mid,51,keine,1,8,0,0,0,8
+oe:player:2caa05c21e7e142214c20319ff97d09,Kakkun,DetonatioN FocusMe,bot,50,,0,0,0,0,0,0
+oe:player:28210a578227a57de61f42f4bd0d2b4,Gaeng,DetonatioN FocusMe,sup,15,gaeng,2,15,12,0,0,27
+oe:player:75019a36fdf85666fbd9396ae4fc7ec,Kratos,MVK Esports,top,78,,0,0,0,0,0,0
+oe:player:0101bf828e44b2630d500590c4ad461,Gury,MVK Esports,jng,89,gury,1,4,0,0,0,4
+oe:player:2e7d6bbb048c7e1ff0eb4d8e3bbad9a,Kati,MVK Esports,mid,16,kati,3,27,5,0,0,32
+oe:player:60d1428b9206634f3feb66e4b8ebd59,Shogun,MVK Esports,bot,19,shogun (nguyen van huy),2,13,16,0,0,29
+oe:player:21d0c093d9553e0074a98c5b5880b4c,Elio,MVK Esports,sup,19,elio,1,12,20,0,0,32
+oe:player:4830e7becfcf3539978e3a69cc1c27c,Seany,MVK Esports,mid,17,,0,0,0,0,0,0
+oe:player:9db3f170213f562a9613fe4f99d7dfa,Empyros,Fnatic,top,45,,0,0,0,0,0,0
+oe:player:390ca7b6b38d552363eba1b5b54ff18,Razork,Fnatic,jng,67,razork,4,31,14,0,0,45
+oe:player:367fecc4cb53a8234abbd9f283b7997,Vladi,Fnatic,mid,67,,0,0,0,0,0,0
+oe:player:fe4329cec43193c425eb28a4a4b304a,Upset,Fnatic,bot,67,upset,2,16,0,0,0,16
+oe:player:0758af26fa0c3af6899bb1569059609,Lospa,Fnatic,sup,67,,0,0,0,0,0,0
+oe:player:7f77fb35ead1b44ec7cb3ebb5a395ac,Baus,Los Ratones,top,11,,0,0,0,0,0,0
+oe:player:a68581f40d30119bad63673b157e660,Velja,Los Ratones,jng,11,,0,0,0,0,0,0
+oe:player:456d479c879155333c0624219803ec4,Nemesis,Los Ratones,mid,11,nemesis,2,21,0,0,0,21
+oe:player:1c51707d8fd9873c9fd184e2cd01b33,Crownie,Los Ratones,bot,11,crownie,1,16,0,0,0,16
+oe:player:d8362fe0d38ca0e70953ed957deaa00,Rekkles,Los Ratones,sup,11,rekkles,6,75,14,0,0,89
+oe:player:6daafc30b010acda4ebc20b6785cbc0,Boal,paiN Gaming,top,51,boal,1,7,0,0,0,7
+oe:player:946b74bfc34e861b344ae03700af039,Disamis,Vivo Keyd Stars,jng,63,disamis,1,7,0,0,0,7
+oe:player:5b86bafc34d79c84a8847d29b64ca29,Mireu,Vivo Keyd Stars,mid,70,mireu,2,11,7,0,0,18
+oe:player:1999dbe32608051613a2d3ed9c1b0d4,Morttheus,RED Canids,bot,80,morttheus,1,7,0,0,0,7
+oe:player:0103d21d116b61eb55fa351242208cf,Kaiwing,Ground Zero Gaming,sup,54,kaiwing,5,51,49,0,0,100
+oe:player:3085815ef497539cb1d93b3c9a16624,Robo,paiN Gaming,top,30,robo,3,21,23,0,0,44
+oe:player:5e07433d52dbc7bbc4faaf9492dbd2c,CarioK,paiN Gaming,jng,61,cariok,1,12,6,0,0,18
+oe:player:ae770d2c942cee6dbcfbd1832015231,tinowns,paiN Gaming,mid,14,tinowns,3,22,17,0,0,39
+oe:player:7db16a4ce881aecec2bfeb3e0c74188,Marvin,paiN Gaming,bot,12,,0,0,0,0,0,0
+oe:player:87b0ff8e56b0ce96bc0a82ea5dc9a7e,Kuri,paiN Gaming,sup,37,kuri,1,12,0,0,0,12
+oe:player:eeec6c7a9d2b475c23650b202208b89,Lot,GiantX,top,58,,0,0,0,0,0,0
+oe:player:5450c7731de19c131ce20ea74933cc2,ISMA,GiantX,jng,91,,0,0,0,0,0,0
+oe:player:204746c853a12888ad72d8035cdf8c7,Jackies,GiantX,mid,91,,0,0,0,0,0,0
+oe:player:95d286ec0a5d750d09e848a4e630c56,Noah,GiantX,bot,58,noah (oh hyeon-taek),2,15,14,0,0,29
+oe:player:054e5f8aeb885db6713f4a3e7328efc,Jun,GiantX,sup,91,jun (yoon se-jun),1,6,14,0,0,20
+oe:player:285954244fdc2bcce532fb88a1e0ddb,Rooster,Shifters,top,61,,0,0,0,0,0,0
+oe:player:b137ce57a15794ffac86eaeff085326,Boukada,Shifters,jng,28,,0,0,0,0,0,0
+oe:player:8f862245fbdb4d065e46c83630b9495,nuc,Shifters,mid,61,nuc,1,16,0,0,0,16
+oe:player:326f63d01099f1c8b91620cbc893813,Paduck,Shifters,bot,61,,0,0,0,0,0,0
+oe:player:8b73af38e98bccab6f86930c75a9450,Trymbi,Shifters,sup,40,trymbi,4,34,0,0,0,34
+oe:player:61ea9de879a9b27bb8eddcba7f32f4a,fNb,RED Canids,top,20,,0,0,0,0,0,0
+oe:player:9c51ed760409db6fa2a02fe8046f110,Curse,LØS,jng,116,,0,0,0,0,0,0
+oe:player:722c8846b5f0c756efb2affe467958a,Kaze,LOUD,mid,82,,0,0,0,0,0,0
+oe:player:3ace2e5d36ad46eb2aec2ad1c43d3c5,Rabelo,LOUD,bot,49,,0,0,0,0,0,0
+oe:player:9d361f9d8214252ee571375f9105cb4,frosty,RED Canids,sup,58,,0,0,0,0,0,0
+oe:player:c2247726b5c15c6b06022f64d4a080a,curty,Fluxo W7M,top,46,,0,0,0,0,0,0
+oe:player:53841c6e42a6ce77b6f3b80133c9342,Peach,Fluxo W7M,jng,62,,0,0,0,0,0,0
+oe:player:979d7cbbe1e2a8b55d503047f5c72a0,Hauz,Fluxo W7M,mid,9,,0,0,0,0,0,0
+oe:player:6c1d0c529e73fe4c8b9a5306867c4bf,BAO,Fluxo W7M,bot,62,,0,0,0,0,0,0
+oe:player:44744b6de7f1fa0b93d0e9b7ea328fc,ProDelta,Fluxo W7M,sup,9,,0,0,0,0,0,0
+oe:player:1725cf69407d2dcdf2873d0669409e8,Tracyn,Team Heretics,top,59,,0,0,0,0,0,0
+oe:player:404079b4e478ea2a8b57904c640311b,Sheo,Shifters,jng,63,sheo,1,16,0,0,0,16
+oe:player:e3b8d5a9290fe0c7458dc01db4dc9dc,Serin,Team Heretics,mid,59,serin,1,5,12,0,0,17
+oe:player:8bac58409e91b96ecd05f6d8f053e07,Ice,Team Heretics,bot,40,,0,0,0,0,0,0
+oe:player:41672e17bc1f86dc5d93955c031d2a9,Stend,Shifters,sup,37,,0,0,0,0,0,0
+oe:player:63dd174baf11b12006e5dc29c2269a1,Maynter,Natus Vincere,top,86,,0,0,0,0,0,0
+oe:player:cbe20c64274a87a21e5bdac1ccc3e77,Rhilech,Natus Vincere,jng,86,,0,0,0,0,0,0
+oe:player:4e0ee55680fa265c49e158f85e26650,Poby,Natus Vincere,mid,86,poby,1,5,0,0,0,5
+oe:player:bc4f68ea698f26bb1e2f6d34f900f57,SamD,Natus Vincere,bot,86,,0,0,0,0,0,0
+oe:player:a9cfbc13e22eefdd22af7b346ce2af4,Parus,Natus Vincere,sup,86,,0,0,0,0,0,0
+oe:player:fd0a05e90aefc83ac69d3352b0f0be6,xyno,LOUD,top,91,,0,0,0,0,0,0
+oe:player:e5feef89d633a666eeaaf6392ca2fa9,YoungJae,LOUD,jng,64,,0,0,0,0,0,0
+oe:player:a5a0a92da1f12d481f7e1699e638000,Mago,LOUD,mid,12,,0,0,0,0,0,0
+oe:player:92c21511d7b383b2f8ba5b00c3c9a47,Bull,LOUD,bot,64,,0,0,0,0,0,0
+oe:player:0c041d02ab7138f57164fafbc091b2d,RedBert,LOUD,sup,39,redbert,2,14,11,0,0,25
+oe:player:d61d8a0b25028f787123bfff542d305,Guigo,FURIA,top,105,guigo,1,9,16,0,0,25
+oe:player:6625d682ed10ef5e0e7c6c9e4dd2fc1,Tatu,FURIA,jng,99,tatu (pedro seixas),0,0,10,0,0,10
+oe:player:886e8205ac1b091dbf67dbae83b1544,Tutsz,FURIA,mid,105,tutsz,0,0,10,0,0,10
+oe:player:d7a904873d10637ef44afa9c1de83b3,Ayu,FURIA,bot,105,ayu (andrey saraiva),0,0,10,0,0,10
+oe:player:cb4cd2fd258d5961d2f1c4815b04123,JoJo,FURIA,sup,105,jojo (gabriel dzelme),1,9,16,0,0,25
+oe:player:d11068c782573b34be81beb5a4eeb12,Wunder,SK Gaming,top,58,wunder,5,73,18,0,1,91
+oe:player:682275c2ba204d32b67f5fa94b928e4,Skeanz,SK Gaming,jng,58,,0,0,0,0,0,0
+oe:player:4491b20edc9ceb1d782095e341051d9,LIDER,SK Gaming,mid,32,,0,0,0,0,0,0
+oe:player:e214e8e906f16ec13e9a88de30dc181,Jopa,SK Gaming,bot,58,,0,0,0,0,0,0
+oe:player:9d5052e9f9f4a63835f738441a3b1f6,Mikyx,SK Gaming,sup,58,mikyx,6,60,47,0,1,107
+oe:player:370f639a8b838f1933c7232d8adae72,Naak Nako,Team Vitality,top,86,,0,0,0,0,0,0
+oe:player:ca9701f085966dfca32e31b1b1e9d55,Lyncas,Team Vitality,jng,86,,0,0,0,0,0,0
+oe:player:edf8b064c096691e539b7e2a3e28179,Humanoid,Team Vitality,mid,56,humanoid,6,67,35,0,0,102
+oe:player:ec0c2b8d7630efba391c288765d4d7e,Carzzy,Team Vitality,bot,86,carzzy,3,26,27,0,0,53
+oe:player:10be1f35d8b5ea6babf916a6e7dd8a4,Fleshy,Team Vitality,sup,86,,0,0,0,0,0,0
+oe:player:786b5bbf7bbfb7b79379e8589a865c1,Zest,LØS,top,125,,0,0,0,0,0,0
+oe:player:5ee2cd6074f5a5f37edebee2f481c6b,Drakehero,LØS,jng,29,,0,0,0,0,0,0
+oe:player:d1ae0e2f9f3ac1e0e0cdcb86504ca77,Feisty,LØS,mid,125,,0,0,0,0,0,0
+oe:player:b4179fdeda1242fcd94b82a5710dd3e,Duduhh,LØS,bot,125,,0,0,0,0,0,0
+oe:player:145201414ecb853de684fbe7d6bb5b6,Ackerman,LØS,sup,125,ackerman (gabriel aparicio),1,4,10,0,0,14
+oe:player:7577c239c73fa5f3011cd7b5503e75e,Canna,Karmine Corp,top,156,canna,2,22,0,0,0,22
+oe:player:4203fc46c4c6333e9bfa9d0a8618677,Yike,Karmine Corp,jng,156,yike,2,17,29,0,0,46
+oe:player:308e48bf56284c09a1a9aadf55bc80c,kyeahoo,Karmine Corp,mid,156,,0,0,0,0,0,0
+oe:player:e2af2b779499aa25ab9a9c10c9a5ffd,Caliste,Karmine Corp,bot,156,,0,0,0,0,0,0
+oe:player:3e722c8ede909c83af9342c41805a16,Busio,Karmine Corp,sup,156,busio,2,22,19,0,0,41
+oe:player:199bbcd68b0c89c2fc2c7892385cb2b,Tao,Karmine Corp Blue,top,11,,0,0,0,0,0,0
+oe:player:8bad2b6e61622bd2fa9462db0a2b877,Yukino,Karmine Corp Blue,jng,11,,0,0,0,0,0,0
+oe:player:728ce343a6718cfdd5d223c971cc2fd,Kamiloo,Karmine Corp Blue,mid,11,,0,0,0,0,0,0
+oe:player:bcd61ebb24698511281a624595bb2f7,Hazel,Karmine Corp Blue,bot,11,,0,0,0,0,0,0
+oe:player:e038414b765a8bda52e602f7eaeff04,Prime,Karmine Corp Blue,sup,11,,0,0,0,0,0,0
+oe:player:fd108dd07ee510bb9462127d183e1c5,Devost,Leviatan,top,55,,0,0,0,0,0,0
+oe:player:bc5b7cd82bc9e26b3bbdeddeb73c7d8,Booki,Leviatan,jng,55,,0,0,0,0,0,0
+oe:player:39d68aa20f0b0b1ddddb871a7b26fbf,Enga,Leviatan,mid,55,,0,0,0,0,0,0
+oe:player:219d2d945cfbd391d0ade5e352a1bc5,ceo,Vivo Keyd Stars,bot,56,ceo,2,12,7,0,0,19
+oe:player:9d8b079deedcc90dda4617fb4ffac40,TopLop,Leviatan,sup,41,,0,0,0,0,0,0
+oe:player:84bff3a326833c7c9181c698f676878,BrokenBlade,G2 Esports,top,136,brokenblade,4,33,70,0,0,103
+oe:player:ab15060e5225b51592cd04b3aed1e09,SkewMond,G2 Esports,jng,136,skewmond,1,10,20,0,0,30
+oe:player:55dd587cdc4a278be6a5c37f9e539de,Caps,G2 Esports,mid,136,caps,8,101,102,0,1,203
+oe:player:c62a5235ad6bc113a1e64eb0e9aa8c8,Hans Sama,G2 Esports,bot,136,hans sama,6,53,35,0,0,88
+oe:player:bb6ac5763c6576e104a7a2f59eb4ddf,Labrov,G2 Esports,sup,136,labrov,2,26,20,0,0,46
+oe:player:ede24d5e0911d7a4f6ec514a67802ff,Myrwn,Movistar KOI,top,119,myrwn,2,20,8,0,0,28
+oe:player:8a8f18e4b7d0f30c19c5fb99a526951,Elyoya,Movistar KOI,jng,119,elyoya,5,48,35,0,0,83
+oe:player:83eb62484689106807fcf5ad55b5479,Jojopyun,Movistar KOI,mid,119,jojopyun,2,26,29,0,0,55
+oe:player:1223a0ed2bfab9b714c72d965df8133,Supa,Movistar KOI,bot,119,supa,2,20,8,0,0,28
+oe:player:f5bf9bd732b85e4dcab5121e4769ae4,Alvaro,Movistar KOI,sup,119,alvaro (alvaro fernandez),2,20,8,0,0,28
+oe:player:9d8737d57b1048a8b571856a296b624,Keshi,ThunderTalk Gaming,top,80,,0,0,0,0,0,0
+oe:player:211333df928f872c063bce4ef25ea63,Junhao,ThunderTalk Gaming,jng,80,,0,0,0,0,0,0
+oe:player:9fbfcaef69533c0545859880e974572,Heru,ThunderTalk Gaming,mid,80,,0,0,0,0,0,0
+oe:player:11d4eea204ec17c89fd957a648c2e6d,Ryan3,ThunderTalk Gaming,bot,16,,0,0,0,0,0,0
+oe:player:5000a68e43f946c726a17e1008e230a,Feather,ThunderTalk Gaming,sup,80,,0,0,0,0,0,0
+oe:player:57ac9f77eae511aeee1e854434f73f2,HOYA,Ninjas in Pyjamas,top,93,,0,0,0,0,0,0
+oe:player:6427b0c5a7c3106e92a7c11257a08c6,Guwon,Ninjas in Pyjamas,jng,93,,0,0,0,0,0,0
+oe:player:6bc43cc1537fa4ac6295b4899e972cf,Care,Ninjas in Pyjamas,mid,93,,0,0,0,0,0,0
+oe:player:da3299cd46f1ad8a86bbadeb6b8a320,Assum,Invictus Gaming,bot,77,,0,0,0,0,0,0
+oe:player:e78da55d6db43d982f841204a8e51ac,Zhuo,Top Esports,sup,114,,0,0,0,0,0,0
+oe:player:ee051912ad5f9a97aa9ce4980cbb481,Peter,DN SOOPers,sup,62,peter (jeong yoon-su),1,16,0,0,0,16
+oe:player:555e3934816743f30cdda4c7cc0dfe3,Momo,DetonatioN FocusMe,top,48,,0,0,0,0,0,0
+oe:player:f73dde2d8c7879ae8d1fcdc03c4ffeb,Morgan,Team Liquid,top,108,morgan,1,17,0,0,0,17
+oe:player:52b4f060a577ff87c99118d97fa75f4,Josedeodo,Team Liquid,jng,108,josedeodo,1,7,4,0,0,11
+oe:player:8f8eaac8e99c203ee76e57c5c81c91f,Quid,Team Liquid,mid,108,quid,2,12,0,0,0,12
+oe:player:f6b8af05a5af22004a67a78f3046b92,Yeon,Team Liquid,bot,108,yeon (sean sung),2,15,11,0,0,26
+oe:player:05fafeaf23dc3285558a4e968970b9f,CoreJJ,Team Liquid,sup,108,corejj,8,76,31,1,0,107
+oe:player:1efc4e5732e91520d03385900b903f9,Thanatos,Cloud9,top,93,,0,0,0,0,0,0
+oe:player:ed455f823b6586e9e3621dfb5aeb42e,Blaber,Cloud9,jng,93,blaber,5,40,26,0,0,66
+oe:player:ea9ed09584feecae0991089f087d2ce,APA,Cloud9,mid,52,apa (eain stearns),2,15,11,0,0,26
+oe:player:10fcffece0ac7be85f09c4b51a75762,Zven,Cloud9,bot,52,zven,5,42,44,0,0,86
+oe:player:81acc6bcde5c927c78e0990e9887f84,Vulcan,Cloud9,sup,93,vulcan (philippe laflamme),3,48,37,0,0,85
+oe:player:80fea0848c57b8e07a79675d41f582c,Castle,LYON,top,37,,0,0,0,0,0,0
+oe:player:67007ffa5eb4f53d82366f6685a8303,Kisno,Disguised,jng,6,,0,0,0,0,0,0
+oe:player:87f7503a6cdacffa612aeee7f04cc7c,Callme,Disguised,mid,66,,0,0,0,0,0,0
+oe:player:3b63ea0de80cfb191f952872b392da9,sajed,Disguised,bot,66,,0,0,0,0,0,0
+oe:player:a2d7b8856032bf106783621b9afeb41,Lyonz,Disguised,sup,66,lyonz,2,12,7,0,0,19
+oe:player:21f59b54f62b5b8b4bc0f63f0f617fc,Impact,Sentinels,top,81,impact,8,94,63,1,0,157
+oe:player:845ea84cec22236278388f19fcd20bf,HamBak,Sentinels,jng,81,,0,0,0,0,0,0
+oe:player:05a73863e113f3cb6b472a76da2ea52,DARKWINGS,Sentinels,mid,81,,0,0,0,0,0,0
+oe:player:e2c655411d8d95ef73d8026704f5e7a,Rahel,Sentinels,bot,81,,0,0,0,0,0,0
+oe:player:9191e392e93a6ef011ef76b5b83ee6c,huhi,Sentinels,sup,81,huhi,3,18,34,0,0,52
+oe:player:d617210b92fa03e78554883250d432c,Gakgos,FlyQuest,top,85,,0,0,0,0,0,0
+oe:player:2cbf592923f34b2e6acc4b747385c8a,Gryffinn,FlyQuest,jng,85,,0,0,0,0,0,0
+oe:player:e9017664588010860a92ceb5f8fcb82,Quad,FlyQuest,mid,85,quad,2,22,12,0,0,34
+oe:player:c145139d26813639b8fe6f4d0b28228,Massu,FlyQuest,bot,85,massu,2,22,19,0,0,41
+oe:player:4f27911a3702f671c3d21286356a6df,Cryogen,FlyQuest,sup,85,,0,0,0,0,0,0
+oe:player:f02f1c8275084050765b4b6414bdfda,Fudge,Shopify Rebellion,top,63,fudge,4,35,26,0,0,61
+oe:player:8a5dbe19794784cfd0553556844f045,Contractz,Shopify Rebellion,jng,63,contractz,2,26,0,0,0,26
+oe:player:3648451fd5b8a8ab01e4bedf780c1d6,Zinie,Shopify Rebellion,mid,63,,0,0,0,0,0,0
+oe:player:494fc60dffbb5da1caa2226baef0ec7,Bvoy,Shopify Rebellion,bot,63,,0,0,0,0,0,0
+oe:player:c88cada1696defe81464925789aa6d8,Ceos,paiN Gaming,sup,56,ceos,2,16,6,0,0,22
+oe:player:5385f74da3e5deb5b66d9a1ee56cf97,Dhokla,LYON,top,130,dhokla,2,13,0,0,0,13
+oe:player:a8307167f3a1c933295bb9e3d43700e,Inspired,LYON,jng,124,inspired,5,52,40,0,0,92
+oe:player:f45792335d83b10581da2f0cbdd6e8e,Saint,LYON,mid,133,,0,0,0,0,0,0
+oe:player:460ae5a7af8d68f7831b70307210ab3,Berserker,LYON,bot,133,berserker (kim min-cheol),2,12,10,0,0,22
+oe:player:40704dfd2d966862568d29770de57bd,Isles,LYON,sup,133,isles,1,8,0,0,0,8
+oe:player:fd22b656b23ca07a276181a4953ba2c,Photon,Dignitas,top,28,,0,0,0,0,0,0
+oe:player:08936c56ab5a6453c58974a619651c3,eXyu,Dignitas,jng,34,,0,0,0,0,0,0
+oe:player:fddde6d256bee26713f64ad9b2a9394,Palafox,Dignitas,mid,45,palafox,1,8,0,0,0,8
+oe:player:340a76e3aef8e862f5fd79411261b29,Mobility,Cupid Esports,bot,11,,0,0,0,0,0,0
+oe:player:647116a60606bd44fb11a860da72776,Breezy,Cupid Esports,sup,11,,0,0,0,0,0,0
+oe:player:9d5e3b1fd70d1652fc3f5f1a978cd9b,Hiro02,Team Secret Whales,top,1,hiro02,1,4,0,0,0,4
+oe:player:3389bea88a7a78d4b5577a86e07c2ee,re0,Oh My God,jng,21,,0,0,0,0,0,0
+oe:player:5bc99370722c5ecbfa9b3c1e17338e6,Trigger,paiN Gaming,bot,25,,0,0,0,0,0,0
+oe:player:73d2b65353d7b00e0f198ffdc085edc,FBI,Dignitas,bot,43,fbi,4,25,6,0,0,31
+oe:player:b6f837c8bd1b510dd3f77ee8c903c30,Ignar,Dignitas,sup,43,ignar,3,26,0,0,0,26
+oe:player:a408b9f6a7b5f82bfac03a88e026986,SofM,MVK Esports,jng,3,sofm,1,19,0,0,0,19
+oe:player:85ab9a415e1cf1f63000f7f6f1c183a,KryRa,Disguised,jng,60,,0,0,0,0,0,0
+oe:player:95496721c429ee19a2a9bd9c4321e95,Qats,Vivo Keyd Stars,mid,4,,0,0,0,0,0,0
+oe:player:a672b5bc1c212a6922418fad18734c1,Envy,Estral Esports,mid,63,envy (bruno farias),1,5,6,0,0,11
+oe:player:978c38ad839a85b4bdc8d3cd5e2c560,zynts,RED Canids,top,66,,0,0,0,0,0,0
+oe:player:6fcbbff49badbddafbda79a49abba07,STEPZ,RED Canids,jng,66,,0,0,0,0,0,0
+oe:player:8c6395564a23f3c2af8d378540012b0,Way,Team Heretics,sup,43,,0,0,0,0,0,0
+oe:player:840d0b77e71408d3da84e4f0cae4b73,Wizer,Vivo Keyd Stars,top,22,wizer,1,12,0,0,0,12
+oe:player:44b1e81bfc6d5bb1a0da7fe5daaa4c0,Samkz,paiN Gaming,jng,4,,0,0,0,0,0,0
+oe:player:a66db93c9f417a2500c24e689ba0ccc,cody,Fluxo W7M,mid,53,cody,1,4,10,0,0,14
+oe:player:4dabc9746a3cae241a063d7a1e4d204,Momochi,Fluxo W7M,sup,53,,0,0,0,0,0,0
+oe:player:81d2110b25710f286ed9e9b6a8426b0,Snaker,Fuego,bot,25,snaker,0,0,4,0,0,4
+oe:player:0a53c1102dafce61e89decc517b3175,Loki,Cloud9,mid,58,,0,0,0,0,0,0
+oe:player:035b9ae578574cdf728d8760483d804,Effort,KT Rolster,sup,89,effort,1,12,0,0,0,12
+oe:player:0d9b0a3b3a93a8f759c9d8ac8eef97c,Breathe,Anyone's Legend,top,94,breathe,2,35,0,0,0,35
+oe:player:1b481e5ac2a687de752b330bee95ce8,Renard,Invictus Gaming,mid,20,,0,0,0,0,0,0
+oe:player:bda7cc061d7a1576f1dcad33dd505cd,Meiko,Invictus Gaming,sup,79,meiko,8,87,29,1,1,116
+oe:player:f52533de1cc92487ab58b973cd2490e,ZUIAN,Top Esports,top,93,,0,0,0,0,0,0
+oe:player:0da0eeb199e8fa3ab773cf84f9de9ab,Tian,Top Esports,jng,99,tian,4,39,16,1,0,55
+oe:player:c54e1090ef1faa736b12493051c4855,JackeyLove,Top Esports,bot,99,jackeylove,6,77,30,1,0,107
+oe:player:effd5b04b5d98b779f0a6162c40735a,Fisher,DetonatioN FocusMe,mid,35,,0,0,0,0,0,0
+oe:player:31b5f1d49f55acb4ee7624813bda6b2,Woody,DetonatioN FocusMe,sup,35,woody,3,27,24,0,0,51
+oe:player:ab2455e33b8ddb6a9d2d41107a2ed4f,Hang,Weibo Gaming,sup,27,hang,3,35,0,0,0,35
+oe:player:a41eb80b5f23627fc710cc41c516e49,LazyFeel,Kiwoom DRX,bot,44,,0,0,0,0,0,0
+oe:player:f9234f74ef6e8ef9657e1d3afec1098,Steller,MVK Esports,top,15,,0,0,0,0,0,0
+oe:player:c4d64ae9f01ee43ec2367d28eeadbea,Chika,MVK Esports,mid,61,,0,0,0,0,0,0
+oe:player:28a1925f6c4df972a5ae722c07bb4c4,Harky,MVK Esports,bot,75,,0,0,0,0,0,0
+oe:player:397fee5de074b10600707b618fb1f29,SiuLoong,MVK Esports,sup,75,,0,0,0,0,0,0
+oe:player:fa6ab005227d25bf19d02ca58f00cab,Kratos,MVK Esports,top,1,,0,0,0,0,0,0
+oe:player:e68cc4b2bef76a96aae344b49a81579,Daystar,BNK FEARX,mid,10,,0,0,0,0,0,0
+oe:player:566586ef99b39b57e9c85c59f021da5,Burdol,LGD Gaming,top,80,burdol,1,3,0,0,0,3
+oe:player:30b18cd72f0d41ae18f14378d2dab48,climber,Ultra Prime,jng,12,,0,0,0,0,0,0
+oe:player:5c168b7c27f077ce0492be203ffb625,Saber,Ultra Prime,mid,2,,0,0,0,0,0,0
+oe:player:66d0ff0f8f9b5296770c1dbda549950,Ahn,ThunderTalk Gaming,bot,64,,0,0,0,0,0,0
+oe:player:ca187ee49dd3e9ed20eaacbbf484fdf,Pout,CTBC Flying Oyster,mid,66,,0,0,0,0,0,0
+oe:player:acb3a05894b7c57412b2d7e911e17dd,Kino,CTBC Flying Oyster,sup,66,kino,2,18,0,0,0,18
+oe:player:c78788a736a0c7e5a77890144fd2986,Quantum,DN SOOPers,sup,8,,0,0,0,0,0,0
+oe:player:b49867477e266c5da8e995074e18f80,Daglas,Team Heretics,jng,29,,0,0,0,0,0,0
+oe:player:a62b7767388e9ede229669deba7d736,Tyrion,Team WE,jng,4,,0,0,0,0,0,0
+oe:player:f89b14820da11d8679cfd07da552ca5,uZent,LOUD,sup,52,,0,0,0,0,0,0
+oe:player:5c10d4fc029a04de654a59d8078b913,sarolu,Vivo Keyd Stars,jng,11,,0,0,0,0,0,0
+oe:player:5fa6eac8bedeed60a83f154d9538ee1,Carlsen,Galions,top,9,,0,0,0,0,0,0
+oe:player:d6a41c1166922d1ff489fdb2fa06289,Thayger,Galions,jng,9,,0,0,0,0,0,0
+oe:player:e42fd90dea956c3986b69209b56ce16,OMON,Galions,mid,9,,0,0,0,0,0,0
+oe:player:3d022fcafe5af9f52df92b17c015fe6,HARPOON,Galions,bot,9,,0,0,0,0,0,0
+oe:player:fa22d396503a5a737f2f169943d7241,Zoelys,Galions,sup,9,,0,0,0,0,0,0
+oe:player:75414f3b4f03bf449c319eb75f3dd5b,Kryze,Solary,top,7,,0,0,0,0,0,0
+oe:player:060e16e1c91434827c294bac52e8b47,Zicssi,Solary,jng,7,,0,0,0,0,0,0
+oe:player:990de650e44c3b85ec90451de02db04,Jool,Solary,mid,7,,0,0,0,0,0,0
+oe:player:d47955c8bc06bf316f24ee15d45407b,Aetinoth,Solary,bot,7,,0,0,0,0,0,0
+oe:player:973547129a691fb61e886add170ac7a,Piero,Solary,sup,7,,0,0,0,0,0,0
+oe:player:613a571a4b0b674547093130f2e4093,SlowQ,SK Gaming,mid,26,,0,0,0,0,0,0
+oe:player:be17beb4d906e22fa6995e17060ebd3,Slayer,BNK FEARX,bot,2,,0,0,0,0,0,0
+oe:player:7c30c1a6ce9d063b361b66ccb40444b,Nia,LNG Esports,mid,32,,0,0,0,0,0,0
+oe:player:5522f05516e62197107dd9166442187,TheHank,Weibo Gaming,sup,13,,0,0,0,0,0,0
+oe:player:7fdedd3126915607d5c8f42f8239253,Pleata,Nongshim RedForce,sup,7,,0,0,0,0,0,0
+oe:player:4d0ec5fa505ee341aff8b2309356afc,Srtty,Disguised,top,32,,0,0,0,0,0,0
+oe:player:97e179ee675d0c4345bcd64089d2218,sinian,EDward Gaming,mid,15,,0,0,0,0,0,0
+oe:player:67447707ec7cbde9ab25bfa2ed69877,DDoiV,DN SOOPers,jng,2,,0,0,0,0,0,0
+oe:player:5836a085b5ebaa7662fbba55341703c,Enosh,DN SOOPers,bot,4,,0,0,0,0,0,0
+oe:player:a47f435a46e32d2567f7af69f9dc20d,XiaoXiang,Deep Cross Gaming,mid,1,,0,0,0,0,0,0
+oe:player:655ff5d5e29058249fdf0ab0e1389f8,FenRir,KT Rolster,bot,13,,0,0,0,0,0,0
+oe:player:51e528aaaafe5451e0a14c0da847dc4,Bluffing,Hanwha Life Esports,sup,6,,0,0,0,0,0,0
+oe:player:3d44f54d2b0fa13b698040cb51d09db,zekas,Vivo Keyd Stars,top,36,,0,0,0,0,0,0
+oe:player:18a70ca6e551b080cf886828cc18394,Sharvel,DN SOOPers,jng,21,,0,0,0,0,0,0
+oe:player:97703d326201ee5bfa4694c7a73a2b4,Gloryy,GAM Esports,mid,34,gloryy,1,10,0,0,0,10
+oe:player:1d1600d15a68ab1a80348ee748ea1e3,scamber,Vivo Keyd Stars,sup,35,,0,0,0,0,0,0
+oe:player:6059545b206c4b230b97fd3651b473a,Crisp,LGD Gaming,sup,52,crisp,4,60,0,1,0,60
+oe:player:31fcee25eb58c4dad5616a879948390,Wenbo,Bilibili Gaming,top,20,,0,0,0,0,0,0
+oe:player:5ee64eb3feb02e60832a2265db54f71,FIESTA,Team Vitality,mid,30,,0,0,0,0,0,0
+oe:player:301affc76ea7f69929aff6bf84c642b,Uniboy,Ground Zero Gaming,mid,15,uniboy,2,11,0,0,0,11
+oe:player:7e754adda86a60e0a39d7204ba60424,Betty,Ground Zero Gaming,bot,15,betty,4,31,64,0,0,95
+oe:player:37f20525a39d17ec49fd10294f9c994,TheShy,Invictus Gaming,top,41,theshy,4,50,14,1,0,64
+oe:player:cce40f4b3dab509dbf23a9eaefed6ec,Sinatra,LOUD,jng,27,,0,0,0,0,0,0
+oe:player:a04a853a0f540f156d08711204fe252,Armao,LYON,jng,9,,0,0,0,0,0,0
+oe:player:3bb028a43aff78070d15c646450aa0d,Denathor,Dignitas,top,17,,0,0,0,0,0,0
+oe:player:57da8dfcfbdb4e5b019fe93003db1c4,Weiwei,LNG Esports,jng,14,weiwei,2,27,0,0,0,27
+oe:player:8b976d804f0b51e0dff5d24fc6ead77,Strensh,Leviatan,bot,14,,0,0,0,0,0,0
+oe:player:5a63f3e7e2b4282f07785cdc895d624,Shiku,Leviatan,sup,14,,0,0,0,0,0,0
+oe:player:6e632d8dfe91b18ecbbcdc028094e5c,Zothve,Fluxo W7M,top,16,zothve,0,0,4,0,0,4
+oe:player:71b8101d78beb04a089caa90a8d9310,Jeskla,Vivo Keyd Stars,bot,24,,0,0,0,0,0,0
+oe:player:35859191db73609302debbc5c43117c,Fuuu,RED Canids,mid,31,,0,0,0,0,0,0
+oe:player:4e0619e57cb50c4ab1230c2dd72df1b,Tactical,Cloud9,bot,41,tactical,2,18,0,0,0,18
+oe:player:6841f2d68619d53bdd1cdbf30b5be2c,Zeyzal,Shopify Rebellion,sup,35,zeyzal,2,28,0,0,0,28
+oe:player:c942f21cd85aaf8d7892aa712e3e2ce,Frog,Kiwoom DRX,top,19,,0,0,0,0,0,0
+oe:player:2452114de900ce4bb971851b668786d,Hype,Team Heretics,bot,19,,0,0,0,0,0,0
+oe:player:be9758f87345bcce47970a8f17b3c07,Oscarinin,GiantX,top,33,oscarinin,3,20,14,0,0,34
+oe:player:717bb4d71a2dab54e7020b1a8fde420,Flakked,GiantX,bot,33,flakked,1,6,21,0,0,27
+oe:player:eede71c35922ad83e3bb96fb56c40e5,Luuukz,FURIA,jng,2,,0,0,0,0,0,0
+oe:player:323b1ce118ee27efaa0f0e2d163d31e,Manel,RED Canids,sup,28,,0,0,0,0,0,0
+oe:player:4d08cbf857994dc42e1b09205158e15,Painter,T1,jng,3,,0,0,0,0,0,0
+oe:player:a2de87eae98d0ab3b85567026561a51,Dardoch,Dignitas,jng,11,,0,0,0,0,0,0
+oe:player:863519e5df81ff9b308c90f6a59495b,xiaofang,JD Gaming,jng,6,,0,0,0,0,0,0
+oe:player:2f0b9f7cda18943425d555b51e570e8,Minous,Kiwoom DRX,sup,1,,0,0,0,0,0,0
+oe:player:efd1b76f52f29c9252d5375eea2b594,Namiru,paiN Gaming,mid,15,,0,0,0,0,0,0
+oe:player:99f0996e8f487ec0633f1920bd4631d,Shini,FURIA,jng,4,shini,1,5,6,0,0,11
+oe:player:cefb78f4cb1e9cca79eefc393d98e72,Brayaron,Golden Lions,top,2,,0,0,0,0,0,0
+oe:player:0cae306fd021751c70ab9f75123b561,Ganks,Golden Lions,jng,2,,0,0,0,0,0,0
+oe:player:fbbdc14045f1d9b78dd8fd4ca50306d,Piqueos,Golden Lions,mid,2,,0,0,0,0,0,0
+oe:player:01ec6c66d030c0bfe5962c7cfe26655,Scenari0,Golden Lions,bot,2,,0,0,0,0,0,0
+oe:player:84e640911c6d6f172d4cf1c7cc78a67,Crecre,Golden Lions,sup,2,,0,0,0,0,0,0
+oe:player:ecdb594501a5800ad0f5c4e6b3b5a84,Yupps,KaBuM! Ilha das Lendas,top,18,,0,0,0,0,0,0
+oe:player:6cb75f242bca4309e2f942a4895805f,SCARY,KaBuM! Ilha das Lendas,jng,18,,0,0,0,0,0,0
+oe:player:dda07addeb137c860725f0c964dcbbf,Grevthar,KaBuM! Ilha das Lendas,mid,18,grevthar,1,7,6,0,0,13
+oe:player:966e8f61b0847f6059559ed09f8574f,Kojima,KaBuM! Ilha das Lendas,bot,18,,0,0,0,0,0,0
+oe:player:c7c0cc0b057c316e22af5c5da55c0c8,Guigs,KaBuM! Ilha das Lendas,sup,18,,0,0,0,0,0,0
+oe:player:7e2505960c12cc54c96a0a6efb2e055,Bwipo,Estral Esports,top,11,bwipo,6,62,32,0,0,94
+oe:player:de23ee5a66222e1e02da354414f2971,Oddie,Estral Esports,jng,11,oddie,4,27,25,0,0,52
+oe:player:166969943c4ca12527dd5449aab5e8e,Brance,Estral Esports,bot,11,brance,1,10,0,0,0,10
+oe:player:a5a630a5d4f0d3151f3c98d2d98834b,Telas,Estral Esports,sup,11,,0,0,0,0,0,0
+oe:player:8878e7050143a0fe4020498043fcc0d,Nate,9z Globant,top,7,nate,1,4,6,0,0,10
+oe:player:87ea894dd96c4c4577c7e32bdcd630b,Warsor,9z Globant,jng,7,,0,0,0,0,0,0
+oe:player:b6c18d4d98745c100d8234a673b0c8a,Aloned,9z Globant,mid,7,aloned,1,7,6,0,0,13
+oe:player:6aaac758332a8320840ac0e5f8fc28e,FIX,9z Globant,bot,7,fix,2,8,6,0,0,14
+oe:player:a6ecfc61cbbde3dc4a88a431219809b,Ux,9z Globant,sup,7,,0,0,0,0,0,0
+oe:player:5d66cbb86c841dd01cfbf146389f042,Crimson,Maryville University,top,14,,0,0,0,0,0,0
+oe:player:f9e804c44aa43f18576783a067e99ab,Yuuji,Maryville University,jng,14,,0,0,0,0,0,0
+oe:player:60b3048edebc03e520e775db4cc706f,AoJune,Maryville University,mid,14,,0,0,0,0,0,0
+oe:player:265b58ce8b2f418df94006bf24e296c,ScaryJerry,Maryville University,bot,14,,0,0,0,0,0,0
+oe:player:5143731d10e0edf3a81ee7d55d8b961,Obstinatus,Maryville University,sup,14,,0,0,0,0,0,0
+oe:player:c70b6e57e597809a8561caa79c5db8f,Keii,Zeu5 Esports,top,4,,0,0,0,0,0,0
+oe:player:906c6cdbfce615131dafcbeb1bbe7e8,Blind Walker,Zeu5 Esports,jng,4,,0,0,0,0,0,0
+oe:player:288d8e1e6e78a857421f10ee40d3fba,Zelt,Zeu5 Esports,mid,4,,0,0,0,0,0,0
+oe:player:5cd6a9269ede81b85d57e2beaaae6b0,Raysito,Zeu5 Esports,bot,4,,0,0,0,0,0,0
+oe:player:aaa8bc3b73bb36e8638857dd41dbeaf,Kita,Zeu5 Esports,sup,4,,0,0,0,0,0,0
+oe:player:4e8d825698068a189023c34c67fe2cb,Horder,Cupid Esports,top,9,,0,0,0,0,0,0
+oe:player:7bcd2e0ffb1e417c2aa64d08675ed2b,Music,Cupid Esports,jng,9,,0,0,0,0,0,0
+oe:player:e181a641eac63b45915802512997360,Ablazeolive,Cupid Esports,mid,9,,0,0,0,0,0,0
+oe:player:d258f8c326e3532981a60d2393f129a,Jauny,Fuego,top,6,,0,0,0,0,0,0
+oe:player:5aa99e88083b40b8070e90f314e92ca,Grell,Fuego,jng,6,grell,1,5,0,0,0,5
+oe:player:f7d8c1fd03b11c456966e4f1ee056f1,Skyy,Fuego,mid,6,,0,0,0,0,0,0
+oe:player:4d8833619c7d2128cd31d6098e7e4f3,Ichiwin,Fuego,sup,6,,0,0,0,0,0,0
+oe:player:413e2abb884854a2fe8bdfa3fac0b7e,SanSan,MVK Esports,jng,2,,0,0,0,0,0,0

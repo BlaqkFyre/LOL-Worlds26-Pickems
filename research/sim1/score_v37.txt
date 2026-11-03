@@ -1,0 +1,9 @@
+Out-of-sample, Swiss round 5 (31 Oct US / 1 Nov AEST), app v37 before adding, 3,000 sims per real draft (WORLDS_LIVE.n=44, asof 2026-10-30)
+KC v MKOI G1 (KC blue): KC 89% - KC won
+KC v MKOI G2 (KC blue): KC 62% - KC won
+LYON v LOS G1 (LYON blue): LOS 11% - LOS won
+LOS v LYON G2 (LOS blue): LYON 86% - LYON won
+LYON v LOS G3 (LYON blue): LYON 71% - LYON won
+BLG v HLE G1 (BLG blue): BLG 66% - BLG won
+BLG v HLE G2 (BLG blue): BLG 51% - BLG won
+Favourite 6/7, log loss 0.629, Brier 0.201. Running total 27/44 + 6/7 = 33/51 (65%).

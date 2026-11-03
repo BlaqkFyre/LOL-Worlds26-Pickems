@@ -1,0 +1,196 @@
+{
+ "league_now": {
+  "CBLOL": -0.79443631712484,
+  "LCK": 1.491591042728924,
+  "LCP": -0.7176819599638236,
+  "LCS": -0.12036677814937626,
+  "LEC": 0.13977237897145375,
+  "LPL": 0.9513649793410794
+ },
+ "league_shift": {
+  "top": {
+   "c": 0.138,
+   "se": 0.017,
+   "n_values": 3176
+  },
+  "jng": {
+   "c": 0.141,
+   "se": 0.016,
+   "n_values": 2382
+  },
+  "mid": {
+   "c": 0.119,
+   "se": 0.02,
+   "n_values": 2382
+  },
+  "bot": {
+   "c": 0.205,
+   "se": 0.019,
+   "n_values": 3152
+  },
+  "sup": {
+   "c": 0.082,
+   "se": 0.019,
+   "n_values": 2382
+  }
+ },
+ "adjusted_base": {
+  "validation": {
+   "n": 712,
+   "logloss": 0.6367,
+   "fav_won": 0.625
+  },
+  "test_from_sep": {
+   "n": 311,
+   "logloss": 0.6461,
+   "fav_won": 0.637
+  },
+  "worlds": {
+   "n": 73,
+   "logloss": 0.6446,
+   "fav_won": 0.616
+  },
+  "weights": {
+   "top_laning": 0.046,
+   "top_teamfight": -0.001,
+   "top_cons_side": 0.145,
+   "top_cons_dur": 0.047,
+   "top_cons_steady": 0.002,
+   "jng_early": 0.069,
+   "jng_objectives": 0.092,
+   "jng_teamfight": 0.031,
+   "mid_laning": 0.126,
+   "mid_mapimpact": -0.002,
+   "mid_damage": 0.084,
+   "bot_lane_own": 0.036,
+   "bot_lane_duo": 0.035,
+   "bot_damage": -0.006,
+   "bot_lategame": 0.114,
+   "sup_playmaking": 0.032,
+   "sup_mappresence": 0.044,
+   "sup_reliability": 0.035
+  }
+ },
+ "candidates": {
+  "top_teamfight": [
+   {
+    "candidate": "teamfight",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6461,
+    "weight_val": 0.011,
+    "weight_full": -0.001
+   },
+   {
+    "candidate": "alt_tf_dmg",
+    "val_logloss": 0.6368,
+    "test_logloss": 0.6463,
+    "weight_val": -0.042,
+    "weight_full": -0.027
+   },
+   {
+    "candidate": "alt_tf_dpm",
+    "val_logloss": 0.6368,
+    "test_logloss": 0.6459,
+    "weight_val": -0.006,
+    "weight_full": 0.017
+   },
+   {
+    "candidate": "alt_tf_kapm",
+    "val_logloss": 0.637,
+    "test_logloss": 0.646,
+    "weight_val": 0.126,
+    "weight_full": 0.104
+   },
+   {
+    "candidate": "alt_tf_kp",
+    "val_logloss": 0.6371,
+    "test_logloss": 0.646,
+    "weight_val": 0.065,
+    "weight_full": 0.025
+   }
+  ],
+  "top_cons_steady": [
+   {
+    "candidate": "cons_steady",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6461,
+    "weight_val": -0.015,
+    "weight_full": 0.002
+   },
+   {
+    "candidate": "alt_st_d15",
+    "val_logloss": 0.6369,
+    "test_logloss": 0.6455,
+    "weight_val": -0.096,
+    "weight_full": -0.082
+   }
+  ],
+  "mid_mapimpact": [
+   {
+    "candidate": "alt_mi_ka15",
+    "val_logloss": 0.6364,
+    "test_logloss": 0.6459,
+    "weight_val": 0.11,
+    "weight_full": 0.113
+   },
+   {
+    "candidate": "mapimpact",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6461,
+    "weight_val": 0.043,
+    "weight_full": -0.002
+   },
+   {
+    "candidate": "alt_mi_vis",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6458,
+    "weight_val": 0.048,
+    "weight_full": 0.025
+   },
+   {
+    "candidate": "alt_mi_fb",
+    "val_logloss": 0.6368,
+    "test_logloss": 0.6462,
+    "weight_val": 0.062,
+    "weight_full": 0.027
+   },
+   {
+    "candidate": "alt_mi_kp",
+    "val_logloss": 0.6368,
+    "test_logloss": 0.646,
+    "weight_val": 0.031,
+    "weight_full": -0.027
+   }
+  ],
+  "bot_damage": [
+   {
+    "candidate": "damage",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6461,
+    "weight_val": 0.011,
+    "weight_full": -0.006
+   },
+   {
+    "candidate": "alt_dm_share",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.646,
+    "weight_val": -0.002,
+    "weight_full": -0.023
+   },
+   {
+    "candidate": "alt_dm_eff",
+    "val_logloss": 0.6367,
+    "test_logloss": 0.6462,
+    "weight_val": 0.002,
+    "weight_full": -0.022
+   },
+   {
+    "candidate": "alt_dm_dpm",
+    "val_logloss": 0.6368,
+    "test_logloss": 0.646,
+    "weight_val": 0.023,
+    "weight_full": 0.012
+   }
+  ]
+ }
+}
