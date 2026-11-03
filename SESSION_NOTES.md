@@ -63,6 +63,8 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - **Found:** the session 1 working files were already committed (`82264c0`), though these notes said otherwise. `research/sim1/experience_progress.md` still says player matching is "not done"; the CSV has all 442 (left as a mid-session note). Several outputs were printed, not saved (per-game app comparison, experience test numbers, `deeper.py`, gol.gg comparison); the report says so.
 - **App v new team ratings** (Luke OK'd the read-out): each team's `t.ov` read from the running app (v38) on a temporary local server in a new browser-pane tab, console clean; server stopped, tab closed, `.claude/launch.json` removed. Ranks are close (15 of 16 within 2 places); AL is the exception (app 5th, new 8th). Added to the report (section 3) and the scorecard. Node.js isn't installed, so the planned script couldn't run and the app was used instead.
 - `research/sim1/README.md` and the `research/sim-plan.md` status line updated. No app change (v38).
+- Committed `0ff5d1f` and pushed.
+- Tidy at end of session: `research/sim1/experience_progress.md` marked as a superseded mid-session note; `CLAUDE.md` Files table lists `research/sim1/`, `research/model/sim1/` and the report. Node.js is not installed on this PC, so app values are read through the browser pane (noted in Claude's memory).
 
 ### Session (2 Nov 2026, AEST) — v38: Swiss round 5, HLE–G2 confirmed
 - **New Oracle's Elixir file** (9,857 games, data to 1 Nov 11:42 UTC; last Worlds game 31 Oct 23:05 UTC): has HLE–G2 and all of round 5.

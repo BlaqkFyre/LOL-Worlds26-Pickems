@@ -1,5 +1,7 @@
 # Experience data — progress (3 Nov 2026 AEST)
 
+> **Superseded mid-session note.** The "Not done" items below were finished later the same session: all 442 players are matched in `research/model/sim1/player_experience_pre2026.csv`. Results: `research/sim1-report.md`, section 5.
+
 Source: Leaguepedia Cargo export (https://lol.fandom.com/wiki/Special:CargoExport), read 3 Nov.
 
 ## Done
