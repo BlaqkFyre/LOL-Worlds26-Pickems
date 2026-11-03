@@ -1,6 +1,6 @@
 # Pick'Em Lab: data-built game simulator plan
 
-Written 27 Oct 2026. Status: **planned, not started.** The live copy (with a diagram) is the Claude doc of the same name; this is the repo copy.
+Written 27 Oct 2026. Status: **session 1 done** (3 Nov 2026 AEST; report `research/sim1-report.md`); session 2 next. The live copy (with a diagram) is the Claude doc of the same name; this is the repo copy.
 
 ## How we got here
 

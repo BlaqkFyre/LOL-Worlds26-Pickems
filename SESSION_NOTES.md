@@ -9,7 +9,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 - **App:** v38 (2 Nov 2026 AEST): Swiss round 5 data, HLE–G2 confirmed from the Oracle's Elixir file. v37 (31 Oct): new champ select pick/ban board and tier colours. App data and code are correct as they stand.
 - **Real data:** the whole Swiss stage, 51 games, in `js/worlds-live.js` (data to 31 Oct), every game confirmed against the Oracle's Elixir file. H2H in `js/h2h.js` (data to 31 Oct). Knockouts start 3 Nov (US).
 - **Time zones:** Luke's dates are AEST; Worlds game days are US dates; the Oracle's Elixir file is UTC. Check a game's UTC time against the file before saying it has been played.
-- **Sim engine:** session 1 (ratings and who-wins model) **fitted and tested, report not written yet**. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`.
+- **Sim engine:** session 1 (ratings and who-wins model) **done**: report `research/sim1-report.md`. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`. Scorecard artifact: https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
 - **Where work happens:** Claude Code sessions only. The claude.ai chats that built the app no longer write to the repo.
 
@@ -19,8 +19,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 | Task | Status/blocker |
 |---|---|
-| **Sim session 1 report (next)** | Fitting and tests done 3 Nov. Write `research/sim1-report.md` from `research/sim1/README.md`, the JSON/CSV results in `research/model/sim1/` and the decisions in `research/sim-plan.md`; show Luke the scorecard as an artifact; then propose a commit (the new folders are not committed yet). No app change |
-| Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat |
+| Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat; four skills with ~0 weight (top Teamfight, top steadiness, mid Map impact, ADC Damage): keep or swap; S5 card step has no saved script (add to `scales.py` before session 4). Report section 9 |
 | Sim sessions 2–5 | After session 1, in order (see the plan) |
 | Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
@@ -58,6 +57,13 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 
 ## Recent updates
 
+### Session (3 Nov 2026, AEST) — sim session 1 report
+- **Report written:** `research/sim1-report.md`, from the saved results in `research/model/sim1/`, `research/sim1/README.md` and `research/sim-plan.md`. Nothing was re-run. Headline: new model 0.639 v app 0.679 log loss on the 51 Swiss games (no drafts); 0.646 from 1 Sep (coin flip 0.693); calibration within 5 points from 1 Sep, 10–12 points off in two Worlds bands (small samples).
+- **Scorecard artifact:** https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL (tests, calibration, league strength, 16 team ratings, 80 S5 player cards, open items), built from small CSVs of the same numbers.
+- **Found:** the session 1 working files were already committed (`82264c0`), though these notes said otherwise. `research/sim1/experience_progress.md` still says player matching is "not done"; the CSV has all 442 (left as a mid-session note). Several outputs were printed, not saved (per-game app comparison, experience test numbers, `deeper.py`, gol.gg comparison); the report says so.
+- **App v new team ratings** (Luke OK'd the read-out): each team's `t.ov` read from the running app (v38) on a temporary local server in a new browser-pane tab, console clean; server stopped, tab closed, `.claude/launch.json` removed. Ranks are close (15 of 16 within 2 places); AL is the exception (app 5th, new 8th). Added to the report (section 3) and the scorecard. Node.js isn't installed, so the planned script couldn't run and the app was used instead.
+- `research/sim1/README.md` and the `research/sim-plan.md` status line updated. No app change (v38).
+
 ### Session (2 Nov 2026, AEST) — v38: Swiss round 5, HLE–G2 confirmed
 - **New Oracle's Elixir file** (9,857 games, data to 1 Nov 11:42 UTC; last Worlds game 31 Oct 23:05 UTC): has HLE–G2 and all of round 5.
 - **HLE 2-0 G2:** matches the file on every field (incl. Hans Sama's 212 CS and the grubs); rows replaced with the file's, adding CS@15.
@@ -67,7 +73,7 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - Cache v37 → v38. How checked: local server in a new browser-pane tab, data counts and H2H read in the console, 8 pages render at desktop, no sideways scroll on 5 pages at 375 px, console clean. Server stopped, tabs closed, `.claude/launch.json` removed.
 - Also: v37 committed `bd396b3` and pushed. Luke's time zone (AEST) saved in Claude's memory and noted above.
 - Committed `b1ed266` and pushed.
-- **Sim session 1 (same day, later):** planned with Luke (8 decisions + role skills table, committed `c845ba7`), then fitted and tested in scratch: team ratings from results (league, side, 90-day recency), player skills with a league shift per role, S5 card scale adopted, extra Worlds weight dropped (test), experience tested (not adopted yet), sources checked against Leaguepedia and gol.gg, fixed ID lookup built, new model beats the app on the 51 Swiss games (0.639 v 0.679). Copied to `research/sim1/` and `research/model/sim1/` for the next session; `research/sim-plan.md` updated. **Not committed yet.** Report moved to a new chat because this one reached 93% context.
+- **Sim session 1 (same day, later):** planned with Luke (8 decisions + role skills table, committed `c845ba7`), then fitted and tested in scratch: team ratings from results (league, side, 90-day recency), player skills with a league shift per role, S5 card scale adopted, extra Worlds weight dropped (test), experience tested (not adopted yet), sources checked against Leaguepedia and gol.gg, fixed ID lookup built, new model beats the app on the 51 Swiss games (0.639 v 0.679). Copied to `research/sim1/` and `research/model/sim1/` for the next session; `research/sim-plan.md` updated. Committed `82264c0` and pushed (git showed main up to date with origin on 3 Nov). Report moved to a new chat because this one reached 93% context.
 
 ### Session (31 Oct 2026) — v34–v37: Swiss round 4 day 3, display tidy-ups, pick/ban board
 - **New Oracle's Elixir file** (9,831 games, data to 30 Oct 22:00 UTC): has TES–BLG and LOS–TL, not HLE–G2.
@@ -105,16 +111,6 @@ Decided 29 Oct (details in `research/sim-plan.md`):
   - Note: one earlier preview tab of Luke's was reloaded by mistake during testing (CLAUDE.md rule 9); later tests used separate tabs.
   - Committed `bd396b3` and pushed.
 
-### Session (30 Oct 2026) — v32: Swiss round 4 day 2, aged subway sign
-- **Data:** KC 2-0 CFO from Luke's new Oracle's Elixir file (data to 29 Oct 21:00 UTC). It matches pickorban and Leaguepedia on every field checked. TES 2-1 BLG isn't in the file yet, so it came from Leaguepedia's scoreboards with pickorban for damage share (CS@15 null, `fp` left out). `js/worlds-live.js` now has 39 games. `build_from_oe.py` was run on a scratch copy: 34/34 OK, `js/h2h.js` rebuilt to 29 Oct, then TES–BLG added by hand. Details and sources in `research/worlds-live-2026.md`.
-- **Pick/ban check:** the app's pick, ban and win counts for all 84 champions match Leaguepedia's Main Event champion statistics (39 games).
-- **Out-of-sample (v31 before the update):** favourite 3 of 5, log loss 0.945, Brier 0.334. BLG was 76–90% in all three TES games. Running total: 23 of 39 (59%).
-- **Subway band:** caption removed; the band now looks like an aged enamel station sign (grain texture, top white stripe, off-white Helvetica, faded bullets with scuffs, screw heads). CSS only, in `css/styles.css`.
-- Cache v31 → v32. How checked: local server in a new browser-pane tab at desktop and 375 px, console clean, data counts and H2H read in the console, role-page game log for 369 renders with the missing CS@15 shown as a dash. The temporary `.claude/launch.json` was removed afterwards.
-- Download link for the Oracle's Elixir file is now in the Sources section of `research/worlds-live-2026.md`.
-- Committed `4fe2ab1` and pushed.
-- **v33, Counters row:** champion page cards (`champCard`) and the hover card (`champTip`) now show "Counters": 3 champions this one beats (`beats3` in `js/core.js`). Order: same-lane METAsrc matchups at 50.5%+ (so the shown % rounds to 51%+), then other-lane matchups, then lane opponents it beat at Worlds; only champions seen in pro play (`POOL`). Example: Nocturne shows Rengar 55%, Locke 54%, Qiyana 54%. Champions with no qualifying matchup show "no matchup data" (27 of 163 before the 50.5% cut-off; not recounted after it). How checked: local server in a new browser-pane tab, every pool champion's row checked in the console (none at 50% or below), all 15 jungle cards show the row, hover card renders, a Counters chip opens that champion's hover card, 375 px with no sideways scroll, console clean. Committed `7b3c221`.
-
 ---
 
 ## Session index
@@ -124,3 +120,4 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 | 20–27 Oct 2026 (claude.ai chats) | App built from v20 to v30 (see `git log`): player and champion cards, tournament, series mode, real Worlds data, power rankings, themes. Sim back-tested on 711 series (22 Oct). Sim plan written 27 Oct. No notes file then |
 | 29 Oct 2026 | CLAUDE.md, SESSION_NOTES.md and the build script added; sim plan decisions recorded (ratings, draft AI, draft review, old engine, minor leagues, scorecard). No app change (v30) |
 | 29 Oct 2026 (later) | v31: Subway and Arcade Smash themes, role-page game log hover, ticker fix, side-coloured pick/ban tags, Swiss round 4 day 1 data |
+| 30 Oct 2026 | v32: Swiss round 4 day 2 (KC–CFO from the file, TES–BLG from Leaguepedia), aged subway sign (`4fe2ab1`); v33: champion card "Counters" row (`7b3c221`) |

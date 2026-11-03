@@ -1,6 +1,6 @@
 # Sim session 1 — working files (ratings and the who-wins model)
 
-Built 3 Nov 2026 (AEST) in one Claude Code session. **The report is not written yet** (next session). Decisions are in `research/sim-plan.md`; results tables are in `research/model/sim1/`.
+Built 3 Nov 2026 (AEST) in one Claude Code session. **Report: `research/sim1-report.md`** (written 3 Nov in the next session). Decisions are in `research/sim-plan.md`; results tables are in `research/model/sim1/`.
 
 All scripts are read-only on the Oracle's Elixir CSV and were run from a scratch folder with intermediate files next to them. To re-run, copy this folder somewhere outside the repo and run in this order (each script's docstring has its usage line):
 
