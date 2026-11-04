@@ -20,7 +20,8 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 | Task | Status/blocker |
 |---|---|
 | Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat; four skills with ~0 weight (top Teamfight, top steadiness, mid Map impact, ADC Damage): keep or swap; S5 card step has no saved script (add to `scales.py` before session 4). Report section 9 |
-| Sim sessions 2–5 | After session 1, in order (see the plan) |
+| **Sim session 2 (next): champions, comps, synergies and counters** | Plan the foundation with Luke first (see the plan). **Use only the games in the current Oracle's Elixir file** (to 1 Nov UTC, no knockouts); don't wait for or assume knockout results (Luke, 4 Nov) |
+| Sim sessions 3–5 | After session 2, in order (see the plan) |
 | Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
 
