@@ -1,0 +1,13 @@
+input,pair,weight_per_sd,d_jul_aug,d_from_sep,d_worlds,passes
+cohesion,team,0.101,-0.002,-0.0002,0.0032,True
+newest_link,team,0.119,-0.0022,0.0003,0.0051,False
+pair,bot-sup,0.056,0.0011,-0.001,0.0002,False
+pair,jng-bot,0.058,-0.0002,-0.0019,-0.0007,True
+pair,jng-mid,0.093,-0.0017,-0.0018,-0.0011,True
+pair,jng-sup,0.089,-0.0013,-0.0016,0.0023,True
+pair,mid-bot,0.073,-0.0007,-0.0004,0.0003,True
+pair,mid-sup,0.086,-0.0005,0.0,0.0015,False
+pair,top-bot,0.033,0.001,0.0005,0.0015,False
+pair,top-jng,0.08,-0.0013,0.0007,0.0049,False
+pair,top-mid,0.066,-0.0002,0.0008,-0.0003,False
+pair,top-sup,0.071,-0.0006,0.0017,0.0051,False

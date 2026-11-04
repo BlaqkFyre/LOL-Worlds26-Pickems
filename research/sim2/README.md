@@ -112,6 +112,97 @@ Step 6, lolalytics synergy (Luke, 4 Nov: "run it, pane visible").
 - Used as lolalytics gives it (delta 1 points = change in win chance, no fitting): from 1 Sep 0.6478 v v1 0.6485 (278 games), Worlds 0.6497 v 0.6446, both patches 0.6435 v 0.6420. **Not kept.** At half strength it scored 0.6461 / 0.6447 / 0.6408, better than v1, but that strength was picked after seeing these games, so it is not a fair test; it can be tested fairly on the knockout games when a newer file has them.
 - metabot duos (the app's `DUOS`, 29 pairs) v lolalytics ADC–support delta 1 on 16.20: 27 pairs found, rank agreement 0.54, same sign in 17.
 
+| 7 (part 2) | `s2_roles.py` (scratch folder, with `v1_games.csv`, `gfeat.csv`, the lolalytics files) | `model/sim2/roles_results.csv`, `roles_base.json` | Done 5 Nov |
+
+Step 7, every draft input role by role (Luke, 4–5 Nov). 41 tests: 8 inputs × 5 roles (synergy × 6 teammate pairs), each added alone to v1. Pass = better than v1 on both July–August (fit Feb–Jun) and from 1 Sep (fit Feb–Aug). Change in log loss (negative = better):
+
+| Passes | Jul–Aug | From 1 Sep | Worlds |
+|---|---|---|---|
+| Champion strength, ADC | −0.0027 | −0.0014 | −0.0041 |
+| Comfort (games on champion), jungle | −0.0004 | −0.0022 | −0.0040 |
+| Comfort (games on champion), mid | −0.0004 | −0.0001 | −0.0015 |
+
+- 17 fail. 21 can't be checked on July–August (built from 16.15 onward, so the Feb–Jun fit has no values); of those, better on both from 1 Sep and Worlds: pro lane matchup support (−0.0006 / −0.0006), pro synergy ADC–support (−0.0009 / −0.0078), lolalytics synergy jungle–top (−0.0015 / −0.0098). Pro synergy jungle–mid is much worse (+0.0113 / +0.0219); pro lane top worse still (+0.0297 / +0.0597).
+- **Reading:** with 41 tests, a few passes by chance are expected, so these are candidates, not results. The two that improve all three sets (ADC champion strength, jungle comfort) are the strongest. A combination chosen after seeing these numbers can only be tested fairly on new games (knockouts, when a newer file has them).
+- Earlier combined tests hid these: champion strength over all roles was worse (step 2), but the ADC part alone is better on every set.
+
+| 7b | `s2_comfort_worlds.py` | `model/sim2/comfort_worlds.csv` | Done 5 Nov |
+
+Step 7b, comfort at Worlds checked directly (Luke, 5 Nov). 730 Worlds picks (73 games). For each pick, the player's earlier games on that champion (all leagues, earlier days only), grouped 0–2 / 3–9 / 10+; "won − expected" = win rate minus v1's expected win rate for that side (percentage points):
+
+| Role | 0–2 earlier games | 3–9 | 10+ |
+|---|---|---|---|
+| Top | +7.4 (31 picks) | +3.6 (57) | −7.6 (58) |
+| Jungle | +3.6 (16) | **−9.9** (60) | **+7.7** (70) |
+| Mid | **−9.1** (22) | +3.1 (76) | −0.7 (48) |
+| ADC | +10.5 (22) | −1.9 (54) | −1.8 (70) |
+| Support | +11.5 (20) | −2.3 (74) | −1.2 (52) |
+| All roles | +4.9 (111) | −1.3 (321) | −0.4 (298) |
+
+- Overall, low-comfort picks did **not** lose more than expected at Worlds (0–2 games: +4.9 points over 111 picks).
+- Jungle is the one role with the comfort pattern (10+ games +7.7 v 3–9 games −9.9); mid's few low-comfort picks lost more than expected (−9.1, 22 picks). Top, ADC and support show the opposite (low-comfort picks did better), possibly deliberate counter or meta picks (not tested).
+- Sizes: cells are 16–76 picks in 15–60 games; a ±10-point gap on ~20 games is within chance (rough standard error about ±11 points). The five picks of a side share one result, so picks are not independent.
+- Fits the step 7 model result: the Worlds gain is in jungle (and a little mid), not comfort in general.
+
+| 7c | `s2_comfort_events.py` | `model/sim2/comfort_events.csv` | Done 5 Nov |
+
+Step 7c, the comfort check on other events (Luke, 5 Nov). Same bands; won − expected (v1) in points, picks in brackets. Games: Worlds 73, MSI 71, EWC 232, First Stand 45, domestic playoffs 586 (1,007 big-event games together), domestic regular season 1,661.
+
+| Jungle | 0–2 | 3–9 | 10+ |
+|---|---|---|---|
+| Worlds | +3.6 (16) | −9.9 (60) | +7.7 (70) |
+| MSI | −15.7 (30) | +2.8 (72) | +6.8 (40) |
+| EWC | −3.1 (138) | +1.1 (263) | +2.3 (63) |
+| First Stand | −6.5 (39) | +4.7 (48) | +9.3 (3) |
+| Domestic playoffs | −1.1 (490) | +0.4 (504) | +2.0 (178) |
+| **Big events together** | **−2.3 (713)** | **+0.3 (947)** | **+3.8 (354)** |
+| Domestic regular season | −0.5 (1,489) | +0.6 (1,415) | −0.4 (418) |
+
+- **Jungle:** in every big-event group the 10+ band is above the 0–2 band (5 of 5); together −2.3 → +0.3 → +3.8. Flat in the domestic regular season. Rough standard errors (by game) for the jungle cells together: 2.1 / 1.8 / 2.8 points, so the 6.1-point gap from 0–2 to 10+ is about 1.7 standard errors: suggestive, not proven on its own; the consistency across events is the stronger evidence. (Several role and band splits were looked at, which also weakens any single gap.)
+- **Mid:** big events together −1.3 → +0.6 → +1.4, a smaller gap; Worlds and MSI disagree (−9.1 v +13.7 at 0–2).
+- **Top, ADC, support:** no comfort pattern at big events (top −1.0 / +0.8 / +0.1; ADC +1.2 / −1.3 / +1.5; support −1.3 / +1.3 / −1.1).
+- **All roles:** big events −1.0 / +0.4 / +1.3; regular season +0.5 / −1.1 / +2.0.
+- **Reading:** jungle comfort matters on the big stage (playoffs and internationals), not in the regular season and not for other roles. A fixed test for the knockouts: jungle comfort only, in big-event games.
+
+| 8 | `s2_together.py` | `model/sim2/together_results.csv`, `together_bands.csv` | Done 5 Nov |
+
+Step 8, player time together (Luke's "player and team synergy"). Earlier games two teammates played on the same team, all leagues, earlier days only; 2026 only (the file starts 1 Jan, so 2025 history isn't counted). Some minor-league rows have no player ID; those are skipped.
+
+Model test (each alone on v1; change in log loss, negative = better):
+
+| Input | Jul–Aug | From 1 Sep | Worlds | Passes |
+|---|---|---|---|---|
+| Pair jungle–mid | −0.0017 | −0.0018 | −0.0011 | yes (all three) |
+| Pair jungle–ADC | −0.0002 | −0.0019 | −0.0007 | yes (all three) |
+| Pair jungle–support | −0.0013 | −0.0016 | +0.0023 | yes |
+| Pair mid–ADC | −0.0007 | −0.0004 | +0.0003 | yes |
+| Team cohesion (mean of 10 pairs) | −0.0020 | −0.0002 | +0.0032 | yes |
+| Newest link | −0.0022 | +0.0003 | +0.0051 | no |
+| Other 6 pairs | | | | no |
+
+- Every one of the 12 fitted weights is positive (more time together, better), which is more consistent than any draft input.
+- Direct check, sides grouped by their newest link (won − v1 expected, points): domestic regular season 0–9 games −2.1 (1,060 sides, SE 1.5), 10–49 0.0 (1,632), 50+ +3.5 (630, SE 1.8); domestic playoffs −3.8 / −0.1 / +0.7; internationals +1.9 / −2.6 / +2.0; Worlds 0–9 only 8 sides. The clear pattern is in the regular season, where roster changes happen; by big events rosters are settled.
+- Possible reasons (not tested): v1's team rating lags after a roster change (it rates the team name, not the current five), and this corrects for it; stable rosters may also mark better-run teams.
+- Jungle pairs again lead, as with comfort.
+
+| 9 | `s2_bans_pools.py` | `model/sim2/bans_pools_results.csv`, `bans_bands.csv` | Done 5 Nov: **neither kept** |
+
+Step 9, denials (bans) and player pool depth. Player history = all leagues, 2026, earlier days only.
+- **Denials:** each opposing player's 3 most-played champions; sides ban 1.6 of these on average. Model test (each alone on v1, change in log loss): bans on top-3 comfort +0.0015 / 0.0000 / +0.0001 (Jul–Aug / from 1 Sep / Worlds), weight ≈ 0; bans weighted by the opponents' games on them +0.0004 / −0.0014 / −0.0013 but with a **negative** weight; opponents pushed off comfort +0.0007 / −0.0005 / +0.0006. Direct check (won − v1 expected, points): big events 0 comfort bans +0.7 (318 sides), 1 −1.0 (701), 2+ +0.5 (995); regular season 0 +3.8 (477, SE 2.1), 1 −0.5, 2+ −0.7. Banning comfort picks doesn't help; sides that banned none did slightly better in the regular season (possibly stronger teams banning for the meta rather than the opponent: not tested).
+- **Pool depth:** effective number of champions (exp of entropy) and champions with 3+ games, last 90 days. All fitted weights positive (deeper pool, a little better), but only top laners' effective pool passes (−0.0015 / −0.0002, Worlds +0.0021); ADC effective pool −0.0015 from 1 Sep and −0.0033 Worlds but fails Jul–Aug (+0.0003); team total 0.0000 from 1 Sep. Not kept.
+
+| 10 | `s2_fearless_check.py`, `s2_pool.py`, `s2_pool_cards.py` | `model/sim2/pool_results.csv`, `pool_direct_g1.csv`, `pool_direct_g3plus.csv`, `pool_cards_worlds.csv` | Done 5 Nov |
+
+Step 10, pool depth as part of player ratings (Luke, 5 Nov: "deep research").
+- **Fearless everywhere:** in every 2026 league in the file, no team re-picks a champion inside a multi-game series (0 repeats in LPL 4,280 later-game picks, LCK 3,140, LEC 1,970, LCS 1,660, LCP 1,860, CBLOL 1,690, EWC 1,290…; a handful of repeats only in three minor leagues). Series = same day, same two teams.
+- **Measures** (all leagues, earlier days only): effective pool (90 days); champions with 3+ games (180 days); meta pool = the player's champions with 2+ games that are in the role's current pro meta (top 10 by pro picks in the previous 30 days); free comfort = 3+-game champions not yet used in the series by either team. Typical player: 6–7 champions with 3+ games, effective pool ~10.
+- **Pool v skill:** correlation with the player's pre-game role skill is low (top 0.07–0.11, jungle 0.06–0.14, mid 0.21–0.22, ADC 0.11–0.17, support 0.17–0.20): mostly new information, not a copy of skill.
+- **Beyond v1** (change in log loss; Jul–Aug / from 1 Sep / Worlds): **jungle** passes on all three for every measure that counts champions: 3+ games −0.0021 / −0.0034 / −0.0038, free comfort −0.0015 / −0.0033 / −0.0047, meta pool −0.0007 / −0.0020 / −0.0054. Meta pool also passes for ADC, support and team total (smaller). Effective pool fails almost everywhere.
+- **Fearless split** (from 1 Sep, game 1 = 109 games, games 2+ = 202): top and mid pool measures hurt in game 1 but mostly help in games 2+ (e.g. top free comfort +0.0054 v −0.0013), as Fearless would predict; jungle helps most in game 1 (−0.0084). Direct check, games 3+ of a series by team free comfort: lowest quarter −1.3 points v v1 expected (364 sides), middle half +0.3, highest quarter +0.9 (SE ~2.5): same direction, not proven. Game 1: flat.
+- **Outside check (gol.gg, opened 5 Nov, https://gol.gg/players/player-stats/48/season-S16/split-ALL/tournament-ALL/):** Faker 2026 on gol.gg = 178 games, 23 champions; the file = 160 games, 21 champions, all 21 on gol.gg's list; gol.gg's extra 18 games and 2 champions (Mel, Yasuo) are not in the file (which events: not checked; may include games after the file's cut-off). Leaguepedia's 2026 champion statistics page for Faker does not exist.
+- **Pool card** (S5 scale, mean of the 3+ games and meta pool z-scores; `pool_cards_worlds.csv`): highest of the 80 Worlds players Faker 89 (16 champions with 3+ games, all 10 current-meta mids), Caliste 89, Peyz 88; lowest 369 43 (he played Jan–Mar, then only 6 Worlds games in the last 180 days: a recent window marks stand-ins), Rookie 65. Knight 82, Kanavi 81, Canyon 78, Chovy 76.
+- **Reading:** pool depth belongs on the player card as its own skill ("Pool"): it isn't a copy of skill, and Faker's depth is real where his laning numbers are not. For win odds, only jungle pool (closely related to jungle comfort) is a candidate. Its main job in the sim is mechanical: in Fearless series the draft AI must run out of comfort picks game by game, which uses pool depth directly without needing a fitted weight.
+
 Step 1 detail: `research/sim1/` scripts re-run on a scratch copy in order (`prep.py`, `playerprep.py` n0 = 6, `teamfit.py`, `leaguefit.py`; `playerfit.py` not needed). They reproduce the saved session 1 results exactly (validation 0.6441, from 1 Sep 0.6489, Worlds 0.6491, rolling 0.6451; league-adjusted 0.6367 / 0.6461 / 0.6446; same league shifts and 16 team ratings). `v1_offsets.py` runs from that folder (it uses `exptest.py`): v1 odds for 2,668 of 2,845 games (the first games of the year have no earlier games to rate teams from), 0.6461 from 1 Sep and 0.6446 on Worlds, the same as session 1.
 
 ## Sample sizes (step 0, major leagues + internationals, 2,845 games)

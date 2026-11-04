@@ -1,0 +1,15 @@
+input,role,weight_per_sd,d_jul_aug,d_from_sep,d_worlds,passes
+denied_pick,team,0.03,0.0007,-0.0005,0.0006,False
+deny_top3,team,0.001,0.0015,0.0,0.0001,False
+deny_weight,team,-0.042,0.0004,-0.0014,-0.0013,False
+pool_eff,bot,0.034,0.0003,-0.0015,-0.0033,False
+pool_eff,jng,0.049,0.0006,-0.0001,-0.0002,False
+pool_eff,mid,0.015,0.0018,0.0005,0.0008,False
+pool_eff,sup,0.091,-0.0015,0.0008,-0.0042,False
+pool_eff,team,0.085,0.0002,-0.0,-0.0018,False
+pool_eff,top,0.099,-0.0015,-0.0002,0.0021,True
+pool_n3,bot,0.04,-0.0003,0.0023,0.0016,False
+pool_n3,jng,0.079,-0.0013,0.0023,0.0048,False
+pool_n3,mid,0.084,-0.0003,0.0027,0.0012,False
+pool_n3,sup,0.049,-0.0005,0.0017,0.0004,False
+pool_n3,top,0.004,0.0003,0.0002,0.0003,False

@@ -1,0 +1,13 @@
+group,band,sides,won_minus_expected,rough_se
+Worlds,0-9,8,16.5,16.3
+Worlds,10-49,26,2.1,10.1
+Worlds,50+,112,-1.7,4.5
+"Internationals (MSI, EWC, First Stand)",0-9,64,1.9,6.1
+"Internationals (MSI, EWC, First Stand)",10-49,304,-2.6,2.8
+"Internationals (MSI, EWC, First Stand)",50+,328,2.0,2.5
+Domestic playoffs,0-9,77,-3.8,5.6
+Domestic playoffs,10-49,617,-0.1,2.0
+Domestic playoffs,50+,478,0.7,2.2
+Domestic regular season,0-9,1060,-2.1,1.5
+Domestic regular season,10-49,1632,-0.0,1.2
+Domestic regular season,50+,630,3.5,1.8
