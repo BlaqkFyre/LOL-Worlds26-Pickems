@@ -1,0 +1,441 @@
+champion,position,patch,vs,metasrc_wr,list,lola_wr,lola_n,lola_d1
+Vi,jng,26.20,Rengar,54.6,wins,53.45,1854,3.07
+Vi,jng,26.20,Qiyana,52.2,wins,48.29,4233,-1.43
+Vi,jng,26.20,Lee Sin,52.1,wins,51.75,10955,2.54
+Vi,jng,26.20,Kha'Zix,51.6,wins,50.23,3494,1.27
+Vi,jng,26.20,Hecarim,51.5,wins,50.48,2700,1.28
+Vi,jng,26.20,Kindred,51.4,wins,49.9,1441,1.59
+Vi,jng,26.20,Shaco,51.4,wins,52.42,2043,5.08
+Vi,jng,26.20,Naafiri,51.1,wins,51.39,1660,2.44
+Vi,jng,26.20,Wukong,46.0,loses,47.48,4756,1.46
+Vi,jng,26.20,Shyvana,46.2,loses,49.19,2043,2.42
+Vi,jng,26.20,Amumu,46.9,loses,50.72,1041,3.62
+Vi,jng,26.20,Cho'Gath,46.9,loses,48.97,3353,2.38
+Vi,jng,26.20,Lillia,47.5,loses,49.48,2878,2.6
+Vi,jng,26.20,Briar,47.6,loses,49.09,2153,2.26
+Vi,jng,26.20,Warwick,47.7,loses,49.19,1675,3.06
+Vi,jng,26.20,Graves,48.7,loses,50.53,4285,1.66
+Jarvan IV,jng,26.20,Rengar,55.6,wins,54.86,3055,4.48
+Jarvan IV,jng,26.20,Locke,54.3,wins,55.05,643,2.63
+Jarvan IV,jng,26.20,Qiyana,53.4,wins,52.25,6356,2.53
+Jarvan IV,jng,26.20,Quinn,52.7,wins,49.77,1093,2.22
+Jarvan IV,jng,26.20,Ambessa,52.6,wins,53.3,546,1.77
+Jarvan IV,jng,26.20,Shaco,52.4,wins,50.44,3428,3.1
+Jarvan IV,jng,26.20,Hecarim,52.4,wins,50.66,4191,1.46
+Jarvan IV,jng,26.20,Shyvana,46.7,loses,50.59,3151,3.82
+Jarvan IV,jng,26.20,Zaahen,47.2,loses,44.26,357,-2.77
+Jarvan IV,jng,26.20,Wukong,47.2,loses,48.49,7299,2.47
+Jarvan IV,jng,26.20,Zyra,47.2,loses,48.67,1087,1.99
+Jarvan IV,jng,26.20,Rammus,47.9,loses,49.29,1416,4.65
+Jarvan IV,jng,26.20,Master Yi,48.0,loses,47.99,5245,0.63
+Jarvan IV,jng,26.20,Amumu,48.2,loses,55.01,1587,7.91
+Jarvan IV,jng,26.20,Cho'Gath,48.3,loses,49.57,4898,2.98
+Nocturne,jng,26.20,Rengar,54.8,wins,53.13,1920,2.75
+Nocturne,jng,26.20,Locke,54.4,wins,52.65,359,0.23
+Nocturne,jng,26.20,Qiyana,54.3,wins,52.72,3625,3.0
+Nocturne,jng,26.20,Nidalee,54.0,wins,51.67,1314,3.85
+Nocturne,jng,26.20,Naafiri,53.3,wins,55.38,1553,6.43
+Nocturne,jng,26.20,Zed,52.8,wins,54.96,1541,4.37
+Nocturne,jng,26.20,Kindred,52.3,wins,52.56,1406,4.25
+Nocturne,jng,26.20,Lee Sin,52.3,wins,52.44,6947,3.23
+Nocturne,jng,26.20,Shyvana,44.1,loses,48.41,2262,1.64
+Nocturne,jng,26.20,Gwen,44.9,loses,47.08,463,-0.54
+Nocturne,jng,26.20,Rammus,45.2,loses,47.32,1120,2.68
+Nocturne,jng,26.20,Wukong,45.8,loses,47.05,4482,1.03
+Nocturne,jng,26.20,Cho'Gath,46.0,loses,48.68,3383,2.09
+Nocturne,jng,26.20,Dr. Mundo,46.0,loses,53.4,206,4.47
+Nocturne,jng,26.20,Bel'Veth,46.4,loses,48.66,1268,1.62
+Nocturne,jng,26.20,Sejuani,46.8,loses,48.63,1166,2.17
+Lee Sin,jng,26.20,Rengar,53.6,wins,54.28,6028,3.9
+Lee Sin,jng,26.20,Qiyana,51.8,wins,51.18,14973,1.46
+Lee Sin,jng,26.20,Locke,51.7,wins,55.06,1404,2.64
+Lee Sin,jng,26.20,Hecarim,51.0,wins,51.7,8354,2.5
+Lee Sin,jng,26.20,Zed,50.6,wins,54.13,6130,3.54
+Lee Sin,jng,26.20,Talon,50.5,wins,51.72,9693,3.72
+Lee Sin,jng,26.20,Nidalee,50.4,wins,50.33,8667,2.51
+Lee Sin,jng,26.20,Kindred,50.4,wins,50.4,5214,2.09
+Lee Sin,jng,26.20,Shyvana,44.6,loses,48.31,5525,1.54
+Lee Sin,jng,26.20,Zaahen,44.7,loses,45.96,607,-1.07
+Lee Sin,jng,26.20,Rammus,44.8,loses,47.58,3146,2.94
+Lee Sin,jng,26.20,Cho'Gath,44.8,loses,49.05,10460,2.46
+Lee Sin,jng,26.20,Warwick,45.3,loses,49.26,5400,3.13
+Lee Sin,jng,26.20,Briar,45.3,loses,49.24,6765,2.41
+Lee Sin,jng,26.20,Zyra,45.5,loses,46.98,2386,0.3
+Lee Sin,jng,26.20,Lillia,45.5,loses,49.4,8544,2.52
+Xin Zhao,jng,26.17,Rengar,55.0,wins,55.81,1084,5.43
+Xin Zhao,jng,26.17,Diana,53.0,wins,56.03,1087,7.47
+Xin Zhao,jng,26.17,Bel'Veth,52.0,wins,50.71,771,3.67
+Xin Zhao,jng,26.17,Master Yi,52.0,wins,51.64,1681,4.28
+Xin Zhao,jng,26.17,Lee Sin,52.0,wins,51.4,5041,2.19
+Xin Zhao,jng,26.17,Kha'Zix,51.0,wins,49.02,1938,0.06
+Xin Zhao,jng,26.17,Talon,51.0,wins,51.61,1552,3.61
+Xin Zhao,jng,26.17,Hecarim,51.0,wins,51.41,1387,2.21
+Xin Zhao,jng,26.17,Shyvana,46.0,loses,49.34,1064,2.57
+Xin Zhao,jng,26.17,Warwick,47.0,loses,48.18,851,2.05
+Xin Zhao,jng,26.17,Sylas,47.0,loses,51.54,1948,2.49
+Xin Zhao,jng,26.17,Wukong,48.0,loses,47.26,2613,1.24
+Xin Zhao,jng,26.17,Briar,48.0,loses,52.56,1210,5.73
+Xin Zhao,jng,26.17,Jax,48.0,loses,52.75,309,3.81
+Xin Zhao,jng,26.17,Naafiri,49.0,loses,53.74,681,4.79
+Xin Zhao,jng,26.17,Vi,49.0,loses,53.9,1371,4.42
+Pantheon,jng,26.20,Rengar,53.7,wins,51.51,398,1.13
+Pantheon,jng,26.20,Hecarim,52.2,wins,47.25,527,-1.95
+Pantheon,jng,26.20,Evelynn,51.4,wins,53.25,246,6.1
+Pantheon,jng,26.20,Qiyana,51.4,wins,47.7,979,-2.02
+Pantheon,jng,26.20,Lee Sin,51.3,wins,50.94,2554,1.73
+Pantheon,jng,26.20,Zed,51.3,wins,47.88,307,-2.71
+Pantheon,jng,26.20,Quinn,51.1,wins,54.48,145,6.93
+Pantheon,jng,26.20,Wukong,43.6,loses,43.37,860,-2.65
+Pantheon,jng,26.20,Bel'Veth,44.4,loses,50.2,247,3.16
+Pantheon,jng,26.20,Volibear,44.8,loses,43.93,107,-4.56
+Pantheon,jng,26.20,Cho'Gath,45.0,loses,46.18,615,-0.41
+Olaf,top,26.20,Jayce,55.0,wins,55.38,2640,4.44
+Olaf,top,26.20,Teemo,53.0,wins,56.28,2603,9.83
+Olaf,top,26.20,Yasuo,52.0,wins,53.68,952,5.14
+Olaf,top,26.20,Gangplank,52.0,wins,51.09,2329,3.62
+Olaf,top,26.20,Urgot,51.0,wins,53.75,1505,6.3
+Olaf,top,26.20,Cho'Gath,51.0,wins,52.91,1272,5.21
+Olaf,top,26.20,Mordekaiser,51.0,wins,53.38,3846,6.17
+Olaf,top,26.20,Yone,51.0,wins,51.51,2646,3.18
+Olaf,top,26.20,Illaoi,45.0,loses,49.52,1038,1.86
+Olaf,top,26.20,Trundle,45.0,loses,52.41,1328,2.62
+Olaf,top,26.20,Tryndamere,46.0,loses,47.73,1584,0.01
+Olaf,top,26.20,Sett,47.0,loses,49.68,2220,2.04
+Olaf,top,26.20,Garen,48.0,loses,51.75,2054,4.49
+Olaf,top,26.20,Fiora,49.0,loses,49.82,1692,1.93
+Olaf,top,26.20,Jax,49.0,loses,51.9,2786,3.18
+Olaf,top,26.20,Renekton,49.0,loses,52.75,1602,4.08
+K'Sante,top,26.20,Corki,51.7,wins,52.92,325,-0.55
+K'Sante,top,26.20,Jayce,49.8,wins,49.79,3758,-1.15
+K'Sante,top,26.20,Akali,49.4,wins,50.0,996,0.66
+K'Sante,top,26.20,Ryze,48.7,wins,53.94,241,3.23
+K'Sante,top,26.20,Rumble,48.4,wins,47.89,973,-3.26
+K'Sante,top,26.20,Gragas,48.2,wins,48.77,1175,0.44
+K'Sante,top,26.20,Varus,48.0,wins,49.12,682,-1.9
+K'Sante,top,26.20,Kayle,39.1,loses,41.69,1607,-5.07
+K'Sante,top,26.20,Singed,40.0,loses,43.77,1044,-2.74
+K'Sante,top,26.20,Illaoi,40.8,loses,43.36,1492,-4.3
+K'Sante,top,26.20,Garen,41.1,loses,45.62,3439,-1.64
+K'Sante,top,26.20,Yorick,42.6,loses,47.56,1190,-1.44
+K'Sante,top,26.20,Aurora,42.7,loses,42.24,232,-5.91
+K'Sante,top,26.20,Urgot,43.3,loses,44.34,1166,-3.11
+K'Sante,top,26.20,Shen,43.7,loses,46.63,1632,-0.63
+Rumble,top,26.20,Ryze,54.0,wins,60.0,140,9.29
+Rumble,top,26.20,Aurora,54.0,wins,54.14,133,5.99
+Rumble,top,26.20,Vayne,54.0,wins,56.84,190,6.91
+Rumble,top,26.20,Riven,52.0,wins,45.85,386,-3.16
+Rumble,top,26.20,Varus,52.0,wins,51.98,177,0.96
+Rumble,top,26.20,Wukong,52.0,wins,54.88,164,7.04
+Rumble,top,26.20,K'Sante,52.0,wins,53.52,953,1.56
+Rumble,top,26.20,Yone,43.0,loses,45.39,1875,-2.94
+Rumble,top,26.20,Sett,44.0,loses,47.27,988,-0.37
+Rumble,top,26.20,Mordekaiser,46.0,loses,48.46,1009,1.25
+Rumble,top,26.20,Teemo,46.0,loses,47.31,1059,0.86
+Rumble,top,26.20,Garen,46.0,loses,49.09,931,1.83
+Rumble,top,26.20,Aatrox,47.0,loses,50.67,1338,2.21
+Rumble,top,26.20,Darius,48.0,loses,51.94,1132,3.37
+Rumble,top,26.20,Malphite,49.0,loses,49.67,1371,3.15
+Jax,top,26.20,Kalista,57.3,wins,59.61,255,9.51
+Jax,top,26.20,Irelia,55.8,wins,55.89,4589,7.64
+Jax,top,26.20,Volibear,55.4,wins,58.77,5091,9.39
+Jax,top,26.20,Gwen,53.8,wins,52.44,1947,4.52
+Jax,top,26.20,Varus,53.7,wins,52.31,694,1.29
+Jax,top,26.20,Udyr,53.6,wins,54.59,414,3.81
+Jax,top,26.20,Corki,53.4,wins,54.14,556,0.67
+Jax,top,26.20,Yone,53.2,wins,53.98,9546,5.65
+Jax,top,26.20,Illaoi,43.2,loses,46.19,2191,-1.47
+Jax,top,26.20,Singed,44.2,loses,46.12,1728,-0.39
+Jax,top,26.20,Dr. Mundo,44.5,loses,48.66,2614,0.47
+Jax,top,26.20,Garen,44.5,loses,46.01,8574,-1.25
+Jax,top,26.20,Malphite,46.2,loses,48.41,4823,1.89
+Jax,top,26.20,Poppy,46.3,loses,48.31,888,0.35
+Jax,top,26.20,Quinn,46.6,loses,47.05,627,0.84
+Jax,top,26.20,Cho'Gath,46.6,loses,47.57,2247,-0.13
+Jayce,top,26.20,Corki,55.5,wins,57.39,704,3.92
+Jayce,top,26.20,Skarner,55.1,wins,54.84,124,4.71
+Jayce,top,26.20,Cassiopeia,53.9,wins,51.31,343,3.15
+Jayce,top,26.20,Udyr,52.5,wins,55.27,275,4.49
+Jayce,top,26.20,Vayne,51.2,wins,51.46,785,1.53
+Jayce,top,26.20,Varus,51.1,wins,54.7,777,3.68
+Jayce,top,26.20,Gnar,51.0,wins,51.58,3067,1.85
+Jayce,top,26.20,Riven,50.9,wins,51.41,1418,2.4
+Jayce,top,26.20,Maokai,41.8,loses,46.34,246,-2.1
+Jayce,top,26.20,Zac,41.9,loses,46.6,324,-0.4
+Jayce,top,26.20,Malphite,42.1,loses,44.45,10577,-2.07
+Jayce,top,26.20,Kled,42.2,loses,45.25,1105,-2.22
+Jayce,top,26.20,Dr. Mundo,42.5,loses,46.79,2178,-1.4
+Jayce,top,26.20,Quinn,43.0,loses,45.16,733,-1.05
+Jayce,top,26.20,Irelia,43.2,loses,46.04,5925,-2.21
+Jayce,top,26.20,Ornn,43.4,loses,45.15,2534,-1.54
+Gnar,top,26.20,Ryze,55.7,wins,49.07,216,-1.64
+Gnar,top,26.20,K'Sante,54.3,wins,54.48,2577,2.52
+Gnar,top,26.20,Varus,53.5,wins,53.94,495,2.92
+Gnar,top,26.20,Corki,53.2,wins,58.65,312,5.18
+Gnar,top,26.20,Maokai,52.4,wins,51.45,173,3.01
+Gnar,top,26.20,Poppy,52.3,wins,52.05,390,4.09
+Gnar,top,26.20,Volibear,51.9,wins,55.49,2294,6.11
+Gnar,top,26.20,Malphite,43.3,loses,44.13,5001,-2.39
+Gnar,top,26.20,Ornn,44.3,loses,45.87,2322,-0.82
+Gnar,top,26.20,Zac,44.7,loses,46.15,234,-0.85
+Gnar,top,26.20,Irelia,45.0,loses,48.23,2942,-0.02
+Gnar,top,26.20,Wukong,45.5,loses,53.02,430,5.18
+Gnar,top,26.20,Yorick,45.5,loses,51.19,1264,2.19
+Gnar,top,26.20,Teemo,45.8,loses,49.42,1995,2.97
+Gnar,top,26.20,Nasus,45.8,loses,48.87,1997,0.92
+Ambessa,top,26.20,K'Sante,53.0,wins,53.68,1956,1.72
+Ambessa,top,26.20,Vladimir,52.0,wins,54.39,524,5.52
+Ambessa,top,26.20,Akali,52.0,wins,52.59,1177,3.25
+Ambessa,top,26.20,Rumble,52.0,wins,50.36,844,-0.79
+Ambessa,top,26.20,Varus,52.0,wins,47.26,438,-3.76
+Ambessa,top,26.20,Dr. Mundo,51.0,wins,53.5,1271,5.31
+Ambessa,top,26.20,Vayne,51.0,wins,53.75,493,3.82
+Ambessa,top,26.20,Cho'Gath,51.0,wins,50.99,1308,3.29
+Ambessa,top,26.20,Renekton,45.0,loses,47.26,5102,-1.41
+Ambessa,top,26.20,Garen,46.0,loses,49.72,2464,2.46
+Ambessa,top,26.20,Teemo,46.0,loses,47.87,1665,1.42
+Ambessa,top,26.20,Malphite,46.0,loses,47.86,2804,1.34
+Ambessa,top,26.20,Volibear,47.0,loses,50.61,1796,1.23
+Ambessa,top,26.20,Sett,47.0,loses,51.12,2357,3.48
+Ambessa,top,26.20,Mordekaiser,47.0,loses,49.8,2245,2.59
+Ambessa,top,26.20,Jax,49.0,loses,50.95,2469,2.23
+Renekton,top,26.20,Riven,57.3,wins,55.4,2852,6.39
+Renekton,top,26.20,Cassiopeia,55.8,wins,48.9,272,0.74
+Renekton,top,26.20,Yasuo,55.7,wins,56.46,4598,7.92
+Renekton,top,26.20,Skarner,55.0,wins,56.25,128,6.12
+Renekton,top,26.20,Ambessa,54.8,wins,54.95,5161,4.84
+Renekton,top,26.20,K'Sante,54.2,wins,53.54,2557,1.58
+Renekton,top,26.20,Udyr,54.1,wins,57.48,421,6.7
+Renekton,top,26.20,Akali,54.0,wins,54.95,2131,5.61
+Renekton,top,26.20,Illaoi,43.3,loses,47.57,2451,-0.09
+Renekton,top,26.20,Teemo,45.7,loses,48.65,2695,2.2
+Renekton,top,26.20,Dr. Mundo,46.3,loses,46.56,3009,-1.63
+Renekton,top,26.20,Garen,47.3,loses,49.19,4265,1.93
+Renekton,top,26.20,Shen,47.4,loses,48.97,2224,1.71
+Renekton,top,26.20,Kayle,47.4,loses,46.75,1463,-0.01
+Renekton,top,26.20,Mordekaiser,47.5,loses,49.71,5206,2.5
+Renekton,top,26.20,Quinn,47.9,loses,46.16,756,-0.05
+Ryze,mid,26.17,Riven,56.4,wins,49.11,112,0.81
+Ryze,mid,26.17,Smolder,55.1,wins,68.94,132,15.31
+Ryze,mid,26.17,Sion,52.3,wins,40.98,122,-7.38
+Ryze,mid,26.17,Jayce,52.1,wins,52.31,195,1.42
+Ryze,mid,26.17,Orianna,52.1,wins,48.86,919,-3.23
+Ryze,mid,26.17,Vex,51.9,wins,48.25,601,2.05
+Ryze,mid,26.17,Kayle,43.0,loses,40.61,165,-7.62
+Ryze,mid,26.17,Aurelion Sol,43.1,loses,45.83,552,-2.51
+Ryze,mid,26.17,Syndra,43.3,loses,46.68,2076,-1.62
+Ryze,mid,26.17,Swain,43.7,loses,44.66,309,-2.57
+Ryze,mid,26.17,Veigar,43.8,loses,46.24,1010,-1.7
+Ryze,mid,26.17,Malzahar,43.9,loses,45.73,1371,-2.3
+Ryze,mid,26.17,Vel'Koz,44.2,loses,40.36,223,-7.09
+Ryze,mid,26.17,Ziggs,44.5,loses,40.41,146,-7.18
+Cassiopeia,mid,26.20,Ryze,52.8,wins,56.73,557,3.5
+Cassiopeia,mid,26.20,Azir,52.0,wins,55.33,244,3.78
+Cassiopeia,mid,26.20,Sylas,50.5,wins,50.49,1317,0.34
+Cassiopeia,mid,26.20,Kassadin,50.2,wins,54.47,514,6.45
+Cassiopeia,mid,26.20,Xerath,40.8,loses,43.97,730,-3.02
+Cassiopeia,mid,26.20,Vel'Koz,41.2,loses,38.76,178,-8.69
+Cassiopeia,mid,26.20,Malzahar,42.7,loses,49.78,685,1.75
+Cassiopeia,mid,26.20,Veigar,42.9,loses,49.18,488,1.24
+Syndra,mid,26.20,Azir,56.0,wins,57.64,2089,6.09
+Syndra,mid,26.20,Mel,56.0,wins,60.99,2571,8.54
+Syndra,mid,26.20,Orianna,55.0,wins,57.45,4275,5.36
+Syndra,mid,26.20,Qiyana,52.0,wins,50.49,2632,1.98
+Syndra,mid,26.20,Akali,52.0,wins,52.81,4793,3.61
+Syndra,mid,26.20,Lissandra,52.0,wins,51.7,5099,4.33
+Syndra,mid,26.20,Zoe,52.0,wins,50.37,3131,2.89
+Syndra,mid,26.20,Vex,52.0,wins,52.5,3280,6.3
+Syndra,mid,26.20,Fizz,45.0,loses,46.26,6706,-0.16
+Syndra,mid,26.20,Ekko,46.0,loses,46.76,5291,0.16
+Syndra,mid,26.20,Xerath,47.0,loses,48.82,6344,1.83
+Syndra,mid,26.20,Katarina,47.0,loses,46.65,6388,-0.95
+Syndra,mid,26.20,Diana,48.0,loses,52.29,3123,4.93
+Syndra,mid,26.20,Yasuo,48.0,loses,49.95,7689,1.71
+Syndra,mid,26.20,Locke,48.0,loses,48.22,7694,-0.24
+Syndra,mid,26.20,Irelia,49.0,loses,51.99,2668,2.32
+Viktor,mid,26.20,Lissandra,54.0,wins,53.61,6592,6.24
+Viktor,mid,26.20,Zed,53.0,wins,53.54,8796,5.04
+Viktor,mid,26.20,Yasuo,53.0,wins,54.99,10541,6.75
+Viktor,mid,26.20,Katarina,52.0,wins,51.83,6767,4.23
+Viktor,mid,26.20,Sylas,52.0,wins,53.3,8937,3.15
+Viktor,mid,26.20,LeBlanc,51.0,wins,51.77,6502,3.99
+Viktor,mid,26.20,Malzahar,51.0,wins,53.77,6377,5.74
+Viktor,mid,26.20,Akali,51.0,wins,50.32,7848,1.12
+Viktor,mid,26.20,Gwen,46.0,loses,50.0,610,4.45
+Viktor,mid,26.20,Xerath,47.0,loses,48.68,9143,1.69
+Viktor,mid,26.20,Ekko,49.0,loses,49.88,6031,3.28
+Viktor,mid,26.20,Kog'Maw,49.0,loses,52.31,1145,3.6
+Viktor,mid,26.20,Kassadin,49.0,loses,50.14,3466,2.12
+Orianna,mid,26.19,Smolder,54.0,wins,58.64,191,5.01
+Orianna,mid,26.19,Cassiopeia,53.0,wins,51.75,543,1.0
+Orianna,mid,26.19,Riven,52.0,wins,51.77,141,3.47
+Orianna,mid,26.19,Mel,51.0,wins,52.64,910,0.19
+Orianna,mid,26.19,Ryze,51.0,wins,53.54,917,0.31
+Orianna,mid,26.19,Taliyah,51.0,wins,50.07,715,0.39
+Orianna,mid,26.19,Gangplank,51.0,wins,55.23,172,5.97
+Orianna,mid,26.19,Azir,50.0,wins,50.0,836,-1.55
+Orianna,mid,26.19,Syndra,44.0,loses,44.69,4126,-3.61
+Orianna,mid,26.19,Yone,45.0,loses,48.16,3212,0.5
+Orianna,mid,26.19,Viktor,46.0,loses,47.91,4498,-0.03
+Orianna,mid,26.19,Yasuo,46.0,loses,47.38,3379,-0.86
+Orianna,mid,26.19,Malzahar,46.0,loses,50.21,2115,2.18
+Orianna,mid,26.19,Ahri,46.0,loses,46.47,4050,-0.57
+Orianna,mid,26.19,Sylas,47.0,loses,50.45,2904,0.3
+Orianna,mid,26.19,Zed,47.0,loses,48.04,2700,-0.46
+Azir,mid,26.19,Gangplank,52.2,wins,53.57,112,4.31
+Azir,mid,26.19,Mel,51.5,wins,54.53,453,2.08
+Azir,mid,26.19,Ryze,51.0,wins,53.38,474,0.15
+Azir,mid,26.19,Kayle,50.8,wins,40.91,132,-7.32
+Azir,mid,26.19,Akshan,50.2,wins,49.63,536,0.85
+Azir,mid,26.19,Smolder,50.2,wins,58.33,108,4.7
+Azir,mid,26.19,Xerath,41.7,loses,45.35,1259,-1.64
+Azir,mid,26.19,Nasus,42.9,loses,46.47,170,-1.28
+Azir,mid,26.19,Ekko,43.0,loses,43.18,1290,-3.42
+Azir,mid,26.19,Ziggs,43.7,loses,56.32,174,8.73
+Azir,mid,26.19,Gragas,43.8,loses,52.99,134,7.02
+Azir,mid,26.19,Viktor,43.9,loses,46.44,2231,-1.5
+Azir,mid,26.19,Swain,44.1,loses,44.23,208,-3.0
+Azir,mid,26.19,Hwei,44.1,loses,45.9,963,-1.57
+Ahri,mid,26.20,Corki,57.8,wins,64.25,372,10.29
+Ahri,mid,26.20,Azir,55.8,wins,55.55,2378,4.0
+Ahri,mid,26.20,Cassiopeia,55.4,wins,55.56,1440,4.81
+Ahri,mid,26.20,Jayce,54.6,wins,54.67,856,3.78
+Ahri,mid,26.20,Gragas,54.1,wins,52.7,704,6.73
+Ahri,mid,26.20,Orianna,53.9,wins,56.81,4142,4.72
+Ahri,mid,26.20,Ryze,53.8,wins,57.25,2421,4.02
+Ahri,mid,26.20,Qiyana,53.7,wins,51.77,3805,3.26
+Ahri,mid,26.20,Heimerdinger,47.0,loses,50.4,377,5.39
+Ahri,mid,26.20,Veigar,48.1,loses,52.72,5290,4.78
+Ahri,mid,26.20,Naafiri,48.2,loses,52.67,955,3.76
+Ahri,mid,26.20,Yasuo,48.3,loses,52.64,11008,4.4
+Ahri,mid,26.20,Xerath,48.7,loses,51.33,5202,4.34
+Ahri,mid,26.20,Ekko,48.7,loses,51.52,6599,4.92
+Ahri,mid,26.20,Lux,48.8,loses,51.97,6242,4.97
+Ahri,mid,26.20,Malzahar,48.9,loses,53.83,6847,5.8
+Ezreal,bot,26.19,Cassiopeia,50.8,wins,51.33,526,1.54
+Ezreal,bot,26.19,Mel,49.5,wins,50.83,1141,-0.18
+Ezreal,bot,26.19,Varus,49.1,wins,50.95,4049,0.52
+Ezreal,bot,26.19,Corki,48.8,wins,49.81,2626,0.45
+Ezreal,bot,26.19,Caitlyn,47.9,wins,50.27,30146,1.48
+Ezreal,bot,26.19,Lucian,47.9,wins,48.19,14812,-1.23
+Ezreal,bot,26.19,Draven,47.7,wins,46.77,7092,-1.82
+Ezreal,bot,26.19,Miss Fortune,47.2,wins,50.9,8797,2.61
+Ezreal,bot,26.19,Katarina,42.6,loses,44.02,1388,-2.68
+Ezreal,bot,26.19,Karthus,43.5,loses,44.58,729,-0.66
+Ezreal,bot,26.19,Aurelion Sol,43.6,loses,47.08,926,1.17
+Ezreal,bot,26.19,Yasuo,43.7,loses,42.31,3590,-4.24
+Ezreal,bot,26.19,Kog'Maw,43.8,loses,45.32,3100,-0.71
+Ezreal,bot,26.19,Swain,44.1,loses,46.14,1426,0.04
+Ezreal,bot,26.19,Sivir,44.4,loses,45.26,7484,-2.46
+Ezreal,bot,26.19,Zeri,44.9,loses,45.04,5832,-2.46
+Caitlyn,bot,26.20,Cassiopeia,53.4,wins,55.53,488,5.74
+Caitlyn,bot,26.20,Varus,52.6,wins,54.17,6134,3.74
+Caitlyn,bot,26.20,Ezreal,52.0,wins,53.61,30170,1.22
+Caitlyn,bot,26.20,Corki,51.6,wins,53.43,3032,4.07
+Caitlyn,bot,26.20,Draven,51.4,wins,51.64,10308,3.05
+Caitlyn,bot,26.20,Yunara,51.4,wins,54.1,20330,5.03
+Caitlyn,bot,26.20,Lucian,51.2,wins,52.77,18852,3.35
+Caitlyn,bot,26.20,Kalista,51.2,wins,50.54,6832,1.22
+Caitlyn,bot,26.20,Veigar,46.0,loses,49.1,2487,3.74
+Caitlyn,bot,26.20,Katarina,46.0,loses,46.53,2031,-0.17
+Caitlyn,bot,26.20,Swain,46.3,loses,49.48,2023,3.38
+Caitlyn,bot,26.20,Hwei,46.7,loses,46.25,2309,0.62
+Caitlyn,bot,26.20,Yasuo,46.8,loses,49.25,4571,2.7
+Caitlyn,bot,26.20,Ziggs,47.2,loses,48.31,4840,0.98
+Caitlyn,bot,26.20,Nilah,47.6,loses,49.29,1757,2.86
+Caitlyn,bot,26.20,Aurelion Sol,47.6,loses,47.7,1174,1.79
+Yunara,bot,26.20,Kalista,52.8,wins,54.03,5375,4.71
+Yunara,bot,26.20,Ezreal,52.7,wins,54.03,13680,1.64
+Yunara,bot,26.20,Cassiopeia,52.6,wins,49.86,353,0.07
+Yunara,bot,26.20,Mel,52.3,wins,52.99,819,1.98
+Yunara,bot,26.20,Kai'Sa,51.5,wins,53.65,28838,5.11
+Yunara,bot,26.20,Vayne,51.5,wins,53.71,4709,4.73
+Yunara,bot,26.20,Varus,51.3,wins,52.56,3626,2.13
+Yunara,bot,26.20,Samira,51.2,wins,53.52,4886,5.25
+Yunara,bot,26.20,Swain,45.7,loses,49.8,1526,3.7
+Yunara,bot,26.20,Kog'Maw,46.3,loses,47.74,3590,1.71
+Yunara,bot,26.20,Nilah,46.5,loses,48.18,1345,1.75
+Yunara,bot,26.20,Veigar,46.9,loses,47.92,1511,2.56
+Yunara,bot,26.20,Aurelion Sol,47.0,loses,45.83,864,-0.08
+Yunara,bot,26.20,Viktor,47.2,loses,47.86,3013,1.25
+Yunara,bot,26.20,Twitch,47.3,loses,48.16,7727,1.07
+Yunara,bot,26.20,Hwei,47.4,loses,48.56,1281,2.93
+Lulu,sup,26.20,Camille,58.2,wins,59.16,2652,6.41
+Lulu,sup,26.20,Mel,56.5,wins,59.83,712,5.55
+Lulu,sup,26.20,Skarner,55.2,wins,52.32,388,1.78
+Lulu,sup,26.20,Ziggs,54.8,wins,60.9,156,7.27
+Lulu,sup,26.20,Sion,54.2,wins,60.45,445,8.7
+Lulu,sup,26.20,Ivern,54.1,wins,52.94,289,4.43
+Lulu,sup,26.20,Malphite,53.9,wins,60.08,521,7.58
+Lulu,sup,26.20,Shaco,53.7,wins,56.22,1882,5.76
+Lulu,sup,26.20,Amumu,45.5,loses,47.18,1136,0.45
+Lulu,sup,26.20,Braum,47.1,loses,48.78,8922,2.37
+Lulu,sup,26.20,Leona,47.2,loses,47.98,12517,1.75
+Lulu,sup,26.20,Blitzcrank,47.8,loses,48.83,14203,2.07
+Lulu,sup,26.20,Thresh,47.9,loses,48.52,28234,2.09
+Lulu,sup,26.20,Vel'Koz,48.3,loses,50.39,4707,2.58
+Lulu,sup,26.20,Sona,48.5,loses,50.11,5129,2.7
+Lulu,sup,26.20,Annie,48.5,loses,51.71,526,3.1
+Milio,sup,26.17,Ivern,65.0,wins,54.24,177,5.73
+Milio,sup,26.17,Skarner,61.3,wins,53.16,158,2.62
+Milio,sup,26.17,Annie,60.4,wins,49.81,267,1.2
+Milio,sup,26.17,Neeko,57.0,wins,54.79,1515,5.64
+Milio,sup,26.17,Ashe,56.5,wins,62.43,865,8.96
+Milio,sup,26.17,Camille,56.3,wins,59.41,1084,6.66
+Milio,sup,26.17,Pantheon,55.3,wins,55.37,2550,5.43
+Milio,sup,26.17,Zoe,55.3,wins,54.08,797,3.59
+Milio,sup,26.17,Braum,47.5,loses,49.76,5106,3.35
+Milio,sup,26.17,Nidalee,47.6,loses,52.85,193,2.82
+Milio,sup,26.17,Nami,48.3,loses,50.58,12780,3.01
+Milio,sup,26.17,Blitzcrank,48.5,loses,47.49,6906,0.73
+Milio,sup,26.17,Sona,48.8,loses,51.53,3064,4.12
+Milio,sup,26.17,Zilean,49.7,loses,52.49,3052,5.52
+Milio,sup,26.17,Senna,49.9,loses,50.49,5395,3.39
+Milio,sup,26.17,Thresh,50.0,loses,49.2,14523,2.77
+Rakan,sup,26.17,Blitzcrank,55.0,wins,54.92,3871,8.16
+Rakan,sup,26.17,Pyke,54.0,wins,55.17,4551,6.18
+Rakan,sup,26.17,Braum,54.0,wins,53.65,3476,7.24
+Rakan,sup,26.17,Karma,54.0,wins,53.2,3564,3.42
+Rakan,sup,26.17,Nautilus,53.0,wins,54.44,4934,5.66
+Rakan,sup,26.17,Yuumi,53.0,wins,56.4,2929,5.8
+Rakan,sup,26.17,Pantheon,53.0,wins,54.5,1622,4.56
+Rakan,sup,26.17,Lulu,52.0,wins,52.35,6477,3.8
+Rakan,sup,26.17,Zyra,45.0,loses,51.41,1173,2.99
+Rakan,sup,26.17,Seraphine,47.0,loses,50.78,3058,3.28
+Rakan,sup,26.17,Leona,47.0,loses,51.03,3900,4.8
+Rakan,sup,26.17,Alistar,48.0,loses,52.48,3590,5.22
+Rakan,sup,26.17,Senna,48.0,loses,49.63,2720,2.53
+Rakan,sup,26.17,Nami,48.0,loses,50.86,4538,3.29
+Rakan,sup,26.17,Janna,49.0,loses,49.31,3346,2.23
+Rakan,sup,26.17,Poppy,49.0,loses,49.02,1685,1.6
+Nautilus,sup,26.20,Mel,56.7,wins,60.44,594,6.16
+Nautilus,sup,26.20,Ashe,56.5,wins,64.0,889,10.53
+Nautilus,sup,26.20,Skarner,56.4,wins,56.6,288,6.06
+Nautilus,sup,26.20,Ivern,55.7,wins,49.33,223,0.82
+Nautilus,sup,26.20,Camille,55.4,wins,55.18,2249,2.43
+Nautilus,sup,26.20,Yuumi,55.2,wins,57.49,8791,6.89
+Nautilus,sup,26.20,Zoe,54.2,wins,56.55,1091,6.06
+Nautilus,sup,26.20,Pyke,53.7,wins,54.18,8677,5.19
+Nautilus,sup,26.20,Taric,42.5,loses,43.59,2269,-2.72
+Nautilus,sup,26.20,Braum,45.2,loses,46.27,13334,-0.14
+Nautilus,sup,26.20,Rell,45.3,loses,45.88,6831,-1.1
+Nautilus,sup,26.20,Leona,45.5,loses,46.56,12384,0.33
+Nautilus,sup,26.20,Renata Glasc,46.3,loses,46.06,2438,-2.15
+Nautilus,sup,26.20,Swain,46.6,loses,51.41,4198,1.91
+Nautilus,sup,26.20,Alistar,46.7,loses,46.25,9058,-1.01
+Nautilus,sup,26.20,Morgana,47.8,loses,49.85,7743,1.83
+Alistar,sup,26.17,Camille,58.0,wins,57.84,1447,5.09
+Alistar,sup,26.17,Yuumi,54.0,wins,58.45,4344,7.85
+Alistar,sup,26.17,Pyke,53.0,wins,53.86,4577,4.87
+Alistar,sup,26.17,Pantheon,53.0,wins,55.81,2978,5.87
+Alistar,sup,26.17,Braum,52.0,wins,52.2,5096,5.79
+Alistar,sup,26.17,Rakan,52.0,wins,49.78,3624,2.31
+Alistar,sup,26.17,Nautilus,52.0,wins,56.38,9190,7.6
+Alistar,sup,26.17,Blitzcrank,52.0,wins,53.3,6505,6.54
+Alistar,sup,26.17,Senna,46.0,loses,48.48,3323,1.38
+Alistar,sup,26.17,Brand,46.0,loses,50.23,1505,2.1
+Alistar,sup,26.17,Swain,47.0,loses,49.45,2350,-0.05
+Alistar,sup,26.17,Soraka,47.0,loses,51.23,2682,3.49
+Alistar,sup,26.17,Poppy,48.0,loses,51.42,2542,4.0
+Alistar,sup,26.17,Zyra,48.0,loses,55.37,1443,6.95
+Alistar,sup,26.17,Karma,49.0,loses,52.15,3971,2.37
+Alistar,sup,26.17,Seraphine,49.0,loses,50.96,3346,3.46

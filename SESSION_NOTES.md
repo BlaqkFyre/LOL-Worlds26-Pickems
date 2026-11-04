@@ -9,7 +9,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 - **App:** v38 (2 Nov 2026 AEST): Swiss round 5 data, HLE–G2 confirmed from the Oracle's Elixir file. v37 (31 Oct): new champ select pick/ban board and tier colours. App data and code are correct as they stand.
 - **Real data:** the whole Swiss stage, 51 games, in `js/worlds-live.js` (data to 31 Oct), every game confirmed against the Oracle's Elixir file. H2H in `js/h2h.js` (data to 31 Oct). Knockouts start 3 Nov (US).
 - **Time zones:** Luke's dates are AEST; Worlds game days are US dates; the Oracle's Elixir file is UTC. Check a game's UTC time against the file before saying it has been played.
-- **Sim engine:** session 1 (ratings and who-wins model) **done**: report `research/sim1-report.md`. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`. Scorecard artifact: https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
+- **Sim engine:** session 1 (ratings and who-wins model) **done**: report `research/sim1-report.md`. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`. Session 2 (champions, lanes, synergy, meta) **part 1 done 4 Nov**: report `research/sim2-report.md`, working files `research/sim2/` (README), tables `research/model/sim2/`. Progress tracker (was the scorecard): https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
 - **Where work happens:** Claude Code sessions only. The claude.ai chats that built the app no longer write to the repo.
 
@@ -20,7 +20,8 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 | Task | Status/blocker |
 |---|---|
 | Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat; four skills with ~0 weight (top Teamfight, top steadiness, mid Map impact, ADC Damage): keep or swap; S5 card step has no saved script (add to `scales.py` before session 4). Report section 9 |
-| **Sim session 2 (next): champions, comps, synergies and counters** | Plan the foundation with Luke first (see the plan). **Use only the games in the current Oracle's Elixir file** (to 1 Nov UTC, no knockouts); don't wait for or assume knockout results (Luke, 4 Nov) |
+| **Sim session 2, part 2 (next)** | Power curves, comp profile, draft meta model (which champions get picked and banned per patch, tested on Worlds drafts). First decide with Luke: keep testing who-wins inputs or accept v1 for pre-game odds (report section 7). **Use only the games in the current Oracle's Elixir file**; don't wait for or assume knockout results (Luke, 4 Nov) |
+| When a newer file has the knockouts | Re-test lolalytics synergy at half strength (chosen after seeing the test games, so not yet fair), the experience test, and every session 2 part on the new games |
 | Sim sessions 3–5 | After session 2, in order (see the plan) |
 | Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
@@ -58,6 +59,15 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 
 ## Recent updates
 
+### Session (4 Nov 2026, AEST) — sim session 2, part 1
+- **Plan agreed** (Luke, "yes go ahead"): seven parts measured beyond v1, three outside sources per part, data cut-off at the file (no knockouts); Luke's current-meta principle recorded. All in `research/sim-plan.md`.
+- **Report:** `research/sim2-report.md`; working files and every number's source: `research/sim2/README.md`; tables in `research/model/sim2/`.
+- **Results:** no part beats v1 for who wins (v1 0.6461 from 1 Sep). The meta clearly follows the latest patches (Worlds presence v 16.17 0.91, v 16.01 0.60). Pro lane records on 16.15–16.20 predict the later lane (top 0.30, jungle 0.27); solo-queue counters don't. Sources agree with each other (Leaguepedia = file; METAsrc v lolalytics 0.80).
+- **lolalytics read in full:** tier lists (16.11–16.20, from each page's embedded data), lane counters (4 patches, 648 pages) and synergy (88 pages in the browser pane, one real click each; saved by file download with Luke's OK).
+- **Mistakes and fixes:** a scaling fault in my patch-test script (fixed, re-run); synergy reading failed until I found it needs a real click.
+- **Tracker:** the scorecard artifact is now "Sim Engine Progress" (parts map, progress chart, meta-by-patch chart, lanes and sources tables): https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL. Its own page check did not report back after most updates.
+- How checked: session 1 scripts re-run on a scratch copy reproduce every saved result exactly; lolalytics values checked against the page (Yone top 16.20); outside-source comparisons as listed in the report. No app change (v38). Browser tabs closed, temporary lolalytics storage cleared.
+
 ### Session (3 Nov 2026, AEST) — sim session 1 report
 - **Report written:** `research/sim1-report.md`, from the saved results in `research/model/sim1/`, `research/sim1/README.md` and `research/sim-plan.md`. Nothing was re-run. Headline: new model 0.639 v app 0.679 log loss on the 51 Swiss games (no drafts); 0.646 from 1 Sep (coin flip 0.693); calibration within 5 points from 1 Sep, 10–12 points off in two Worlds bands (small samples).
 - **Scorecard artifact:** https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL (tests, calibration, league strength, 16 team ratings, 80 S5 player cards, open items), built from small CSVs of the same numbers.
@@ -78,42 +88,6 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - Committed `b1ed266` and pushed.
 - **Sim session 1 (same day, later):** planned with Luke (8 decisions + role skills table, committed `c845ba7`), then fitted and tested in scratch: team ratings from results (league, side, 90-day recency), player skills with a league shift per role, S5 card scale adopted, extra Worlds weight dropped (test), experience tested (not adopted yet), sources checked against Leaguepedia and gol.gg, fixed ID lookup built, new model beats the app on the 51 Swiss games (0.639 v 0.679). Copied to `research/sim1/` and `research/model/sim1/` for the next session; `research/sim-plan.md` updated. Committed `82264c0` and pushed (git showed main up to date with origin on 3 Nov). Report moved to a new chat because this one reached 93% context.
 
-### Session (31 Oct 2026) — v34–v37: Swiss round 4 day 3, display tidy-ups, pick/ban board
-- **New Oracle's Elixir file** (9,831 games, data to 30 Oct 22:00 UTC): has TES–BLG and LOS–TL, not HLE–G2.
-- **TES 2-1 BLG:** matches the file on every field; CS@15 and `fp` filled in from it.
-- **LOS 2-1 TL:** added from the file, game 3 cross-checked with pickorban. Josedeodo's game 3 kill participation is 1.2 (1/3/5 on 5 team kills, same on pickorban), kept as sourced.
-- **HLE 2-0 G2:** added from Luke's Reddit post-match paste, checked against Leaguepedia's scoreboards. CS from Leaguepedia, damage share from pickorban. CS@15 null; to confirm against the next file.
-- **Out-of-sample (v33 before the update):** favourite 4 of 5, log loss 0.573, Brier 0.192. Running total: 27 of 44 (61%).
-- `build_from_oe.py` run on a scratch copy: 42/44 OK (the 2 HLE–G2 games not in the file yet), `js/h2h.js` rebuilt to 30 Oct (new: LOS v TL 2-1), then HLE v G2 5-0 added by hand. Pick, ban and win counts for all 86 champions match Leaguepedia (44 games).
-- Cache v33 → v34. How checked: local server in a new browser-pane tab, data counts, H2H and player form read in the console, jungle, top, meta, champion and power pages at desktop and 375 px (no sideways scroll), console clean. Server stopped, tabs closed, temporary `.claude/launch.json` removed.
-- Committed `889b55d` and pushed.
-- **Matchup grid:** a champion-v-champion grid of the Worlds games was previewed in chat; the idea (bot lane as a duo, lane result v game result) is noted under session 2 in `research/sim-plan.md`.
-- **v35, display tidy-ups:** Luke left 5 notes on the running app through a temporary note overlay in the browser pane (not part of the app). Changes:
-  - Intro text, legal line and the Tournament mode description now use the full page width.
-  - Tournament setup team picker lists teams in power-ranking order with rank, region seed tag and team colour badge (same pieces as Power Rankings); boxes widened so names don't cut off (3 per row on desktop, 1 on a phone).
-  - "Custom · soon" button: flat muted fill and muted text instead of 60% opacity, including the Subway theme.
-  - Header legend: shorter Meta / In the mix / Not seen text with "!" hovers for the patch detail; hidden on Play → Worlds 2026 and Custom (those pages use neither ratings nor meta tags, and the tournament reuses the tag colours for Qualified / Alive / Eliminated).
-  - Cache v34 → v35. How checked: local server in a new browser-pane tab; legend shown/hidden per page read in the console; team picker order, ticking a team, no cut-off names; all 7 Worlds mode themes plus light mode looked at; "!" hovers at desktop and 375 px (inside the screen); no sideways scroll on 6 pages at 375 px; console clean. Server stopped, tabs closed, `.claude/launch.json` removed, test theme settings and notes cleared from localhost storage. Committed `8359d05` and pushed.
-- **Notes sessions saved:** the overlay is `tools/qol-notes-overlay.js` (now with a live width readout, "375 px · phone"), and the routine is the "Notes sessions" section of `CLAUDE.md`.
-- **v36, champ select tidy-ups** (Luke's 9 notes at 375 px; 8 built, the pick/ban board redesign is its own task in What's next):
-  - Worlds mode controls stay on one row on phones (the "Worlds mode" word is hidden there; the select keeps its label for screen readers).
-  - Header legend split into labelled **Players** and **Champions** groups.
-  - Champ select default matchup LYON v LOS (was TSW).
-  - Setup labels (Your team, Opponent, Format, Draft style, Game 1 side) in bright small capitals (`.flabel`) instead of muted grey.
-  - Champion card bars tighter: row gap 8 → 3 px, bars 16 → 14 px, value lines closer (3-bar group on a phone 145 → 124 px).
-  - Suggestion reasons brighter (`fmtWhy`): meta tier in the legend's Meta / In the mix colour, player names in gold, grey separators.
-  - Champion card "!" hovers shortened (Recent meta, Worlds meta, Most picked, Pairs with, Countered by, Counters); same facts and sources.
-  - Cache v35 → v36. How checked: local server in a new browser-pane tab at desktop and 375 px; one-row controls, no sideways scroll, legend groups, default LOS, new labels, bar heights and all six hover texts read in the console; a Bo3 started to see suggestions and the champion sheet; text colours read in all 7 Worlds mode themes plus light mode; console clean. Server stopped, tabs closed, `.claude/launch.json` removed, test settings and notes cleared from localhost storage. Committed `5d53243` and pushed.
-- **v37, pick/ban board** (Luke picked "style 2" after three rounds of previews in chat; built and previewed locally before commit):
-  - Order bar (`renderDraft`, `.track`/`.tk`): 20 tiles in draft order, side colour of who acts, B/P + step number (B1…P20); a done step shows its champion (bans greyed with a strike, picks framed in side colour); current step gold. Desktop: one row across the full width; phones: 2 rows of 10.
-  - Bans (`teamPanel`): phase 1 (3) | divider | phase 2 (2) per team.
-  - No jumping: the "Picking… open" line always keeps its space; the turn banner has fixed line boxes (1+1 lines desktop, 2+2 phone), including "Draft complete"; rows fixed height.
-  - Phones: both teams side by side (`.board.pb`, so the draft review's `.board` is unchanged); 50 px rows, no splash art, no role menu; a picked champion's tap sheet has a Role bar (`setPickRole`, shared with the desktop role menu; a team-mate in that role swaps).
-  - Tier text in Meta page colours (`tierCol`): S gold, A teal, B blue, C muted grey; in suggestion reasons, champion hover/tap cards, champion page cards and the draft review table.
-  - Cache v36 → v37. How checked: local server, separate test tabs; full 20-step drafts with AI and by hand at 1280 px and 375 px with panel, row, banner and bar heights measured every step (no change between steps); Undo; a tournament draft (LOS v T1); role change and swap from the tap sheet; draft review layout on phone; colours in all 7 Worlds mode themes plus light mode; no sideways scroll; console clean. Test run and settings cleared from localhost storage.
-  - Note: one earlier preview tab of Luke's was reloaded by mistake during testing (CLAUDE.md rule 9); later tests used separate tabs.
-  - Committed `bd396b3` and pushed.
-
 ---
 
 ## Session index
@@ -124,3 +98,4 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 | 29 Oct 2026 | CLAUDE.md, SESSION_NOTES.md and the build script added; sim plan decisions recorded (ratings, draft AI, draft review, old engine, minor leagues, scorecard). No app change (v30) |
 | 29 Oct 2026 (later) | v31: Subway and Arcade Smash themes, role-page game log hover, ticker fix, side-coloured pick/ban tags, Swiss round 4 day 1 data |
 | 30 Oct 2026 | v32: Swiss round 4 day 2 (KC–CFO from the file, TES–BLG from Leaguepedia), aged subway sign (`4fe2ab1`); v33: champion card "Counters" row (`7b3c221`) |
+| 31 Oct 2026 | v34: Swiss R4 day 3 data (`889b55d`); v35: header and legend tidy-up, ranked team picker (`8359d05`); v36: champ select tidy-ups (`5d53243`); v37: pick/ban board (`bd396b3`). Notes-session overlay saved (`tools/qol-notes-overlay.js`) |

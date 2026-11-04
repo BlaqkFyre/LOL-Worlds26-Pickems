@@ -1,0 +1,171 @@
+{
+ "coverage": {
+  "top": {
+   "games": 2712,
+   "with_solo": 705
+  },
+  "jng": {
+   "games": 2712,
+   "with_solo": 688
+  },
+  "mid": {
+   "games": 2712,
+   "with_solo": 705
+  },
+  "bot": {
+   "games": 2712,
+   "with_solo": 703
+  }
+ },
+ "lane_test": {
+  "top | all 16.15+": {
+   "n": 705,
+   "corr": -0.015,
+   "gold_per_point": -5.8,
+   "skill_gold_per_sd": 638.6
+  },
+  "top | from 1 Sep": {
+   "n": 296,
+   "corr": -0.076,
+   "gold_per_point": -27.6,
+   "skill_gold_per_sd": 638.6
+  },
+  "top | Worlds": {
+   "n": 72,
+   "corr": -0.004,
+   "gold_per_point": -1.7,
+   "skill_gold_per_sd": 638.6
+  },
+  "jng | all 16.15+": {
+   "n": 688,
+   "corr": -0.007,
+   "gold_per_point": -2.3,
+   "skill_gold_per_sd": 511.7
+  },
+  "jng | from 1 Sep": {
+   "n": 289,
+   "corr": 0.089,
+   "gold_per_point": 34.8,
+   "skill_gold_per_sd": 511.7
+  },
+  "jng | Worlds": {
+   "n": 71,
+   "corr": 0.213,
+   "gold_per_point": 84.2,
+   "skill_gold_per_sd": 511.7
+  },
+  "mid | all 16.15+": {
+   "n": 705,
+   "corr": 0.121,
+   "gold_per_point": 39.9,
+   "skill_gold_per_sd": 592.3
+  },
+  "mid | from 1 Sep": {
+   "n": 296,
+   "corr": 0.168,
+   "gold_per_point": 50.9,
+   "skill_gold_per_sd": 592.3
+  },
+  "mid | Worlds": {
+   "n": 72,
+   "corr": 0.073,
+   "gold_per_point": 17.5,
+   "skill_gold_per_sd": 592.3
+  },
+  "bot | all 16.15+": {
+   "n": 703,
+   "corr": -0.041,
+   "gold_per_point": -24.1,
+   "skill_gold_per_sd": 838.4
+  },
+  "bot | from 1 Sep": {
+   "n": 296,
+   "corr": -0.044,
+   "gold_per_point": -25.2,
+   "skill_gold_per_sd": 838.4
+  },
+  "bot | Worlds": {
+   "n": 73,
+   "corr": 0.104,
+   "gold_per_point": 57.1,
+   "skill_gold_per_sd": 838.4
+  },
+  "bot duo | all 16.15+": {
+   "n": 709,
+   "corr": -0.089,
+   "gold_per_point": -108.0
+  },
+  "bot duo | from 1 Sep": {
+   "n": 297,
+   "corr": -0.05,
+   "gold_per_point": -56.1
+  },
+  "bot duo | Worlds": {
+   "n": 73,
+   "corr": -0.001,
+   "gold_per_point": -0.7
+  }
+ },
+ "win_test": {
+  "games": {
+   "train_16.15_to_Aug": 458,
+   "from_sep": 311,
+   "worlds": 73
+  },
+  "v1": {
+   "train": 0.6234,
+   "from_sep": 0.6461,
+   "worlds": 0.6446
+  },
+  "lanes (one weight)": {
+   "weights_per_sd": {
+    "lanes_sum": -0.038
+   },
+   "points_per_sd": {
+    "lanes_sum": 4.16
+   },
+   "train": 0.6232,
+   "from_sep": 0.6471,
+   "worlds": 0.6491
+  },
+  "four lanes": {
+   "weights_per_sd": {
+    "top": -0.04,
+    "jng": -0.038,
+    "mid": -0.04,
+    "duo": 0.089
+   },
+   "points_per_sd": {
+    "top": 2.27,
+    "jng": 2.34,
+    "mid": 2.34,
+    "duo": 1.07
+   },
+   "train": 0.6221,
+   "from_sep": 0.6515,
+   "worlds": 0.652
+  },
+  "bot duo only": {
+   "weights_per_sd": {
+    "duo": 0.085
+   },
+   "points_per_sd": {
+    "duo": 1.07
+   },
+   "train": 0.6226,
+   "from_sep": 0.6488,
+   "worlds": 0.6439
+  },
+  "mid only": {
+   "weights_per_sd": {
+    "mid": -0.029
+   },
+   "points_per_sd": {
+    "mid": 2.34
+   },
+   "train": 0.6233,
+   "from_sep": 0.6457,
+   "worlds": 0.6457
+  }
+ }
+}

@@ -1,0 +1,222 @@
+{
+ "meta k=5": {
+  "games": [
+   458,
+   311,
+   73
+  ],
+  "lane_link_from_sep": {
+   "top": {
+    "n": 250,
+    "corr": 0.301
+   },
+   "jng": {
+    "n": 260,
+    "corr": 0.272
+   },
+   "mid": {
+    "n": 259,
+    "corr": 0.108
+   },
+   "bot duo": {
+    "n": 165,
+    "corr": 0.053
+   }
+  },
+  "v1": [
+   0.6461,
+   0.6446
+  ],
+  "synergy": {
+   "weights_per_sd": {
+    "syn": 0.066
+   },
+   "from_sep": 0.6476,
+   "worlds": 0.6464
+  },
+  "lanes": {
+   "weights_per_sd": {
+    "lane_all": -0.189
+   },
+   "from_sep": 0.6596,
+   "worlds": 0.6592
+  },
+  "synergy + lanes": {
+   "weights_per_sd": {
+    "syn": 0.07,
+    "lane_all": -0.191
+   },
+   "from_sep": 0.6611,
+   "worlds": 0.6607
+  },
+  "share_of_test_games_with_a_prior_pair": {
+   "synergy": 1.0,
+   "lanes": 0.987
+  }
+ },
+ "meta k=20": {
+  "games": [
+   458,
+   311,
+   73
+  ],
+  "lane_link_from_sep": {
+   "top": {
+    "n": 250,
+    "corr": 0.285
+   },
+   "jng": {
+    "n": 260,
+    "corr": 0.247
+   },
+   "mid": {
+    "n": 259,
+    "corr": 0.12
+   },
+   "bot duo": {
+    "n": 165,
+    "corr": 0.045
+   }
+  },
+  "v1": [
+   0.6461,
+   0.6446
+  ],
+  "synergy": {
+   "weights_per_sd": {
+    "syn": 0.108
+   },
+   "from_sep": 0.6499,
+   "worlds": 0.6471
+  },
+  "lanes": {
+   "weights_per_sd": {
+    "lane_all": -0.208
+   },
+   "from_sep": 0.6648,
+   "worlds": 0.6599
+  },
+  "synergy + lanes": {
+   "weights_per_sd": {
+    "syn": 0.112,
+    "lane_all": -0.21
+   },
+   "from_sep": 0.6688,
+   "worlds": 0.6617
+  },
+  "share_of_test_games_with_a_prior_pair": {
+   "synergy": 1.0,
+   "lanes": 0.987
+  }
+ },
+ "season k=5": {
+  "games": [
+   2357,
+   311,
+   73
+  ],
+  "lane_link_from_sep": {
+   "top": {
+    "n": 274,
+    "corr": 0.294
+   },
+   "jng": {
+    "n": 278,
+    "corr": 0.266
+   },
+   "mid": {
+    "n": 282,
+    "corr": 0.121
+   },
+   "bot duo": {
+    "n": 208,
+    "corr": 0.032
+   }
+  },
+  "v1": [
+   0.6461,
+   0.6446
+  ],
+  "synergy": {
+   "weights_per_sd": {
+    "syn": 0.057
+   },
+   "from_sep": 0.6471,
+   "worlds": 0.6452
+  },
+  "lanes": {
+   "weights_per_sd": {
+    "lane_all": -0.073
+   },
+   "from_sep": 0.6482,
+   "worlds": 0.6473
+  },
+  "synergy + lanes": {
+   "weights_per_sd": {
+    "syn": 0.063,
+    "lane_all": -0.077
+   },
+   "from_sep": 0.6496,
+   "worlds": 0.6481
+  },
+  "share_of_test_games_with_a_prior_pair": {
+   "synergy": 1.0,
+   "lanes": 1.0
+  }
+ },
+ "season k=20": {
+  "games": [
+   2357,
+   311,
+   73
+  ],
+  "lane_link_from_sep": {
+   "top": {
+    "n": 274,
+    "corr": 0.286
+   },
+   "jng": {
+    "n": 278,
+    "corr": 0.241
+   },
+   "mid": {
+    "n": 282,
+    "corr": 0.119
+   },
+   "bot duo": {
+    "n": 208,
+    "corr": 0.019
+   }
+  },
+  "v1": [
+   0.6461,
+   0.6446
+  ],
+  "synergy": {
+   "weights_per_sd": {
+    "syn": 0.085
+   },
+   "from_sep": 0.6481,
+   "worlds": 0.6453
+  },
+  "lanes": {
+   "weights_per_sd": {
+    "lane_all": -0.063
+   },
+   "from_sep": 0.6474,
+   "worlds": 0.6461
+  },
+  "synergy + lanes": {
+   "weights_per_sd": {
+    "syn": 0.09,
+    "lane_all": -0.069
+   },
+   "from_sep": 0.6498,
+   "worlds": 0.6469
+  },
+  "share_of_test_games_with_a_prior_pair": {
+   "synergy": 1.0,
+   "lanes": 1.0
+  }
+ }
+}

@@ -1,0 +1,199 @@
+{
+ "tuning": {
+  "5": 0.6457,
+  "15": 0.6457,
+  "40": 0.6458
+ },
+ "models": {
+  "season (step 2)": {
+   "weights": {
+    "season": 0.2
+   },
+   "jul_aug": [
+    0.6308,
+    0.64
+   ],
+   "from_sep": [
+    0.6516,
+    0.621
+   ],
+   "worlds": [
+    0.6507,
+    0.575
+   ]
+  },
+  "patch": {
+   "weights": {
+    "patch": 0.092
+   },
+   "jul_aug": [
+    0.6345,
+    0.628
+   ],
+   "from_sep": [
+    0.6511,
+    0.621
+   ],
+   "worlds": [
+    0.6511,
+    0.616
+   ]
+  },
+  "solo": {
+   "weights": {
+    "solo": 0.013
+   },
+   "jul_aug": [
+    0.635,
+    0.625
+   ],
+   "from_sep": [
+    0.6454,
+    0.64
+   ],
+   "worlds": [
+    0.6443,
+    0.589
+   ]
+  },
+  "solo + solo_prev": {
+   "weights": {
+    "solo": 0.097,
+    "solo_prev": -0.095
+   },
+   "jul_aug": [
+    0.651,
+    0.631
+   ],
+   "from_sep": [
+    0.645,
+    0.64
+   ],
+   "worlds": [
+    0.644,
+    0.616
+   ]
+  },
+  "season + patch": {
+   "weights": {
+    "season": 0.203,
+    "patch": -0.006
+   },
+   "jul_aug": [
+    0.6308,
+    0.639
+   ],
+   "from_sep": [
+    0.6513,
+    0.624
+   ],
+   "worlds": [
+    0.6505,
+    0.589
+   ]
+  },
+  "patch + solo": {
+   "weights": {
+    "patch": 0.092,
+    "solo": 0.014
+   },
+   "jul_aug": [
+    0.6346,
+    0.628
+   ],
+   "from_sep": [
+    0.6505,
+    0.624
+   ],
+   "worlds": [
+    0.6509,
+    0.616
+   ]
+  },
+  "season + patch + solo": {
+   "weights": {
+    "season": 0.203,
+    "patch": -0.006,
+    "solo": 0.006
+   },
+   "jul_aug": [
+    0.6309,
+    0.639
+   ],
+   "from_sep": [
+    0.6511,
+    0.611
+   ],
+   "worlds": [
+    0.6504,
+    0.562
+   ]
+  },
+  "all four": {
+   "weights": {
+    "season": 0.202,
+    "patch": -0.006,
+    "solo": 0.081,
+    "solo_prev": -0.085
+   },
+   "jul_aug": [
+    0.6457,
+    0.649
+   ],
+   "from_sep": [
+    0.6505,
+    0.614
+   ],
+   "worlds": [
+    0.65,
+    0.589
+   ]
+  }
+ },
+ "raw_sd_pre_sep": {
+  "5": {
+   "season": 0.0821,
+   "patch": 0.3052,
+   "solo": 0.0264,
+   "solo_prev": 0.0253
+  },
+  "15": {
+   "season": 0.0821,
+   "patch": 0.19,
+   "solo": 0.0264,
+   "solo_prev": 0.0253
+  },
+  "40": {
+   "season": 0.0821,
+   "patch": 0.1077,
+   "solo": 0.0264,
+   "solo_prev": 0.0253
+  }
+ },
+ "chosen_k_patch": 5,
+ "v1": {
+  "jul_aug": [
+   0.635,
+   0.624
+  ],
+  "from_sep": [
+   0.6461,
+   0.637
+  ],
+  "worlds": [
+   0.6446,
+   0.616
+  ],
+  "n": [
+   712,
+   311,
+   73
+  ]
+ },
+ "feature_sd": {
+  "season": 1.0036,
+  "patch": 0.996,
+  "solo": 1.1371,
+  "solo_prev": 1.1625
+ }
+}

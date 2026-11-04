@@ -1,0 +1,148 @@
+{
+ "file_last_date": "2026-11-01 11:42:53",
+ "games_all": 9845,
+ "games_major": 2845,
+ "worlds_games": 73,
+ "patches_major": {
+  "16.01": 184,
+  "16.02": 239,
+  "16.03": 214,
+  "16.04": 36,
+  "16.05": 45,
+  "16.06": 49,
+  "16.07": 217,
+  "16.08": 227,
+  "16.09": 263,
+  "16.1": 252,
+  "16.11": 81,
+  "16.13": 122,
+  "16.14": 147,
+  "16.15": 230,
+  "16.16": 215,
+  "16.17": 251,
+  "16.2": 73
+ },
+ "champion_role_pairs": 281,
+ "champions_major": 156,
+ "champion_role_pairs_10plus": 146,
+ "champion_role_pairs_30plus": 113,
+ "champion_role_pairs_100plus": 74,
+ "player_champion_pairs_all_leagues": 28682,
+ "player_champion_pairs_major": 6598,
+ "player_champion_pairs_major_3plus": 3460,
+ "player_champion_pairs_major_5plus": 2213,
+ "player_champion_pairs_major_10plus": 810,
+ "lane_pairs": 1478,
+ "lane_pairs_3plus": 760,
+ "lane_pairs_5plus": 568,
+ "lane_pairs_10plus": 368,
+ "bot_duos": 418,
+ "bot_duos_10plus": 106,
+ "top_champion_roles": [
+  {
+   "champion": "Ryze",
+   "position": "mid",
+   "g": 761,
+   "w": 392,
+   "wr": 0.515
+  },
+  {
+   "champion": "Jarvan IV",
+   "position": "jng",
+   "g": 737,
+   "w": 379,
+   "wr": 0.514
+  },
+  {
+   "champion": "Rumble",
+   "position": "top",
+   "g": 711,
+   "w": 379,
+   "wr": 0.533
+  },
+  {
+   "champion": "Ezreal",
+   "position": "bot",
+   "g": 708,
+   "w": 355,
+   "wr": 0.501
+  },
+  {
+   "champion": "Xin Zhao",
+   "position": "jng",
+   "g": 637,
+   "w": 302,
+   "wr": 0.474
+  },
+  {
+   "champion": "Pantheon",
+   "position": "jng",
+   "g": 581,
+   "w": 294,
+   "wr": 0.506
+  },
+  {
+   "champion": "Vi",
+   "position": "jng",
+   "g": 580,
+   "w": 317,
+   "wr": 0.547
+  },
+  {
+   "champion": "K'Sante",
+   "position": "top",
+   "g": 579,
+   "w": 262,
+   "wr": 0.453
+  },
+  {
+   "champion": "Yunara",
+   "position": "bot",
+   "g": 568,
+   "w": 273,
+   "wr": 0.481
+  },
+  {
+   "champion": "Bard",
+   "position": "sup",
+   "g": 564,
+   "w": 296,
+   "wr": 0.525
+  },
+  {
+   "champion": "Gnar",
+   "position": "top",
+   "g": 559,
+   "w": 297,
+   "wr": 0.531
+  },
+  {
+   "champion": "Ambessa",
+   "position": "top",
+   "g": 517,
+   "w": 260,
+   "wr": 0.503
+  },
+  {
+   "champion": "Orianna",
+   "position": "mid",
+   "g": 499,
+   "w": 263,
+   "wr": 0.527
+  },
+  {
+   "champion": "Jhin",
+   "position": "bot",
+   "g": 498,
+   "w": 216,
+   "wr": 0.434
+  },
+  {
+   "champion": "Nautilus",
+   "position": "sup",
+   "g": 494,
+   "w": 220,
+   "wr": 0.445
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+id,part,source,kind,gives,checked
+champ_gol,Champion strength,gol.gg,Pro games,"Picks, bans, wins per event","Compared 4 Nov: LCK Rounds 3-4 has 99 games v 98; 1 extra game (10 picks/bans, 5 wins differ)"
+champ_lp,Champion strength,Leaguepedia,Pro games,"Picks, bans, wins per event","Compared 4 Nov: matches the file exactly (98 games, 91 champions)"
+champ_lola,Champion strength,lolalytics,Solo queue (Emerald+),Win rate per patch and lane,Read in full 4 Nov: 173 champions x 5 lanes x patches 16.11–16.20 (site keeps no older patches); values match the page
+curve_gol,Power curve,gol.gg,Pro games,"GD@15, CSD@15, XPD@15 per champion",Opened 4 Nov: columns present
+curve_lp,Power curve,Leaguepedia,Pro games,Gold and CS per minute per champion,Opened 4 Nov: columns present
+curve_lola,Power curve,lolalytics,Solo queue (Emerald+),Win rate by game length,Not opened yet
+comp_dd,Comp profile,Riot Data Dragon,Official,"Champion class tags (Fighter, Mage, Tank…)",Not opened yet
+comp_lp,Comp profile,Leaguepedia,Wiki (Riot classes),Champion class and subclass,Not opened yet
+comp_app,Comp profile,App's CHAMP_ARCH,This project,Hand-set archetypes to compare against,In the repo
+comf_gol,Player comfort,gol.gg,Pro games,Player champion pools per season,Not opened yet
+comf_lp,Player comfort,Leaguepedia,Pro games,"Player champion stats, all leagues",Not opened yet
+comf_oe,Player comfort,Oracle's Elixir file,Pro games,"Every player-champion game (6,598 major pairs)",Counted 4 Nov
+lane_lola,Lane matchups,lolalytics,Solo queue (Emerald+),Lane counters with games and deltas,"Read 4 Nov: 117 champion-roles x 4 patches (16.15-16.17, 16.20), 43,667 matchups with 100+ games"
+lane_meta,Lane matchups,METAsrc,Solo queue,Counter win rates (already in the app),Compared 4 Nov: 440 of the app's 460 METAsrc pairs; rank agreement with lolalytics 0.80
+lane_gol,Lane matchups,gol.gg,Pro games,Champion v champion pro results,Not opened yet
+syn_lola,Synergy,lolalytics,Solo queue (Emerald+),Teammate synergy per champion,"Read 4 Nov: 88 pages (20 jungle, 24 ADC champions x 16.17, 16.20), 5,172 pro-relevant pairs; needs a real click per page"
+syn_mb,Synergy,metabot.gg,Solo queue,Bot duos (already in the app),"Compared 4 Nov: 27 of the app's 29 duos; rank agreement with lolalytics 0.54, same sign in 17"
+syn_meta,Synergy,METAsrc,Solo queue,Duo and synergy pages (already in the app),In the app (PARTNERS)
