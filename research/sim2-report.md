@@ -1,4 +1,4 @@
-# Sim session 2 report, part 1: champions, lanes, synergy and the meta
+# Sim session 2 report: champions, lanes, synergy, the meta (part 1) and role-by-role tests, pools, curves, draft meta (part 2)
 
 Written 4 Nov 2026 (AEST). Covers the work done on 4 Nov; session 2 is not finished (power curves, comp profile and the draft meta model are still to do). Working files, every number's source and how to re-run: `research/sim2/README.md`. Plan and decisions: `research/sim-plan.md` (session 2 entry). Live tracker: https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
 
@@ -108,3 +108,74 @@ How the lolalytics data was read (for repeating it): tier lists and counters are
 1. ~~Whether to keep testing who-wins inputs or accept v1.~~ **Decided (Luke, 4 Nov): keep testing, each role tested on its own** (top, jungle, mid, ADC, support; bot also as a duo).
 2. Pro lane records' negative weight in who-wins: worth a look later, or leave.
 3. lolalytics synergy at half strength: re-test on knockout games when available.
+
+---
+---
+
+# Part 2 (5 Nov 2026, AEST): role by role, comfort, time together, bans, pools, curves, comp profile, draft meta
+
+Same data and rules as part 1. Every input measured beyond v1, from earlier days only; "passes" = better than v1 on both the July–August check and the games from 1 Sep. Details and every number's source: `research/sim2/README.md` steps 7–13. Luke's decision for part 2 (4 Nov): keep testing who-wins inputs, each role on its own.
+
+## P1. Summary
+
+- **Part 2 found real signals; part 1 found none.** Testing role by role, rather than lumping roles together, turned up four candidates for who-wins:
+  - **Jungle comfort at big events:** junglers on champions they've played 10+ times beat v1 by more than those on 0–2, at all 5 big-event groups (together −2.3 → +0.3 → +3.8 points; about 1.7 standard errors). Flat in the domestic regular season.
+  - **Player time together:** all 12 pair weights are positive; jungle–mid and jungle–ADC beat v1 on every test set. Clearest in the regular season (sides with a new link −2.1 points, settled sides +3.5), where roster changes happen.
+  - **Jungle pool depth:** every count-based jungle pool measure beats v1 on every set (closely related to jungle comfort).
+  - **ADC champion strength:** better on every set, but 1 of 41 role-by-role tests, so weakest of the four.
+- **Not kept for who-wins:** bans on the opponents' comfort picks, pool depth in other roles, power curves, comp style, lane matchups, synergy, solo-queue data.
+- **Draft meta model works:** 60% of each game's actual picks and bans land in its top 20 (42% for season presence alone), from 1 Sep and at Worlds. Same-patch and last-30-days presence carry it; the season adds almost nothing. For the draft AI.
+- **All 2026 play is Fearless** (no repeat picks inside a series in any major league). The Fearless lock is the biggest single gain in the draft meta model.
+- **Pool added as a fourth player card skill** (Luke, 5 Nov). Faker has the deepest pool of the 80 Worlds players (89).
+- **Champion gold curves are lasting traits** (0.69–0.76 before v after 1 Sep) and match gol.gg exactly; they track where gold goes, not late-game power. For the game sim.
+- **Jungle is the recurring theme:** comfort, time together and pool all point to the jungler.
+
+## P2. Who-wins candidates (change in log loss v v1; negative = better)
+
+| Candidate | Jul–Aug | From 1 Sep | Worlds | Note |
+|---|---|---|---|---|
+| Jungle comfort (games on champion) | −0.0004 | −0.0022 | −0.0040 | direct check: same direction at every big event |
+| Time together, jungle–mid | −0.0017 | −0.0018 | −0.0011 | all 12 pair weights positive |
+| Time together, jungle–ADC | −0.0002 | −0.0019 | −0.0007 | |
+| Jungle pool, champions with 3+ games | −0.0021 | −0.0034 | −0.0038 | free comfort and meta pool the same direction |
+| ADC champion strength | −0.0027 | −0.0014 | −0.0041 | 1 of 41 tests: weakest |
+
+These were chosen after looking at many tests, so the fair test is new games: the knockouts, once a newer file has them. The plan: fix one combination now (jungle comfort/pool + jungle time together), then score it on the knockouts without changing it.
+
+## P3. Draft meta model (share of actual picks and bans in the top 20)
+
+| Model | From 1 Sep | Worlds |
+|---|---|---|
+| Season presence only | 42% | 42% |
+| Last-30-days presence | 48% | 53% |
+| + same patch, season, lolalytics, player pools | 48% | 53% |
+| + Fearless lock | **60%** | **60%** |
+
+## P4. For the game sim (session 3)
+
+- Pro lane records (part 1): top 0.30, jungle 0.27 link with the later lane.
+- Champion gold curves at 10/15/20/25 (lasting: 0.69–0.76); use as gold flow, not power.
+- Comp style: a draft predicts a little of the game's siege (0.14), objectives (0.18) and pace (0.16) beyond team strength.
+- Pool and Fearless: the draft uses up each player's comfort picks game by game in a series.
+
+## P5. Outside sources in part 2
+
+| Check | Result |
+|---|---|
+| gol.gg GD@15 v file, LCK Rounds 3–4 (65 champions) | identical (correlation 1.000, all within 50 gold) |
+| gol.gg v file, Faker's 2026 pool | file 21 champions (160 games), all on gol.gg's 23 (178 games); the extra 2 champions and 18 games aren't in the file (events not checked) |
+| lolalytics win rate by game length v pro gold curves | 0.04: no match |
+| Riot Data Dragon classes v gold curves | tanks −196, assassins +376: shows the curve is gold flow, not power |
+| App's CHAMP_ARCH v learned styles | broadly agree (poke → siege, engage → objectives, scaling → less early tempo) |
+
+## P6. Mistakes and fixes in part 2
+
+- Comp profile first run didn't take team strength out (strong teams' champions looked objective-heavy); fixed and re-run.
+- Support lane skill column was empty in the power-curve script; switched to the support's playmaking estimate.
+- A few minor-league rows have no player ID; skipped in time-together and pool scripts.
+
+## P7. Open items for Luke
+
+1. Fix the who-wins candidate combination now (proposed: jungle comfort/pool + jungle time together), to be scored unchanged on the knockouts.
+2. Session 3 (the game-state sim) can start from these inputs; session 2's who-wins work waits on the knockouts.
+3. Pool on the card: shown with how many recent games it's based on (stand-ins read low: 369 43).

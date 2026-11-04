@@ -1,0 +1,7 @@
+,from_sep,worlds
+last-30-days presence only,"(0.2863, np.float64(0.475))","(0.2739, np.float64(0.532))"
+season presence only,"(0.3006, np.float64(0.422))","(0.2967, np.float64(0.417))"
+pro presence (30 days + season + patch),"(0.2842, np.float64(0.48))","(0.2708, np.float64(0.534))"
++ lolalytics,"(0.284, np.float64(0.479))","(0.2701, np.float64(0.53))"
++ lolalytics + player pools,"(0.2798, np.float64(0.481))","(0.266, np.float64(0.525))"
+full (+ Fearless lock),"(0.2356, np.float64(0.602))","(0.2389, np.float64(0.602))"

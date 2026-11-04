@@ -203,6 +203,45 @@ Step 10, pool depth as part of player ratings (Luke, 5 Nov: "deep research").
 - **Pool card** (S5 scale, mean of the 3+ games and meta pool z-scores; `pool_cards_worlds.csv`): highest of the 80 Worlds players Faker 89 (16 champions with 3+ games, all 10 current-meta mids), Caliste 89, Peyz 88; lowest 369 43 (he played Jan–Mar, then only 6 Worlds games in the last 180 days: a recent window marks stand-ins), Rookie 65. Knight 82, Kanavi 81, Canyon 78, Chovy 76.
 - **Reading:** pool depth belongs on the player card as its own skill ("Pool"): it isn't a copy of skill, and Faker's depth is real where his laning numbers are not. For win odds, only jungle pool (closely related to jungle comfort) is a candidate. Its main job in the sim is mechanical: in Fearless series the draft AI must run out of comfort picks game by game, which uses pool depth directly without needing a fitted weight.
 
+| 11 | `s2_curves.py` | `model/sim2/champion_curves.csv`, `champion_curves_recent.csv` | Done 5 Nov |
+| 12 | `s2_comp.py` | `model/sim2/champion_styles.csv` | Done 5 Nov |
+
+Step 11, champion power curves. Per champion-role: gold lead v the lane opponent at 10/15/20/25 minutes after the two players' laning skills (k = 20), scaling = 25-min value − 10-min value, and the win left after v1 in short (< 28 min, 558 games), medium (1,311) and long (> 34 min, 976) games.
+- **Curves are lasting champion traits.** Before v from 1 Sep (77 champion-roles with 10+ games in both): gold lead at 10 0.72, 15 0.76, 20 0.72, 25 0.69; scaling 0.61 (jungle 0.88, top 0.68, mid 0.53, support 0.31, ADC 0.23).
+- **Results by game length don't last** (short 0.05, long 0.10): noise.
+- **Who-wins:** team scaling alone on v1: Jul–Aug +0.0012, from 1 Sep −0.0004, Worlds −0.0004: not kept. The more-scaling side does not win more of the long games (correlation with the win left after v1: −0.01 in long games).
+- **gol.gg check:** LCK Rounds 3–4, 65 champions with 5+ games: gol.gg's GD@15 = the file's mean gold lead at 15 (correlation 1.000, all 65 within 50 gold; e.g. Orianna −218 both, Jayce +318 both).
+- Use: the game sim's laning and mid-game gold (session 3), per champion; not pre-game odds.
+
+Step 12, comp profile. Team stats per side as shares of both teams (plates, towers, first tower; dragons, grubs, Heralds, Barons; kills by 15; kills per minute of both teams), each **minus what v1's odds predict** (a first run without this mixed champion style with team strength and was replaced). Champion style = mean over its games (k = 20); a draft = its five summed.
+- Styles last only weakly (before v from 1 Sep, 77 champion-roles): siege 0.29, objectives 0.29, pace 0.28, skirmish 0.07.
+- A draft's style predicts a little of how the game goes (games from 1 Sep, styles from before; beyond team strength): siege 0.14, objectives 0.18, pace 0.16, skirmish 0.05.
+- Who-wins (each alone on v1; Jul–Aug / from 1 Sep / Worlds): siege +0.0032 / −0.0002 / +0.0036; objectives −0.0028 / +0.0006 / +0.0039; skirmish +0.0002 / −0.0003 / +0.0041; pace +0.0009 / +0.0001 / +0.0012. **None kept.**
+- Use: a mild flavour input for the game sim (which side leans to plates, objectives, a faster game), not pre-game odds.
+
+| 13 | `s2_draftmeta.py` | `model/sim2/draftmeta_presence.csv`, `draftmeta_picked.csv` | Done 5 Nov: **kept for the draft AI** |
+
+Step 12b, curves and styles v three outside labels (`lola_length.py` → `model/sim2/lola_length.csv`; `s2_style_sources.py`; 123 champion-roles with 20+ pro games):
+- **lolalytics win rate by game length** (7 buckets in length order, edges not stated; 16.17 + 16.20 pooled; solo scaling = last 3 buckets − first 3): v pro gold-curve scaling, rank agreement **0.04** (top 0.18, jungle −0.02, mid −0.19, ADC 0.37, support −0.45). Solo-queue length curves don't describe pro gold curves.
+- **Riot Data Dragon classes** (16.22.1, all 123 matched): gold-curve scaling by primary class: Assassin +376, Fighter +111, Marksman +42, Support +29, Mage −14, Tank −196. **Caveat found:** the "scaling" measure tracks where gold goes (tanks give it away as games go on), not late-game power. It is renamed "gold curve" for use, and the sim's late-game strength must not be read from it.
+- **The app's `CHAMP_ARCH`** (engage 24, poke 16, scaling 16, skirmish 25, protect 12) v learned styles (list v the rest): poke → siege +0.0145 v −0.0005; engage → objectives +0.0052 v −0.0004; scaling → early tempo down (siege −0.0125 v +0.0033, pace −0.0097 v −0.0017); skirmish → objectives +0.0091 and gold curve +99 v −7. The hand-set labels broadly agree with what the data learned.
+
+Step 13, draft meta model: which champions get picked or banned in a pro game. One row per (game, champion), 156+ champions; every feature from earlier days only; logistic, trained on games before 1 Sep. Score: share of the game's actual picks and bans that are in the model's top 20 for that game (log loss per champion-row in brackets).
+
+| Model | From 1 Sep (311) | Worlds (73) |
+|---|---|---|
+| Season presence only | 42% (0.301) | 42% (0.297) |
+| Last-30-days presence only | 48% (0.286) | 53% (0.274) |
+| Pro presence (30 days + season + same patch) | 48% (0.284) | 53% (0.271) |
+| + lolalytics pick/ban rate on the patch | 48% (0.284) | 53% (0.270) |
+| + player pools (players with 3+ games on it) | 48% (0.280) | 53% (0.266) |
+| **Full (+ Fearless lock: picked earlier in the series)** | **60% (0.236)** | **60% (0.239)** |
+
+- Picked only (not bans): season 33% → full 50% from 1 Sep; 36% → 50% at Worlds.
+- Weights per standard deviation (presence model): same-patch presence 0.83, last 30 days 0.65, **season 0.07**, player pools 0.31, lolalytics pick 0.05, Fearless lock −2.33. Recent and same-patch presence carry the meta; the season adds almost nothing (the current-meta principle, measured).
+- lolalytics adds nearly nothing once pro presence is known; player pools help the picked model more (0.39) than presence.
+- Use: the **draft AI's** sense of what is in the meta for this tournament, including Fearless locks in series. Pro presence rolls forward with each new patch and event.
+
 Step 1 detail: `research/sim1/` scripts re-run on a scratch copy in order (`prep.py`, `playerprep.py` n0 = 6, `teamfit.py`, `leaguefit.py`; `playerfit.py` not needed). They reproduce the saved session 1 results exactly (validation 0.6441, from 1 Sep 0.6489, Worlds 0.6491, rolling 0.6451; league-adjusted 0.6367 / 0.6461 / 0.6446; same league shifts and 16 team ratings). `v1_offsets.py` runs from that folder (it uses `exptest.py`): v1 odds for 2,668 of 2,845 games (the first games of the year have no earlier games to rate teams from), 0.6461 from 1 Sep and 0.6446 on Worlds, the same as session 1.
 
 ## Sample sizes (step 0, major leagues + internationals, 2,845 games)
