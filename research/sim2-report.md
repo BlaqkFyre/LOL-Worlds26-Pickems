@@ -105,6 +105,6 @@ How the lolalytics data was read (for repeating it): tier lists and counters are
 
 ## 7. Open items for Luke
 
-1. Whether to keep testing who-wins inputs (e.g. comp profile) or accept v1 for pre-game odds and put the draft data into the draft AI and the game sim.
+1. ~~Whether to keep testing who-wins inputs or accept v1.~~ **Decided (Luke, 4 Nov): keep testing, each role tested on its own** (top, jungle, mid, ADC, support; bot also as a duo).
 2. Pro lane records' negative weight in who-wins: worth a look later, or leave.
 3. lolalytics synergy at half strength: re-test on knockout games when available.

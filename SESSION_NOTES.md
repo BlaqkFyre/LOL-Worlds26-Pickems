@@ -20,7 +20,7 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 | Task | Status/blocker |
 |---|---|
 | Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat; four skills with ~0 weight (top Teamfight, top steadiness, mid Map impact, ADC Damage): keep or swap; S5 card step has no saved script (add to `scales.py` before session 4). Report section 9 |
-| **Sim session 2, part 2 (next)** | Power curves, comp profile, draft meta model (which champions get picked and banned per patch, tested on Worlds drafts). First decide with Luke: keep testing who-wins inputs or accept v1 for pre-game odds (report section 7). **Use only the games in the current Oracle's Elixir file**; don't wait for or assume knockout results (Luke, 4 Nov) |
+| **Sim session 2, part 2 (next)** | **Keep testing who-wins inputs, each role tested on its own** (top, jungle, mid, ADC, support; bot also as a duo) (Luke, 4 Nov). Then power curves, comp profile, draft meta model (which champions get picked and banned per patch, tested on Worlds drafts). **Use only the games in the current Oracle's Elixir file**; don't wait for or assume knockout results (Luke, 4 Nov) |
 | When a newer file has the knockouts | Re-test lolalytics synergy at half strength (chosen after seeing the test games, so not yet fair), the experience test, and every session 2 part on the new games |
 | Sim sessions 3–5 | After session 2, in order (see the plan) |
 | Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
@@ -67,6 +67,7 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - **Mistakes and fixes:** a scaling fault in my patch-test script (fixed, re-run); synergy reading failed until I found it needs a real click.
 - **Tracker:** the scorecard artifact is now "Sim Engine Progress" (parts map, progress chart, meta-by-patch chart, lanes and sources tables): https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL. Its own page check did not report back after most updates.
 - How checked: session 1 scripts re-run on a scratch copy reproduce every saved result exactly; lolalytics values checked against the page (Yone top 16.20); outside-source comparisons as listed in the report. No app change (v38). Browser tabs closed, temporary lolalytics storage cleared.
+- Committed `61609b0` and pushed. Decision at the end (Luke): keep testing who-wins inputs next session, each role tested on its own.
 
 ### Session (3 Nov 2026, AEST) — sim session 1 report
 - **Report written:** `research/sim1-report.md`, from the saved results in `research/model/sim1/`, `research/sim1/README.md` and `research/sim-plan.md`. Nothing was re-run. Headline: new model 0.639 v app 0.679 log loss on the 51 Swiss games (no drafts); 0.646 from 1 Sep (coin flip 0.693); calibration within 5 points from 1 Sep, 10–12 points off in two Worlds bands (small samples).
