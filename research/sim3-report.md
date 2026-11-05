@@ -209,6 +209,37 @@ Only pace → kills per minute is clearly real (the rest are under 0.12, within 
 
 ---
 
+## 7b. Player choice moments (5 Nov, parked for later)
+
+Luke's idea: at each stage (laning, after first and second back, mid game, late game) each player makes a choice, such as a jungler farming or ganking, or a support staying with the ADC or roaming. Those choices should give variety, based on data. Measured from the timelines (`research/sim3/s3_choices.py`; `research/model/sim3/choices.json`, per-player table `choices_players.csv`). Kills are tagged with each champion's player and role through the matched file game: 4,182 of 4,206 early kills.
+
+- **What can be seen:** only choices that ended in a kill (killer, assisters, victim, time). Positions and paths aren't in any source used, so a gank or roam with no kill is invisible.
+- **Per game before 14:00:** the jungler is involved in about 2.3 kills (bot 0.85, enemy jungle 0.57, mid 0.44, top 0.42); supports make about 0.55 roam kills; mids about 0.77.
+- **Inside a game the choices go with outcomes:** a jungler involved in more early bot-side kills than the enemy jungler goes with first dragon 46% of the time (33% when fewer). A support roaming more goes with its bot lane being ahead at 15 (+413 gold v −76), likely because roams happen when bot has priority.
+- **As player habits they mostly aren't stable:** first half v second half of each player's games: jungle ganks top / mid / bot 0.12 / 0.16 / −0.05; support roams 0.20; mid roams −0.06; **jungle CS at 14 (farming) 0.55, a real habit**.
+- **Known before the game, they don't predict it:** players' earlier gank and roam tendencies made held-out first-dragon, Herald and grub predictions worse (first dragon from 1 Sep 0.631 → 0.641) and didn't change lane gold at 15. Not kept as player traits.
+- **Farming habit, every role** (`s3_farm.py`, `farm.json`; the file's CS at 15 in all 2,719 games, against the role average of the previous 30 days). Luke's rule: what one role gets, check for the others.
+  - It's a stable habit in every role: first half v second half 0.58 (top), 0.62 (jungle), 0.71 (mid), 0.58 (bot), 0.69 (support).
+  - Known before the game, it doesn't help who-wins beyond v1. Only support is better on both held-out sets, by about 0.001–0.002 with a near-zero weight. Jungle farming doesn't predict first dragon, Herald or grubs. **Not kept.**
+  - One small lead: a top laner's farming habit predicts their gold lead at 15 a little better from 1 Sep (error 868 → 855; no change at Worlds). It overlaps session 1's laning skill, so it would need a test inside the lane model before being kept.
+- **For later:** (1) state-driven choices in the sim: each choice moment's chances fitted from the timelines and depending on the game state (lane priority, timers), which gives the play-by-play variety without claiming a player always ganks bot; (2) jungle farming as a tested player trait.
+
+## 7c. Session 2 inputs v in-game events, every role and pair (5 Nov)
+
+Luke: if an input feeds the sim for one role, check the other roles too. `research/sim3/s3_roleevents.py`; `research/model/sim3/roleevents.csv`.
+- **Inputs** (pre-game, earlier days only): comfort, champion strength (each role), time together and champion-pair synergy (each of the 10 teammate pairs).
+- **Events** (major games, the file): the role's or pair's gold lead at 15; kills minus deaths by 15; the jungle pair's side objectives.
+- **Pass rule** (as in session 2): better than v1 alone on Jul–Aug (fit Feb–Jun) and from 1 Sep (fit Feb–Aug).
+
+- **80 tests, 14 pass (9 also better at Worlds).** About 20 would pass by luck alone, so as a group these inputs move in-game events no more than chance. Single passes are mostly noise.
+- **Consistent with session 2's separate evidence, and kept as candidates for the sim's laning:**
+  - ADC champion strength → bot gold at 15: 0.3% / 0.7% / 1.7% lower squared error, Jul–Aug / from 1 Sep / Worlds. It also passed for who-wins in session 2.
+  - ADC + support pro pair synergy → bot lane gold at 15: 0.03% / 0.5% / 0.7%. Pro ADC–support synergy passed in session 2.
+- **Other passes:**
+  - Top champion strength → top gold at 15 (0.1% / 1.5% / 2.2%), but the effect is negative, which is likely gold flow (tanks) rather than power, as session 2 warned.
+  - ADC + support time together → bot lane gold (0.2% / 0.3% / ~0).
+- **Comfort moves no lane events in any role (0 of 13),** jungle included, although jungle comfort helps predict winners at big events. **Jungle–mid time together** (session 2's strongest pair) doesn't move mid/jungle gold, early kills, Herald or grubs. These act on winning through something the file doesn't record well (decisions, teamfights), so they belong at the who-wins level (the v2 candidate's knockout test), not as lane events.
+
 ## 8. Open items for Luke
 
 1. **Spread of games:** length and kills vary too much from game to game. Next test: a per-game tempo (some games slow, some fast) fitted from the timelines.
@@ -217,3 +248,4 @@ Only pace → kills per minute is clearly real (the rest are under 0.12, within 
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?
 5. **The app's "one damage type" warning** is untested (session 4).
 6. **Elder:** only 69 real Elder takes in the timelines, so Elder chances are rough.
+7. **Player choice moments** (parked, Luke 5 Nov): come back to choices as a source of variety, based on data (section 7b).

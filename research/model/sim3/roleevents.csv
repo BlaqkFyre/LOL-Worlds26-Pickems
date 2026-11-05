@@ -1,0 +1,81 @@
+input,role_or_pair,event,passes,worlds_better,jul_aug,from_1_sep,worlds,weight,measure
+comfort,top,gd_top,False,True,0.303,0.078,-0.025,-5.71,% change in squared error
+comfort,top,kd_top,False,False,0.029,0.08,0.238,-0.02,% change in squared error
+strength,top,gd_top,True,True,-0.104,-1.502,-2.248,-51.81,% change in squared error
+strength,top,kd_top,False,True,0.074,0.463,-0.379,-0.05,% change in squared error
+comfort,jng,gd_jng,False,True,0.216,-0.703,-0.881,-25.03,% change in squared error
+comfort,jng,kd_jng,False,False,0.449,-0.011,0.104,-0.01,% change in squared error
+comfort,jng,fd,False,True,0.0003,0.0002,-0.0004,0.019,change in log loss
+comfort,jng,fh,False,False,-0.0,0.0014,0.0023,-0.022,change in log loss
+comfort,jng,grubs,False,False,0.0013,-0.001,-0.0,0.025,change in log loss
+strength,jng,gd_jng,False,False,0.784,0.244,0.493,7.48,% change in squared error
+strength,jng,kd_jng,False,False,0.418,0.515,0.582,0.06,% change in squared error
+strength,jng,fd,True,True,-0.001,-0.0006,-0.0022,0.062,change in log loss
+strength,jng,fh,False,False,0.0013,0.0014,0.0023,-0.043,change in log loss
+strength,jng,grubs,False,False,0.0003,-0.0001,0.0028,0.024,change in log loss
+comfort,mid,gd_mid,False,True,-0.096,0.275,-0.433,18.08,% change in squared error
+comfort,mid,kd_mid,False,True,-0.097,0.872,-0.48,0.09,% change in squared error
+strength,mid,gd_mid,False,True,0.196,1.483,-0.138,61.16,% change in squared error
+strength,mid,kd_mid,False,False,0.008,1.773,1.442,0.12,% change in squared error
+comfort,bot,gd_bot,False,False,1.37,0.326,0.296,-22.48,% change in squared error
+comfort,bot,kd_bot,False,False,0.79,0.184,0.635,-0.04,% change in squared error
+strength,bot,gd_bot,True,True,-0.325,-0.689,-1.667,44.61,% change in squared error
+strength,bot,kd_bot,True,False,-0.21,-0.554,0.307,-0.13,% change in squared error
+comfort,sup,gd_sup,False,False,0.562,1.231,2.602,-22.57,% change in squared error
+comfort,sup,kd_sup,False,False,-0.075,0.308,0.682,-0.04,% change in squared error
+strength,sup,gd_sup,False,True,0.034,-1.008,-0.227,13.72,% change in squared error
+strength,sup,kd_sup,False,False,0.11,-0.284,0.052,0.02,% change in squared error
+together,top-jng,gd_top_jng,False,True,1.897,0.013,-0.03,-8.45,% change in squared error
+together,top-jng,kd_top_jng,False,False,0.997,0.02,0.066,0.02,% change in squared error
+together,top-jng,fh,False,False,-0.0009,0.0022,0.0088,-0.068,change in log loss
+together,top-jng,grubs,False,False,0.0004,0.0001,0.0003,0.003,change in log loss
+synergy,top-jng,gd_top_jng,False,False,0.299,-0.011,0.184,10.85,% change in squared error
+synergy,top-jng,kd_top_jng,True,True,-0.083,-0.762,-0.318,0.1,% change in squared error
+synergy,top-jng,fh,False,False,0.0007,0.0007,0.0008,-0.015,change in log loss
+synergy,top-jng,grubs,False,False,0.0001,-0.0003,0.0,0.011,change in log loss
+together,top-mid,gd_top_mid,False,True,0.198,0.603,-0.361,50.03,% change in squared error
+together,top-mid,kd_top_mid,False,False,0.011,0.025,0.015,0.01,% change in squared error
+synergy,top-mid,gd_top_mid,False,False,0.269,-0.022,0.41,28.37,% change in squared error
+synergy,top-mid,kd_top_mid,False,False,-0.232,0.344,1.051,0.12,% change in squared error
+together,top-bot,gd_top_bot,False,False,-0.203,0.203,0.64,44.84,% change in squared error
+together,top-bot,kd_top_bot,True,True,-0.011,-0.01,-0.211,-0.03,% change in squared error
+synergy,top-bot,gd_top_bot,True,True,-0.089,-0.217,-0.572,-34.72,% change in squared error
+synergy,top-bot,kd_top_bot,True,True,-0.688,-0.015,-2.219,-0.23,% change in squared error
+together,top-sup,gd_top_sup,False,False,0.123,0.019,0.018,9.89,% change in squared error
+together,top-sup,kd_top_sup,False,True,-0.042,0.057,-0.268,-0.04,% change in squared error
+synergy,top-sup,gd_top_sup,False,True,0.28,-0.096,-0.1,9.07,% change in squared error
+synergy,top-sup,kd_top_sup,False,False,-0.052,0.348,0.026,-0.05,% change in squared error
+together,jng-mid,gd_jng_mid,False,False,-0.779,0.407,0.812,77.37,% change in squared error
+together,jng-mid,kd_jng_mid,False,False,-0.262,0.496,1.006,0.15,% change in squared error
+together,jng-mid,fh,False,False,-0.0003,0.0002,0.003,-0.069,change in log loss
+together,jng-mid,grubs,False,False,-0.0006,0.0015,0.0046,0.055,change in log loss
+synergy,jng-mid,gd_jng_mid,False,False,0.055,-0.127,1.078,29.58,% change in squared error
+synergy,jng-mid,kd_jng_mid,False,False,0.071,-0.21,1.101,0.11,% change in squared error
+synergy,jng-mid,fh,False,False,0.0004,0.0003,0.0,0.006,change in log loss
+synergy,jng-mid,grubs,False,True,0.0006,-0.0003,-0.0009,-0.007,change in log loss
+together,jng-bot,gd_jng_bot,False,False,0.766,-0.274,0.551,51.14,% change in squared error
+together,jng-bot,kd_jng_bot,False,False,0.758,0.005,0.357,0.06,% change in squared error
+together,jng-bot,fd,False,False,0.0016,0.0025,0.0078,0.074,change in log loss
+synergy,jng-bot,gd_jng_bot,False,True,-0.006,0.019,-0.068,14.16,% change in squared error
+synergy,jng-bot,kd_jng_bot,False,True,0.11,-0.166,-0.31,-0.12,% change in squared error
+synergy,jng-bot,fd,False,False,-0.0001,0.0003,0.0029,0.062,change in log loss
+together,jng-sup,gd_jng_sup,True,False,-0.123,-0.22,0.133,25.11,% change in squared error
+together,jng-sup,kd_jng_sup,True,False,-0.089,-0.126,0.119,0.08,% change in squared error
+together,jng-sup,fd,True,False,-0.0013,-0.001,0.0055,0.094,change in log loss
+synergy,jng-sup,gd_jng_sup,False,True,0.041,-0.244,-0.263,-12.23,% change in squared error
+synergy,jng-sup,kd_jng_sup,False,False,0.252,0.417,0.065,0.06,% change in squared error
+synergy,jng-sup,fd,False,False,0.0011,-0.0004,0.0013,-0.033,change in log loss
+together,mid-bot,gd_mid_bot,False,False,-0.223,0.349,0.042,47.58,% change in squared error
+together,mid-bot,kd_mid_bot,False,True,0.017,0.232,-0.016,0.08,% change in squared error
+synergy,mid-bot,gd_mid_bot,False,True,-0.421,0.357,-1.411,68.01,% change in squared error
+synergy,mid-bot,kd_mid_bot,False,False,0.02,0.204,0.227,0.03,% change in squared error
+together,mid-sup,gd_mid_sup,False,True,-0.32,0.504,-1.91,86.18,% change in squared error
+together,mid-sup,kd_mid_sup,False,True,-0.31,0.389,-0.204,0.13,% change in squared error
+synergy,mid-sup,gd_mid_sup,False,True,0.003,-0.03,-0.218,7.78,% change in squared error
+synergy,mid-sup,kd_mid_sup,False,False,0.011,-0.019,0.829,0.06,% change in squared error
+together,bot-sup,gd_bot_sup,True,True,-0.249,-0.297,-0.002,57.0,% change in squared error
+together,bot-sup,kd_bot_sup,True,False,-0.292,-0.142,0.084,0.14,% change in squared error
+together,bot-sup,fd,False,False,-0.001,0.0009,0.0068,0.08,change in log loss
+synergy,bot-sup,gd_bot_sup,True,True,-0.03,-0.467,-0.697,20.6,% change in squared error
+synergy,bot-sup,kd_bot_sup,False,True,0.205,0.026,-0.036,-0.03,% change in squared error
+synergy,bot-sup,fd,False,True,-0.0019,0.0002,-0.003,0.105,change in log loss

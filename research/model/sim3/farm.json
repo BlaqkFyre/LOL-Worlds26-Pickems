@@ -1,0 +1,280 @@
+{
+ "games": 2719,
+ "stability_first_v_second_half": {
+  "top": {
+   "players": 71,
+   "raw": 0.641,
+   "relative": 0.577
+  },
+  "jng": {
+   "players": 63,
+   "raw": 0.579,
+   "relative": 0.615
+  },
+  "mid": {
+   "players": 69,
+   "raw": 0.685,
+   "relative": 0.713
+  },
+  "bot": {
+   "players": 67,
+   "raw": 0.57,
+   "relative": 0.581
+  },
+  "sup": {
+   "players": 70,
+   "raw": 0.662,
+   "relative": 0.693
+  }
+ },
+ "who_wins": {
+  "top": {
+   "weights_per_sd": [
+    -0.0463
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6364
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.6451
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6273
+   }
+  },
+  "jng": {
+   "weights_per_sd": [
+    0.0215
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6366
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.6436
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6277
+   }
+  },
+  "mid": {
+   "weights_per_sd": [
+    -0.0032
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6367
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.6431
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6267
+   }
+  },
+  "bot": {
+   "weights_per_sd": [
+    0.0442
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6365
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.644
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6269
+   }
+  },
+  "sup": {
+   "weights_per_sd": [
+    -0.0171
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6366
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.6421
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6252
+   }
+  },
+  "all five": {
+   "weights_per_sd": [
+    -0.0447,
+    0.0132,
+    -0.0079,
+    0.037,
+    -0.0286
+   ],
+   "train": {
+    "games": 2268,
+    "v1": 0.6367,
+    "v1_plus_habit": 0.6362
+   },
+   "from 1 Sep": {
+    "games": 224,
+    "v1": 0.643,
+    "v1_plus_habit": 0.6451
+   },
+   "Worlds": {
+    "games": 80,
+    "v1": 0.6267,
+    "v1_plus_habit": 0.6258
+   }
+  }
+ },
+ "gold_at_15": {
+  "top": {
+   "gold_per_sd": 165.3,
+   "train": {
+    "rmse_v1": 888,
+    "rmse_plus_habit": 872
+   },
+   "from 1 Sep": {
+    "rmse_v1": 868,
+    "rmse_plus_habit": 855
+   },
+   "Worlds": {
+    "rmse_v1": 950,
+    "rmse_plus_habit": 950
+   }
+  },
+  "jng": {
+   "gold_per_sd": 81.2,
+   "train": {
+    "rmse_v1": 765,
+    "rmse_plus_habit": 760
+   },
+   "from 1 Sep": {
+    "rmse_v1": 896,
+    "rmse_plus_habit": 894
+   },
+   "Worlds": {
+    "rmse_v1": 777,
+    "rmse_plus_habit": 778
+   }
+  },
+  "mid": {
+   "gold_per_sd": 70.5,
+   "train": {
+    "rmse_v1": 800,
+    "rmse_plus_habit": 797
+   },
+   "from 1 Sep": {
+    "rmse_v1": 773,
+    "rmse_plus_habit": 771
+   },
+   "Worlds": {
+    "rmse_v1": 649,
+    "rmse_plus_habit": 671
+   }
+  },
+  "bot": {
+   "gold_per_sd": 119.5,
+   "train": {
+    "rmse_v1": 1044,
+    "rmse_plus_habit": 1038
+   },
+   "from 1 Sep": {
+    "rmse_v1": 1043,
+    "rmse_plus_habit": 1038
+   },
+   "Worlds": {
+    "rmse_v1": 1136,
+    "rmse_plus_habit": 1152
+   }
+  },
+  "sup": {
+   "gold_per_sd": 31.8,
+   "train": {
+    "rmse_v1": 441,
+    "rmse_plus_habit": 439
+   },
+   "from 1 Sep": {
+    "rmse_v1": 467,
+    "rmse_plus_habit": 463
+   },
+   "Worlds": {
+    "rmse_v1": 389,
+    "rmse_plus_habit": 390
+   }
+  }
+ },
+ "jungle_objectives": {
+  "first dragon": {
+   "weight_per_sd": 0.1249,
+   "train": {
+    "v1": 0.6569,
+    "v1_plus_habit": 0.6551
+   },
+   "from 1 Sep": {
+    "v1": 0.6409,
+    "v1_plus_habit": 0.6439
+   },
+   "Worlds": {
+    "v1": 0.7143,
+    "v1_plus_habit": 0.7285
+   }
+  },
+  "first Herald": {
+   "weight_per_sd": 0.0451,
+   "train": {
+    "v1": 0.6449,
+    "v1_plus_habit": 0.6447
+   },
+   "from 1 Sep": {
+    "v1": 0.6155,
+    "v1_plus_habit": 0.6153
+   },
+   "Worlds": {
+    "v1": 0.643,
+    "v1_plus_habit": 0.6435
+   }
+  },
+  "more grubs": {
+   "weight_per_sd": 0.0173,
+   "train": {
+    "v1": 0.6562,
+    "v1_plus_habit": 0.6562
+   },
+   "from 1 Sep": {
+    "v1": 0.6525,
+    "v1_plus_habit": 0.6522
+   },
+   "Worlds": {
+    "v1": 0.6505,
+    "v1_plus_habit": 0.6496
+   }
+  }
+ }
+}
