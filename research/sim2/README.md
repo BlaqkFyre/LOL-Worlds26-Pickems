@@ -242,6 +242,15 @@ Step 13, draft meta model: which champions get picked or banned in a pro game. O
 - lolalytics adds nearly nothing once pro presence is known; player pools help the picked model more (0.39) than presence.
 - Use: the **draft AI's** sense of what is in the meta for this tournament, including Fearless locks in series. Pro presence rolls forward with each new patch and event.
 
+| 14 | `s2_v2candidate.py` | `model/sim2/v2_candidate.json` (fixed 5 Nov 10:33 AEST) | Done 5 Nov |
+| 15 | `s2_score_candidate.py` (with the session 1 scripts and `v1_offsets.py` re-run on the new file) | `model/sim2/knockout_score_2026-11-05.txt`, `v1_games.csv` (now to 4 Nov) | Done 5 Nov: **running total, 4 games** |
+
+Step 15, first knockout test (Luke's new Oracle's Elixir file, saved 5 Nov 10:40 AEST, 7 minutes after the candidate was fixed; the candidate file's SHA-256 is unchanged).
+- New file: 9,861 games, data to 4 Nov 02:20 UTC; one new major series, the quarter-final **IG 3–1 TES** (3–4 Nov UTC, patch 16.20). All 4 games match Leaguepedia's Quarterfinals scoreboards (https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Quarterfinals, read 5 Nov): sides, winners, lengths 31:02 / 47:09 / 29:29 / 30:58, kills 27–12 / 17–20 / 9–16 / 16–10, and all 40 champions.
+- v1 re-run on the new file (scratch copy): the 2,845 earlier games have **identical** v1 odds (largest change 0); 4 new games.
+- Score on the 4 knockout games: **v1 log loss 0.6692, Brier 0.2381, favourite 2 of 4; v2 candidate 0.6935, 0.2502, 2 of 4.** The candidate leaned toward TES because Tian had the deeper pool (12 v Wei's 9) and more games with his mid and ADC (99–101 v 69–86); IG won 3–1.
+- Reading: one series is far too few to judge (either model could be ahead after the next one). The candidate stays fixed; the knockout total keeps running and is judged when all knockout games are in.
+
 Step 1 detail: `research/sim1/` scripts re-run on a scratch copy in order (`prep.py`, `playerprep.py` n0 = 6, `teamfit.py`, `leaguefit.py`; `playerfit.py` not needed). They reproduce the saved session 1 results exactly (validation 0.6441, from 1 Sep 0.6489, Worlds 0.6491, rolling 0.6451; league-adjusted 0.6367 / 0.6461 / 0.6446; same league shifts and 16 team ratings). `v1_offsets.py` runs from that folder (it uses `exptest.py`): v1 odds for 2,668 of 2,845 games (the first games of the year have no earlier games to rate teams from), 0.6461 from 1 Sep and 0.6446 on Worlds, the same as session 1.
 
 ## Sample sizes (step 0, major leagues + internationals, 2,845 games)

@@ -1,0 +1,17 @@
+games in both runs: 2845; largest change in v1 log-odds: 0.00e+00; games only in the new run: 4
+
+knockout games: 4
+  2026-11-03 22:14 IG (blue) v TES: blue won 1 | v1 blue 0.583 | candidate blue 0.550
+      Blue: Wei on Qiyana: 4 earlier games, pool 9, with mid 84 games, with ADC 69
+      Red: Tian on Vi: 12 earlier games, pool 12, with mid 99 games, with ADC 99
+  2026-11-03 23:07 IG (blue) v TES: blue won 0 | v1 blue 0.589 | candidate blue 0.565
+      Blue: Wei on Wukong: 12 earlier games, pool 9, with mid 84 games, with ADC 69
+      Red: Tian on Xin Zhao: 11 earlier games, pool 12, with mid 99 games, with ADC 99
+  2026-11-04 00:16 TES (blue) v IG: blue won 0 | v1 blue 0.507 | candidate blue 0.539
+      Blue: Tian on Skarner: 5 earlier games, pool 12, with mid 101 games, with ADC 101
+      Red: Wei on Jayce: 2 earlier games, pool 9, with mid 86 games, with ADC 71
+  2026-11-04 02:20 IG (blue) v TES: blue won 1 | v1 blue 0.582 | candidate blue 0.566
+      Blue: Wei on Naafiri: 10 earlier games, pool 9, with mid 86 games, with ADC 71
+      Red: Tian on Maokai: 3 earlier games, pool 12, with mid 101 games, with ADC 101
+  v1            log loss 0.6692  Brier 0.2381  favourite won 2 of 4
+  v2 candidate  log loss 0.6935  Brier 0.2502  favourite won 2 of 4

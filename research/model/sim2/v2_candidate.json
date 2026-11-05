@@ -1,0 +1,45 @@
+{
+ "decided": "2026-11-05 AEST, Luke ('Yes, fix it')",
+ "data_to": "2026-10-31 23:05:06",
+ "games_fitted": 2668,
+ "features": [
+  "jng_comfort",
+  "jng_pool",
+  "tt_jng_mid",
+  "tt_jng_bot"
+ ],
+ "feature_sd_before_1_Sep": {
+  "jng_comfort": 0.9881,
+  "jng_pool": 2.653,
+  "tt_jng_mid": 1.1079,
+  "tt_jng_bot": 1.0855
+ },
+ "weights_per_sd": {
+  "jng_comfort": 0.0351,
+  "jng_pool": 0.0839,
+  "tt_jng_mid": 0.0552,
+  "tt_jng_bot": 0.0013
+ },
+ "rule": "logit = z_v1 + sum(w * x / sd); x = blue minus red; each feature from earlier days only; ridge 1.0",
+ "reference_not_fair_test": {
+  "weights_fit_before_1_Sep": {
+   "jng_comfort": 0.0134,
+   "jng_pool": 0.0798,
+   "tt_jng_mid": 0.0569,
+   "tt_jng_bot": -0.0033
+  },
+  "from_1_Sep": {
+   "games": 311,
+   "v1": 0.6461,
+   "candidate": 0.6419,
+   "fav_v1": 0.637,
+   "fav_candidate": 0.637
+  },
+  "worlds": {
+   "games": 73,
+   "v1": 0.6446,
+   "candidate": 0.6399
+  }
+ },
+ "knockout_test": "when a newer Oracle's Elixir file has the knockout games: compute the four features as above (earlier days only, history up to each game), apply these weights unchanged, and compare log loss and favourite record with v1 on the knockout games only"
+}
