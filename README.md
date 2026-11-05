@@ -37,7 +37,7 @@ Simulated games stay in their own mode: numbers from a tournament run show only 
 
 ## Real Worlds data
 
-The real Swiss games played so far (`js/worlds-live.js`) feed the champion cards' Worlds meta, pairs and counters, players' champion pools, draft suggestions and a small capped "Worlds form" update to player skills. They never change simulated standings: every tournament run starts at 0-0. Details in `research/worlds-live-2026.md`.
+The real Swiss and knockout games played so far (`js/worlds-live.js`) feed the champion cards' Worlds meta, pairs and counters, players' champion pools, draft suggestions and a small capped "Worlds form" update to player skills. They never change simulated standings: every tournament run starts at 0-0. Details in `research/worlds-live-2026.md`.
 
 ## Themes
 
@@ -67,7 +67,7 @@ js/ui.js            theme toggle, Worlds mode, info popover
 js/data.js          teams, ratings, champion pools, meta, synergy, counters, play-in drafts
 js/champions.js     pro data for 165 champions (presence, win rates, roles, builds, play-in users)
 js/assets.js        champion icons (Data Dragon, with on/off switch) and team colours
-js/worlds-live.js    real Worlds 2026 Swiss games (picks, bans, player stats) for champion data, pools and player form
+js/worlds-live.js    real Worlds 2026 Swiss and knockout games (picks, bans, player stats) for champion data, pools and player form
 js/h2h.js            real 2026 head-to-head between the 16 Worlds teams (games), for Power Rankings
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation

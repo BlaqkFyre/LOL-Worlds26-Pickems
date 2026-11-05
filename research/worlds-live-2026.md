@@ -2,6 +2,24 @@
 
 Updated 2 Nov 2026 (AEST): **51 games**, the whole Swiss stage: rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
 
+## Quarter-final 1: IG 3–1 TES (added 5 Nov, v39)
+- **New Oracle's Elixir file** (Luke, 5 Nov AEST): 9,861 games, data to 4 Nov 02:20 UTC; one new Worlds series, IG 3–1 TES (3 Nov US; 3–4 Nov UTC; patch 16.20).
+- **Checked against Leaguepedia** (https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Quarterfinals, read 5 Nov): sides, winners, lengths 31:02 / 47:09 / 29:29 / 30:58, kills 27–12 / 17–20 / 9–16 / 16–10, and all 40 champions match.
+- Rows built from the file (same format as the Swiss rows, `r:"QF"`, `d:"2026-11-03"` = US event day); first pick TES in games 1, 2, 4 and IG in game 3. 55 games now.
+- `build_from_oe.py` on a scratch copy: 55/55 Worlds games OK (the 4 new ones included); `js/h2h.js` rebuilt to 4 Nov: IG v TES 8–10 → 11–11. Its `worlds-live.js` output differed only in the play-in team list order, so that file was not copied back.
+
+## Out-of-sample check, quarter-final 1 (the app at v38, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| IG vs TES G1 (IG blue) | IG 49% | IG won |
+| IG vs TES G2 (IG blue) | TES 53% | TES won |
+| TES vs IG G3 (TES blue) | IG 34% | IG won |
+| IG vs TES G4 (IG blue) | IG 52% | IG won |
+
+- Favourite won 2 of 4; log loss 0.773, Brier 0.288. The miss that cost most: TES 66% in game 3.
+- Running total across all real Worlds main-event games scored before their data was added: 33 of 51 + 2 of 4 = **35 of 55 (64%)**.
+- The research models on the same 4 games (no drafts): v1 0.669, the fixed v2 candidate 0.694 (`research/sim2/README.md` step 15).
+
 ## Swiss round 5, and HLE–G2 confirmed (added 2 Nov)
 - **New Oracle's Elixir file** (downloaded 2 Nov AEST): 9,857 games, data to 1 Nov 11:42 UTC; last Worlds game 31 Oct 23:05 UTC. It has HLE–G2 and all of round 5 (7 games); no knockout games yet.
 - **HLE 2-0 G2 confirmed:** the file matches what was entered from the Reddit post-match thread, Leaguepedia and pickorban on every field (sides, winner, length, bans in order, champions, K/D/A, CS including Hans Sama's 212, kill participation, objectives including grubs, first pick; damage share within rounding). Rows replaced with the file's, which adds CS@15.
@@ -151,6 +169,7 @@ Add the new games to `js/worlds-live.js` (same row format) and bump the cache ve
 With a newer Oracle's Elixir file in `research/`: run `research/build/build_from_oe.py` on a scratch copy to rebuild `js/h2h.js` and check every game, then copy back only the files that really changed (see CLAUDE.md).
 
 ## Sources
+- https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Quarterfinals (IG 3–1 TES, all 4 games, 5 Nov)
 - Oracle's Elixir 2026 match data file (downloaded 2 Nov AEST, data to 1 Nov 11:42 UTC; kept local in `research/`).
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Round_5 (all 7 round 5 games, 2 Nov)
 - https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Champion_Statistics (51 games, 2 Nov) Download: https://oracleselixir.com/tools/downloads → Google Drive folder https://drive.google.com/drive/u/1/folders/1gLSw0RLjBbtaNy0dgnGQDAZOHIgCe-HH (updated once a day)

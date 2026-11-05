@@ -6,10 +6,10 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Where we are
 
-- **App:** v38 (2 Nov 2026 AEST): Swiss round 5 data, HLE–G2 confirmed from the Oracle's Elixir file. v37 (31 Oct): new champ select pick/ban board and tier colours. App data and code are correct as they stand.
-- **Real data:** the whole Swiss stage, 51 games, in `js/worlds-live.js` (data to 31 Oct), every game confirmed against the Oracle's Elixir file. H2H in `js/h2h.js` (data to 31 Oct). Knockouts start 3 Nov (US).
+- **App:** v39 (5 Nov 2026 AEST): quarter-final 1 (IG 3–1 TES) added from the Oracle's Elixir file. v38 (2 Nov): Swiss round 5. App data and code are correct as they stand.
+- **Real data:** the whole Swiss stage (51 games) and quarter-final 1 (4 games), 55 games in `js/worlds-live.js` (data to 3 Nov US), every game confirmed against the Oracle's Elixir file. H2H in `js/h2h.js` (data to 4 Nov UTC). Quarter-finals 2–4 on 4–6 Nov (US).
 - **Time zones:** Luke's dates are AEST; Worlds game days are US dates; the Oracle's Elixir file is UTC. Check a game's UTC time against the file before saying it has been played.
-- **Sim engine:** session 1 (ratings and who-wins model) **done**: report `research/sim1-report.md`. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`. Session 2 (champions, lanes, synergy, meta) **part 1 done 4 Nov**: report `research/sim2-report.md`, working files `research/sim2/` (README), tables `research/model/sim2/`. Progress tracker (was the scorecard): https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
+- **Sim engine:** session 1 (ratings and who-wins model) **done**: report `research/sim1-report.md`. Decisions in `research/sim-plan.md`; scripts and notes in `research/sim1/` (start with its README); result tables in `research/model/sim1/`. Session 2 **done 4–5 Nov** (parts 1 and 2; v2 candidate fixed 5 Nov, knockout test running): report `research/sim2-report.md`, working files `research/sim2/` (README), tables `research/model/sim2/`. Progress tracker (was the scorecard): https://claude.ai/artifact/J6sw8U1HziM7t8PAfKmqSL
 - **Draft Game:** Tier 1 built, autosave added 26 Oct. See `Draft Game/draft-card-game-handoff.md`.
 - **Where work happens:** Claude Code sessions only. The claude.ai chats that built the app no longer write to the repo.
 
@@ -20,12 +20,11 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 | Task | Status/blocker |
 |---|---|
 | Sim session 1 open items | Experience re-test after the Worlds knockouts; Faker must not stay at a mid rating (S5 72) — resolve through the process (session 2 champion context, experience re-test, how "wins beyond stats" is shared); "wins beyond stats" shown as a team stat; four skills with ~0 weight (top Teamfight, top steadiness, mid Map impact, ADC Damage): keep or swap; S5 card step has no saved script (add to `scales.py` before session 4). Report section 9 |
-| **Sim session 2, part 2 (next)** | **Keep testing who-wins inputs, each role tested on its own** (top, jungle, mid, ADC, support; bot also as a duo) (Luke, 4 Nov). Then power curves, comp profile, draft meta model (which champions get picked and banned per patch, tested on Worlds drafts). **Use only the games in the current Oracle's Elixir file**; don't wait for or assume knockout results (Luke, 4 Nov) |
-| Sim session 2, part 2 progress (5 Nov) | Done: role-by-role tests, comfort by event, time together, bans and pools, pool depth study (`research/sim2/README.md` steps 7–10). Candidates for who-wins: jungle comfort (big events), time together (jungle–mid, jungle–ADC), jungle pool, ADC champion strength. **Pool added as a card skill** (sim-plan). Then (same day) power curves, comp profile and the draft meta model: done (steps 11–13). Part 2 written up in `research/sim2-report.md` (Part 2 section). v2 candidate fixed 5 Nov (jungle comfort, jungle pool, jungler–mid and jungler–ADC time together; sim-plan). **Next:** session 3 (game-state sim) |
+| Sim session 2 (done 5 Nov) | Done: role-by-role tests, comfort by event, time together, bans and pools, pool depth study (`research/sim2/README.md` steps 7–10). Candidates for who-wins: jungle comfort (big events), time together (jungle–mid, jungle–ADC), jungle pool, ADC champion strength. **Pool added as a card skill** (sim-plan). Then (same day) power curves, comp profile and the draft meta model: done (steps 11–13). Part 2 written up in `research/sim2-report.md` (Part 2 section). v2 candidate fixed 5 Nov (jungle comfort, jungle pool, jungler–mid and jungler–ADC time together; sim-plan). **Next:** session 3 (game-state sim) |
 | Knockout test of the v2 candidate (running) | 5 Nov file: IG 3–1 TES (4 games, checked against Leaguepedia). v1 0.6692 v candidate 0.6935, favourite 2/4 each. Too few to judge; add each new knockout series with `research/sim2/s2_score_candidate.py` |
 | When a newer file has the knockouts | **Score the fixed v2 candidate** (`research/model/sim2/v2_candidate.json`, fixed 5 Nov, not to be changed) against v1 on the knockout games only. Also re-test lolalytics synergy at half strength (chosen after seeing the test games, so not yet fair), the experience test, and every session 2 part on the new games |
 | Sim sessions 3–5 | After session 2, in order (see the plan) |
-| Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | Waits for the games and the next Oracle's Elixir file. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
+| Add knockouts (quarter-finals 3–6 Nov, semi-finals 7–8 Nov, final 14 Nov, US dates) | QF1 IG 3–1 TES added (v39). Next: QF2–4 when a newer file has them. Score each match day with the app before adding. Steps in `research/worlds-live-2026.md` |
 | Draft Game next steps | Pick one when wanted (feel tweaks, real data, Tier 2, smarter AI, Bo series); see the handoff file |
 
 **Parked:** Custom tournament (Play → Custom). Planned feature, not being worked on yet (Luke, 29 Oct).
@@ -61,6 +60,12 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 
 ## Recent updates
 
+### Session (5 Nov 2026, AEST) — sim session 2 part 2, v2 candidate, v39 (QF1)
+- **Sim session 2 part 2:** role-by-role tests (41), comfort at big events, player time together, bans, pool depth (Pool added as a card skill), power curves, comp profile, draft meta model (60% of picks/bans in its top 20). Report: `research/sim2-report.md` Part 2; steps 7–15 in `research/sim2/README.md`. Committed `c1eac68`, `5dd1fe7`, pushed.
+- **v2 candidate fixed** before any knockout game was in the file (sim-plan; `research/model/sim2/v2_candidate.json`, SHA-256 recorded). Committed `fca556f`, pushed.
+- **New Oracle's Elixir file** (to 4 Nov 02:20 UTC): IG 3–1 TES checked against Leaguepedia. v1 re-run: earlier games' odds unchanged. Knockout score so far: v1 0.669, candidate 0.694 (4 games).
+- **v39:** QF1 scored with the app first (v38: favourite 2 of 4, log loss 0.773; running total 35 of 55), then added to `js/worlds-live.js` (55 games); `build_from_oe.py` on a scratch copy: 55/55 OK, `js/h2h.js` rebuilt (IG v TES 11–11); "Swiss games" wording now "Swiss and knockout games" (ⓘ panel, champion pages, player game log, README). Cache v38 → v39. How checked: local server in a new browser-pane tab; data counts, H2H, Wei/Tian logs and Qiyana's counts read in the console; all 16 pages render at desktop and none scrolls sideways at 375 px; console clean. Server stopped, tabs closed, `.claude/launch.json` removed.
+
 ### Session (4 Nov 2026, AEST) — sim session 2, part 1
 - **Plan agreed** (Luke, "yes go ahead"): seven parts measured beyond v1, three outside sources per part, data cut-off at the file (no knockouts); Luke's current-meta principle recorded. All in `research/sim-plan.md`.
 - **Report:** `research/sim2-report.md`; working files and every number's source: `research/sim2/README.md`; tables in `research/model/sim2/`.
@@ -80,17 +85,6 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 - Committed `0ff5d1f` and pushed.
 - Tidy at end of session: `research/sim1/experience_progress.md` marked as a superseded mid-session note; `CLAUDE.md` Files table lists `research/sim1/`, `research/model/sim1/` and the report. Node.js is not installed on this PC, so app values are read through the browser pane (noted in Claude's memory).
 
-### Session (2 Nov 2026, AEST) — v38: Swiss round 5, HLE–G2 confirmed
-- **New Oracle's Elixir file** (9,857 games, data to 1 Nov 11:42 UTC; last Worlds game 31 Oct 23:05 UTC): has HLE–G2 and all of round 5.
-- **HLE 2-0 G2:** matches the file on every field (incl. Hans Sama's 212 CS and the grubs); rows replaced with the file's, adding CS@15.
-- **Round 5** (31 Oct): KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE added from the file; all 7 games match Leaguepedia's Round 5 scoreboards (lengths, bans, objectives, champions, K/D/A, CS). 51 games now.
-- **Out-of-sample (v37 before the update):** favourite 6 of 7, log loss 0.629, Brier 0.201. Running total: 33 of 51 (65%). KC 89% and LYON 89% / 86% above the ceiling.
-- `build_from_oe.py` on a scratch copy: 51/51 OK; `js/h2h.js` rebuilt to 31 Oct (BLG v HLE 7-4, KC v MKOI 17-8, LOS v LYON 3-2); HLE v G2 5-0 now comes from the file. Pick, ban and win counts for all 90 champions match Leaguepedia (51 games).
-- Cache v37 → v38. How checked: local server in a new browser-pane tab, data counts and H2H read in the console, 8 pages render at desktop, no sideways scroll on 5 pages at 375 px, console clean. Server stopped, tabs closed, `.claude/launch.json` removed.
-- Also: v37 committed `bd396b3` and pushed. Luke's time zone (AEST) saved in Claude's memory and noted above.
-- Committed `b1ed266` and pushed.
-- **Sim session 1 (same day, later):** planned with Luke (8 decisions + role skills table, committed `c845ba7`), then fitted and tested in scratch: team ratings from results (league, side, 90-day recency), player skills with a league shift per role, S5 card scale adopted, extra Worlds weight dropped (test), experience tested (not adopted yet), sources checked against Leaguepedia and gol.gg, fixed ID lookup built, new model beats the app on the 51 Swiss games (0.639 v 0.679). Copied to `research/sim1/` and `research/model/sim1/` for the next session; `research/sim-plan.md` updated. Committed `82264c0` and pushed (git showed main up to date with origin on 3 Nov). Report moved to a new chat because this one reached 93% context.
-
 ---
 
 ## Session index
@@ -102,3 +96,4 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 | 29 Oct 2026 (later) | v31: Subway and Arcade Smash themes, role-page game log hover, ticker fix, side-coloured pick/ban tags, Swiss round 4 day 1 data |
 | 30 Oct 2026 | v32: Swiss round 4 day 2 (KC–CFO from the file, TES–BLG from Leaguepedia), aged subway sign (`4fe2ab1`); v33: champion card "Counters" row (`7b3c221`) |
 | 31 Oct 2026 | v34: Swiss R4 day 3 data (`889b55d`); v35: header and legend tidy-up, ranked team picker (`8359d05`); v36: champ select tidy-ups (`5d53243`); v37: pick/ban board (`bd396b3`). Notes-session overlay saved (`tools/qol-notes-overlay.js`) |
+| 2 Nov 2026 | v38: Swiss round 5 data, HLE–G2 confirmed (`b1ed266`); sim session 1 planned, fitted and tested (`c845ba7`, `82264c0`) |
