@@ -55,3 +55,6 @@ Oracle's Elixir check of js/worlds-live.js · 2026-11-05 · 2026_LoL_esports_mat
 2026-11-03 IG vs TES g2: OK
 2026-11-03 TES vs IG g3: OK
 2026-11-03 IG vs TES g4: OK
+2026-11-04 GEN vs LYON g1: OK
+2026-11-04 GEN vs LYON g2: OK
+2026-11-04 GEN vs LYON g3: OK

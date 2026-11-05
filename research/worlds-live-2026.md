@@ -1,6 +1,23 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 2 Nov 2026 (AEST): **51 games**, the whole Swiss stage: rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+Updated 5 Nov 2026 (AEST): **58 games**: quarter-finals 1–2 (IG 3–1 TES, GEN 3–0 LYON; sections below) and the whole Swiss stage (51 games): rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+
+## Quarter-final 2: GEN 3–0 LYON (added 5 Nov, v40)
+- **Newer Oracle's Elixir file** (Luke, 5 Nov 16:40 AEST): 9,864 games, data to 4 Nov 23:54 UTC; one new Worlds series, Gen.G 3–0 LYON (4 Nov US and UTC; patch 16.20).
+- **Checked against Leaguepedia** (https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Quarterfinals, read 5 Nov): Gen.G blue and winning in all three, lengths 32:13 / 26:32 / 33:29, kills 19–8 / 22–6 / 16–10, all 30 champions and all 30 bans match.
+- Rows built from the file (`r:"QF"`, `d:"2026-11-04"`); first pick LYON in games 1–2, Gen.G in game 3. 58 games now.
+- `build_from_oe.py` on a scratch copy: 58/58 Worlds games OK; `js/h2h.js` rebuilt to 4 Nov: GEN v LYON 5–1 → 8–1 (the only change). Its `worlds-live.js` output differed only in the play-in team list order (same content), so that file was edited directly instead.
+
+## Out-of-sample check, quarter-final 2 (the app at v39, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| GEN vs LYON G1 (GEN blue) | GEN 85% | GEN won |
+| GEN vs LYON G2 (GEN blue) | GEN 96% | GEN won |
+| GEN vs LYON G3 (GEN blue) | GEN 79% | GEN won |
+
+- Favourite won 3 of 3; log loss 0.147, Brier 0.023. Two of the three are above the ~80% ceiling (85%, 96%).
+- Running total across all real Worlds main-event games scored before their data was added: 35 of 55 + 3 of 3 = **38 of 58 (66%)**.
+- The research models on all 7 knockout games so far (no drafts): v1 0.453, the fixed v2 candidate 0.469 (`research/sim2/README.md` step 15).
 
 ## Quarter-final 1: IG 3–1 TES (added 5 Nov, v39)
 - **New Oracle's Elixir file** (Luke, 5 Nov AEST): 9,861 games, data to 4 Nov 02:20 UTC; one new Worlds series, IG 3–1 TES (3 Nov US; 3–4 Nov UTC; patch 16.20).
