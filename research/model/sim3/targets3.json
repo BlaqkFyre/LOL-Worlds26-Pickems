@@ -1,0 +1,502 @@
+{
+ "before 1 Sep": {
+  "games": 2534,
+  "length_min": {
+   "mean": 32.6,
+   "sd": 5.26,
+   "p10": 26.2,
+   "median": 31.97,
+   "p90": 39.4
+  },
+  "kills_total": {
+   "mean": 29.03,
+   "sd": 8.47,
+   "p10": 19.0,
+   "median": 28.0,
+   "p90": 40.0
+  },
+  "kills_per_team": {
+   "mean": 14.52,
+   "sd": 7.18,
+   "p10": 5.0,
+   "median": 15.0,
+   "p90": 24.0
+  },
+  "towers_total": {
+   "mean": 11.5,
+   "sd": 2.27,
+   "p10": 9.0,
+   "median": 11.0,
+   "p90": 14.0
+  },
+  "dragons_total": {
+   "mean": 4.6,
+   "sd": 1.03,
+   "p10": 3.0,
+   "median": 5.0,
+   "p90": 6.0
+  },
+  "barons_total": {
+   "mean": 1.38,
+   "sd": 0.69,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 2.0
+  },
+  "grubs_total": {
+   "mean": 2.94,
+   "sd": 0.35,
+   "p10": 3.0,
+   "median": 3.0,
+   "p90": 3.0
+  },
+  "heralds_total": {
+   "mean": 0.98,
+   "sd": 0.14,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 1.0
+  },
+  "elders_total": {
+   "mean": 0.09,
+   "sd": 0.31,
+   "p10": 0.0,
+   "median": 0.0,
+   "p90": 0.0
+  },
+  "blue_win": 0.555,
+  "first_dragon_team_wins": 0.61,
+  "first_baron_team_wins": 0.851,
+  "first_tower_team_wins": 0.679,
+  "more_grubs_team_wins": 0.536,
+  "soul_games": 0.457,
+  "gold_lead_10": {
+   "mean": 1028.63,
+   "sd": 798.66,
+   "p10": 165.0,
+   "median": 859.5,
+   "p90": 2112.7
+  },
+  "lead_10_team_wins": 0.664,
+  "gold_lead_15": {
+   "mean": 1958.81,
+   "sd": 1556.28,
+   "p10": 278.0,
+   "median": 1611.0,
+   "p90": 4068.2
+  },
+  "lead_15_team_wins": 0.715,
+  "gold_lead_20": {
+   "mean": 3263.38,
+   "sd": 2487.68,
+   "p10": 548.6,
+   "median": 2754.5,
+   "p90": 6699.4
+  },
+  "lead_20_team_wins": 0.763,
+  "gold_lead_25": {
+   "mean": 4993.94,
+   "sd": 3729.87,
+   "p10": 834.0,
+   "median": 4208.0,
+   "p90": 10298.0
+  },
+  "lead_25_team_wins": 0.831,
+  "role_kill_share": {
+   "top": 0.1786,
+   "jng": 0.2241,
+   "mid": 0.2482,
+   "bot": 0.2976,
+   "sup": 0.0515
+  },
+  "role_death_share": {
+   "top": 0.1987,
+   "jng": 0.2157,
+   "mid": 0.1862,
+   "bot": 0.184,
+   "sup": 0.2154
+  },
+  "role_assist_per_team_kill": {
+   "top": 0.3459,
+   "jng": 0.4948,
+   "mid": 0.4054,
+   "bot": 0.3675,
+   "sup": 0.6919
+  }
+ },
+ "16.15+": {
+  "games": 776,
+  "length_min": {
+   "mean": 32.43,
+   "sd": 5.49,
+   "p10": 25.78,
+   "median": 31.61,
+   "p90": 39.97
+  },
+  "kills_total": {
+   "mean": 28.11,
+   "sd": 8.14,
+   "p10": 18.0,
+   "median": 27.0,
+   "p90": 39.0
+  },
+  "kills_per_team": {
+   "mean": 14.05,
+   "sd": 7.02,
+   "p10": 5.0,
+   "median": 14.0,
+   "p90": 23.0
+  },
+  "towers_total": {
+   "mean": 11.64,
+   "sd": 2.21,
+   "p10": 9.0,
+   "median": 12.0,
+   "p90": 14.0
+  },
+  "dragons_total": {
+   "mean": 4.5,
+   "sd": 1.22,
+   "p10": 3.0,
+   "median": 4.0,
+   "p90": 6.0
+  },
+  "barons_total": {
+   "mean": 1.4,
+   "sd": 0.71,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 2.0
+  },
+  "grubs_total": {
+   "mean": 2.95,
+   "sd": 0.38,
+   "p10": 3.0,
+   "median": 3.0,
+   "p90": 3.0
+  },
+  "heralds_total": {
+   "mean": 0.98,
+   "sd": 0.15,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 1.0
+  },
+  "elders_total": {
+   "mean": 0.09,
+   "sd": 0.32,
+   "p10": 0.0,
+   "median": 0.0,
+   "p90": 0.0
+  },
+  "blue_win": 0.599,
+  "first_dragon_team_wins": 0.586,
+  "first_baron_team_wins": 0.852,
+  "first_tower_team_wins": 0.698,
+  "more_grubs_team_wins": 0.573,
+  "soul_games": 0.419,
+  "gold_lead_10": {
+   "mean": 1061.19,
+   "sd": 811.97,
+   "p10": 166.4,
+   "median": 893.0,
+   "p90": 2183.2
+  },
+  "lead_10_team_wins": 0.646,
+  "gold_lead_15": {
+   "mean": 2022.08,
+   "sd": 1624.71,
+   "p10": 314.5,
+   "median": 1645.0,
+   "p90": 4217.5
+  },
+  "lead_15_team_wins": 0.719,
+  "gold_lead_20": {
+   "mean": 3318.16,
+   "sd": 2522.0,
+   "p10": 557.2,
+   "median": 2694.0,
+   "p90": 6850.8
+  },
+  "lead_20_team_wins": 0.736,
+  "gold_lead_25": {
+   "mean": 5087.19,
+   "sd": 3779.0,
+   "p10": 887.5,
+   "median": 4209.5,
+   "p90": 10613.0
+  },
+  "lead_25_team_wins": 0.812,
+  "role_kill_share": {
+   "top": 0.1902,
+   "jng": 0.2136,
+   "mid": 0.261,
+   "bot": 0.2899,
+   "sup": 0.0454
+  },
+  "role_death_share": {
+   "top": 0.2059,
+   "jng": 0.2168,
+   "mid": 0.1866,
+   "bot": 0.186,
+   "sup": 0.2047
+  },
+  "role_assist_per_team_kill": {
+   "top": 0.348,
+   "jng": 0.5014,
+   "mid": 0.4047,
+   "bot": 0.3767,
+   "sup": 0.7117
+  }
+ },
+ "from 1 Sep": {
+  "games": 318,
+  "length_min": {
+   "mean": 32.27,
+   "sd": 5.56,
+   "p10": 25.6,
+   "median": 31.57,
+   "p90": 39.91
+  },
+  "kills_total": {
+   "mean": 26.9,
+   "sd": 7.27,
+   "p10": 18.0,
+   "median": 26.0,
+   "p90": 37.0
+  },
+  "kills_per_team": {
+   "mean": 13.45,
+   "sd": 6.71,
+   "p10": 5.0,
+   "median": 14.0,
+   "p90": 22.0
+  },
+  "towers_total": {
+   "mean": 11.74,
+   "sd": 2.21,
+   "p10": 9.0,
+   "median": 12.0,
+   "p90": 15.0
+  },
+  "dragons_total": {
+   "mean": 4.45,
+   "sd": 1.37,
+   "p10": 3.0,
+   "median": 4.0,
+   "p90": 6.0
+  },
+  "barons_total": {
+   "mean": 1.42,
+   "sd": 0.7,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 2.0
+  },
+  "grubs_total": {
+   "mean": 2.91,
+   "sd": 0.52,
+   "p10": 3.0,
+   "median": 3.0,
+   "p90": 3.0
+  },
+  "heralds_total": {
+   "mean": 0.96,
+   "sd": 0.21,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 1.0
+  },
+  "elders_total": {
+   "mean": 0.11,
+   "sd": 0.33,
+   "p10": 0.0,
+   "median": 0.0,
+   "p90": 0.3
+  },
+  "blue_win": 0.566,
+  "first_dragon_team_wins": 0.588,
+  "first_baron_team_wins": 0.844,
+  "first_tower_team_wins": 0.697,
+  "more_grubs_team_wins": 0.549,
+  "soul_games": 0.406,
+  "gold_lead_10": {
+   "mean": 1086.47,
+   "sd": 828.08,
+   "p10": 167.9,
+   "median": 913.5,
+   "p90": 2109.6
+  },
+  "lead_10_team_wins": 0.628,
+  "gold_lead_15": {
+   "mean": 2020.18,
+   "sd": 1618.99,
+   "p10": 376.6,
+   "median": 1604.0,
+   "p90": 4008.7
+  },
+  "lead_15_team_wins": 0.717,
+  "gold_lead_20": {
+   "mean": 3324.93,
+   "sd": 2498.7,
+   "p10": 787.1,
+   "median": 2663.0,
+   "p90": 6582.1
+  },
+  "lead_20_team_wins": 0.737,
+  "gold_lead_25": {
+   "mean": 5184.9,
+   "sd": 3888.16,
+   "p10": 828.0,
+   "median": 4252.0,
+   "p90": 10595.2
+  },
+  "lead_25_team_wins": 0.783,
+  "role_kill_share": {
+   "top": 0.1868,
+   "jng": 0.2138,
+   "mid": 0.2628,
+   "bot": 0.2929,
+   "sup": 0.0436
+  },
+  "role_death_share": {
+   "top": 0.2084,
+   "jng": 0.2186,
+   "mid": 0.1873,
+   "bot": 0.1919,
+   "sup": 0.1938
+  },
+  "role_assist_per_team_kill": {
+   "top": 0.3469,
+   "jng": 0.4886,
+   "mid": 0.3931,
+   "bot": 0.3738,
+   "sup": 0.72
+  }
+ },
+ "Worlds": {
+  "games": 80,
+  "length_min": {
+   "mean": 33.14,
+   "sd": 5.78,
+   "p10": 26.5,
+   "median": 32.89,
+   "p90": 40.0
+  },
+  "kills_total": {
+   "mean": 25.55,
+   "sd": 6.22,
+   "p10": 18.0,
+   "median": 25.0,
+   "p90": 33.2
+  },
+  "kills_per_team": {
+   "mean": 12.78,
+   "sd": 6.13,
+   "p10": 5.0,
+   "median": 12.0,
+   "p90": 21.0
+  },
+  "towers_total": {
+   "mean": 11.78,
+   "sd": 2.07,
+   "p10": 9.0,
+   "median": 11.5,
+   "p90": 15.0
+  },
+  "dragons_total": {
+   "mean": 4.79,
+   "sd": 1.14,
+   "p10": 3.0,
+   "median": 5.0,
+   "p90": 6.0
+  },
+  "barons_total": {
+   "mean": 1.36,
+   "sd": 0.68,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 2.0
+  },
+  "grubs_total": {
+   "mean": 3.0,
+   "sd": 0.0,
+   "p10": 3.0,
+   "median": 3.0,
+   "p90": 3.0
+  },
+  "heralds_total": {
+   "mean": 1.0,
+   "sd": 0.0,
+   "p10": 1.0,
+   "median": 1.0,
+   "p90": 1.0
+  },
+  "elders_total": {
+   "mean": 0.16,
+   "sd": 0.4,
+   "p10": 0.0,
+   "median": 0.0,
+   "p90": 1.0
+  },
+  "blue_win": 0.575,
+  "first_dragon_team_wins": 0.613,
+  "first_baron_team_wins": 0.813,
+  "first_tower_team_wins": 0.65,
+  "more_grubs_team_wins": 0.5,
+  "soul_games": 0.438,
+  "gold_lead_10": {
+   "mean": 1034.38,
+   "sd": 787.77,
+   "p10": 137.1,
+   "median": 913.0,
+   "p90": 1903.6
+  },
+  "lead_10_team_wins": 0.588,
+  "gold_lead_15": {
+   "mean": 1782.89,
+   "sd": 1376.73,
+   "p10": 389.3,
+   "median": 1398.5,
+   "p90": 3546.0
+  },
+  "lead_15_team_wins": 0.675,
+  "gold_lead_20": {
+   "mean": 3222.49,
+   "sd": 2171.02,
+   "p10": 884.8,
+   "median": 2584.5,
+   "p90": 6069.7
+  },
+  "lead_20_team_wins": 0.738,
+  "gold_lead_25": {
+   "mean": 4625.03,
+   "sd": 3311.45,
+   "p10": 1213.3,
+   "median": 4026.0,
+   "p90": 8740.7
+  },
+  "lead_25_team_wins": 0.808,
+  "role_kill_share": {
+   "top": 0.1835,
+   "jng": 0.2172,
+   "mid": 0.2622,
+   "bot": 0.2886,
+   "sup": 0.0484
+  },
+  "role_death_share": {
+   "top": 0.2088,
+   "jng": 0.2044,
+   "mid": 0.1917,
+   "bot": 0.1863,
+   "sup": 0.2088
+  },
+  "role_assist_per_team_kill": {
+   "top": 0.3542,
+   "jng": 0.5034,
+   "mid": 0.3958,
+   "bot": 0.3738,
+   "sup": 0.7099
+  }
+ }
+}

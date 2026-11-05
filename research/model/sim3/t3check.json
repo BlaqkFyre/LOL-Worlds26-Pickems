@@ -1,0 +1,51 @@
+{
+ "real": {
+  "held-out": {
+   "lanes_T2_to_T3": 388,
+   "T2_to_T3_s": {
+    "median": 89,
+    "p25": 20,
+    "p75": 326
+   },
+   "T3_segments": 2334,
+   "share_under_baron": 0.569,
+   "share_after_won_minute": 0.578,
+   "minutes_T3_standing": 3435,
+   "segments_per_minute": 0.441,
+   "minutes_with_0_1to2_3plus": [
+    0.827,
+    0.099,
+    0.074
+   ],
+   "T3_falls_under_baron": 0.608
+  },
+  "train": {
+   "lanes_T2_to_T3": 688,
+   "T2_to_T3_s": {
+    "median": 127,
+    "p25": 28,
+    "p75": 335
+   },
+   "T3_segments": 4076,
+   "share_under_baron": 0.592,
+   "share_after_won_minute": 0.577,
+   "minutes_T3_standing": 5478,
+   "segments_per_minute": 0.482,
+   "minutes_with_0_1to2_3plus": [
+    0.812,
+    0.105,
+    0.083
+   ],
+   "T3_falls_under_baron": 0.596
+  }
+ },
+ "sim": {
+  "lanes_T2_to_T3": 993,
+  "T2_to_T3_s": {
+   "median": 214,
+   "p25": 32,
+   "p75": 447
+  },
+  "T3_falls_under_baron": 0.309
+ }
+}

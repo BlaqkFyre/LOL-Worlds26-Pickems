@@ -100,6 +100,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 | `research/build/build_from_oe.py` | Rebuilds `js/h2h.js`, `research/model/h2h_2026.json` and the play-in tables in `js/worlds-live.js` from the Oracle's Elixir CSV, and checks the Swiss games (see Repo rules before running) |
 | `research/model/` | Tables built from the Oracle's Elixir file (`h2h_2026.json`; sim session 1 results in `model/sim1/`) |
 | `research/sim2/`, `research/sim2-report.md` | Sim session 2 scripts, outside-source extracts (lolalytics, gol.gg, Leaguepedia) and notes (start with its README), and the part 1 report. Results in `research/model/sim2/` |
+| `research/sim3/`, `research/sim3-report.md` | Sim session 3: the minute-by-minute game-state sim (`s3_sim.py`), gol.gg timeline pull and fits, held-out tests (start with its README). Small tables in `research/model/sim3/`; raw timelines stay local. Comps options and their tests: `research/comps-plan.md` |
 | `research/sim1/`, `research/sim1-report.md` | Sim session 1 scripts and notes (start with its README; scripts run from a scratch copy, Python + pandas), and the session 1 report with the scorecard |
 | `Draft Game/` | Separate pick/ban card game (`index.html`) and its handoff file |
 | `tools/qol-notes-overlay.js` | Note-taking overlay for notes sessions (pasted into a browser tab; not loaded by the app) |

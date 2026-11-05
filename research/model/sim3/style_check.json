@@ -1,0 +1,115 @@
+{
+ "games": 231,
+ "n_sims": 40,
+ "mode": "timing",
+ "links": {
+  "pace -> kills_per_min": {
+   "real_corr": 0.189,
+   "sim_corr": 0.729,
+   "real_per_0.1": 0.032,
+   "sim_per_0.1": 0.041
+  },
+  "pace -> first_tower_s": {
+   "real_corr": -0.031,
+   "sim_corr": -0.072,
+   "real_per_0.1": -3.338,
+   "sim_per_0.1": -1.821
+  },
+  "pace -> towers": {
+   "real_corr": -0.026,
+   "sim_corr": -0.181,
+   "real_per_0.1": -0.043,
+   "sim_per_0.1": -0.062
+  },
+  "pace -> first_dragon_wait_s": {
+   "real_corr": 0.116,
+   "sim_corr": 0.017,
+   "real_per_0.1": 11.937,
+   "sim_per_0.1": 0.324
+  },
+  "pace -> first_baron_s": {
+   "real_corr": -0.045,
+   "sim_corr": -0.158,
+   "real_per_0.1": -7.922,
+   "sim_per_0.1": -4.866
+  },
+  "pace -> length_min": {
+   "real_corr": -0.063,
+   "sim_corr": -0.301,
+   "real_per_0.1": -0.275,
+   "sim_per_0.1": -0.291
+  },
+  "siege -> kills_per_min": {
+   "real_corr": -0.059,
+   "sim_corr": 0.053,
+   "real_per_0.1": -0.017,
+   "sim_per_0.1": 0.005
+  },
+  "siege -> first_tower_s": {
+   "real_corr": -0.055,
+   "sim_corr": -0.118,
+   "real_per_0.1": -9.91,
+   "sim_per_0.1": -4.922
+  },
+  "siege -> towers": {
+   "real_corr": -0.046,
+   "sim_corr": 0.05,
+   "real_per_0.1": -0.125,
+   "sim_per_0.1": 0.028
+  },
+  "siege -> first_dragon_wait_s": {
+   "real_corr": 0.055,
+   "sim_corr": 0.07,
+   "real_per_0.1": 9.374,
+   "sim_per_0.1": 2.152
+  },
+  "siege -> first_baron_s": {
+   "real_corr": 0.058,
+   "sim_corr": 0.004,
+   "real_per_0.1": 16.164,
+   "sim_per_0.1": 0.214
+  },
+  "siege -> length_min": {
+   "real_corr": -0.055,
+   "sim_corr": -0.083,
+   "real_per_0.1": -0.393,
+   "sim_per_0.1": -0.131
+  },
+  "obj -> kills_per_min": {
+   "real_corr": -0.019,
+   "sim_corr": 0.207,
+   "real_per_0.1": -0.006,
+   "sim_per_0.1": 0.022
+  },
+  "obj -> first_tower_s": {
+   "real_corr": -0.085,
+   "sim_corr": -0.023,
+   "real_per_0.1": -17.654,
+   "sim_per_0.1": -1.125
+  },
+  "obj -> towers": {
+   "real_corr": -0.007,
+   "sim_corr": -0.083,
+   "real_per_0.1": -0.021,
+   "sim_per_0.1": -0.054
+  },
+  "obj -> first_dragon_wait_s": {
+   "real_corr": 0.027,
+   "sim_corr": 0.11,
+   "real_per_0.1": 5.221,
+   "sim_per_0.1": 3.919
+  },
+  "obj -> first_baron_s": {
+   "real_corr": -0.04,
+   "sim_corr": 0.054,
+   "real_per_0.1": -12.869,
+   "sim_per_0.1": 3.079
+  },
+  "obj -> length_min": {
+   "real_corr": -0.023,
+   "sim_corr": -0.117,
+   "real_per_0.1": -0.193,
+   "sim_per_0.1": -0.214
+  }
+ }
+}

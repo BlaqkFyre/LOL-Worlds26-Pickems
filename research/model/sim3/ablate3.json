@@ -1,0 +1,45 @@
+{
+ "n_sims": 200,
+ "full": {
+  "from 1 Sep": {
+   "n": 304,
+   "sim": 0.6348,
+   "v1": 0.6396,
+   "mean_gap_to_v1": 0.0369
+  },
+  "Worlds": {
+   "n": 80,
+   "sim": 0.626,
+   "v1": 0.6278,
+   "mean_gap_to_v1": 0.0355
+  }
+ },
+ "no draft styles": {
+  "from 1 Sep": {
+   "n": 304,
+   "sim": 0.6324,
+   "v1": 0.6396,
+   "mean_gap_to_v1": 0.038
+  },
+  "Worlds": {
+   "n": 80,
+   "sim": 0.6174,
+   "v1": 0.6278,
+   "mean_gap_to_v1": 0.0339
+  }
+ },
+ "no draft styles, no lane inputs": {
+  "from 1 Sep": {
+   "n": 304,
+   "sim": 0.6332,
+   "v1": 0.6396,
+   "mean_gap_to_v1": 0.0369
+  },
+  "Worlds": {
+   "n": 80,
+   "sim": 0.6153,
+   "v1": 0.6278,
+   "mean_gap_to_v1": 0.0323
+  }
+ }
+}

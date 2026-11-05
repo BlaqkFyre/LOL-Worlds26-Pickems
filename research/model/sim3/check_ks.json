@@ -1,0 +1,195 @@
+{
+ "real_fights_by_phase_and_lead": {
+  "0-13 | <2k": {
+   "minutes": 5072.0,
+   "fights_per_min": 0.301,
+   "kills_per_min": 0.487
+  },
+  "0-13 | 2-5k": {
+   "minutes": 440.0,
+   "fights_per_min": 0.391,
+   "kills_per_min": 0.716
+  },
+  "0-13 | 5-9k": {
+   "minutes": 18.0,
+   "fights_per_min": 0.444,
+   "kills_per_min": 0.778
+  },
+  "14-24 | <2k": {
+   "minutes": 1837.0,
+   "fights_per_min": 0.446,
+   "kills_per_min": 0.892
+  },
+  "14-24 | 2-5k": {
+   "minutes": 1678.0,
+   "fights_per_min": 0.423,
+   "kills_per_min": 0.922
+  },
+  "14-24 | 5-9k": {
+   "minutes": 684.0,
+   "fights_per_min": 0.449,
+   "kills_per_min": 1.083
+  },
+  "14-24 | 9k+": {
+   "minutes": 128.0,
+   "fights_per_min": 0.492,
+   "kills_per_min": 1.227
+  },
+  "25-34 | <2k": {
+   "minutes": 625.0,
+   "fights_per_min": 0.424,
+   "kills_per_min": 1.158
+  },
+  "25-34 | 2-5k": {
+   "minutes": 921.0,
+   "fights_per_min": 0.474,
+   "kills_per_min": 1.326
+  },
+  "25-34 | 5-9k": {
+   "minutes": 762.0,
+   "fights_per_min": 0.478,
+   "kills_per_min": 1.353
+  },
+  "25-34 | 9k+": {
+   "minutes": 406.0,
+   "fights_per_min": 0.51,
+   "kills_per_min": 1.525
+  },
+  "35+ | <2k": {
+   "minutes": 163.0,
+   "fights_per_min": 0.472,
+   "kills_per_min": 1.35
+  },
+  "35+ | 2-5k": {
+   "minutes": 199.0,
+   "fights_per_min": 0.528,
+   "kills_per_min": 1.472
+  },
+  "35+ | 5-9k": {
+   "minutes": 122.0,
+   "fights_per_min": 0.459,
+   "kills_per_min": 1.566
+  },
+  "35+ | 9k+": {
+   "minutes": 45.0,
+   "fights_per_min": 0.378,
+   "kills_per_min": 1.511
+  }
+ },
+ "real_kills_by_length": {
+  "(0, 28]": 23.6,
+  "(28, 32]": 25.9,
+  "(32, 36]": 25.1,
+  "(36, 40]": 28.2,
+  "(40, 99]": 30.2
+ },
+ "real_kills_sd": 7.05,
+ "real_dragons": {
+  "before 1 Sep": {
+   "next_to_last_taker": 0.607,
+   "next_to_team_with_more": 0.59,
+   "soul_games": 0.453,
+   "dragons": 1775,
+   "games": 395
+  },
+  "from 1 Sep": {
+   "next_to_last_taker": 0.577,
+   "next_to_team_with_more": 0.555,
+   "soul_games": 0.445,
+   "dragons": 1042,
+   "games": 227
+  }
+ },
+ "sim_kills_by_length": {
+  "(0, 28]": 20.9,
+  "(28, 32]": 24.2,
+  "(32, 36]": 30.1,
+  "(36, 40]": 35.2,
+  "(40, 99]": 41.5
+ },
+ "sim_kills_sd": 12.87,
+ "sim_dragons": {
+  "next_to_last_taker": 0.588,
+  "next_to_team_with_more": 0.589,
+  "soul_games": 0.507,
+  "dragons": 2709,
+  "games": 600
+ },
+ "sim_fights_by_phase_and_lead": {
+  "0-13 | <2k": {
+   "minutes": 7263.0,
+   "fights_per_min": 0.269,
+   "kills_per_min": 0.486
+  },
+  "0-13 | 2-5k": {
+   "minutes": 1082.0,
+   "fights_per_min": 0.25,
+   "kills_per_min": 0.487
+  },
+  "0-13 | 5-9k": {
+   "minutes": 55.0,
+   "fights_per_min": 0.218,
+   "kills_per_min": 0.527
+  },
+  "14-24 | <2k": {
+   "minutes": 2917.0,
+   "fights_per_min": 0.358,
+   "kills_per_min": 0.914
+  },
+  "14-24 | 2-5k": {
+   "minutes": 2417.0,
+   "fights_per_min": 0.357,
+   "kills_per_min": 0.939
+  },
+  "14-24 | 5-9k": {
+   "minutes": 961.0,
+   "fights_per_min": 0.376,
+   "kills_per_min": 1.024
+  },
+  "14-24 | 9k+": {
+   "minutes": 242.0,
+   "fights_per_min": 0.372,
+   "kills_per_min": 1.116
+  },
+  "25-34 | <2k": {
+   "minutes": 1196.0,
+   "fights_per_min": 0.375,
+   "kills_per_min": 1.31
+  },
+  "25-34 | 2-5k": {
+   "minutes": 1423.0,
+   "fights_per_min": 0.392,
+   "kills_per_min": 1.298
+  },
+  "25-34 | 5-9k": {
+   "minutes": 1131.0,
+   "fights_per_min": 0.357,
+   "kills_per_min": 1.155
+  },
+  "25-34 | 9k+": {
+   "minutes": 474.0,
+   "fights_per_min": 0.426,
+   "kills_per_min": 1.502
+  },
+  "35+ | <2k": {
+   "minutes": 461.0,
+   "fights_per_min": 0.358,
+   "kills_per_min": 1.362
+  },
+  "35+ | 2-5k": {
+   "minutes": 525.0,
+   "fights_per_min": 0.345,
+   "kills_per_min": 1.36
+  },
+  "35+ | 5-9k": {
+   "minutes": 384.0,
+   "fights_per_min": 0.419,
+   "kills_per_min": 1.409
+  },
+  "35+ | 9k+": {
+   "minutes": 146.0,
+   "fights_per_min": 0.438,
+   "kills_per_min": 1.747
+  }
+ }
+}

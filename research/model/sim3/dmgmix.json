@@ -1,0 +1,502 @@
+{
+ "labels": {
+  "wiki_champions": 173,
+  "unknown_damage_tag": [
+   "Evelynn",
+   "Katarina",
+   "Renata Glasc"
+  ],
+  "frontline_champions": 22,
+  "pro_champions_not_in_wiki": [],
+  "app_CHAMP_AP_v_wiki": {
+   "champions": 155,
+   "agree": 141,
+   "app_magic_wiki_physical": [
+    "Sion",
+    "Poppy",
+    "Smolder",
+    "Skarner"
+   ],
+   "app_physical_wiki_magic": [
+    "Braum",
+    "Thresh",
+    "Blitzcrank",
+    "Locke"
+   ]
+  },
+  "ddragon_magic_rating_by_wiki_type": [
+   {
+    "mag": 0.0,
+    "mean": 2.96,
+    "min": 0,
+    "max": 7,
+    "count": 73
+   },
+   {
+    "mag": 0.5,
+    "mean": 4.0,
+    "min": 3,
+    "max": 6,
+    "count": 7
+   },
+   {
+    "mag": 1.0,
+    "mean": 7.15,
+    "min": 0,
+    "max": 10,
+    "count": 75
+   }
+  ]
+ },
+ "how_common": {
+  "Worlds": {
+   "sides": 160,
+   "magic_count": {
+    "0.5": 1,
+    "1.0": 1,
+    "1.5": 4,
+    "2.0": 86,
+    "2.5": 5,
+    "3.0": 45,
+    "3.5": 1,
+    "4.0": 1
+   },
+   "frontline_count": {
+    "0": 60,
+    "1": 84,
+    "2": 16
+   },
+   "one_damage_type_share": 0.0069,
+   "no_frontline_share": 0.375
+  },
+  "before 1 Sep": {
+   "sides": 4714,
+   "magic_count": {
+    "1.0": 109,
+    "1.5": 79,
+    "2.0": 2923,
+    "2.5": 261,
+    "3.0": 1224,
+    "3.5": 21,
+    "4.0": 4
+   },
+   "frontline_count": {
+    "0": 2074,
+    "1": 2181,
+    "2": 447,
+    "3": 12
+   },
+   "one_damage_type_share": 0.0,
+   "no_frontline_share": 0.44
+  },
+  "from 1 Sep": {
+   "sides": 476,
+   "magic_count": {
+    "1.0": 4,
+    "1.5": 7,
+    "2.0": 259,
+    "2.5": 19,
+    "3.0": 144,
+    "3.5": 2,
+    "4.0": 1
+   },
+   "frontline_count": {
+    "0": 225,
+    "1": 211,
+    "2": 39,
+    "3": 1
+   },
+   "one_damage_type_share": 0.0,
+   "no_frontline_share": 0.4727
+  }
+ },
+ "by_magic_count": {
+  "Worlds": {
+   "0-0.5": {
+    "sides": 1.0,
+    "won": 1.0,
+    "v1_expected": 0.525,
+    "won_minus_expected_pts": 47.52,
+    "se_pts": 0.0
+   },
+   "1": {
+    "sides": 1.0,
+    "won": 0.0,
+    "v1_expected": 0.27,
+    "won_minus_expected_pts": -27.038,
+    "se_pts": 0.0
+   },
+   "1.5": {
+    "sides": 4.0,
+    "won": 0.75,
+    "v1_expected": 0.481,
+    "won_minus_expected_pts": 26.862,
+    "se_pts": 21.651
+   },
+   "2": {
+    "sides": 91.0,
+    "won": 0.505,
+    "v1_expected": 0.506,
+    "won_minus_expected_pts": -0.087,
+    "se_pts": 5.241
+   },
+   "2.5+": {
+    "sides": 47.0,
+    "won": 0.468,
+    "v1_expected": 0.514,
+    "won_minus_expected_pts": -4.61,
+    "se_pts": 7.278
+   }
+  },
+  "before 1 Sep": {
+   "1": {
+    "sides": 109.0,
+    "won": 0.541,
+    "v1_expected": 0.477,
+    "won_minus_expected_pts": 6.384,
+    "se_pts": 4.773
+   },
+   "1.5": {
+    "sides": 79.0,
+    "won": 0.519,
+    "v1_expected": 0.499,
+    "won_minus_expected_pts": 1.967,
+    "se_pts": 5.621
+   },
+   "2": {
+    "sides": 3184.0,
+    "won": 0.493,
+    "v1_expected": 0.501,
+    "won_minus_expected_pts": -0.833,
+    "se_pts": 0.886
+   },
+   "2.5+": {
+    "sides": 1249.0,
+    "won": 0.519,
+    "v1_expected": 0.499,
+    "won_minus_expected_pts": 1.992,
+    "se_pts": 1.414
+   }
+  },
+  "from 1 Sep": {
+   "1": {
+    "sides": 4.0,
+    "won": 0.25,
+    "v1_expected": 0.468,
+    "won_minus_expected_pts": -21.772,
+    "se_pts": 21.651
+   },
+   "1.5": {
+    "sides": 7.0,
+    "won": 0.571,
+    "v1_expected": 0.483,
+    "won_minus_expected_pts": 8.833,
+    "se_pts": 18.704
+   },
+   "2": {
+    "sides": 278.0,
+    "won": 0.482,
+    "v1_expected": 0.497,
+    "won_minus_expected_pts": -1.479,
+    "se_pts": 2.997
+   },
+   "2.5+": {
+    "sides": 147.0,
+    "won": 0.537,
+    "v1_expected": 0.507,
+    "won_minus_expected_pts": 3.075,
+    "se_pts": 4.112
+   }
+  },
+  "all": {
+   "0-0.5": {
+    "sides": 1.0,
+    "won": 1.0,
+    "v1_expected": 0.525,
+    "won_minus_expected_pts": 47.52,
+    "se_pts": 0.0
+   },
+   "1": {
+    "sides": 114.0,
+    "won": 0.526,
+    "v1_expected": 0.475,
+    "won_minus_expected_pts": 5.103,
+    "se_pts": 4.676
+   },
+   "1.5": {
+    "sides": 90.0,
+    "won": 0.533,
+    "v1_expected": 0.497,
+    "won_minus_expected_pts": 3.607,
+    "se_pts": 5.259
+   },
+   "2": {
+    "sides": 3553.0,
+    "won": 0.492,
+    "v1_expected": 0.501,
+    "won_minus_expected_pts": -0.865,
+    "se_pts": 0.839
+   },
+   "2.5+": {
+    "sides": 1443.0,
+    "won": 0.519,
+    "v1_expected": 0.5,
+    "won_minus_expected_pts": 1.888,
+    "se_pts": 1.315
+   }
+  }
+ },
+ "by_frontline_count": {
+  "Worlds": {
+   "0": {
+    "sides": 60.0,
+    "won": 0.6,
+    "v1_expected": 0.477,
+    "won_minus_expected_pts": 12.336,
+    "se_pts": 6.325
+   },
+   "1": {
+    "sides": 84.0,
+    "won": 0.429,
+    "v1_expected": 0.508,
+    "won_minus_expected_pts": -7.926,
+    "se_pts": 5.399
+   },
+   "2+": {
+    "sides": 16.0,
+    "won": 0.5,
+    "v1_expected": 0.546,
+    "won_minus_expected_pts": -4.646,
+    "se_pts": 12.5
+   }
+  },
+  "before 1 Sep": {
+   "0": {
+    "sides": 2074.0,
+    "won": 0.505,
+    "v1_expected": 0.506,
+    "won_minus_expected_pts": -0.022,
+    "se_pts": 1.098
+   },
+   "1": {
+    "sides": 2181.0,
+    "won": 0.497,
+    "v1_expected": 0.497,
+    "won_minus_expected_pts": 0.028,
+    "se_pts": 1.071
+   },
+   "2+": {
+    "sides": 459.0,
+    "won": 0.49,
+    "v1_expected": 0.491,
+    "won_minus_expected_pts": -0.031,
+    "se_pts": 2.333
+   }
+  },
+  "from 1 Sep": {
+   "0": {
+    "sides": 225.0,
+    "won": 0.533,
+    "v1_expected": 0.517,
+    "won_minus_expected_pts": 1.661,
+    "se_pts": 3.326
+   },
+   "1": {
+    "sides": 211.0,
+    "won": 0.464,
+    "v1_expected": 0.482,
+    "won_minus_expected_pts": -1.77,
+    "se_pts": 3.433
+   },
+   "2+": {
+    "sides": 40.0,
+    "won": 0.5,
+    "v1_expected": 0.5,
+    "won_minus_expected_pts": -0.006,
+    "se_pts": 7.906
+   }
+  },
+  "all": {
+   "0": {
+    "sides": 2359.0,
+    "won": 0.51,
+    "v1_expected": 0.506,
+    "won_minus_expected_pts": 0.453,
+    "se_pts": 1.029
+   },
+   "1": {
+    "sides": 2476.0,
+    "won": 0.492,
+    "v1_expected": 0.496,
+    "won_minus_expected_pts": -0.395,
+    "se_pts": 1.005
+   },
+   "2+": {
+    "sides": 515.0,
+    "won": 0.491,
+    "v1_expected": 0.493,
+    "won_minus_expected_pts": -0.172,
+    "se_pts": 2.203
+   }
+  }
+ },
+ "one_damage_type": {
+  "Worlds": {
+   "mixed": {
+    "sides": 143.0,
+    "won": 0.497,
+    "v1_expected": 0.507,
+    "won_minus_expected_pts": -1.008,
+    "se_pts": 4.181
+   },
+   "one type": {
+    "sides": 1.0,
+    "won": 1.0,
+    "v1_expected": 0.525,
+    "won_minus_expected_pts": 47.52,
+    "se_pts": 0.0
+   }
+  },
+  "before 1 Sep": {
+   "mixed": {
+    "sides": 4621.0,
+    "won": 0.501,
+    "v1_expected": 0.5,
+    "won_minus_expected_pts": 0.148,
+    "se_pts": 0.736
+   }
+  },
+  "from 1 Sep": {
+   "mixed": {
+    "sides": 436.0,
+    "won": 0.5,
+    "v1_expected": 0.5,
+    "won_minus_expected_pts": 0.036,
+    "se_pts": 2.395
+   }
+  },
+  "all": {
+   "mixed": {
+    "sides": 5200.0,
+    "won": 0.501,
+    "v1_expected": 0.5,
+    "won_minus_expected_pts": 0.107,
+    "se_pts": 0.693
+   },
+   "one type": {
+    "sides": 1.0,
+    "won": 1.0,
+    "v1_expected": 0.525,
+    "won_minus_expected_pts": 47.52,
+    "se_pts": 0.0
+   }
+  }
+ },
+ "model": {
+  "one damage type": {
+   "weight": 0.0,
+   "before 1 Sep": {
+    "games": 2264,
+    "v1": 0.6418,
+    "v1_plus": 0.6418,
+    "games_where_it_differs": 0
+   },
+   "from 1 Sep": {
+    "games": 198,
+    "v1": 0.6504,
+    "v1_plus": 0.6504,
+    "games_where_it_differs": 0
+   },
+   "Worlds": {
+    "games": 64,
+    "v1": 0.5861,
+    "v1_plus": 0.5861,
+    "games_where_it_differs": 1
+   }
+  },
+  "low magic (<=1)": {
+   "weight": 0.3166,
+   "before 1 Sep": {
+    "games": 2264,
+    "v1": 0.6418,
+    "v1_plus": 0.6412,
+    "games_where_it_differs": 103
+   },
+   "from 1 Sep": {
+    "games": 198,
+    "v1": 0.6504,
+    "v1_plus": 0.6521,
+    "games_where_it_differs": 4
+   },
+   "Worlds": {
+    "games": 64,
+    "v1": 0.5861,
+    "v1_plus": 0.5854,
+    "games_where_it_differs": 2
+   }
+  },
+  "no frontline": {
+   "weight": 0.0006,
+   "before 1 Sep": {
+    "games": 2264,
+    "v1": 0.6418,
+    "v1_plus": 0.6418,
+    "games_where_it_differs": 1103
+   },
+   "from 1 Sep": {
+    "games": 198,
+    "v1": 0.6504,
+    "v1_plus": 0.6504,
+    "games_where_it_differs": 104
+   },
+   "Worlds": {
+    "games": 64,
+    "v1": 0.5861,
+    "v1_plus": 0.586,
+    "games_where_it_differs": 24
+   }
+  },
+  "frontline count": {
+   "weight": 0.0054,
+   "before 1 Sep": {
+    "games": 2264,
+    "v1": 0.6418,
+    "v1_plus": 0.6418,
+    "games_where_it_differs": 1320
+   },
+   "from 1 Sep": {
+    "games": 198,
+    "v1": 0.6504,
+    "v1_plus": 0.6505,
+    "games_where_it_differs": 126
+   },
+   "Worlds": {
+    "games": 64,
+    "v1": 0.5861,
+    "v1_plus": 0.5867,
+    "games_where_it_differs": 35
+   }
+  },
+  "magic count": {
+   "weight": 0.0936,
+   "before 1 Sep": {
+    "games": 2264,
+    "v1": 0.6418,
+    "v1_plus": 0.6413,
+    "games_where_it_differs": 1122
+   },
+   "from 1 Sep": {
+    "games": 198,
+    "v1": 0.6504,
+    "v1_plus": 0.6478,
+    "games_where_it_differs": 105
+   },
+   "Worlds": {
+    "games": 64,
+    "v1": 0.5861,
+    "v1_plus": 0.5903,
+    "games_where_it_differs": 30
+   }
+  }
+ }
+}

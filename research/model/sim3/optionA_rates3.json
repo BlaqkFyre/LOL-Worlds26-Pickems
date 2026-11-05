@@ -1,0 +1,484 @@
+{
+ "games": {
+  "train": 395,
+  "test": 151,
+  "worlds": 80
+ },
+ "segments": {
+  "coef": {
+   "intercept": -2.2118,
+   "phase 14-19": 1.0666,
+   "phase 20-24": 1.0471,
+   "phase 25-29": 1.1899,
+   "phase 30-34": 1.4669,
+   "phase 35+": 1.582,
+   "tier T2": -0.7074,
+   "tier T3": -1.3988,
+   "mid": 0.1485,
+   "bot": 0.114,
+   "per_1k_lane_lead": -0.0162,
+   "per_1k_team_lead": 0.1164,
+   "per_v1_logit": 0.0684,
+   "baron": 1.18,
+   "elder": 0.6321,
+   "herald_last_3min": 0.3691,
+   "own_grubs": 0.0861,
+   "net_kills_this_minute": 0.1577,
+   "siege_style": 0.2295
+  },
+  "train": {
+   "n": 76866,
+   "loss": 0.5257,
+   "baseline": 0.6056
+  },
+  "test": {
+   "n": 29445,
+   "loss": 0.535,
+   "baseline": 0.6117
+  },
+  "worlds": {
+   "n": 15887,
+   "loss": 0.5292,
+   "baseline": 0.6012
+  },
+  "dispersion_by_phase": {
+   "0-13": 1.193,
+   "14-19": 1.754,
+   "20-24": 2.136,
+   "25-29": 2.454,
+   "30-34": 3.104,
+   "35+": 4.016
+  },
+  "check_5_per_tower": "every T1/T2/T3 in the timelines fell on its 5th/10th/15th segment"
+ },
+ "base_structures": {
+  "coef": {
+   "intercept": -2.3971,
+   "from 25": 0.1684,
+   "from 35": 0.1548,
+   "per_1k_lead": 0.0213,
+   "per_v1_logit": 0.0203,
+   "baron": 0.2035,
+   "elder": 0.2493,
+   "enemy_inhibs_down": 0.0502,
+   "open_lanes": 0.2253,
+   "siege_style": -0.1846,
+   "lane_just_opened": 0.9582,
+   "base_take_last_minute": -1.6903,
+   "net_kills_this_minute": 0.1711
+  },
+  "train": {
+   "n": 1636,
+   "loss": 0.6223,
+   "baseline": 0.7487
+  },
+  "test": {
+   "n": 578,
+   "loss": 0.6567,
+   "baseline": 0.7826
+  },
+  "worlds": {
+   "n": 325,
+   "loss": 0.5999,
+   "baseline": 0.7282
+  },
+  "dispersion_by_phase": {
+   "14-19": 0.252,
+   "20-24": 0.52,
+   "25-29": 0.481,
+   "30-34": 0.571,
+   "35+": 0.67
+  }
+ },
+ "base_push": {
+  "coef": {
+   "intercept": -3.4279,
+   "from 25": 0.5349,
+   "from 35": 0.3346,
+   "per_1k_lead": 0.0481,
+   "per_v1_logit": 0.0103,
+   "baron": 0.4175,
+   "elder": 0.6274,
+   "enemy_inhibs_down": -0.0372,
+   "open_lanes": 0.642,
+   "siege_style": -0.467,
+   "lane_just_opened": 1.7369,
+   "base_take_last_minute": -2.9569,
+   "net_kills_this_minute": 0.4561
+  },
+  "size_dist": {
+   "1": 0.9903,
+   "2": 0.0097
+  },
+  "size_dist_by_state": {
+   "no_inhib_down": {
+    "1": 0.2772,
+    "2": 0.1109,
+    "3": 0.0333,
+    "4": 0.4479,
+    "5": 0.1197,
+    "6": 0.0111
+   },
+   "inhib_down": {
+    "1": 0.2586,
+    "2": 0.1149,
+    "3": 0.3276,
+    "4": 0.2759,
+    "5": 0.023
+   }
+  },
+  "train": {
+   "n": 1636,
+   "logloss": 0.435,
+   "baseline": 0.6616
+  },
+  "test": {
+   "n": 578,
+   "logloss": 0.4406,
+   "baseline": 0.6741
+  },
+  "worlds": {
+   "n": 325,
+   "logloss": 0.41,
+   "baseline": 0.6508
+  }
+ },
+ "segments_timing": {
+  "coef": {
+   "intercept": -2.2164,
+   "phase 14-19": 1.0658,
+   "phase 20-24": 1.0452,
+   "phase 25-29": 1.1853,
+   "phase 30-34": 1.4634,
+   "phase 35+": 1.5765,
+   "tier T2": -0.704,
+   "tier T3": -1.3962,
+   "mid": 0.149,
+   "bot": 0.1143,
+   "per_1k_lane_lead": -0.0163,
+   "per_1k_team_lead": 0.1172,
+   "per_v1_logit": 0.0703,
+   "baron": 1.1779,
+   "elder": 0.6332,
+   "herald_last_3min": 0.3683,
+   "own_grubs": 0.0865,
+   "net_kills_this_minute": 0.1575,
+   "siege_style_sum": 0.1379
+  },
+  "train": {
+   "n": 76866,
+   "loss": 0.5257,
+   "baseline": 0.6056
+  },
+  "test": {
+   "n": 29445,
+   "loss": 0.5351,
+   "baseline": 0.6117
+  },
+  "worlds": {
+   "n": 15887,
+   "loss": 0.5291,
+   "baseline": 0.6012
+  }
+ },
+ "base_push_timing": {
+  "coef": {
+   "intercept": -3.4375,
+   "from 25": 0.5437,
+   "from 35": 0.3418,
+   "per_1k_lead": 0.0474,
+   "per_v1_logit": 0.0071,
+   "baron": 0.4198,
+   "elder": 0.6329,
+   "enemy_inhibs_down": -0.0324,
+   "open_lanes": 0.6344,
+   "siege_style_sum": -0.1224,
+   "lane_just_opened": 1.7464,
+   "base_take_last_minute": -2.957,
+   "net_kills_this_minute": 0.4571
+  },
+  "train": {
+   "n": 1636,
+   "logloss": 0.4352
+  },
+  "test": {
+   "n": 578,
+   "logloss": 0.4411
+  },
+  "worlds": {
+   "n": 325,
+   "logloss": 0.4111
+  }
+ },
+ "segments_A": {
+  "coef": {
+   "intercept": -2.2176,
+   "phase 14-19": 1.0662,
+   "phase 20-24": 1.0462,
+   "phase 25-29": 1.1864,
+   "phase 30-34": 1.4637,
+   "phase 35+": 1.5759,
+   "tier T2": -0.7042,
+   "tier T3": -1.3946,
+   "mid": 0.149,
+   "bot": 0.1143,
+   "per_1k_lane_lead": -0.0166,
+   "per_1k_team_lead": 0.118,
+   "per_v1_logit": 0.0706,
+   "baron": 1.1773,
+   "elder": 0.631,
+   "herald_last_3min": 0.3684,
+   "own_grubs": 0.0867,
+   "net_kills_this_minute": 0.1572,
+   "siege_style_sum": 0.1753,
+   "own_siege_x_lead": -0.0371
+  },
+  "train": {
+   "n": 76866,
+   "loss": 0.5257,
+   "timing_only": 0.5257
+  },
+  "test": {
+   "n": 29445,
+   "loss": 0.5351,
+   "timing_only": 0.5351
+  },
+  "worlds": {
+   "n": 15887,
+   "loss": 0.5292,
+   "timing_only": 0.5291
+  },
+  "note": "baseline here = the timing-only model"
+ },
+ "base_push_A": {
+  "coef": {
+   "intercept": -3.4457,
+   "from 25": 0.543,
+   "from 35": 0.339,
+   "per_1k_lead": 0.0506,
+   "per_v1_logit": 0.0125,
+   "baron": 0.4186,
+   "elder": 0.6221,
+   "enemy_inhibs_down": -0.038,
+   "open_lanes": 0.6444,
+   "siege_style_sum": 0.1446,
+   "lane_just_opened": 1.7359,
+   "base_take_last_minute": -2.9575,
+   "net_kills_this_minute": 0.4556,
+   "own_siege_x_lead": -0.1323
+  },
+  "train": {
+   "n": 1636,
+   "logloss": 0.435,
+   "timing_only": 0.4352
+  },
+  "test": {
+   "n": 578,
+   "logloss": 0.4401,
+   "timing_only": 0.4411
+  },
+  "worlds": {
+   "n": 325,
+   "logloss": 0.4101,
+   "timing_only": 0.4111
+  }
+ },
+ "nexus_tier_share_when_inhib_down": {
+  "structures": 1247,
+  "share_nexus_tier": 0.82
+ },
+ "first_tower_lane_share": {
+  "BOT": 0.447,
+  "TOP": 0.407,
+  "MID": 0.145
+ },
+ "first_tower_time_s": {
+  "median": 914,
+  "p10": 734,
+  "p90": 1070
+ },
+ "fights": {
+  "coef": {
+   "intercept": -1.2657,
+   "phase 14-19": 0.3494,
+   "phase 20-24": 0.1676,
+   "phase 25-29": 0.2274,
+   "phase 30-34": 0.3407,
+   "phase 35+": 0.32,
+   "per_1k_abs_lead": 0.0166,
+   "monster_up": 0.2093,
+   "buff_up": 0.1036,
+   "pace_style": 0.5599
+  },
+  "train": {
+   "n": 13100,
+   "loss": 0.7496,
+   "phase_only": 0.7523
+  },
+  "test": {
+   "n": 5003,
+   "loss": 0.7156,
+   "phase_only": 0.7186
+  },
+  "worlds": {
+   "n": 2697,
+   "loss": 0.7084,
+   "phase_only": 0.7127
+  },
+  "dispersion_by_phase": {
+   "0-13": 0.823,
+   "14-19": 0.722,
+   "20-24": 0.733,
+   "25-29": 0.768,
+   "30-34": 0.709,
+   "35+": 0.692
+  }
+ },
+ "monsters": {
+  "dragon": {
+   "coef": {
+    "intercept": 0.3086,
+    "spawn_minute": -0.1737,
+    "1_min_after": 0.4057,
+    "4+_min_after": 0.7017,
+    "per_1k_abs_lead": -0.0274,
+    "fight_this_minute": 0.0628,
+    "first_dragon": -1.4456,
+    "objectives_style_sum": -0.1667
+   },
+   "minutes_up": 6284,
+   "taken": 2831,
+   "train": {
+    "n": 4001,
+    "logloss": 0.6511,
+    "base": 0.6868
+   },
+   "test": {
+    "n": 1491,
+    "logloss": 0.6516,
+    "base": 0.6905
+   },
+   "worlds": {
+    "n": 792,
+    "logloss": 0.6498,
+    "base": 0.6921
+   }
+  },
+  "grub": {
+   "coef": {
+    "intercept": 1.6106,
+    "spawn_minute": 1.0355,
+    "1_min_after": 0.6265,
+    "4+_min_after": 0.0076,
+    "per_1k_abs_lead": -0.3534,
+    "fight_this_minute": -0.4094,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.186
+   },
+   "minutes_up": 702,
+   "taken": 626,
+   "train": {
+    "n": 445,
+    "logloss": 0.33,
+    "base": 0.3514
+   },
+   "test": {
+    "n": 168,
+    "logloss": 0.3199,
+    "base": 0.3283
+   },
+   "worlds": {
+    "n": 89,
+    "logloss": 0.3394,
+    "base": 0.3282
+   }
+  },
+  "herald": {
+   "coef": {
+    "intercept": 0.2381,
+    "spawn_minute": -0.0316,
+    "1_min_after": 0.1551,
+    "4+_min_after": 0.8751,
+    "per_1k_abs_lead": 0.0491,
+    "fight_this_minute": 0.2676,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.0973
+   },
+   "minutes_up": 998,
+   "taken": 626,
+   "train": {
+    "n": 637,
+    "logloss": 0.6569,
+    "base": 0.664
+   },
+   "test": {
+    "n": 233,
+    "logloss": 0.6494,
+    "base": 0.6503
+   },
+   "worlds": {
+    "n": 128,
+    "logloss": 0.6693,
+    "base": 0.6616
+   }
+  },
+  "baron": {
+   "coef": {
+    "intercept": -2.1993,
+    "spawn_minute": -0.2457,
+    "1_min_after": -0.1989,
+    "4+_min_after": 0.4755,
+    "per_1k_abs_lead": 0.1041,
+    "fight_this_minute": 0.2986,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.102
+   },
+   "minutes_up": 4919,
+   "taken": 865,
+   "train": {
+    "n": 3117,
+    "logloss": 0.4435,
+    "base": 0.4575
+   },
+   "test": {
+    "n": 1141,
+    "logloss": 0.4865,
+    "base": 0.4961
+   },
+   "worlds": {
+    "n": 661,
+    "logloss": 0.4286,
+    "base": 0.4478
+   }
+  },
+  "elder": {
+   "coef": {
+    "intercept": -0.0927,
+    "spawn_minute": -0.7037,
+    "1_min_after": -0.0247,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": -0.0994,
+    "fight_this_minute": 0.2415,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0931
+   },
+   "minutes_up": 235,
+   "taken": 69,
+   "train": {
+    "n": 149,
+    "logloss": 0.5591,
+    "base": 0.5817
+   },
+   "test": {
+    "n": 51,
+    "logloss": 0.6239,
+    "base": 0.6271
+   },
+   "worlds": {
+    "n": 35,
+    "logloss": 0.6651,
+    "base": 0.6849
+   }
+  }
+ }
+}

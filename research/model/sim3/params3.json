@@ -1,0 +1,746 @@
+{
+ "roles": [
+  "top",
+  "jng",
+  "mid",
+  "bot",
+  "sup"
+ ],
+ "lanes": {
+  "top": {
+   "10": [
+    41.844,
+    39.143,
+    307.637,
+    0.886
+   ],
+   "15": [
+    95.756,
+    98.664,
+    506.294,
+    0.923
+   ]
+  },
+  "jng": {
+   "10": [
+    31.08,
+    35.762,
+    242.798,
+    1.241
+   ],
+   "15": [
+    56.286,
+    128.438,
+    396.807,
+    1.2
+   ]
+  },
+  "mid": {
+   "10": [
+    32.397,
+    54.838,
+    231.845,
+    1.093
+   ],
+   "15": [
+    66.815,
+    164.609,
+    416.949,
+    1.054
+   ]
+  },
+  "bot": {
+   "10": [
+    16.406,
+    87.082,
+    286.68,
+    1.093
+   ],
+   "15": [
+    37.304,
+    191.314,
+    600.431,
+    0.982
+   ]
+  },
+  "sup": {
+   "10": [
+    3.302,
+    48.654,
+    63.331,
+    1.062
+   ],
+   "15": [
+    12.577,
+    99.627,
+    90.121,
+    1.055
+   ]
+  }
+ },
+ "lane_cov15": [
+  [
+   652070.0,
+   122543.0,
+   83055.0,
+   -34345.0,
+   35366.0
+  ],
+  [
+   122543.0,
+   546149.0,
+   180110.0,
+   193810.0,
+   101071.0
+  ],
+  [
+   83055.0,
+   180110.0,
+   571232.0,
+   138915.0,
+   85772.0
+  ],
+  [
+   -34345.0,
+   193810.0,
+   138915.0,
+   1045459.0,
+   222027.0
+  ],
+  [
+   35366.0,
+   101071.0,
+   85772.0,
+   222027.0,
+   177958.0
+  ]
+ ],
+ "lane_cov10": [
+  [
+   202700.0,
+   25105.0,
+   11459.0,
+   -27259.0,
+   -435.0
+  ],
+  [
+   25105.0,
+   210112.0,
+   48101.0,
+   32740.0,
+   27288.0
+  ],
+  [
+   11459.0,
+   48101.0,
+   203546.0,
+   3307.0,
+   20469.0
+  ],
+  [
+   -27259.0,
+   32740.0,
+   3307.0,
+   303811.0,
+   72566.0
+  ],
+  [
+   -435.0,
+   27288.0,
+   20469.0,
+   72566.0,
+   85679.0
+  ]
+ ],
+ "segments": {
+  "intercept": -2.2195,
+  "phase 14-19": 1.0544,
+  "phase 20-24": 1.0329,
+  "phase 25-29": 1.1571,
+  "phase 30-34": 1.4415,
+  "phase 35+": 1.5553,
+  "tier T2": -0.7421,
+  "tier T3": -1.1932,
+  "mid": 0.1462,
+  "bot": 0.1153,
+  "per_1k_lane_lead": -0.0154,
+  "per_1k_team_lead": 0.1137,
+  "per_v1_logit": 0.0688,
+  "baron": 1.2848,
+  "elder": 0.6548,
+  "herald_last_3min": 0.3614,
+  "own_grubs": 0.0849,
+  "net_kills_this_minute": 0.1575,
+  "lane_segments_last_minute": 0.0742,
+  "T3_x_baron": -0.51,
+  "siege_style": 0.2519
+ },
+ "base_structures": {
+  "intercept": -2.3971,
+  "from 25": 0.1684,
+  "from 35": 0.1548,
+  "per_1k_lead": 0.0213,
+  "per_v1_logit": 0.0203,
+  "baron": 0.2035,
+  "elder": 0.2493,
+  "enemy_inhibs_down": 0.0502,
+  "open_lanes": 0.2253,
+  "siege_style": -0.1846,
+  "lane_just_opened": 0.9582,
+  "base_take_last_minute": -1.6903,
+  "net_kills_this_minute": 0.1711
+ },
+ "base_push": {
+  "coef": {
+   "intercept": -3.4279,
+   "from 25": 0.5349,
+   "from 35": 0.3346,
+   "per_1k_lead": 0.0481,
+   "per_v1_logit": 0.0103,
+   "baron": 0.4175,
+   "elder": 0.6274,
+   "enemy_inhibs_down": -0.0372,
+   "open_lanes": 0.642,
+   "siege_style": -0.467,
+   "lane_just_opened": 1.7369,
+   "base_take_last_minute": -2.9569,
+   "net_kills_this_minute": 0.4561
+  },
+  "size_dist": {
+   "1": 0.9903,
+   "2": 0.0097
+  },
+  "size_dist_by_state": {
+   "no_inhib_down": {
+    "1": 0.2772,
+    "2": 0.1109,
+    "3": 0.0333,
+    "4": 0.4479,
+    "5": 0.1197,
+    "6": 0.0111
+   },
+   "inhib_down": {
+    "1": 0.2586,
+    "2": 0.1149,
+    "3": 0.3276,
+    "4": 0.2759,
+    "5": 0.023
+   }
+  },
+  "train": {
+   "n": 1636,
+   "logloss": 0.435,
+   "baseline": 0.6616
+  },
+  "test": {
+   "n": 578,
+   "logloss": 0.4406,
+   "baseline": 0.6741
+  },
+  "worlds": {
+   "n": 325,
+   "logloss": 0.41,
+   "baseline": 0.6508
+  }
+ },
+ "segments_timing": {
+  "intercept": -2.2242,
+  "phase 14-19": 1.0536,
+  "phase 20-24": 1.0308,
+  "phase 25-29": 1.1521,
+  "phase 30-34": 1.4376,
+  "phase 35+": 1.5494,
+  "tier T2": -0.7383,
+  "tier T3": -1.1904,
+  "mid": 0.1468,
+  "bot": 0.1156,
+  "per_1k_lane_lead": -0.0155,
+  "per_1k_team_lead": 0.1146,
+  "per_v1_logit": 0.0708,
+  "baron": 1.2823,
+  "elder": 0.6559,
+  "herald_last_3min": 0.3607,
+  "own_grubs": 0.0853,
+  "net_kills_this_minute": 0.1572,
+  "lane_segments_last_minute": 0.0737,
+  "T3_x_baron": -0.5094,
+  "siege_style_sum": 0.1431
+ },
+ "segment_push": {
+  "coef": {
+   "intercept": -2.2593,
+   "phase 14-19": 1.0078,
+   "phase 20-24": 0.94,
+   "phase 25-29": 0.9284,
+   "phase 30-34": 1.195,
+   "phase 35+": 1.3462,
+   "tier T2": -1.2359,
+   "tier T3": -2.0058,
+   "mid": 0.1,
+   "bot": 0.0817,
+   "per_1k_lane_lead": 0.005,
+   "per_1k_team_lead": 0.1496,
+   "per_v1_logit": 0.0968,
+   "baron": 1.1443,
+   "elder": 0.5703,
+   "herald_last_3min": 0.3058,
+   "own_grubs": 0.1107,
+   "net_kills_this_minute": 0.1472,
+   "lane_segments_last_minute": -0.3145,
+   "T3_x_baron": -0.1634,
+   "siege_style_sum": 0.2052
+  },
+  "size_dist": {
+   "0": {
+    "1": 0.562,
+    "2": 0.2541,
+    "3": 0.0984,
+    "4": 0.0405,
+    "5": 0.0164,
+    "6": 0.0107,
+    "7": 0.0067,
+    "8": 0.0033,
+    "9": 0.0017,
+    "10": 0.0019,
+    "11": 0.0017,
+    "12": 0.0014,
+    "13": 0.0007,
+    "14": 0.0002,
+    "15": 0.0002
+   },
+   "0_early": {
+    "1": 0.8364,
+    "2": 0.128,
+    "3": 0.0233,
+    "4": 0.0094,
+    "5": 0.002,
+    "7": 0.0003,
+    "8": 0.0003,
+    "10": 0.0003
+   },
+   "1": {
+    "1": 0.3859,
+    "2": 0.2104,
+    "3": 0.118,
+    "4": 0.0746,
+    "5": 0.0813,
+    "6": 0.0289,
+    "7": 0.0323,
+    "8": 0.0212,
+    "9": 0.0197,
+    "10": 0.0278
+   },
+   "2": {
+    "1": 0.2761,
+    "2": 0.1923,
+    "3": 0.1639,
+    "4": 0.1213,
+    "5": 0.2465
+   }
+  },
+  "train": {
+   "n": 76866,
+   "logloss": 0.3748,
+   "baseline": 0.4019
+  },
+  "test": {
+   "n": 29445,
+   "logloss": 0.3797,
+   "baseline": 0.4051
+  },
+  "worlds": {
+   "n": 15887,
+   "logloss": 0.3715,
+   "baseline": 0.3958
+  }
+ },
+ "base_push_timing": {
+  "intercept": -3.4375,
+  "from 25": 0.5437,
+  "from 35": 0.3418,
+  "per_1k_lead": 0.0474,
+  "per_v1_logit": 0.0071,
+  "baron": 0.4198,
+  "elder": 0.6329,
+  "enemy_inhibs_down": -0.0324,
+  "open_lanes": 0.6344,
+  "siege_style_sum": -0.1224,
+  "lane_just_opened": 1.7464,
+  "base_take_last_minute": -2.957,
+  "net_kills_this_minute": 0.4571
+ },
+ "kill_side_timing": {
+  "intercept": 0.0373,
+  "per_1k_gold_lead": 0.1253,
+  "per_v1_logit": 0.1442,
+  "baron": 0.1911,
+  "elder": 0.206
+ },
+ "taker_timing": {
+  "dragon": {
+   "blue_side": -0.18,
+   "gd_per_1k": 0.1842,
+   "jng_per_1k": 0.1515,
+   "bot2_per_1k": 0.0463,
+   "mid_per_1k": 0.2087,
+   "net60k_per_1k": 0.917,
+   "first1k_per_1k": -0.4928,
+   "per_v1_logit": 0.1985
+  },
+  "grub": {
+   "blue_side": 0.38,
+   "gd_per_1k": 0.1946,
+   "jng_per_1k": -0.0448,
+   "top_per_1k": 0.3214,
+   "mid_per_1k": 0.2316,
+   "net60k_per_1k": 0.3378,
+   "per_v1_logit": -0.0358
+  },
+  "herald": {
+   "blue_side": 0.6588,
+   "gd_per_1k": 0.2053,
+   "jng_per_1k": 0.2522,
+   "top_per_1k": 0.1117,
+   "mid_per_1k": 0.2971,
+   "net60k_per_1k": 0.7821,
+   "per_v1_logit": -0.1807
+  },
+  "baron": {
+   "blue_side": -0.0941,
+   "gd_per_1k": 0.3156,
+   "net60k_per_1k": 1.5127,
+   "per_v1_logit": 0.0231
+  },
+  "elder": {
+   "blue_side": -0.3238,
+   "gd_per_1k": 0.1106,
+   "net60k_per_1k": 1.075,
+   "per_v1_logit": 0.2225
+  }
+ },
+ "fights": {
+  "intercept": -1.2657,
+  "phase 14-19": 0.3494,
+  "phase 20-24": 0.1676,
+  "phase 25-29": 0.2274,
+  "phase 30-34": 0.3407,
+  "phase 35+": 0.32,
+  "per_1k_abs_lead": 0.0166,
+  "monster_up": 0.2093,
+  "buff_up": 0.1036,
+  "pace_style": 0.5599
+ },
+ "dispersion": {
+  "segments": {
+   "0-13": 1.19,
+   "14-19": 1.762,
+   "20-24": 2.153,
+   "25-29": 2.447,
+   "30-34": 3.042,
+   "35+": 3.718
+  },
+  "base_structures": {
+   "14-19": 0.252,
+   "20-24": 0.52,
+   "25-29": 0.481,
+   "30-34": 0.571,
+   "35+": 0.67
+  },
+  "fights": {
+   "0-13": 0.823,
+   "14-19": 0.722,
+   "20-24": 0.733,
+   "25-29": 0.768,
+   "30-34": 0.709,
+   "35+": 0.692
+  }
+ },
+ "monsters": {
+  "dragon": {
+   "intercept": 0.3086,
+   "spawn_minute": -0.1737,
+   "1_min_after": 0.4057,
+   "4+_min_after": 0.7017,
+   "per_1k_abs_lead": -0.0274,
+   "fight_this_minute": 0.0628,
+   "first_dragon": -1.4456,
+   "objectives_style_sum": -0.1667
+  },
+  "grub": {
+   "intercept": 1.6106,
+   "spawn_minute": 1.0355,
+   "1_min_after": 0.6265,
+   "4+_min_after": 0.0076,
+   "per_1k_abs_lead": -0.3534,
+   "fight_this_minute": -0.4094,
+   "first_dragon": 0.0,
+   "objectives_style_sum": -0.186
+  },
+  "herald": {
+   "intercept": 0.2381,
+   "spawn_minute": -0.0316,
+   "1_min_after": 0.1551,
+   "4+_min_after": 0.8751,
+   "per_1k_abs_lead": 0.0491,
+   "fight_this_minute": 0.2676,
+   "first_dragon": 0.0,
+   "objectives_style_sum": -0.0973
+  },
+  "baron": {
+   "intercept": -2.1993,
+   "spawn_minute": -0.2457,
+   "1_min_after": -0.1989,
+   "4+_min_after": 0.4755,
+   "per_1k_abs_lead": 0.1041,
+   "fight_this_minute": 0.2986,
+   "first_dragon": 0.0,
+   "objectives_style_sum": -0.102
+  },
+  "elder": {
+   "intercept": -0.0927,
+   "spawn_minute": -0.7037,
+   "1_min_after": -0.0247,
+   "4+_min_after": 0.0,
+   "per_1k_abs_lead": -0.0994,
+   "fight_this_minute": 0.2415,
+   "first_dragon": 0.0,
+   "objectives_style_sum": 0.0931
+  }
+ },
+ "first_tower_lane_share": {
+  "BOT": 0.447,
+  "TOP": 0.407,
+  "MID": 0.145
+ },
+ "nexus_tier_share": 0.82,
+ "kill_side": {
+  "intercept": 0.0383,
+  "per_1k_gold_lead": 0.1249,
+  "per_v1_logit": 0.1356,
+  "baron": 0.1937,
+  "elder": 0.2064,
+  "skirmish_style_early": 2.1933
+ },
+ "fight_size_table": {
+  "0-13": {
+   "1": 0.6451,
+   "2": 0.1933,
+   "3": 0.0876,
+   "4": 0.0436,
+   "5": 0.0204,
+   "6": 0.0054,
+   "7": 0.0042,
+   "8": 0.0004
+  },
+  "14-24": {
+   "1": 0.5081,
+   "2": 0.1831,
+   "3": 0.1168,
+   "4": 0.0821,
+   "5": 0.0594,
+   "6": 0.0316,
+   "7": 0.0134,
+   "8": 0.0055
+  },
+  "25-34": {
+   "1": 0.3657,
+   "2": 0.168,
+   "3": 0.1228,
+   "4": 0.1433,
+   "5": 0.1115,
+   "6": 0.0539,
+   "7": 0.0288,
+   "8": 0.0062
+  },
+  "35+": {
+   "1": 0.3123,
+   "2": 0.1768,
+   "3": 0.0993,
+   "4": 0.1332,
+   "5": 0.1453,
+   "6": 0.0944,
+   "7": 0.0291,
+   "8": 0.0097
+  }
+ },
+ "two_sided_share_by_size": {
+  "2": 0.403,
+  "3": 0.541,
+  "4": 0.638,
+  "5": 0.676,
+  "6": 0.995
+ },
+ "taker": {
+  "dragon": {
+   "blue_side": -0.1866,
+   "gd_per_1k": 0.1923,
+   "jng_per_1k": 0.1296,
+   "bot2_per_1k": 0.0382,
+   "mid_per_1k": 0.1845,
+   "net60k_per_1k": 0.9157,
+   "objk_per_1k": 1.636,
+   "first1k_per_1k": -0.4989,
+   "per_v1_logit": 0.1808
+  },
+  "grub": {
+   "blue_side": 0.3764,
+   "gd_per_1k": 0.1907,
+   "jng_per_1k": -0.0567,
+   "top_per_1k": 0.3361,
+   "mid_per_1k": 0.2135,
+   "net60k_per_1k": 0.3366,
+   "objk_per_1k": 0.996,
+   "per_v1_logit": -0.0478
+  },
+  "herald": {
+   "blue_side": 0.655,
+   "gd_per_1k": 0.2055,
+   "jng_per_1k": 0.2389,
+   "top_per_1k": 0.1179,
+   "mid_per_1k": 0.2842,
+   "net60k_per_1k": 0.7778,
+   "objk_per_1k": 0.9075,
+   "per_v1_logit": -0.1903
+  },
+  "baron": {
+   "blue_side": -0.1032,
+   "gd_per_1k": 0.3125,
+   "net60k_per_1k": 1.5079,
+   "objk_per_1k": 0.7362,
+   "per_v1_logit": 0.0271
+  },
+  "elder": {
+   "blue_side": -0.3217,
+   "gd_per_1k": 0.111,
+   "net60k_per_1k": 1.0745,
+   "objk_per_1k": -0.0877,
+   "per_v1_logit": 0.2238
+  }
+ },
+ "gold": {
+  "drift": -2.4,
+  "kill": 604.8,
+  "tower": 291.4,
+  "plate_early": 110.9,
+  "plate": 80.1,
+  "dragon_n": 21.5,
+  "grub": -13.7,
+  "herald": 1.0,
+  "baron": 730.4,
+  "inhib": -117.9,
+  "per_v1_logit_per_min": 3.1
+ },
+ "gold_noise_sd": 362.6,
+ "gold_feedback": {
+  "per_1k_lead": -18.5,
+  "extra_per_1k_after_20": -6.0
+ },
+ "gold_swing_share": {
+  "laning": {
+   "top": 0.1694,
+   "jng": 0.2248,
+   "mid": 0.2078,
+   "bot": 0.2789,
+   "sup": 0.1191
+  },
+  "after": {
+   "top": 0.1948,
+   "jng": 0.1993,
+   "mid": 0.208,
+   "bot": 0.2879,
+   "sup": 0.11
+  }
+ },
+ "dragon_types": {
+  "first_two_share": {
+   "ocean": 0.177,
+   "cloud": 0.174,
+   "chemtech": 0.17,
+   "hextech": 0.161,
+   "fire": 0.16,
+   "mountain": 0.158
+  },
+  "third_on_same_as_third": 1.0,
+  "first_two_differ": 1.0
+ },
+ "grubs_split": {
+  "games": 626,
+  "one_team_all": 0.698,
+  "total_dist": {
+   "3": 1.0
+  }
+ },
+ "role_kill_share": {
+  "top": 0.1786,
+  "jng": 0.2241,
+  "mid": 0.2482,
+  "bot": 0.2976,
+  "sup": 0.0515
+ },
+ "role_death_share": {
+  "top": 0.1987,
+  "jng": 0.2157,
+  "mid": 0.1862,
+  "bot": 0.184,
+  "sup": 0.2154
+ },
+ "role_assist_per_team_kill": {
+  "top": 0.3459,
+  "jng": 0.4948,
+  "mid": 0.4054,
+  "bot": 0.3675,
+  "sup": 0.6919
+ },
+ "box": {
+  "top": {
+   "gold_share": 0.2016,
+   "cs_per_1k_gold_15": 16.772,
+   "dmg_mean": 0.2253,
+   "dmg_per_kp": 0.0912,
+   "kp_mean": 0.5159,
+   "dmg_sd_resid": 0.0584,
+   "vspm_mean": 1.333,
+   "vspm_sd": 0.3
+  },
+  "jng": {
+   "gold_share": 0.2036,
+   "cs_per_1k_gold_15": 12.214,
+   "dmg_mean": 0.1675,
+   "dmg_per_kp": 0.0769,
+   "kp_mean": 0.7167,
+   "dmg_sd_resid": 0.0467,
+   "vspm_mean": 1.805,
+   "vspm_sd": 0.382
+  },
+  "mid": {
+   "gold_share": 0.2157,
+   "cs_per_1k_gold_15": 13.136,
+   "dmg_mean": 0.2466,
+   "dmg_per_kp": 0.1057,
+   "kp_mean": 0.6454,
+   "dmg_sd_resid": 0.054,
+   "vspm_mean": 1.331,
+   "vspm_sd": 0.327
+  },
+  "bot": {
+   "gold_share": 0.275,
+   "cs_per_1k_gold_15": 12.735,
+   "dmg_mean": 0.2803,
+   "dmg_per_kp": 0.1338,
+   "kp_mean": 0.6505,
+   "dmg_sd_resid": 0.0591,
+   "vspm_mean": 1.329,
+   "vspm_sd": 0.358
+  },
+  "sup": {
+   "gold_share": 0.1041,
+   "cs_per_1k_gold_15": 0.382,
+   "dmg_mean": 0.0803,
+   "dmg_per_kp": 0.0049,
+   "kp_mean": 0.7351,
+   "dmg_sd_resid": 0.0304,
+   "vspm_mean": 4.226,
+   "vspm_sd": 0.635
+  }
+ }
+}

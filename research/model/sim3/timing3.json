@@ -1,0 +1,148 @@
+{
+ "Worlds": {
+  "games": 80,
+  "first_dragon_wait_s": {
+   "within 30": 0.062,
+   "30-90": 0.362,
+   "90-180": 0.175,
+   "180+": 0.4,
+   "median": 106
+  },
+  "first_dragon_blue_share": 0.512,
+  "first_tower_s": {
+   "median": 912,
+   "p10": 742,
+   "p90": 1066
+  },
+  "first_dragon_to_bot_jungle_leader_at_5": 0.719,
+  "first_dragon_median_wait_when_leader_takes_s": 114,
+  "first_dragon_median_wait_when_other_takes_s": 197,
+  "grubs_and_first_dragon_split": 0.438,
+  "first_dragon_and_first_tower_split": 0.438,
+  "herald_taken": 1.0,
+  "herald_to_grubs_team": 0.512,
+  "first_blood_s": {
+   "median": 243,
+   "p10": 142,
+   "p90": 552
+  },
+  "first_blood_team_takes_first_dragon": 0.65,
+  "first_baron_s": {
+   "median": 1509,
+   "p10": 1326,
+   "p90": 1800,
+   "games_with_baron": 0.938
+  }
+ },
+ "before 1 Sep": {
+  "games": 395,
+  "first_dragon_wait_s": {
+   "within 30": 0.056,
+   "30-90": 0.334,
+   "90-180": 0.17,
+   "180+": 0.441,
+   "median": 135
+  },
+  "first_dragon_blue_share": 0.38,
+  "first_tower_s": {
+   "median": 915,
+   "p10": 738,
+   "p90": 1061
+  },
+  "first_dragon_to_bot_jungle_leader_at_5": 0.649,
+  "first_dragon_median_wait_when_leader_takes_s": 118,
+  "first_dragon_median_wait_when_other_takes_s": 166,
+  "grubs_and_first_dragon_split": 0.575,
+  "first_dragon_and_first_tower_split": 0.468,
+  "herald_taken": 1.0,
+  "herald_to_grubs_team": 0.554,
+  "first_blood_s": {
+   "median": 239,
+   "p10": 132,
+   "p90": 525
+  },
+  "first_blood_team_takes_first_dragon": 0.539,
+  "first_baron_s": {
+   "median": 1487,
+   "p10": 1283,
+   "p90": 1827,
+   "games_with_baron": 0.947
+  }
+ },
+ "from 1 Sep": {
+  "games": 151,
+  "first_dragon_wait_s": {
+   "within 30": 0.046,
+   "30-90": 0.305,
+   "90-180": 0.232,
+   "180+": 0.411,
+   "median": 127
+  },
+  "first_dragon_blue_share": 0.338,
+  "first_tower_s": {
+   "median": 922,
+   "p10": 729,
+   "p90": 1102
+  },
+  "first_dragon_to_bot_jungle_leader_at_5": 0.606,
+  "first_dragon_median_wait_when_leader_takes_s": 112,
+  "first_dragon_median_wait_when_other_takes_s": 118,
+  "grubs_and_first_dragon_split": 0.613,
+  "first_dragon_and_first_tower_split": 0.393,
+  "herald_taken": 1.0,
+  "herald_to_grubs_team": 0.543,
+  "first_blood_s": {
+   "median": 250,
+   "p10": 135,
+   "p90": 514
+  },
+  "first_blood_team_takes_first_dragon": 0.513,
+  "first_baron_s": {
+   "median": 1481,
+   "p10": 1275,
+   "p90": 1776,
+   "games_with_baron": 0.974
+  }
+ },
+ "all": {
+  "games": 626,
+  "first_dragon_wait_s": {
+   "within 30": 0.054,
+   "30-90": 0.331,
+   "90-180": 0.185,
+   "180+": 0.428,
+   "median": 132
+  },
+  "first_dragon_blue_share": 0.387,
+  "first_tower_s": {
+   "median": 914,
+   "p10": 734,
+   "p90": 1070
+  },
+  "first_dragon_to_bot_jungle_leader_at_5": 0.648,
+  "first_dragon_median_wait_when_leader_takes_s": 115,
+  "first_dragon_median_wait_when_other_takes_s": 166,
+  "grubs_and_first_dragon_split": 0.566,
+  "first_dragon_and_first_tower_split": 0.446,
+  "herald_taken": 1.0,
+  "herald_to_grubs_team": 0.546,
+  "first_blood_s": {
+   "median": 240,
+   "p10": 133,
+   "p90": 525
+  },
+  "first_blood_team_takes_first_dragon": 0.547,
+  "first_baron_s": {
+   "median": 1490,
+   "p10": 1283,
+   "p90": 1813,
+   "games_with_baron": 0.952
+  }
+ },
+ "baron_after_fight": {
+  "barons": 865,
+  "taker_won_last_minute_by_2plus": 0.486,
+  "no_kills_last_minute": 0.275,
+  "taker_behind_in_last_minute": 0.03
+ }
+}
