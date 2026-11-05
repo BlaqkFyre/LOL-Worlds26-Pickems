@@ -393,22 +393,41 @@ function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||
   if(runCtx())runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
   return [...m.values()].filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]||(b[1]/b[2])-(a[1]/a[2]))}
 /* five partners: measured pair lift first, then winning team-mates at this Worlds */
-function pairs5(c){const out=synOf(c).filter(x=>x[1]>0).map(([x,l])=>({x,em:"+"+l,cls:"g"}));const seen=new Set(out.map(o=>o.x));
-  worldsMates(c).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"g",note:`${w}-${g-w} together at Worlds`})}});return out.slice(0,6)}
-/* five counters: same-lane matchups, then matchups from other lanes, then lane opponents that beat it at this Worlds */
-function counters5(c){const out=countersOf(c).loses.filter(([x])=>POOL.includes(x)).map(([x,w])=>({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"b"}));const seen=new Set(out.map(o=>o.x));seen.add(c);
-  const more=[];Object.entries(CTR).forEach(([o,d])=>{d.s.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].w.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
-  more.sort((a,b)=>a[1]-b[1]).forEach(([x,w])=>{if(!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"b",other:1})}});
-  if(out.length<6&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.endsWith("|"+c)&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[0];if(!seen.has(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"b",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
+/* Card matchups and pairs (Luke, 5 Nov): meta champions only, pro records from the recent patches first (js/pro-matchups.js),
+   then real Worlds results, then solo-queue tables (METAsrc, metabot) only to fill gaps. Short pro records are pulled toward 50%
+   (2 wins and 2 losses added) so a 2-0 doesn't outrank a 15-10. */
+const PMU=typeof PRO_MU!=="undefined"?PRO_MU:{patches:"",meta:{},lane:{},pair:{}};
+const PRN={top:"top",jng:"jungle",mid:"mid",bot:"bot lane",sup:"support"};
+/* meta = picked or banned in at least 1% of pro games on the recent patches, or picked or banned at this Worlds */
+const isMeta=x=>{const m=PMU.meta[x];if(m&&m[0]+m[1]>=0.01*(PMU.games||1))return true;const w=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.champ[x];return !!(w&&(w.p+w.b>0))};
+const shrunk=(w,g)=>(w+2)/(g+4);
+/* c's pro lane matchups in its main roles (roles with 25%+ of its recorded lane games; flex games elsewhere are left out) */
+function proLane(c){const rows=[],rg={};Object.entries(PMU.lane).forEach(([k,[g,w,gd]])=>{const [r,a,x]=k.split("|");if(a!==c)return;rows.push({x,g,w,gd,r,p:shrunk(w,g)});rg[r]=(rg[r]||0)+g});
+  const tot=Object.values(rg).reduce((s,v)=>s+v,0),by=new Map();
+  rows.filter(o=>rg[o.r]>=0.25*tot).forEach(o=>{const e=by.get(o.x);if(!e||o.g>e.g)by.set(o.x,o)});return [...by.values()]}
+const proLaneNote=(c,o)=>`${c} ${o.w}-${o.g-o.w} v ${o.x} in ${PRN[o.r]} (pro, patches ${PMU.patches})${o.gd!=null?`, ${o.gd>0?"+":""}${o.gd} gold at 15`:""}`;
+function pairs5(c){const out=[],seen=new Set([c]),me=PMU.meta[c],base=me&&me[2]?shrunk(me[3],me[2]):0.5;
+  Object.entries(PMU.pair).forEach(([k,[g,w]])=>{const [a,b]=k.split("|"),x=a===c?b:b===c?a:null;if(!x)return;seen.add(x);if(!isMeta(x))return;const lift=shrunk(w,g)-base;if(lift>0)out.push({x,em:`${w}-${g-w}`,cls:"g",lift,note:`${w}-${g-w} together in pro play (patches ${PMU.patches})`})});
+  out.sort((a,b)=>b.lift-a.lift);  /* every pro-recorded partner counts as covered, so weaker data can't re-add a poor pairing */
+  worldsMates(c).forEach(([x,w,g])=>{if(!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"g",note:`${w}-${g-w} together at Worlds`})}});
+  if(out.length<6)synOf(c).filter(x=>x[1]>0).forEach(([x,l])=>{if(!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:"+"+l,cls:"g",note:`+${l} win-rate lift as a pair · solo queue (metabot.gg, METAsrc)`})}});
+  return out.slice(0,6)}
+/* six counters: pro lane opponents it lost to, then Worlds lane results, then solo-queue matchups, then your run */
+function counters5(c){const out=[],PL=proLane(c),seen=new Set([c,...PL.map(o=>o.x)]);  /* a pro record is never overridden by weaker data */
+  PL.filter(o=>o.p<0.5&&isMeta(o.x)).sort((a,b)=>a.p-b.p).forEach(o=>out.push({x:o.x,em:`${o.w}-${o.g-o.w}`,cls:"b",note:proLaneNote(c,o)}));
+  if(out.length<6&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.endsWith("|"+c)&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[0];if(!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"b",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
+  if(out.length<6){const more=countersOf(c).loses.map(([x,w])=>[x,w,0]);Object.entries(CTR).forEach(([o,d])=>{d.s.forEach(([x,w])=>{if(x===c)more.push([o,Math.round((100-w)*10)/10,1])})});if(CTR[c])CTR[c].w.forEach(([x,w])=>more.push([x,w,1]));
+    more.sort((a,b)=>a[2]-b[2]||a[1]-b[1]).forEach(([x,w,oth])=>{if(!seen.has(x)&&isMeta(x)&&w<50){seen.add(x);out.push({x,em:Math.round(w)+"%",cls:"b",note:`${w}% win rate in the matchup · solo queue (METAsrc)`,other:oth})}})}
   if(out.length<6&&runCtx()){const m=new Map();runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>ROLES.forEach(r=>{if(gm.ps[s][r].c!==c)return;const o=s==="blue"?"red":"blue",x=gm.ps[o][r].c,lost=gm.winner!==(s==="blue"?gm.blue:gm.red);const e=m.get(x)||[x,0,0];e[2]++;if(lost)e[1]++;m.set(x,e)}))));
     [...m.values()].filter(e=>e[1]>e[2]-e[1]).sort((a,b)=>b[1]-a[1]).forEach(([x,w,g])=>{if(!seen.has(x)){seen.add(x);out.push({x,em:`${w}-${g-w}`,cls:"b",note:`beat it ${w}-${g-w} in your run`})}})}
   return out.slice(0,6)}
-/* three champions it counters: same-lane matchups it wins, then wins from other lanes, then lane opponents it beat at this Worlds */
-const BEATS_INFO="Champions it beats, with its matchup win rate (METAsrc). Same lane first; gaps filled by its lane wins at Worlds. Pro-played champions only.";
-function beats3(c){const out=countersOf(c).beats.filter(([x,w])=>w>=50.5&&POOL.includes(x)).map(([x,w])=>({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"g"}));const seen=new Set(out.map(o=>o.x));seen.add(c);
-  const more=[];Object.entries(CTR).forEach(([o,d])=>{d.w.forEach(([x,w])=>{if(x===c&&!seen.has(o))more.push([o,Math.round((100-w)*10)/10])})});if(CTR[c])CTR[c].s.forEach(([x,w])=>{if(!seen.has(x))more.push([x,w])});
-  more.sort((a,b)=>b[1]-a[1]).forEach(([x,w])=>{if(w>=50.5&&!seen.has(x)&&POOL.includes(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",note:w+"% win rate in the matchup",cls:"g",other:1})}});
-  if(out.length<3&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.startsWith(c+"|")&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[1];if(!seen.has(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"g",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
+/* three champions it counters: pro lane opponents it beat, then its Worlds lane wins, then solo-queue matchups */
+const BEATS_INFO="Lane opponents it beat in pro play on the recent patches (record, gold lead at 15; short records pulled toward 50%). Gaps filled by its lane wins at Worlds, then solo-queue matchups (METAsrc). Meta champions only.";
+function beats3(c){const out=[],PL=proLane(c),seen=new Set([c,...PL.map(o=>o.x)]);
+  PL.filter(o=>o.p>0.5&&isMeta(o.x)).sort((a,b)=>b.p-a.p).forEach(o=>out.push({x:o.x,em:`${o.w}-${o.g-o.w}`,cls:"g",note:proLaneNote(c,o)}));
+  if(out.length<3&&typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.lane).filter(([k,v])=>k.startsWith(c+"|")&&v.w>v.g-v.w).sort((a,b)=>b[1].w-a[1].w).forEach(([k,v])=>{const x=k.split("|")[1];if(!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:`${v.w}-${v.g-v.w}`,cls:"g",note:`won the lane ${v.w}-${v.g-v.w} at Worlds`})}});
+  if(out.length<3){const more=countersOf(c).beats.map(([x,w])=>[x,w,0]);Object.entries(CTR).forEach(([o,d])=>{d.w.forEach(([x,w])=>{if(x===c)more.push([o,Math.round((100-w)*10)/10,1])})});if(CTR[c])CTR[c].s.forEach(([x,w])=>more.push([x,w,1]));
+    more.sort((a,b)=>a[2]-b[2]||b[1]-a[1]).forEach(([x,w,oth])=>{if(w>=50.5&&!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",cls:"g",note:`${w}% win rate in the matchup · solo queue (METAsrc)`,other:oth})}})}
   return out.slice(0,3)}
 function mostPicked(c,n=3){const m=new Map(),d=CHAMP_DB[c];
     if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const P=WORLDS_LIVE.players[n],t=P?P.team:(WORLDS_LIVE.pinTeam||{})[n]||"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
@@ -446,8 +465,8 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   <div class="key"><span><i style="background:var(--pick)"></i>Picked</span><span><i class="bnk"></i>Banned</span></div>
   <div><div class="label">Most picked at this Worlds ${infoI(`Real Worlds games on ${c}, as each player's win-loss. Hover a player for more. Your run is listed below.`)}</div><div class="ccs c3">${mp.length?mp.map(e=>`<span class="cc mp" style="--tc:${teamCol(e.t)}" title="${esc(`${e.n} (${e.t}) · ${e.g} game${e.g>1?"s":""} on ${c} at Worlds, ${e.w}-${e.g-e.w}${e.s?` · ${e.s} games on it in 2026`:""}`)}"><span class="tm">${esc(e.t)}</span><span class="cn">${esc(e.n)}</span><em class="g">${e.w}-${e.g-e.w}</em></span>`).join(""):`<span class="notes">No games on ${esc(c)} at this Worlds yet</span>`}</div>${(()=>{const r=mostPickedRun(c);return r.length?`<div class="notes small" style="margin-top:4px">Your run: ${r.map(e=>`${esc(e.n)} (${e.t}) ${e.g} gm ${e.w}-${e.g-e.w}`).join(" · ")}</div>`:""})()}</div>
   ${who.length?`<div class="here">${who.map(o=>`<span class="ig ${sideOf(o.t.id)}">${esc(o.p.n)} (${o.t.id})</span>`).join(" ")} <span class="notes">— comfort pick in this game</span></div>`:""}
-  <div class="hgrid"><div><div class="label">Pairs with ${infoI("Win-rate lift as a pair (metabot.gg, METAsrc, 26.20). Gaps filled by team-mates who won with it at Worlds.")}</div><div class="ccs c3">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
-  <div><div class="label">Countered by ${infoI("Champions that beat it, with its matchup win rate (METAsrc). Same lane first; gaps filled by Worlds lane results, then your run.")}</div><div class="ccs c3">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div></div>
+  <div class="hgrid"><div><div class="label">Pairs with ${infoI(`Team-mates it won with most in pro play on the recent patches (${PMU.patches}, record together, above its usual win rate; short records pulled toward 50%). Gaps filled by Worlds team-mates, then solo-queue duo lift (metabot.gg, METAsrc). Meta champions only.`)}</div><div class="ccs c3">${sy.length?sy.map(cc).join(""):`<span class="notes">no measured pairs</span>`}</div></div>
+  <div><div class="label">Countered by ${infoI(`Lane opponents it lost to in pro play on the recent patches (${PMU.patches}; record, gold lead at 15; short records pulled toward 50%). Gaps filled by Worlds lane results, then solo-queue matchups (METAsrc), then your run. Meta champions only.`)}</div><div class="ccs c3">${ctr.length?ctr.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div></div>
   <div><div class="label">Counters ${infoI(BEATS_INFO)}</div><div class="ccs c3">${bt.length?bt.map(cc).join(""):`<span class="notes">no matchup data</span>`}</div></div>
   ${anySt?`<div class="stkey"><span class="cc st-pick" style="--tc:var(--bside)"><span class="stag">TEAM</span></span><span class="cc st-pick" style="--tc:var(--rside)"><span class="stag">TEAM</span></span> picked this game <span class="cc st-ban" style="--tc:var(--bside)"><span class="stag">Ban</span></span><span class="cc st-ban" style="--tc:var(--rside)"><span class="stag">Ban</span></span> banned this game (tag colour = blue or red side) <span class="cc st-lock"><span class="stag">Locked</span></span> Fearless, picked in an earlier game</div>`:""}
   ${d.keys||d.core?`<div class="notes build">${d.keys?esc(d.keys[0])+" · ":""}${(d.core||[]).slice(0,3).map(esc).join(" → ")}</div>`:""}</div>`}

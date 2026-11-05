@@ -49,7 +49,7 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 
 ## Repo rules
 
-- **Cache version:** every change to `js/` or `css/` bumps `?v=N` on ALL 9 tags in `index.html` (8 scripts + `styles.css`). The version also goes in the commit title.
+- **Cache version:** every change to `js/` or `css/` bumps `?v=N` on ALL 10 tags in `index.html` (9 scripts + `styles.css`). The version also goes in the commit title.
 - **Gitignored, never commit:** `research/*OraclesElixir*.csv` (78 MB raw data) and `Draft Game/draft-clash-save.json` (autosave).
 - **Odds ceiling:** almost no matchup should sim above about 80% (see `research/backtest-2026.md`).
 - **Riot limits:** no Riot logos or artwork, free and non-commercial, keep the `ASSETS.icons` on/off switch in `js/assets.js` working.
@@ -93,6 +93,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 | `js/assets.js` | Champion icons (Data Dragon, on/off switch) and team colours |
 | `js/worlds-live.js` | Real Worlds 2026 Swiss games (picks, bans, player stats) |
 | `js/h2h.js` | Real 2026 head-to-head between the 16 Worlds teams, for Power Rankings |
+| `js/pro-matchups.js` | Pro champion matchups and pairs on recent patches (26.15+) and Worlds, for the champion cards; built by `research/build/build_pro_matchups.py` (writes only this file) |
 | `js/tournament.js` | Tournament engine, stats pool, POG and awards, tournament UI |
 | `js/core.js` | Views, tier lists, meta, champ select, draft AI, game simulation (`simGame`) |
 | `research/` | Data notes and sources: `worlds-live-2026.md`, `backtest-2026.md` (+ `backtest/`), `pro-meta-findings-2026-10-20.md` |
@@ -108,7 +109,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 
 ## Code map
 
-Scripts load in this order (`index.html`): `ui.js` → `data.js` → `champions.js` → `assets.js` → `worlds-live.js` → `h2h.js` → `tournament.js` → `core.js`. Everything is global; `core.js` runs last and ends with `loadRun()` then `show(start)`. Views render as template strings into four sections: `#v-tour`, `#v-draft`, `#v-teams`, `#v-role`.
+Scripts load in this order (`index.html`): `ui.js` → `data.js` → `champions.js` → `assets.js` → `worlds-live.js` → `h2h.js` → `pro-matchups.js` → `tournament.js` → `core.js`. Everything is global; `core.js` runs last and ends with `loadRun()` then `show(start)`. Views render as template strings into four sections: `#v-tour`, `#v-draft`, `#v-teams`, `#v-role`.
 
 | Area | File | Key names |
 |---|---|---|
@@ -121,7 +122,7 @@ Scripts load in this order (`index.html`): `ui.js` → `data.js` → `champions.
 | Navigation | `core.js` | `SECTIONS`, `VIEWS`, `show(v)`, `drawNav`. `runCtx()` returns the tournament run only on tournament screens (or a draft started from one), so simulated numbers never show elsewhere |
 | Real-data views | `core.js` | `metaView`/`metaTiers`/`synergyView`, `champRoleView`/`champCard`, `roleView`/`playerCard`, `drawPower` (+ H2H matrix), roster grid, `drawCmp` |
 | Champion helpers | `core.js` | `metaOf`, `wrOf` (shrunk win rate `adj`), `trendOf`, `proPres` → `basePres` (blends Worlds presence, share = games/(games+60)) → `presOf` (+ `tourPres`), `worldsPool` → `poolOf` (+ `tourPool`), `matchup`, `countersOf`, `SYN`, `ROLEMAP`, `POOL`, `primaryRole` |
-| Hover cards | `core.js` | `playerTip`, `teamTip`, `champTip`; touch screens open them as a bottom sheet (`openSheet`) |
+| Hover cards | `core.js` | `playerTip`, `teamTip`, `champTip`; touch screens open them as a bottom sheet (`openSheet`). Card matchups and pairs: `counters5` / `beats3` / `pairs5` use `PRO_MU` first (meta champions only via `isMeta`, short records pulled toward 50% by `shrunk`, main roles via `proLane`), then Worlds results, then METAsrc / metabot to fill gaps |
 | Draft engine | `core.js` | `SEQ` (20 steps), `DS` (draft state), `scoreFor(c, actor, kind)` (hand-weighted pick/ban score with reasons), `recs()`, `doPick`, `queueAI` (AI picks top 3 at 60/25/15%, 2 s delay), `bestMatch` (typed search), `renderDraft`, `teamPanel`, `nextBest` |
 | Draft review | `core.js` | `draftScore`, `analysis()`: "Before draft" = `winP(ov gap / 9)`; "After draft" = 600 runs of `simGame` |
 | Game sim (to be replaced) | `core.js` | `champMod` → `teamStr` (uses `SIMK`, `STAR`) → `simGame(quiet)` (laning, early objectives, fight loop with `fight`/`push`, Nexus; constants `SIM_SD`, `SIM_GOLD`, `LATE`, `KW`). `runGame` (1500 runs for series odds), `simView` (result screen, gold chart, play-by-play) |

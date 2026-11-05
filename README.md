@@ -69,6 +69,7 @@ js/champions.js     pro data for 165 champions (presence, win rates, roles, buil
 js/assets.js        champion icons (Data Dragon, with on/off switch) and team colours
 js/worlds-live.js    real Worlds 2026 Swiss and knockout games (picks, bans, player stats) for champion data, pools and player form
 js/h2h.js            real 2026 head-to-head between the 16 Worlds teams (games), for Power Rankings
+js/pro-matchups.js   pro champion matchups and pairs on recent patches, for the champion cards
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation
 ```
@@ -82,6 +83,7 @@ To update data (e.g. real results or new stats), edit `js/data.js`.
 - Champion pools: mid.gg player pages; Sheep Esports player pages (LOS).
 - Meta: NerfPlz pro picks and bans (26.20, 26.16–26.20, 2026 season), NerfPlz champion pro-build pages, NerfPlz Worlds 2026 picks and bans; DPM.LOL. Details in `research/`.
 - Champion icons: Riot Data Dragon.
+- Champion card matchups and pairs (champ select): pro games on patches 26.15+ and Worlds from the Oracle's Elixir file (`js/pro-matchups.js`, built by `research/build/build_pro_matchups.py`); meta champions only, solo-queue data only fills gaps.
 - Synergy: metabot.gg duos and METAsrc duo/synergy pages (patch 26.20, ranked solo queue).
 - Counters: METAsrc counter pages (ranked solo queue, patches 26.17–26.20).
 - Draft rules: Sheep Esports and esports.gg on First Selection; Nerdbot on first vs last pick.
