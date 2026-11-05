@@ -30,8 +30,9 @@ Scripts run from a scratch folder (Python + pandas). Each script's docstring has
 | 14 | `s3_ablate.py` | `ablate3.json` (held-out log loss with draft styles off, then lane inputs off too) |
 | 15 | `s3_timing.py`, `s3_check_ks.py`, `s3_t3check.py`, `s3_style_check.py` | `timing3.json`, `check_ks.json` (kills by length, dragon side-swapping, real v sim), `t3check.json` (T2 → T3 stage), `style_check.json` (do draft styles move timing, real v sim) |
 | 16 | `s3_dmgmix.py` | `dmgmix.json` (comps option C: damage type and frontline, with Riot client tags via the League wiki, `wiki_champ_tags.csv`) |
+| 17 | `s3_quick.py` | printout: quick shape check of a sim version on held-out games (length, short games and their Barons, kills, kill difference and gold lead at 15, kill rate v length; real side from the timelines) |
 
-The final sim runs with `s3_test.py ... 200 timing` (draft styles timing-only). Option A (a comp converts a lead) results are in `optionA_rates3.json` / `optionA_events3.json`: not kept.
+The final sim runs with `s3_test.py ... 200 timing` (draft styles timing-only). Spread fixes tested on 5 Nov and not kept (report section 7d) stay in the scripts but are off by default: the per-game tempo measurement (`rates3_results.json` → `tempo`), game form (`events3_results.json` → `kill_side_within`, used only with `cal["form"] = "within"`) and the per-phase fight swing (`s3_test.py ... 200 timing phase`; results in `test3_phase_eps.json`). With the defaults the sim replays the committed games exactly (300 of 300 seeded games checked). Option A (a comp converts a lead) results are in `optionA_rates3.json` / `optionA_events3.json`: not kept.
 
 In the repo (`research/model/sim3/`): the small tables (fits, params, targets, timing, test results, the timeline-to-file match). Kept local (rebuild with steps 1–3): the raw gol.gg pages, `tl_events.csv` (64,199 events), `tl_gold.csv`, `tl_fights.csv`, `lanes3_features.csv`, `comp3_games.csv` and the held-out sim games.
 

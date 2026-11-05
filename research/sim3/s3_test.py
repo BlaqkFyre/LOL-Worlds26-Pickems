@@ -8,7 +8,8 @@ C. Held-out: every game from 1 Sep and every Worlds game, N sims each (seeded). 
    calibration bands, v1 and coin flip side by side. Game shape: length, kills, towers, dragons, Barons, grubs, Heralds,
    Elders, first-Baron / first-dragon / first-tower / Elder team win rates, role kill share, gold lead at 15, against the
    file's real games in the same window (targets3.json).
-usage: python -I s3_test.py params3.json lanes3_features.csv v1_games.csv targets3.json tl_fights.csv comp3_games.csv <out_dir> [n_sims]"""
+usage: python -I s3_test.py params3.json lanes3_features.csv v1_games.csv targets3.json tl_fights.csv comp3_games.csv <out_dir> [n_sims] [side|timing] [phase]
+  The final sim: n_sims 200, "timing". "phase" switches on the per-phase fight swing (tested 5 Nov, not kept; report 7d)."""
 import os, sys, json, math, importlib.util
 from multiprocessing import Pool
 import numpy as np
@@ -17,6 +18,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 PJ, FE, V1, TJ, FI, CO, OUT = sys.argv[1:8]; NS = int(sys.argv[8]) if len(sys.argv) > 8 else 200
 MODE = sys.argv[9] if len(sys.argv) > 9 else "side"  # draft styles: "side" (who) or "timing" (when only)
+PHASE_EPS = len(sys.argv) > 10 and sys.argv[10] == "phase"  # per-phase fight swing: opt-in; tested 5 Nov and not kept (report 7d)
 os.makedirs(OUT, exist_ok=True)
 ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
@@ -46,20 +48,27 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     ks = P["kill_side"]
     # the draft skirmish term (early fights only, about 0 on average) is left out of this check
     xb = ks["intercept"] + ks["per_1k_gold_lead"] * F.gd / 1000 + ks["per_v1_logit"] * F.z + ks["baron"] * F.baron + ks["elder"] * F.elder
-    real2 = ((F.blue > 0) & (F.red > 0)).groupby(F.n.clip(upper=6)).mean()
-    cnt = F.groupby(F.n.clip(upper=6)).size()
     rs = np.random.default_rng(0).standard_normal(400)
-    def two_sided(eps):
-        out = {}
-        for n in real2.index:
-            x = xb[F.n.clip(upper=6) == n].values[:, None] + eps * rs[None, :]
-            p = sig(x); nn = F.n[F.n.clip(upper=6) == n].values[:, None]
-            out[n] = float(np.mean(1 - p ** nn - (1 - p) ** nn))
-        return out
-    best = min(np.arange(0, 3.01, 0.05), key=lambda e: sum(cnt[n] * (two_sided(e)[n] - real2[n]) ** 2 for n in real2.index))
-    cal = {"gain": 1.0, "lane_mu": 1.0, "lane_k": 1.0, "fight_eps": round(float(best), 2), "style_mode": MODE}
-    res = {"fight_eps": {"value": cal["fight_eps"], "real_two_sided": real2.round(3).to_dict(), "sim_two_sided": {k: round(v, 3) for k, v in two_sided(best).items()},
-                         "training_fights": int(len(F))}}
+    def fit_eps(FF, xbb):
+        real2 = ((FF.blue > 0) & (FF.red > 0)).groupby(FF.n.clip(upper=6)).mean(); cnt = FF.groupby(FF.n.clip(upper=6)).size()
+        def two_sided(eps):
+            out = {}
+            for n in real2.index:
+                sel = (FF.n.clip(upper=6) == n).values
+                x = xbb[sel].values[:, None] + eps * rs[None, :]
+                p = sig(x); nn = FF.n[sel].values[:, None]
+                out[n] = float(np.mean(1 - p ** nn - (1 - p) ** nn))
+            return out
+        best = min(np.arange(0, 3.01, 0.05), key=lambda e: sum(cnt[n] * (two_sided(e)[n] - real2[n]) ** 2 for n in real2.index))
+        return round(float(best), 2), {"real_two_sided": real2.round(3).to_dict(), "sim_two_sided": {k: round(v, 3) for k, v in two_sided(best).items()}, "fights": int(len(FF))}
+    best, info_all = fit_eps(F, xb)
+    # by game phase: early fights are trades (two-sided like coin flips), late teamfights one-sided (5 Nov check)
+    PHF = {"0-13": F.m < 14, "14-24": (F.m >= 14) & (F.m < 25), "25+": F.m >= 25}
+    eps_ph = {}; info_ph = {}
+    for k_, msk in PHF.items(): eps_ph[k_], info_ph[k_] = fit_eps(F[msk], xb[msk])
+    cal = {"gain": 1.0, "lane_mu": 1.0, "lane_k": 1.0, "fight_eps": best, "style_mode": MODE, "form": "off"}
+    if PHASE_EPS: cal["fight_eps_phase"] = eps_ph
+    res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
 
 

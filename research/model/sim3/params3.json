@@ -376,6 +376,18 @@
   "baron": 0.1911,
   "elder": 0.206
  },
+ "kill_side_within": {
+  "coef": {
+   "intercept": 0.0759,
+   "per_1k_gold_lead": 0.0478,
+   "per_v1_logit": 0.3481,
+   "baron": 0.1914,
+   "elder": 0.3573
+  },
+  "game_form_sd": 0.4703,
+  "games": 395,
+  "note": "per_v1_logit is not identified within a game (v1 is constant in a game); the sim keeps the pooled v1 term"
+ },
  "taker_timing": {
   "dragon": {
    "blue_side": -0.18,

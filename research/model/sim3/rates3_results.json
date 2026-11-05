@@ -579,5 +579,31 @@
     "base": 0.6849
    }
   }
+ },
+ "tempo": {
+  "train": {
+   "games": 395,
+   "fight_var": -0.0117,
+   "push_var": -0.0089,
+   "cov": 0.0131,
+   "corr": null,
+   "raw_ratio_corr": 0.302
+  },
+  "test": {
+   "games": 151,
+   "fight_var": -0.0254,
+   "push_var": -0.0122,
+   "cov": 0.0048,
+   "corr": null,
+   "raw_ratio_corr": 0.208
+  },
+  "worlds": {
+   "games": 80,
+   "fight_var": -0.0025,
+   "push_var": -0.0141,
+   "cov": 0.0062,
+   "corr": null,
+   "raw_ratio_corr": 0.158
+  }
  }
 }

@@ -23,7 +23,7 @@ Written 5 Nov 2026 (AEST), final version the same evening. Working files, every 
   - how fast games end once an inhibitor falls (sim 0:29, real 0:42).
 - **Timing is flexible, as in real games, because every chance depends on the game state.** Who takes a dragon depends on side, the gold lead, jungle, bot-lane and mid leads (lane priority), a fight just won and the first dragon's special timing. Tower damage comes in pushes, more after a won fight and under Baron. So the same draft plays out differently each time but follows the real tendencies.
 - **Still off:**
-  - Games vary too much from one to the next: length sd 7.0 against 5.6, kills sd 12.4 against 7.3. Real games probably each have their own tempo; the sim doesn't yet.
+  - Games vary too much from one to the next: length sd 7.0 against 5.6, kills sd 12.4 against 7.3. Three data-based fixes were tested after the final version and none is kept (section 7d); the cause is still open.
   - Barons are a little low: 1.32 against 1.42, and 88% of games have one against 97%. Inhibitor turrets fall under Baron less often than real (31% against 61%), and the T2-to-T3 stage is still slower than real (median 3:34 against 1:29).
   - The first-Baron team wins 78.5% against 84.4%.
 - **Draft styles, tested three ways:**
@@ -240,9 +240,36 @@ Luke: if an input feeds the sim for one role, check the other roles too. `resear
   - ADC + support time together → bot lane gold (0.2% / 0.3% / ~0).
 - **Comfort moves no lane events in any role (0 of 13),** jungle included, although jungle comfort helps predict winners at big events. **Jungle–mid time together** (session 2's strongest pair) doesn't move mid/jungle gold, early kills, Herald or grubs. These act on winning through something the file doesn't record well (decisions, teamfights), so they belong at the who-wins level (the v2 candidate's knockout test), not as lane events.
 
+## 7d. The spread of games: three fixes tested, none kept (5 Nov)
+
+Tested after the final version; the committed sim is unchanged. The scripts keep each option switched off by default (`s3_sim.py` `cal["form"]`, `s3_test.py ... phase`), and the defaults reproduce the committed sim exactly (300 of 300 seeded games identical). Quick checks used `research/sim3/s3_quick.py` (150 held-out matchups × 4 runs).
+
+**Where the spread comes from** (held out, sim v real):
+
+| | Sim | Real |
+|---|---|---|
+| Games under 24 min | 11.5% | 2.6% |
+| ...of those with no Baron | 59% | 17% |
+| ...kills per minute | 0.77 | 1.01 |
+| Kills per minute in 42+ min games | 0.94 | 0.69 |
+| Link between kill rate and length | +0.15 | −0.34 |
+| Kill difference at 15 (sd) | 3.7 | 2.7 |
+| Gold lead at 15 (sd) | 2,793 | 2,265 |
+
+Real fast games are bloody and real long games are slow. The sim makes too many quiet stomps and lets long games keep fighting.
+
+| Fix tried | What the data said | Result in the sim | Kept? |
+|---|---|---|---|
+| **Per-game tempo** (one slow/fast factor per game for fights and pushes) | Measured (`rates3_results.json` → `tempo`) on training games after the fitted rates: the leftover game-to-game spread is negative (fights −0.012, pushes −0.009), so real games vary *less* than chance once their state is known; there is no hidden tempo to add | not built | no |
+| **Game form** (the gold-lead effect on who wins kills, fitted within each game, plus a once-per-game form draw) | (`events3_results.json` → `kill_side_within`) The pooled effect (0.125 per 1k gold) is mostly "stronger team in this game": within games it's 0.048 (from 1 Sep 0.061, Worlds 0.069; these two from a one-off check, printout not saved); form spread after noise about 0.47 | early kill spread 3.72 → 3.60; short games unchanged (12%); with the per-phase swing below it was worse | no |
+| **Per-phase fight swing** (how one-sided a fight is, fitted per phase) | Real 2-kill fights go both ways 52% of the time before 14:00, 37% at 14–24 and 30% later (3-kill: 73 / 51 / 42%); one swing for all phases made early fights too one-sided. Fitted swing: 0 / 0.95 / 1.45 | short games 11.5% → 7.8%, Baron games about the same, but who-wins worse (log loss 0.641 v 0.635 from 1 Sep, 0.635 v 0.626 at Worlds; beyond the ~0.0025 noise). Results: `test3_phase_eps.json` | no |
+
+- Also checked: a who-wins-each-kill model fitted by phase is no better on held-out kills (before 14:00: 0.6876 v pooled 0.6868; both near a coin flip, 0.693).
+- With the per-phase swing, simulated kills before 14:00 split almost like real ones (sd 2.94; real 2.72 by 15:00); the small remainder is the gold-lead feedback.
+
 ## 8. Open items for Luke
 
-1. **Spread of games:** length and kills vary too much from game to game. Next test: a per-game tempo (some games slow, some fast) fitted from the timelines.
+1. **Spread of games:** length and kills vary too much from game to game. A per-game tempo, a within-game "form" split and a per-phase fight swing were all tested and not kept (section 7d). Next idea, not tested: the same within-game refit for the tower-push and objective-taker models, whose lead effects may carry the same "stronger team in this game" mix as the kill model did.
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?

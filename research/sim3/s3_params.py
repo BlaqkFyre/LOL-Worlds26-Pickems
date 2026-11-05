@@ -41,7 +41,7 @@ for r in ROLES:
 P = {"roles": ROLES, "lanes": lanes, "lane_cov15": cov15, "lane_cov10": cov10,
      "segments": R["segments"]["coef"], "base_structures": R["base_structures"]["coef"], "base_push": R["base_push"],
      "segments_timing": R["segments_timing"]["coef"], "segment_push": R.get("segment_push"), "base_push_timing": R["base_push_timing"]["coef"],
-     "kill_side_timing": E["kill_side_timing"]["coef"], "taker_timing": {k: v["coef"] for k, v in E["taker_timing"].items()}, "fights": R["fights"]["coef"],
+     "kill_side_timing": E["kill_side_timing"]["coef"], "kill_side_within": E.get("kill_side_within"), "taker_timing": {k: v["coef"] for k, v in E["taker_timing"].items()}, "fights": R["fights"]["coef"],
      "dispersion": {k: R[k].get("dispersion_by_phase", {}) for k in ["segments", "base_structures", "fights"]}, "monsters": {k: v["coef"] for k, v in R["monsters"].items()},
      "first_tower_lane_share": R["first_tower_lane_share"], "nexus_tier_share": R["nexus_tier_share_when_inhib_down"]["share_nexus_tier"],
      "kill_side": E["kill_side"]["coef"], "fight_size_table": E["fight_size_table"], "two_sided_share_by_size": E["two_sided_share_by_size"],

@@ -255,5 +255,22 @@ for k in ["dragon", "grub", "herald", "baron", "elder"]:
         if len(q) > 5: out[s] = {"n": len(q), "logloss": round(lg(np.clip(1 / (1 + np.exp(-X(q) @ b)), 1e-6, 1 - 1e-6), q.y.values), 4),
                                  "base": round(lg(np.full(len(q), trd.y.mean()), q.y.values), 4)}
     res["monsters"][k] = out
+# ---------- game tempo: does a game's fighting and pushing run above / below the fitted rates together? ----------
+# per game: observed v expected fights (fight model) and tower pushes (segment_push model); method of moments for the spread of
+# a game-level multiplier (Poisson / Bernoulli noise removed) and the link between the two; training games, then held out
+SC = "siege_s"
+Fp_ = Fp.copy(); Fp_["e"] = np.exp(Xf(Fp_) @ bf)
+SG_ = SEG.copy(); SG_["e"] = 1 / (1 + np.exp(-Xg(SG_) @ bsp)); SG_["o"] = (SG_.push > 0).astype(float)
+SC = "siege"
+TG = Fp_.groupby("gid").agg(of=("y", "sum"), ef=("e", "sum"), split=("split", "first")).join(SG_.groupby("gid").agg(op=("o", "sum"), ep=("e", "sum")))
+TG = TG.dropna()
+def tempo(d):
+    vf = float(((d.of - d.ef) ** 2 - d.ef).sum() / (d.ef ** 2).sum()); vp = float(((d.op - d.ep) ** 2 - d.ep).sum() / (d.ep ** 2).sum())
+    cfp = float(((d.of - d.ef) * (d.op - d.ep)).sum() / (d.ef * d.ep).sum())
+    return {"games": len(d), "fight_var": round(vf, 4), "push_var": round(vp, 4), "cov": round(cfp, 4),
+            "corr": round(cfp / np.sqrt(max(vf, 1e-9) * max(vp, 1e-9)), 3) if vf > 0 and vp > 0 else None,
+            "raw_ratio_corr": round(float(np.corrcoef(d.of / d.ef, d.op / d.ep)[0, 1]), 3)}
+res["tempo"] = {s_: tempo(TG[TG.split == s_]) for s_ in ["train", "test", "worlds"]}
+TG.to_csv(os.path.join(OUT, "tempo_games.csv"))
 json.dump(res, open(os.path.join(OUT, "rates3_results.json"), "w"), indent=1, default=float)
 print(json.dumps(res, indent=1, default=float))

@@ -112,6 +112,21 @@ bkt = logit_fit(Xk[tr][:, :5], yk[tr])
 res["kill_side_timing"] = {"coef": dict(zip(["intercept", "per_1k_gold_lead", "per_v1_logit", "baron", "elder"], np.round(bkt, 4))),
                            **{s_: {"n": int((spl == s_).sum()), "logloss": round(lg(1 / (1 + np.exp(-Xk[spl == s_][:, :5] @ bkt)), yk[spl == s_]), 4)}
                               for s_ in ["train", "test", "worlds"]}}
+# within-game version: the pooled gold-lead effect partly reflects "this team is stronger in this game" (beyond v1). Fit with a
+# separate baseline per game (game dummies, ridge 1), training games; the game effects' spread minus their noise = game form
+_gid = np.r_[np.repeat(Fw.gid.values, Fw.blue.values.astype(int)), np.repeat(Fw.gid.values, Fw.red.values.astype(int))]
+_tg = pd.Index(sorted(set(_gid[tr]))); _gi = _tg.get_indexer(_gid[tr])
+_D = np.zeros((tr.sum(), len(_tg))); _D[np.arange(tr.sum()), _gi] = 1
+_X = np.c_[Xk[tr][:, :5], _D]; _l2 = np.r_[1e-3, 1, 1, 1, 1, np.ones(len(_tg))]
+bw = np.zeros(_X.shape[1])
+for _ in range(40):
+    _p = 1 / (1 + np.exp(-_X @ bw)); _W = _p * (1 - _p)
+    bw += np.linalg.solve(_X.T @ (_X * _W[:, None]) + np.diag(_l2), _X.T @ (yk[tr] - _p) - _l2 * bw)
+_fe = bw[5:]; _info = np.array([(_W[_gi == j]).sum() for j in range(len(_tg))])
+_v = float(np.var(_fe) - np.mean(1 / (_info + 1)))
+res["kill_side_within"] = {"coef": dict(zip(["intercept", "per_1k_gold_lead", "per_v1_logit", "baron", "elder"], np.round(bw[:5], 4))),
+                           "game_form_sd": round(float(np.sqrt(max(_v, 0.0))), 4), "games": len(_tg),
+                           "note": "per_v1_logit is not identified within a game (v1 is constant in a game); the sim keeps the pooled v1 term"}
 # fights cluster around objectives: share of fights starting within 60 s before an epic monster take
 OBJ = ev[ev.type.isin(["dragon", "baron", "herald", "grub"])]
 near = []
