@@ -617,6 +617,8 @@ em.g,.cc em.g{font-style:normal;color:var(--gold);font-weight:700}em.b,.cc em.b{
 .ccs.c3 .cc em,.ccs.c3 .cc .stag{flex:none}
 .ccs.c3 .cc .ico{flex:none}
 .ccs.c3>.notes{grid-column:1/-1}
+/* card chips from pro data (pro records, real Worlds results): a light tint of the theme accent; solo-queue chips stay plain */
+.cc.pro{background:color-mix(in srgb,var(--gold) 14%,var(--chip))}
 @media (max-width:640px){.ccs.c3 .cc{flex-wrap:nowrap}}
 .ccs.c3 .cc.mp{padding:3px 5px}.ccs.c3 .cc.mp .tm{flex:none;margin-left:0;font-size:10px;padding:1px 4px}
 /* Worlds form box: title, skill changes and tag centred in the left two-thirds; KDA/KP/DMG/CS-min in one darker 2x2 block on the right */
