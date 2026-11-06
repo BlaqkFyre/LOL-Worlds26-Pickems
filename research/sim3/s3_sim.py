@@ -90,6 +90,9 @@ class Sim:
         SPC = P["segment_push"]["coef"] if (P.get("segment_push") and cal.get("seg_mode", "push") == "push") else None
         SEGC = SPC if SPC is not None else (P["segments_timing"] if TIM else P["segments"]); PUSHC = P["base_push_timing"] if TIM else P["base_push"]["coef"]
         KSC = P["kill_side_timing"] if TIM else P["kill_side"]; TAKC = P["taker_timing"] if TIM else P["taker"]
+        FB = P["gold_feedback"]
+        if cal.get("within", "off") == "on" and P.get("segment_push_within"):  # opt-in (6 Nov test): lead effects fitted within games
+            SPC = P["segment_push_within"]["coef"]; SEGC = SPC; PUSHC = P["base_push_within"]["coef"]; TAKC = P["taker_within"]; FB = P["gold_feedback_within"]
         # game form: the pooled gold-lead effect on who wins fights partly reflects "this team is stronger in this game";
         # fitted within games instead (0.048 v 0.125 per 1k), with a once-per-game form draw (spread measured on training games)
         form = 0.0
@@ -130,7 +133,7 @@ class Sim:
                 f0, f1 = (m / 15) ** self.A, ((m + 1) / 15) ** self.A
                 farm += lane_end * (f1 - f0)
             else:
-                fb = P["gold_feedback"]
+                fb = FB
                 d = val["drift"] + val["per_v1_logit_per_min"] * z + fb["per_1k_lead"] * gd / 1000 + (fb["extra_per_1k_after_20"] * gd / 1000 if m >= 20 else 0)
                 d += rng.normal(0, P["gold_noise_sd"]) * cal.get("gold_noise_k", 1.0)
                 gold += d * self.sw_late
@@ -145,7 +148,8 @@ class Sim:
             for _ in range(nf):
                 sizes, pr = self.fsize[FPH(m)]; n = int(rng.choice(sizes, p=pr))
                 ks = KSC
-                p = sig(ks["intercept"] + ks["per_1k_gold_lead"] * gd / 1000 + ks["per_v1_logit"] * z + ks["baron"] * bdir + ks["elder"] * edir + form
+                zk = cal.get("kill_z_phase", {}).get("0-13" if m < 14 else "14-24" if m < 25 else "25+", 1.0)  # opt-in (6 Nov test): strength in kills by phase
+                p = sig(ks["intercept"] + ks["per_1k_gold_lead"] * gd / 1000 + ks["per_v1_logit"] * z * zk + ks["baron"] * bdir + ks["elder"] * edir + form
                         + ks.get("skirmish_style_early", 0.0) * skirm_d * (m < 15)
                         + rng.normal(0, cal.get("fight_eps_phase", {}).get("0-13" if m < 14 else "14-24" if m < 25 else "25+", cal["fight_eps"])))
                 tf = t0 + rng.uniform(0, 55); dead = [set(), set()]

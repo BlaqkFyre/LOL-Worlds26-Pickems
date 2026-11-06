@@ -153,6 +153,10 @@ res["gold_noise_sd_per_min"] = round(float(np.std(qt.dgd.values - Xg @ bg)), 1)
 Xg2 = np.c_[Xg, qt.gd.values / 1000, (qt.gd.values / 1000) * (qt.m.values >= 20)]
 bg2, *_ = np.linalg.lstsq(Xg2, qt.dgd.values, rcond=None)
 res["gold_lead_feedback"] = {"per_1k_lead": round(float(bg2[-2]), 1), "extra_per_1k_after_20": round(float(bg2[-1]), 1)}
+# within-game version (6 Nov): the game's average lead added (Mundlak)
+_mg = qt.groupby("gid").gd.transform("mean").values / 1000
+bg3, *_ = np.linalg.lstsq(np.c_[Xg2, _mg], qt.dgd.values, rcond=None)
+res["gold_lead_feedback_within"] = {"per_1k_lead": round(float(bg3[-3]), 1), "extra_per_1k_after_20": round(float(bg3[-2]), 1), "game_mean_lead": round(float(bg3[-1]), 1)}
 # how a minute's team gold swing lands on each role (slope of the role's change on the team's change), training games
 RG = go.pivot_table(index=["gid", "minute"], columns="role", values="sv", aggfunc="sum").sort_index()
 DG = RG.groupby(level=0).diff().dropna(); DG["team"] = DG[ROLES].sum(axis=1)
@@ -198,6 +202,21 @@ for tkey, drop in [("taker", ()), ("taker_timing", ("objk",)), ("taker_A", ("obj
             if len(q): out[s] = {"n": len(q), "logloss": round(lg(1 / (1 + np.exp(-X(q) @ b)), q.blue.values), 4),
                                  "base": round(lg(np.full(len(q), trd.blue.mean()), q.blue.values), 4), "blue_share": round(float(q.blue.mean()), 3)}
         res[tkey][kind] = out
+# within-game takers (6 Nov): each game's average gold and role leads (blue minus red, over its minutes) added (Mundlak)
+_GM = P.groupby("gid")[["gd", "top", "jng", "mid", "bot", "sup"]].mean(); _GM["bot2"] = _GM.bot + _GM.sup
+for c_ in ["gd", "jng", "top", "mid", "bot2"]: OB["m_" + c_] = OB.gid.map(_GM[c_])
+res["taker_within"] = {}
+for kind, feats in [("dragon", ["gd", "jng", "bot2", "mid", "net60k", "first1k"]), ("grub", ["gd", "jng", "top", "mid", "net60k"]),
+                    ("herald", ["gd", "jng", "top", "mid", "net60k"]), ("baron", ["gd", "net60k"]), ("elder", ["gd", "net60k"])]:
+    mf = ["m_" + f for f in feats if f in ("gd", "jng", "top", "mid", "bot2")]
+    d = OB[(OB.kind == kind)].dropna(subset=["gd"] + mf)
+    if kind == "grub": d = d.drop_duplicates(["gid", "m", "side"])
+    XW = lambda q: np.c_[np.ones(len(q)), q[feats].values / 1000, q.z.values, q[mf].values / 1000]
+    trd = d[d.split == "train"]
+    if len(trd) < 30: continue
+    b = logit_fit(XW(trd), trd.blue.values, l2=2.0)
+    res["taker_within"][kind] = {"coef": dict(zip(["blue_side", *[f + "_per_1k" for f in feats], "per_v1_logit", *[f + "_per_1k" for f in mf]], np.round(b, 4))),
+                                 "pooled_gd_per_1k": res["taker_timing"][kind]["coef"].get("gd_per_1k")}
 # dragon timing: wait from spawn (first at the earliest observed time, then 5 min after the last take) to take
 SPAWN = {"dragon": int(first.dragon.min()) if "dragon" in first else 300}
 wait = []

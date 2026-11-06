@@ -267,9 +267,45 @@ Real fast games are bloody and real long games are slow. The sim makes too many 
 - Also checked: a who-wins-each-kill model fitted by phase is no better on held-out kills (before 14:00: 0.6876 v pooled 0.6868; both near a coin flip, 0.693).
 - With the per-phase swing, simulated kills before 14:00 split almost like real ones (sd 2.94; real 2.72 by 15:00); the small remainder is the gold-lead feedback.
 
+## 7e. The spread of games, continued: where short games come from (6 Nov)
+
+Research only; the default sim is unchanged (300 of 300 seeded games identical). New options stay off by default: `cal["within"] = "on"` and `cal["kill_z_phase"]`.
+
+**1. Lead effects fitted within games (the untested idea from 7d): not kept.** Each game's average lead was added as an input (`s3_rates.py`, `s3_events.py`; results `research/model/sim3/within3.json`). The live-lead effects mostly got *bigger*, not smaller:
+
+| Lead effect | Pooled | Within games |
+|---|---|---|
+| Base push, per 1k lead | 0.05 | 0.22 |
+| Dragon taker, per 1k lead | 0.18 | 0.37 |
+| Gold feedback after 15:00, per 1k lead per minute | −18.5 | −33.0 |
+
+In the sim (`s3_quick.py`, 150 held-out matchups × 4) games under 24 min went from 11.8% to 13.5% and Baron games from 87% to 85%. Not kept.
+
+**2. Team strength by phase.** How strongly pre-game strength (v1) decides who gets each kill (logistic slope), real timeline games v the sim (`s3_zphase.py`):
+
+| Kills | 0:00–14:00 | 14:00–25:00 | 25:00+ |
+|---|---|---|---|
+| Real, before 1 Sep | 0.29 | 0.43 | 0.37 |
+| Real, from 1 Sep | 0.26 | 0.49 | 0.62 |
+| Sim (final version) | 0.13 | 0.34 | 0.35 |
+| Sim with the per-phase fight swing (7d) | 0.23 | 0.29 | 0.29 |
+| Sim with the swing + strength by phase matched to training games (×1.24 / ×1.48 / ×1.26) | 0.30 | 0.43 | 0.47 |
+
+Strength in the sim's kills is *weaker* than real, so the early spread comes from randomness, not strength. The swing + matched strength gives games under 24 min 9.3% (real 2.6%), but kills still vary far too much (sd 12.7 v 7.0). Who-wins not run for this version yet.
+
+**3. Long games are fine; short games aren't.** For games past 21 min, length and kill rate by gold lead at 20:00 match real games (`s3_lead_end.py`):
+
+| Lead at 20:00 | Sim: median length, kills/min | Real |
+|---|---|---|
+| under 2k | 34.0 min, 0.81 | 35.0 min, 0.76 |
+| 2–5k | 31.5 min, 0.86 | 31.8 min, 0.80 |
+| 5–9k | 28.3 min, 0.92 | 27.2 min, 0.88 |
+
+**4. The likely cause: second-tier towers fall too early.** Median times (`s3_diag.py`): first T1 sim 14:39 v real 15:14; **first T2 21:54 v 24:42**; first T3 28:00 v 29:34; first inhibitor 29:16 v 30:34; end 31:25 v 31:59. Bases open almost 3 minutes early, which gives the short no-Baron games. **Next test:** the tower-push model's tier-2 stage (push chance and push size for T2 segments by minute), checked against real T2 timing, then who-wins on held-out games.
+
 ## 8. Open items for Luke
 
-1. **Spread of games:** length and kills vary too much from game to game. A per-game tempo, a within-game "form" split and a per-phase fight swing were all tested and not kept (section 7d). Next idea, not tested: the same within-game refit for the tower-push and objective-taker models, whose lead effects may carry the same "stronger team in this game" mix as the kill model did.
+1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim, opening bases early; next test is the T2 stage of the tower-push model.
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?

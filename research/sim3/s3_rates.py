@@ -204,9 +204,21 @@ res["segment_push"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum"], np.r
                        "size_dist": {k: {str(z): round(float(v), 4) for z, v in d["size"].clip(upper=15).value_counts(normalize=True).sort_index().items()} for k, d in _tp.groupby("key")},
                        **{s_: {"n": int((SEG.split == s_).sum()), "logloss": spush_ll(SEG[SEG.split == s_], bsp), "baseline": spush_ll(SEG[SEG.split == s_], bsp0, False)}
                           for s_ in ["train", "test", "worlds"]}}
+# within-game versions (6 Nov): each game-side's average lane lead and team lead over the game added as inputs (Mundlak), so the
+# lead terms measure "ahead right now" rather than "the stronger team in this game" (which pooled fits mix in)
+SEG["m_lane_lead"] = SEG.groupby(["gid", "side", "lane"]).lane_lead.transform("mean"); SEG["m_lead"] = SEG.groupby(["gid", "side"]).lead.transform("mean")
+XgW = lambda d: np.c_[Xg(d), d.m_lane_lead.clip(-8, 8), d.m_lead.clip(-15, 15)]
+trsW = SEG[SEG.split == "train"]; bspW = logit_fit(XgW(trsW), (trsW.push.values > 0).astype(float))
+_llW = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgW(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
+res["segment_push_within"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "game_mean_lane_lead", "game_mean_team_lead"], np.round(bspW, 4))),
+                              "pooled_lane_lead": round(float(bsp[names_g.index("per_1k_lane_lead")]), 4), "pooled_team_lead": round(float(bsp[names_g.index("per_1k_team_lead")]), 4)}
 _mu = np.exp(Xg(trs) @ bgt); _r = (trs.y.values - _mu) ** 2 / _mu
 res["segments_timing"]["dispersion_by_tier"] = {str(t): round(float(_r[trs.tier.values == t].mean()), 3) for t in (0, 1, 2)}
 trb = BASE[BASE.split == "train"]; ybt = (trb.y.values > 0).astype(float); bpt = logit_fit(Xb(trb), ybt)
+BASE["m_lead"] = BASE.groupby(["gid", "side"]).lead.transform("mean"); trb = BASE[BASE.split == "train"]
+XbW = lambda d: np.c_[Xb(d), d.m_lead.clip(-15, 15)]
+bptW = logit_fit(XbW(trb), (trb.y.values > 0).astype(float))
+res["base_push_within"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b] + ["game_mean_lead"], np.round(bptW, 4)))}
 res["base_push_timing"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b], np.round(bpt, 4))),
                            **{s_: {"n": int((BASE.split == s_).sum()), "logloss": push_ll(BASE[BASE.split == s_], bpt)} for s_ in ["train", "test", "worlds"]}}
 # comps option A: own draft's siege style x own lead (a siege comp that is ahead takes towers faster)

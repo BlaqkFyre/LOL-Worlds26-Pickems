@@ -1,0 +1,157 @@
+{
+ "note": "6 Nov research: lead effects fitted within games (each game's average lead added as an input), from s3_rates.py / s3_events.py; not used by the default sim",
+ "segment_push_within": {
+  "coef": {
+   "intercept": -2.2697,
+   "phase 14-19": 1.0195,
+   "phase 20-24": 0.9534,
+   "phase 25-29": 0.9428,
+   "phase 30-34": 1.211,
+   "phase 35+": 1.3671,
+   "tier T2": -1.2437,
+   "tier T3": -1.9963,
+   "mid": 0.1051,
+   "bot": 0.0867,
+   "per_1k_lane_lead": -0.1087,
+   "per_1k_team_lead": 0.1666,
+   "per_v1_logit": 0.0793,
+   "baron": 1.1645,
+   "elder": 0.5971,
+   "herald_last_3min": 0.3032,
+   "own_grubs": 0.1084,
+   "net_kills_this_minute": 0.1424,
+   "lane_segments_last_minute": -0.3141,
+   "T3_x_baron": -0.1654,
+   "siege_style_sum": 0.2023,
+   "game_mean_lane_lead": 0.1994,
+   "game_mean_team_lead": -0.025
+  },
+  "pooled_lane_lead": 0.005,
+  "pooled_team_lead": 0.1496
+ },
+ "base_push_within": {
+  "coef": {
+   "intercept": -3.2092,
+   "from 25": 0.4233,
+   "from 35": 0.2826,
+   "per_1k_lead": 0.2202,
+   "per_v1_logit": 0.0506,
+   "baron": 0.4023,
+   "elder": 0.5681,
+   "enemy_inhibs_down": -0.1118,
+   "open_lanes": 0.715,
+   "siege_style_sum": -0.1548,
+   "lane_just_opened": 1.7454,
+   "base_take_last_minute": -3.1628,
+   "net_kills_this_minute": 0.5044,
+   "game_mean_lead": -0.2001
+  }
+ },
+ "gold_feedback_within": {
+  "per_1k_lead": -33.0,
+  "extra_per_1k_after_20": 0.9,
+  "game_mean_lead": 19.3
+ },
+ "gold_feedback_pooled": {
+  "per_1k_lead": -18.5,
+  "extra_per_1k_after_20": -6.0
+ },
+ "taker_within": {
+  "dragon": {
+   "blue_side": -0.1971,
+   "gd_per_1k": 0.3699,
+   "jng_per_1k": -0.0966,
+   "bot2_per_1k": -0.3415,
+   "mid_per_1k": 0.061,
+   "net60k_per_1k": 0.9079,
+   "first1k_per_1k": -0.5424,
+   "per_v1_logit": 0.1243,
+   "m_gd_per_1k": -0.2851,
+   "m_jng_per_1k": 0.4406,
+   "m_bot2_per_1k": 0.6243,
+   "m_mid_per_1k": 0.246
+  },
+  "grub": {
+   "blue_side": 0.3933,
+   "gd_per_1k": 0.2361,
+   "jng_per_1k": -0.0653,
+   "top_per_1k": -0.0173,
+   "mid_per_1k": 0.1156,
+   "net60k_per_1k": 0.3301,
+   "per_v1_logit": -0.0641,
+   "m_gd_per_1k": -0.0697,
+   "m_jng_per_1k": -0.0048,
+   "m_top_per_1k": 0.3347,
+   "m_mid_per_1k": 0.1974
+  },
+  "herald": {
+   "blue_side": 0.5992,
+   "gd_per_1k": 0.1976,
+   "jng_per_1k": -0.5644,
+   "top_per_1k": 0.4908,
+   "mid_per_1k": 0.1015,
+   "net60k_per_1k": 0.7409,
+   "per_v1_logit": -0.2455,
+   "m_gd_per_1k": 0.0267,
+   "m_jng_per_1k": 1.0101,
+   "m_top_per_1k": -0.5522,
+   "m_mid_per_1k": 0.197
+  },
+  "baron": {
+   "blue_side": -0.0939,
+   "gd_per_1k": 0.3272,
+   "net60k_per_1k": 1.5141,
+   "per_v1_logit": 0.0261,
+   "m_gd_per_1k": -0.0249
+  },
+  "elder": {
+   "blue_side": -0.3266,
+   "gd_per_1k": 0.2262,
+   "net60k_per_1k": 1.1066,
+   "per_v1_logit": 0.2605,
+   "m_gd_per_1k": -0.3345
+  }
+ },
+ "taker_pooled": {
+  "dragon": {
+   "blue_side": -0.18,
+   "gd_per_1k": 0.1842,
+   "jng_per_1k": 0.1515,
+   "bot2_per_1k": 0.0463,
+   "mid_per_1k": 0.2087,
+   "net60k_per_1k": 0.917,
+   "first1k_per_1k": -0.4928,
+   "per_v1_logit": 0.1985
+  },
+  "grub": {
+   "blue_side": 0.38,
+   "gd_per_1k": 0.1946,
+   "jng_per_1k": -0.0448,
+   "top_per_1k": 0.3214,
+   "mid_per_1k": 0.2316,
+   "net60k_per_1k": 0.3378,
+   "per_v1_logit": -0.0358
+  },
+  "herald": {
+   "blue_side": 0.6588,
+   "gd_per_1k": 0.2053,
+   "jng_per_1k": 0.2522,
+   "top_per_1k": 0.1117,
+   "mid_per_1k": 0.2971,
+   "net60k_per_1k": 0.7821,
+   "per_v1_logit": -0.1807
+  },
+  "baron": {
+   "blue_side": -0.0941,
+   "gd_per_1k": 0.3156,
+   "net60k_per_1k": 1.5127,
+   "per_v1_logit": 0.0231
+  },
+  "elder": {
+   "blue_side": -0.3238,
+   "gd_per_1k": 0.1106,
+   "net60k_per_1k": 1.075,
+   "per_v1_logit": 0.2225
+  }
+ }
+}
