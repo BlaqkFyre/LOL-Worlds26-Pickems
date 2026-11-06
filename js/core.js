@@ -84,8 +84,13 @@ function fitTicks(root){root.querySelectorAll(".tick .rail").forEach(r=>{const s
   if(r.scrollWidth>r.clientWidth+1){s.style.animationDuration=Math.max(8,(r.scrollWidth+r.clientWidth)/45).toFixed(1)+"s";r.classList.add("run")}})}
 let fitT=null,fitW=0;const fitRO=typeof ResizeObserver==="function"&&new ResizeObserver(es=>{const w=Math.round(es[0].contentRect.width);if(w===fitW)return;fitW=w;clearTimeout(fitT);fitT=setTimeout(()=>{const rv=document.getElementById("v-role");if(rv&&!rv.hidden)fitTicks(rv)},150)});
 if(fitRO)fitRO.observe(document.getElementById("v-role"));
+/* a player's real Worlds main-event games per champion: pchamp also holds play-in games (for champion pools), so those are taken back out (Luke, 6 Nov) */
+function mainPC(n){const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,pc=L&&L.pchamp[n],pin=(L&&L.pin&&L.pin[n])||{},out={};if(!pc)return out;
+  Object.entries(pc).forEach(([c,v])=>{const pi=pin[c]||[0,0],g=v.g-pi[0];if(g>0)out[c]={g,w:v.w-pi[1]}});return out}
+/* play-in games and wins for a player, [games, wins], or null */
+function pinTotal(n){const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null;return L&&L.pin&&L.pin[n]?Object.values(L.pin[n]).reduce((a,[g,w])=>[a[0]+g,a[1]+w],[0,0]):null}
 function playerCard(p,rk){const idx=ROLES.indexOf(p.role),tid=p.team.id;
-  const wp=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n])||{},seen=new Set(),tiles=[];
+  const wp=mainPC(p.n),seen=new Set(),tiles=[];
   Object.entries(wp).sort((a,b)=>b[1].g-a[1].g||b[1].w-a[1].w).forEach(([c,v])=>{seen.add(c);const isNew=!p.picks.some(x=>x[0]===c);
     tiles.push(`<span class="cc" data-tc="${esc(c)}" title="${esc(`${c} · ${v.g} Worlds game${v.g>1?"s":""}, ${v.w}-${v.g-v.w}${isNew?" · new at Worlds":""}`)}"><span class="pchamp${isNew?" isnew":""}">${icon(c,22)}</span><span class="cn">${esc(c)}</span><em class="${v.w*2<v.g?"b":"g"}">${v.w}-${v.g-v.w}</em></span>`)});
   p.picks.forEach(([c,g,w])=>{if(seen.has(c))return;seen.add(c);tiles.push(`<span class="cc" data-tc="${esc(c)}" title="${esc(`${c} · ${g?g+" games in 2026":"2026 pick"}${w!=null?", "+w+"% wins":""}`)}"><span class="pchamp">${icon(c,22)}</span><span class="cn">${esc(c)}</span><span class="dim">${g?g+"g":""}</span></span>`)});
@@ -331,7 +336,7 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   const pool=poolOf(p).slice().sort((a,b)=>(b[1]||0)-(a[1]||0));
   /* display: this Worlds' games first (bright), 2026 pro numbers dimmed in brackets */
   const RX=runCtx(),tp=(RX&&RX.stats.pchamp[p.key])||{},hasRun=!!RX;
-  const wp=(typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.pchamp[p.n])||{};
+  const wp=mainPC(p.n),pin=pinTotal(p.n);
   const shown=[...new Set([...Object.keys(wp).sort((a,b)=>wp[b].g-wp[a].g),...Object.keys(tp).sort((a,b)=>tp[b].g-tp[a].g),...p.picks.map(x=>x[0])])];
   const row=c=>{const sx=p.picks.find(y=>y[0]===c),tv=tp[c],wv=wp[c];const st=takenWhy(c),m=enemy&&!st?matchup(c,enemy.c):null,fd=CHAMP_DB[c]&&CHAMP_DB[c].fade;
     const risk=m!=null?(m<48?`<span class="neg">countered by ${esc(enemy.c)} (${m}%)</span>`:m>=52?`<span class="pos">beats ${esc(enemy.c)} (${m}%)</span>`:""):"";
@@ -345,12 +350,13 @@ function playerTip(tid,idx){const t=team(tid),p=t.p[idx],live=inDraft(tid)&&DS.s
   (live?`<div class="here">${best?`Best still open: <b>${esc(best[0])}</b>`:"<b>Every comfort pick is gone</b> — off-pool pick"}${enemy?` · facing ${esc(enemy.c)}`:""}</div>`:"")+
   wformBox(p)+
   (shown.length?`<div class="pkey"><span class="pchamp isnew"><i></i></span> New at Worlds (not in their 2026 top picks)</div><table class="tt ptab"><thead><tr><th>Champion</th><th>Worlds</th>${hasRun?"<th>Your run</th>":""}<th>2026</th><th>Meta</th></tr></thead>${shown.map(row).join("")}</table>`:`<div class="notes">No 2026 champion data</div>`)+
+  (pin&&pin[0]?`<div class="notes small">Worlds = main-event games. Plus ${pin[0]} play-in game${pin[0]>1?"s":""} (${pin[1]}-${pin[0]-pin[1]}), counted in their champion pool.</div>`:"")+
   (typeof tourPlayerLine==="function"?tourPlayerLine(p):"")+(p.note?`<div class="notes">${esc(p.note)}</div>`:"");}
 /* role pages: the player card already shows the summary, so the hover shows the real Worlds games behind it, plus ban risk */
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 function playerLogTip(tid,idx){const t=team(tid),p=t.p[idx],L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,rows=[];
   if(L)L.games.forEach(g=>["blue","red"].forEach(sd=>{const me=g.pl[sd].find(r=>r[1]===p.n);if(!me)return;const os=sd==="blue"?"red":"blue";rows.push({g,me,op:g.pl[os].find(r=>r[0]===me[0]),opp:g[os],won:g.w===g[sd]})}));
-  const pin=L&&L.pin&&L.pin[p.n]?Object.values(L.pin[p.n]).reduce((a,[n,w])=>[a[0]+n,a[1]+w],[0,0]):null;
+  const pin=pinTotal(p.n);
   const risk=poolOf(p).map(x=>[x[0],worldsMeta(x[0])]).filter(([c,W])=>W.bn>0).sort((a,b)=>b[1].bn-a[1].bn).slice(0,4);
   const day=d=>`${+d.slice(8)} ${MON[+d.slice(5,7)-1]}`,w=rows.filter(x=>x.won).length;
   return `<div class="tiph ph" style="--tc:${teamCol(tid)}">${regDot(tid)}<span class="tm">${esc(tid)}</span><b>${esc(p.n)}</b><span class="notes">${RNAME[p.role]}</span></div>
@@ -427,9 +433,9 @@ function beats3(c){const out=[],PL=proLane(c),seen=new Set([c,...PL.map(o=>o.x)]
     more.sort((a,b)=>a[2]-b[2]||b[1]-a[1]).forEach(([x,w,oth])=>{if(w>=50.5&&!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",cls:"g",note:`${w}% win rate in the matchup · solo queue (METAsrc)`,other:oth})}})}
   return out.slice(0,3)}
 function mostPicked(c,n=3){const m=new Map(),d=CHAMP_DB[c];
-    /* main-event games only: pchamp also holds play-in games (for player pools), so those are taken back out */
-    if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const pi=((WORLDS_LIVE.pin||{})[n]||{})[c]||[0,0],g=v.g-pi[0],w=v.w-pi[1];if(g<=0)return;
-      const P=WORLDS_LIVE.players[n],t=P?P.team:"",e=m.get(n)||{n,t,g:0,w:0};e.g+=g;e.w+=w;if(t)e.t=t;m.set(n,e)});
+    /* main-event games only (mainPC) */
+    if(typeof WORLDS_LIVE!=="undefined")Object.keys(WORLDS_LIVE.pchamp).forEach(n=>{const v=mainPC(n)[c];if(!v)return;
+      const P=WORLDS_LIVE.players[n],t=P?P.team:"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,n).map(e=>({...e,s:sea(e.n)}))}
 /* your simulated run's players on this champion (shown separately from the real Worlds numbers) */

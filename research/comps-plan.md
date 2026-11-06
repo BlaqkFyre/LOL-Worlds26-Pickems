@@ -67,6 +67,29 @@ Luke's rule: the sim mustn't add or leave out an effect because of an AI assumpt
 - An article on damage-type distribution and win rate (https://esn.gg/league-of-legends/distribution-of-damage-types) **couldn't be opened** (connection closed twice), so its numbers aren't used. Its search summary suggests it measured damage dealt in finished games (an outcome, partly caused by who was winning), not drafts.
 - No pro-play study of frontline drafts was found.
 
+## Draft-style validation (6 Nov, Luke's decision 2: keep all three styles, keep validating)
+
+Luke: siege should show itself in later games; late game is generally siege or scaling comps; the sim needs to know which champions fit each style. Tested without hand-set labels (`research/sim3/s3_style_validate.py`, results `research/model/sim3/style_validate.csv`):
+
+- **Labels:** Riot's official sub-classes (League wiki champion data: Artillery, Marksman, Juggernaut, Enchanter and the rest, every class tested), **measured siege** (each champion-role's share of its team's damage to towers in pro games before 1 Sep, pulled toward the role average), and **outside scaling** (lolalytics solo-queue win rate in long minus short games, 16.17 + 16.20).
+- **Outcomes:** game length, towers and turret plates (all major games), towers after 25:00 and first-tower time (623 timeline games); both drafts together, beyond how one-sided the game was; blue minus red against who takes the late towers.
+- **Rule:** same sign and |t| ≥ 2 before 1 Sep and from 1 Sep (Worlds included). 90 tests; about 0.2 would pass by chance.
+
+| Label | Outcome | Before 1 Sep (per sd, t) | From 1 Sep (per sd, t) | Passes |
+|---|---|---|---|---|
+| Measured siege (tower damage) | towers in the game | +0.40, 8.6 | +0.27, 2.2 | **yes** |
+| Measured siege (tower damage) | first tower time | −21 s, −3.3 | −31 s, −3.4 | **yes** |
+| Measured siege (tower damage) | towers after 25:00 | +0.13, 0.9 | +0.00, 0.0 | no |
+| Measured siege (tower damage) | game length | −0.04 min, −0.4 | +0.24 min, 0.8 | no |
+| Artillery (Riot class) | towers after 25:00 | +0.49, 3.4 | −0.23, −1.3 | no (flips) |
+| Artillery (Riot class) | game length | +0.29 min, 2.7 | +0.06 min, 0.2 | no |
+| Outside scaling (lolalytics) | game length | −0.40 min, −3.0 | −0.07 min, −0.2 | no |
+| Outside scaling (lolalytics) | towers after 25:00 | −0.24, −1.5 | −0.01, −0.1 | no |
+
+- **What holds up:** siege measured from real tower damage. Drafts built from champions that do a lot of tower damage take more towers and take the first one earlier, on held-out games too. In today's data it shows in the early and mid game, **not** as more towers after 25:00 or longer games.
+- **What doesn't (yet):** no Riot class and no outside scaling label changes late-game timing on held-out games. Artillery looked like "late siege" before 1 Sep and flipped after. The held-out timeline set is small (231 games), so a late-game effect smaller than this test can see may still exist.
+- **For the sim and the draft AI:** the measured tower-damage label is the data-backed siege input (it can replace or check the learned "siege" style). Scaling still has no confirmed label: next ideas are pro-based (a champion's win rate in long games after team strength, which session 2 found flat, re-tested with the knockouts) and a bigger timeline pull for late towers.
+
 ## Suggested order
 
 1. **A** (state-dependent style): cheap, inside the sim, and it follows the lesson above.

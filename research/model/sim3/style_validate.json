@@ -1,0 +1,32 @@
+{
+ "label_coverage": {
+  "wiki_classes": 1.0,
+  "solo_scale": 0.958
+ },
+ "tests": 90,
+ "passing": [
+  {
+   "label": "tower_dmg",
+   "outcome": "towers",
+   "train_n": 2357,
+   "train_per_sd": 0.395,
+   "train_t": 8.6,
+   "test_n": 321,
+   "test_per_sd": 0.2734,
+   "test_t": 2.22,
+   "passes": true
+  },
+  {
+   "label": "tower_dmg",
+   "outcome": "first_tower_min",
+   "train_n": 395,
+   "train_per_sd": -0.3491,
+   "train_t": -3.25,
+   "test_n": 231,
+   "test_per_sd": -0.5155,
+   "test_t": -3.43,
+   "passes": true
+  }
+ ],
+ "note": "per_sd = change in the outcome per standard deviation of the draft label (both drafts together; diff for late_blue_share)"
+}
