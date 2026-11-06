@@ -8,7 +8,7 @@ C. Held-out: every game from 1 Sep and every Worlds game, N sims each (seeded). 
    calibration bands, v1 and coin flip side by side. Game shape: length, kills, towers, dragons, Barons, grubs, Heralds,
    Elders, first-Baron / first-dragon / first-tower / Elder team win rates, role kill share, gold lead at 15, against the
    file's real games in the same window (targets3.json).
-usage: python -I s3_test.py params3.json lanes3_features.csv v1_games.csv targets3.json tl_fights.csv comp3_games.csv <out_dir> [n_sims] [side|timing] [phase]
+usage: python -I s3_test.py params3.json lanes3_features.csv v1_games.csv targets3.json tl_fights.csv comp3_games.csv <out_dir> [n_sims] [side|timing] [phase,zphase,lt]
   The final sim: n_sims 200, "timing". "phase" switches on the per-phase fight swing (tested 5 Nov, not kept; report 7d)."""
 import os, sys, json, math, importlib.util
 from multiprocessing import Pool
@@ -18,7 +18,9 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 PJ, FE, V1, TJ, FI, CO, OUT = sys.argv[1:8]; NS = int(sys.argv[8]) if len(sys.argv) > 8 else 200
 MODE = sys.argv[9] if len(sys.argv) > 9 else "side"  # draft styles: "side" (who) or "timing" (when only)
-PHASE_EPS = len(sys.argv) > 10 and sys.argv[10] == "phase"  # per-phase fight swing: opt-in; tested 5 Nov and not kept (report 7d)
+OPTS = set(sys.argv[10].split(",")) if len(sys.argv) > 10 else set()  # opt-in variants: "phase" (per-phase fight swing, 7d), "zphase"
+                                                                      # (strength in kills by phase, 7e), "lt" (lane x tier push terms, 7e)
+PHASE_EPS = "phase" in OPTS
 os.makedirs(OUT, exist_ok=True)
 ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
@@ -68,6 +70,8 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     for k_, msk in PHF.items(): eps_ph[k_], info_ph[k_] = fit_eps(F[msk], xb[msk])
     cal = {"gain": 1.0, "lane_mu": 1.0, "lane_k": 1.0, "fight_eps": best, "style_mode": MODE, "form": "off"}
     if PHASE_EPS: cal["fight_eps_phase"] = eps_ph
+    if "zphase" in OPTS: cal["kill_z_phase"] = {"0-13": 1.24, "14-24": 1.48, "25+": 1.26}  # matched to real training games at the final gain (7e)
+    if "lt" in OPTS: cal["seg_lane_tier"] = "on"
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
 

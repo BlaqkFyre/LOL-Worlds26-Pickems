@@ -1,0 +1,178 @@
+{
+ "base": {
+  "cal": {
+   "gain": 1.646,
+   "lane_mu": 0.05,
+   "lane_k": 0.023,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off"
+  },
+  "who_wins": {
+   "from 1 Sep": {
+    "sim": {
+     "logloss": 0.6348,
+     "brier": 0.2224,
+     "fav": 0.632
+    },
+    "v1": {
+     "logloss": 0.6396,
+     "brier": 0.2248,
+     "fav": 0.648
+    }
+   },
+   "Worlds": {
+    "sim": {
+     "logloss": 0.626,
+     "brier": 0.22,
+     "fav": 0.625
+    },
+    "v1": {
+     "logloss": 0.6278,
+     "brier": 0.2212,
+     "fav": 0.625
+    }
+   }
+  },
+  "length_sd": 7.04,
+  "kills_sd": 12.35,
+  "baron_games": 0.877,
+  "first_baron_team_wins": 0.785
+ },
+ "lt": {
+  "cal": {
+   "gain": 1.643,
+   "lane_mu": 0.051,
+   "lane_k": 0.023,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "seg_lane_tier": "on"
+  },
+  "who_wins": {
+   "from 1 Sep": {
+    "sim": {
+     "logloss": 0.6385,
+     "brier": 0.2242,
+     "fav": 0.638
+    },
+    "v1": {
+     "logloss": 0.6396,
+     "brier": 0.2248,
+     "fav": 0.648
+    }
+   },
+   "Worlds": {
+    "sim": {
+     "logloss": 0.6173,
+     "brier": 0.2166,
+     "fav": 0.65
+    },
+    "v1": {
+     "logloss": 0.6278,
+     "brier": 0.2212,
+     "fav": 0.625
+    }
+   }
+  },
+  "length_sd": 7.08,
+  "kills_sd": 12.3,
+  "baron_games": 0.874,
+  "first_baron_team_wins": 0.786
+ },
+ "combo": {
+  "cal": {
+   "gain": 1.318,
+   "lane_mu": 0.033,
+   "lane_k": 0.034,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_eps_phase": {
+    "0-13": 0.0,
+    "14-24": 0.95,
+    "25+": 1.45
+   },
+   "kill_z_phase": {
+    "0-13": 1.24,
+    "14-24": 1.48,
+    "25+": 1.26
+   },
+   "seg_lane_tier": "on"
+  },
+  "who_wins": {
+   "from 1 Sep": {
+    "sim": {
+     "logloss": 0.6433,
+     "brier": 0.2264,
+     "fav": 0.632
+    },
+    "v1": {
+     "logloss": 0.6396,
+     "brier": 0.2248,
+     "fav": 0.648
+    }
+   },
+   "Worlds": {
+    "sim": {
+     "logloss": 0.635,
+     "brier": 0.2236,
+     "fav": 0.65
+    },
+    "v1": {
+     "logloss": 0.6278,
+     "brier": 0.2212,
+     "fav": 0.625
+    }
+   }
+  },
+  "length_sd": 7.1,
+  "kills_sd": 12.49,
+  "baron_games": 0.877,
+  "first_baron_team_wins": 0.779
+ },
+ "segment_push_lane_tier": {
+  "coef": {
+   "intercept": -2.1324,
+   "phase 14-19": 1.0306,
+   "phase 20-24": 0.9647,
+   "phase 25-29": 0.9584,
+   "phase 30-34": 1.2257,
+   "phase 35+": 1.38,
+   "tier T2": -1.7073,
+   "tier T3": -2.4976,
+   "mid": -0.2238,
+   "bot": 0.0178,
+   "per_1k_lane_lead": 0.0229,
+   "per_1k_team_lead": 0.1476,
+   "per_v1_logit": 0.098,
+   "baron": 1.1596,
+   "elder": 0.6116,
+   "herald_last_3min": 0.3137,
+   "own_grubs": 0.1117,
+   "net_kills_this_minute": 0.1491,
+   "lane_segments_last_minute": -0.3411,
+   "T3_x_baron": -0.1686,
+   "siege_style_sum": 0.235,
+   "T2 x mid": 1.1383,
+   "T2 x bot": 0.237,
+   "T3 x mid": 1.0813,
+   "T3 x bot": 0.1266
+  },
+  "train": {
+   "n": 76866,
+   "logloss": 0.372,
+   "additive": 0.3748
+  },
+  "test": {
+   "n": 29445,
+   "logloss": 0.3769,
+   "additive": 0.3797
+  },
+  "worlds": {
+   "n": 15887,
+   "logloss": 0.3683,
+   "additive": 0.3715
+  }
+ }
+}

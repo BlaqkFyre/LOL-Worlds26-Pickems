@@ -303,9 +303,36 @@ Strength in the sim's kills is *weaker* than real, so the early spread comes fro
 
 **4. The likely cause: second-tier towers fall too early.** Median times (`s3_diag.py`): first T1 sim 14:39 v real 15:14; **first T2 21:54 v 24:42**; first T3 28:00 v 29:34; first inhibitor 29:16 v 30:34; end 31:25 v 31:59. Bases open almost 3 minutes early, which gives the short no-Baron games. **Next test:** the tower-push model's tier-2 stage (push chance and push size for T2 segments by minute), checked against real T2 timing, then who-wins on held-out games.
 
+## 7f. Second-tier towers: the tier-2 test (6 Nov)
+
+Research only; the default sim is unchanged (300 of 300 seeded games identical). New options, off by default: `cal["seg_lane_tier"]`; `s3_test.py ... timing phase,zphase,lt`. Results `research/model/sim3/t2_tests.json`; check script `s3_t2check.py`.
+
+**Real v sim (held-out matchups, 150 × 4 sim runs; real = 231 timeline games from 1 Sep):**
+
+| | Real | Sim | Sim + lane × tier |
+|---|---|---|---|
+| First T2, median | 24:42 | 21:29 | 21:35 |
+| A T2 down by 18 / 20 min | 8% / 16% | 25% / 39% | 23% / 38% |
+| T1 → T2 gap, top / mid / bot (s) | 547 / 371 / 516 | 406 / 422 / 404 | 468 / 332 / 426 |
+
+- **Lane × tier push terms** (four terms: T2 and T3, mid and bot, against top): real mid T2s and T3s are much easier to push than side-lane ones (T2 × mid +1.14, T3 × mid +1.08). They predict held-out pushes better (log loss 0.3769 v 0.3797 from 1 Sep, 0.3683 v 0.3715 at Worlds, about 45,000 lane-minutes) and give the right per-lane pattern in the sim, but the first T2 still falls early: leads at 15:00 are too spread (sim gold-lead spread about 2,800 v real 2,265), and bigger leads push earlier.
+
+**Full held-out tests** (recalibrated on training games, 200 sims per game):
+
+| Version | Who wins from 1 Sep | Worlds | Length sd (real 5.6) | Kills sd (real 7.3) |
+|---|---|---|---|---|
+| Final sim (re-run) | 0.635 | 0.626 | 7.0 | 12.4 |
+| + lane × tier | 0.639 | **0.617** | 7.1 | 12.3 |
+| + per-phase swing + strength by phase + lane × tier | 0.643 | 0.635 | 7.1 | 12.5 |
+| v1 | 0.640 | 0.628 | | |
+
+- The combined version is worse at who-wins: **not kept**.
+- Lane × tier is mixed (0.004 worse from 1 Sep, 0.009 better at Worlds; noise about 0.0025 from 1 Sep, more on 80 Worlds games). It is a better tower-push input on held-out pushes and more realistic lane by lane. **Luke to decide** whether it goes into the sim.
+- **None of these narrows the spread.** The biggest remaining gap is total kills per game (sd 12.4 v 7.3). Real fights per minute are less bursty than chance (dispersion 0.7–0.8) and real games vary less than chance given their state (7d), while the sim's kill totals add chance on top of chance (fight count × fight size). **Next test:** how kills per game build up in the sim v real (fights per game, kills per fight, and their link to game length).
+
 ## 8. Open items for Luke
 
-1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim, opening bases early; next test is the T2 stage of the tower-push model.
+1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed: Luke to decide); the combined fix is not kept. Next test: how kills per game build up (sd 12.4 v 7.3).
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?

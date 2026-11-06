@@ -91,6 +91,8 @@ class Sim:
         SEGC = SPC if SPC is not None else (P["segments_timing"] if TIM else P["segments"]); PUSHC = P["base_push_timing"] if TIM else P["base_push"]["coef"]
         KSC = P["kill_side_timing"] if TIM else P["kill_side"]; TAKC = P["taker_timing"] if TIM else P["taker"]
         FB = P["gold_feedback"]
+        if cal.get("seg_lane_tier", "off") == "on" and P.get("segment_push_lane_tier"):  # opt-in (6 Nov test): lane x tier push terms
+            SPC = dict(P["segment_push_lane_tier"]["coef"]); SEGC = SPC
         if cal.get("within", "off") == "on" and P.get("segment_push_within"):  # opt-in (6 Nov test): lead effects fitted within games
             SPC = P["segment_push_within"]["coef"]; SEGC = SPC; PUSHC = P["base_push_within"]["coef"]; TAKC = P["taker_within"]; FB = P["gold_feedback_within"]
         # game form: the pooled gold-lead effect on who wins fights partly reflects "this team is stronger in this game";
@@ -235,6 +237,8 @@ class Sim:
                           + sc["baron"] * (baron_until[s] > t0) + sc["elder"] * (elder_until[s] > t0)
                           + sc["herald_last_3min"] * (t0 - herald_t[s] < 180) + sc["own_grubs"] * grubs[s] + sc.get("siege_style", 0.0) * sg * siege_d + sc.get("siege_style_sum", 0.0) * siege_s
                           + sc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
+                          + sc.get("T2 x mid", 0.0) * (tier == 1 and L == "MID") + sc.get("T2 x bot", 0.0) * (tier == 1 and L == "BOT")
+                          + sc.get("T3 x mid", 0.0) * (tier == 2 and L == "MID") + sc.get("T3 x bot", 0.0) * (tier == 2 and L == "BOT")
                           + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0))
                     if SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
                         n = 0

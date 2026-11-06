@@ -70,6 +70,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 ## Sim engine rules (master plan: `research/sim-plan.md`)
 
 - **Plan each foundation with Luke before building it** (ratings, draft AI, draft review, the simulator): agree what it shows, what it's built from and how it feeds the rest, with a worked example, then build.
+- **No numbers hand-set from the data** (Luke, 6 Nov). The sim is a model fitted to match the data as well as possible, then simulated so games play out like real matches. A fix's parameters are fitted (on training games, so simulated games match real patterns), never read off a real-v-sim ratio and typed in; outcome rates such as "blue takes grubs 63%" should come out of the simulation, not be set.
 - **The app only changes in sim session 4.** Sessions 1–3 produce research reports and fitted tables, not app edits.
 - **Count each real game once,** matched by game ID. Once the Oracle's Elixir file covers a day, it is the source of record over `js/worlds-live.js`. Same rule for the NerfPlz patch tables (they already include play-in games).
 - **Judge only on held-out games** (train before 1 Sep, test after, plus Worlds games as they're played). The new sim ships only if it beats the current one on those games.

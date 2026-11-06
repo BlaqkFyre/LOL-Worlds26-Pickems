@@ -212,6 +212,15 @@ trsW = SEG[SEG.split == "train"]; bspW = logit_fit(XgW(trsW), (trsW.push.values 
 _llW = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgW(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
 res["segment_push_within"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "game_mean_lane_lead", "game_mean_team_lead"], np.round(bspW, 4))),
                               "pooled_lane_lead": round(float(bsp[names_g.index("per_1k_lane_lead")]), 4), "pooled_team_lead": round(float(bsp[names_g.index("per_1k_team_lead")]), 4)}
+# lane x tier version (6 Nov): real side-lane T2s hold much longer after their T1 than mid's (T1 to T2 median: top 547 s, mid 371 s,
+# bot 516 s), which an additive lane + tier model averages away; four interaction terms, judged on held-out pushes
+LT = lambda d: np.c_[(d.tier == 1) & (d.lane == "MID"), (d.tier == 1) & (d.lane == "BOT"), (d.tier == 2) & (d.lane == "MID"), (d.tier == 2) & (d.lane == "BOT")].astype(float)
+XgLT = lambda d, full=True: np.c_[Xg(d), LT(d)] if full else Xg(d, False)
+bspLT = logit_fit(XgLT(trs), ypt)
+_llLT = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgLT(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
+res["segment_push_lane_tier"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot"], np.round(bspLT, 4))),
+                                 **{s_: {"n": int((SEG.split == s_).sum()), "logloss": _llLT(SEG[SEG.split == s_], bspLT), "additive": spush_ll(SEG[SEG.split == s_], bsp)}
+                                    for s_ in ["train", "test", "worlds"]}}
 _mu = np.exp(Xg(trs) @ bgt); _r = (trs.y.values - _mu) ** 2 / _mu
 res["segments_timing"]["dispersion_by_tier"] = {str(t): round(float(_r[trs.tier.values == t].mean()), 3) for t in (0, 1, 2)}
 trb = BASE[BASE.split == "train"]; ybt = (trb.y.values > 0).astype(float); bpt = logit_fit(Xb(trb), ybt)
