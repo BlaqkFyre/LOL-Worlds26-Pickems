@@ -255,6 +255,10 @@ Step 15, second knockout update (Luke's newer file, 5 Nov 16:40 AEST: Gen.G 3–
 - All three GEN v LYON games: v1 gave Gen.G 85% and the candidate 84–85%; Gen.G won all three.
 - **Running total, 7 knockout games: v1 log loss 0.4528, Brier 0.1459, favourite 5 of 7; v2 candidate 0.4686, 0.1533, 5 of 7.** The candidate is still slightly behind; still too few games to judge.
 
+Step 15, third knockout update (Luke's file of 6 Nov AEST: BLG 3–0 DK, 3 games, 5–6 Nov UTC). Session 1 scripts (`prep.py`, `playerprep.py` n0 = 6) and `v1_offsets.py` re-run on a scratch copy (2,855 games; the 2,852 earlier games' v1 odds unchanged, largest change 0); candidate SHA-256 unchanged (`73547478…`). Output `model/sim2/knockout_score_2026-11-06_qf3.txt`.
+- BLG v DK: v1 gave BLG 54% / 46% / 50%, the candidate 60% / 48% / 53% (DK blue in games 2–3); BLG won all three. The candidate leaned BLG through Xun's deeper pool (11 v Lucid's 7) and more games with his mid and ADC (185 v 147).
+- **Running total, 10 knockout games: v1 log loss 0.5260, Brier 0.1777, favourite 7 of 10; v2 candidate 0.5155, 0.1722, 7 of 10.** The candidate is now slightly ahead; still too few games to judge.
+
 Step 1 detail: `research/sim1/` scripts re-run on a scratch copy in order (`prep.py`, `playerprep.py` n0 = 6, `teamfit.py`, `leaguefit.py`; `playerfit.py` not needed). They reproduce the saved session 1 results exactly (validation 0.6441, from 1 Sep 0.6489, Worlds 0.6491, rolling 0.6451; league-adjusted 0.6367 / 0.6461 / 0.6446; same league shifts and 16 team ratings). `v1_offsets.py` runs from that folder (it uses `exptest.py`): v1 odds for 2,668 of 2,845 games (the first games of the year have no earlier games to rate teams from), 0.6461 from 1 Sep and 0.6446 on Worlds, the same as session 1.
 
 ## Sample sizes (step 0, major leagues + internationals, 2,845 games)

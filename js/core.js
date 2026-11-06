@@ -112,7 +112,7 @@ function champCard(c,role){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=
 function champRoleView(role){
   const cs=POOL.filter(c=>primaryRole(c)===role).map(c=>[c,presOf(c)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
   const shown=cs.filter(c=>presOf(c)>0||worldsMeta(c).p+worldsMeta(c).b>0);
-  return `<div class="panel" style="display:grid;gap:14px"><div><h2>${RNAME[role]} champions</h2><p class="notes" style="margin:4px 0 0">Every ${RNAME[role].toLowerCase()} champion seen in recent pro play or at Worlds, by blended presence. Recent pro = patches 26.16–26.20; Worlds = real play-in, Swiss and knockout games. Hover or tap a champion for its full card.</p></div>
+  return `<div class="panel" style="display:grid;gap:14px"><div><h2>${RNAME[role]} champions</h2><p class="notes" style="margin:4px 0 0">Every ${RNAME[role].toLowerCase()} champion seen in recent pro play or at Worlds, by blended presence. Recent pro = patches 26.16–26.20 (play-in games included); Worlds = real Swiss and knockout games. Hover or tap a champion for its full card.</p></div>
   <div class="pgrid">${shown.map(c=>champCard(c,role)).join("")}</div></div>`}
 function customView(){return `<div class="panel" style="display:grid;gap:10px;max-width:640px"><h2>Custom tournament</h2><p class="notes" style="margin:0">Coming soon: pick your own teams, format and draw, then play it out with the same draft and sim. For now, use <b>Worlds 2026</b> for the full event or <b>Champ Select</b> for a single Bo1, Bo3 or Bo5.</p><div><button class="btn primary" data-goto="tour">Go to Worlds 2026</button> <button class="btn" data-goto="draft">Go to Champ Select</button></div></div>`}
 document.addEventListener("click",e=>{const b=e.target.closest("button[data-goto]");if(b)show(b.dataset.goto)});
@@ -217,7 +217,7 @@ PARTNERS.forEach(([c,r,s,by])=>Object.values(by).forEach(l=>l.forEach(([pc,ch])=
 const synOf=c=>Object.entries(SYN).filter(([k])=>k.startsWith(c+"|")).map(([k,l])=>[k.split("|")[1],l]).sort((a,b)=>b[1]-a[1]);
 /* pre-tournament presence: blended pro presence; champions outside the pro tables get a small estimate from 2026 pro games */
 const proPres=c=>{const d=CHAMP_DB[c];if(!d)return 0;if(d.bl!=null)return Math.round(d.bl);return Math.min(9,Math.round((d.g||0)/120))};
-/* pre-tournament presence = pro presence blended with real Worlds presence (play-ins + Swiss so far), the Worlds share growing with games */
+/* pre-tournament presence = pro presence blended with real Worlds main-event presence (Swiss and knockouts so far), the Worlds share growing with games */
 const basePres=c=>{const W=worldsMeta(c),k=W.g/(W.g+60);return Math.round((1-k)*proPres(c)+k*(W.pk+W.bn))};
 const presOf=c=>{const b=basePres(c);return typeof tourPres==="function"?tourPres(c,b):b};
 /* a player's champion pool: 2026 favourites plus champions played at this simulated Worlds */
@@ -378,17 +378,14 @@ const hb=(label,inner,val,sub)=>`<div class="hb"><span>${label}</span><i>${inner
 const fill=(w,cls)=>`<b${cls?` class="${cls}"`:""} style="width:${Math.max(0,Math.min(100,w))}%"></b>`;
 const infoI=t=>`<span class="info" tabindex="0" aria-label="${esc(t)}">!<span class="tipx">${esc(t)}</span></span>`;
 function worldsWL(c){const d=CHAMP_DB[c];let w=d&&d.pin?d.pin[0]:0,l=d&&d.pin?d.pin[1]:0;const RX=runCtx(),st=RX&&RX.stats.champ[c];if(st){w+=st.w;l+=st.p-st.w}return [w,l]}
-/* Worlds meta: 22 play-in games (NerfPlz top list for bans, play-in W-L for picks) plus every game of your run */
-function worldsMeta(c){const d=CHAMP_DB[c]||{},ch=CH.find(y=>y[0]===c),PG=22;let g=PG,p=0,b=0,w=0;
-  if(d.pin&&(d.pin[0]+d.pin[1])){p=d.pin[0]+d.pin[1];w=d.pin[0]}else if(ch&&ch[2]!=null)p=Math.round(ch[2]/100*PG);
-  if(ch&&ch[3]!=null)b=Math.round(ch[3]/100*PG);
-  const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,sw=L?L.n:0;let gb=PG+(L?(L.nb!=null?L.nb:sw):0);if(L){g+=sw;const x=L.champ[c];if(x){p+=x.p;b+=x.b;w+=x.w}}
+/* Worlds meta: real main-event games only (Swiss and knockouts). Play-in games count as recent pro games, not Worlds (Luke, 6 Nov);
+   the shown run is separate */
+function worldsMeta(c){const L=typeof WORLDS_LIVE!=="undefined"?WORLDS_LIVE:null,x=L&&L.champ[c],g=L?L.n:0,gb=L?(L.nb!=null?L.nb:g):0,p=x?x.p:0,b=x?x.b:0,w=x?x.w:0;
   const RX=runCtx(),R=RX&&RX.stats,rs=R&&R.champ[c];
   /* ban rate only over games whose bans are published */
-  return {g,gb,p,b,w,l:p-w,pk:Math.round(p/g*100),bn:Math.round(b/gb*100),swiss:sw,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
-/* champions seen on the same team at this Worlds (play-in drafts + your run): [name, wins together, games together] */
+  return {g,gb,p,b,w,l:p-w,pk:g?Math.round(p/g*100):0,bn:gb?Math.round(b/gb*100):0,swiss:g,run:R?R.games:0,runP:rs?rs.p:0,runB:rs?rs.b:0,runW:rs?rs.w:0}}
+/* champions seen on the same team at this Worlds (main-event games + your run): [name, wins together, games together] */
 function worldsMates(c){const m=new Map();const add=(x,won)=>{const e=m.get(x)||[x,0,0];e[2]++;if(won)e[1]++;m.set(x,e)};
-  COMPS.forEach(([s,g,wc,lc])=>{if(wc.includes(c))wc.forEach(x=>x!==c&&add(x,true));if(lc.includes(c))lc.forEach(x=>x!==c&&add(x,false))});
   if(typeof WORLDS_LIVE!=="undefined")WORLDS_LIVE.games.forEach(gm=>["blue","red"].forEach(sd=>{const cs=gm.pl[sd].map(r=>r[2]);if(cs.includes(c)){const won=gm.w===gm[sd];cs.forEach(x=>x!==c&&add(x,won))}}));
   if(runCtx())runCtx().matches.forEach(mt=>mt.games.forEach(gm=>["blue","red"].forEach(s=>{const cs=ROLES.map(r=>gm.ps[s][r].c);if(cs.includes(c)){const won=gm.winner===(s==="blue"?gm.blue:gm.red);cs.forEach(x=>x!==c&&add(x,won))}})));
   return [...m.values()].filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]||(b[1]/b[2])-(a[1]/a[2]))}
@@ -430,7 +427,9 @@ function beats3(c){const out=[],PL=proLane(c),seen=new Set([c,...PL.map(o=>o.x)]
     more.sort((a,b)=>a[2]-b[2]||b[1]-a[1]).forEach(([x,w,oth])=>{if(w>=50.5&&!seen.has(x)&&isMeta(x)){seen.add(x);out.push({x,em:Math.round(w)+"%",cls:"g",note:`${w}% win rate in the matchup · solo queue (METAsrc)`,other:oth})}})}
   return out.slice(0,3)}
 function mostPicked(c,n=3){const m=new Map(),d=CHAMP_DB[c];
-    if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const P=WORLDS_LIVE.players[n],t=P?P.team:(WORLDS_LIVE.pinTeam||{})[n]||"",e=m.get(n)||{n,t,g:0,w:0};e.g+=v.g;e.w+=v.w;if(t)e.t=t;m.set(n,e)});
+    /* main-event games only: pchamp also holds play-in games (for player pools), so those are taken back out */
+    if(typeof WORLDS_LIVE!=="undefined")Object.entries(WORLDS_LIVE.pchamp).forEach(([n,pc])=>{const v=pc[c];if(!v)return;const pi=((WORLDS_LIVE.pin||{})[n]||{})[c]||[0,0],g=v.g-pi[0],w=v.w-pi[1];if(g<=0)return;
+      const P=WORLDS_LIVE.players[n],t=P?P.team:"",e=m.get(n)||{n,t,g:0,w:0};e.g+=g;e.w+=w;if(t)e.t=t;m.set(n,e)});
   const sea=n=>{const p=ALLP.find(x=>x.n===n),x=p&&p.picks.find(y=>y[0]===c);return x&&x[1]?x[1]:null};
   return [...m.values()].sort((a,b)=>b.g-a.g||b.w-a.w).slice(0,n).map(e=>({...e,s:sea(e.n)}))}
 /* your simulated run's players on this champion (shown separately from the real Worlds numbers) */
@@ -458,7 +457,7 @@ function champTip(c){const d=CHAMP_DB[c]||{},pr=presOf(c),tr=trendOf(c),W=wrOf(c
   ${RT?hb("Pick / ban",fill(RT[0],"pk")+fill(RT[1],"bn"),`${RT[0]}% · ${RT[1]}%`,"picked · banned"):hb("Pick / ban","","—","not in pro tables")}
   ${RT?hb("Presence",fill(RT[0]+RT[1]),`${RT[0]+RT[1]}%`,R?"465 games":RS):hb("Presence","","—","not in pro tables")}
   ${W?hb("Win rate",fill(W.wr),`${W.wr}%`,`${W.src}${W.n<15?" · small sample":""}`):hb("Win rate","","—","no data")}</div></div>
-  <div class="hsec"><div class="label"><span class="hl">Worlds meta</span> ${infoI(`${WM.g} real Worlds games: 22 play-in + ${WM.swiss} Swiss. Play-in bans are only partly known${WM.gb<WM.g?`; the ban rate covers ${WM.gb} games`:""}. Your run is shown below.`)}</div><div class="hbars">
+  <div class="hsec"><div class="label"><span class="hl">Worlds meta</span> ${infoI(`${WM.g} real Worlds main-event games (Swiss and knockouts)${WM.gb<WM.g?`; the ban rate covers ${WM.gb} games with published bans`:""}. Play-in games count in the recent pro numbers, not here. Your run is shown below.`)}</div><div class="hbars">
   ${hb("Pick / ban",fill(WM.pk,"pk")+fill(WM.bn,"bn"),`${WM.pk}% · ${WM.bn}%`,"picked · banned")}
   ${hb("Presence",fill(WM.pk+WM.bn),`${WM.pk+WM.bn}%`,`${WM.g} games`)}
   ${hb("Win rate",WM.p?fill(WM.w/WM.p*100):"",WM.p?`${Math.round(WM.w/WM.p*100)}%`:"—",`${WM.w}-${WM.l}${WM.p&&WM.p<5?" · small sample":""}`)}</div>${WM.run?`<span class="notes small">Your run: ${WM.runP} picks · ${WM.runB} bans · ${WM.runW}-${WM.runP-WM.runW} in ${WM.run} games</span>`:""}</div></div>

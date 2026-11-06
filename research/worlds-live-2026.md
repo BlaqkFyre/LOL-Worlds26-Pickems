@@ -1,6 +1,23 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 5 Nov 2026 (AEST): **58 games**: quarter-finals 1–2 (IG 3–1 TES, GEN 3–0 LYON; sections below) and the whole Swiss stage (51 games): rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+Updated 6 Nov 2026 (AEST): **61 games**: quarter-finals 1–3 (IG 3–1 TES, GEN 3–0 LYON, BLG 3–0 DK; sections below) and the whole Swiss stage (51 games): rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+
+## Quarter-final 3: BLG 3–0 DK (added 6 Nov, v43)
+- **Newer Oracle's Elixir file** (Luke, 6 Nov AEST): 9,867 games, data to 6 Nov 00:00 UTC; one new Worlds series, BLG 3–0 DK (5 Nov US; 5–6 Nov UTC; patch 16.20).
+- **Checked against Leaguepedia** (Quarterfinals scoreboards, https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Scoreboards/Quarterfinals, and Picks and Bans, https://lol.fandom.com/wiki/2026_Season_World_Championship/Main_Event/Picks_and_Bans, both read 6 Nov): BLG blue in game 1, DK blue in games 2–3, BLG won all three; lengths 33:21 / 32:11 / 32:36, kills 24–9 / 10–13 / 9–25; all 30 champions, every player's K/D/A and CS, all 30 bans in order, first pick (DK in all three) and towers, inhibitors, Barons, dragons, Heralds and grubs match.
+- Rows built from the file (`r:"QF"`, `d:"2026-11-05"`). 61 games now.
+- `build_from_oe.py` on a scratch copy: 61/61 Worlds games OK; `js/h2h.js` rebuilt to 6 Nov: BLG v DK 1–2 → 4–2 (the only change). Its `worlds-live.js` output differed only in the play-in team list order, so that file was edited directly. `build_pro_matchups.py` (scratch copy) refreshed `js/pro-matchups.js`: 776 → 779 games, to 6 Nov.
+
+## Out-of-sample check, quarter-final 3 (the app at v42, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| BLG vs DK G1 (BLG blue) | BLG 76% | BLG won |
+| DK vs BLG G2 (DK blue) | BLG 69% | BLG won |
+| DK vs BLG G3 (DK blue) | BLG 52% | BLG won |
+
+- Favourite won 3 of 3; log loss 0.433, Brier 0.128. None above the ~80% ceiling.
+- Running total across all real Worlds main-event games scored before their data was added: 38 of 58 + 3 of 3 = **41 of 61 (67%)**.
+- The research models on all 10 knockout games so far (no drafts): v1 0.526, the fixed v2 candidate 0.516 (`research/sim2/README.md` step 15).
 
 ## Quarter-final 2: GEN 3–0 LYON (added 5 Nov, v40)
 - **Newer Oracle's Elixir file** (Luke, 5 Nov 16:40 AEST): 9,864 games, data to 4 Nov 23:54 UTC; one new Worlds series, Gen.G 3–0 LYON (4 Nov US and UTC; patch 16.20).
