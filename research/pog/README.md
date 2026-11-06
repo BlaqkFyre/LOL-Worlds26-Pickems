@@ -18,6 +18,7 @@ Scripts run from a scratch folder (Python + pandas, `python -I`); the Oracle's E
 | 3 | `pog_measure.py <dir> <out json>` | `research/model/pog/pog_measure.json`, `pog_worlds_series_scored.csv` | who wins awards; a quick choice model among the winning five (fitted on LPL Splits 1–2 and their playoffs; judged on later LPL games and on LCS + First Stand); LPL series MVP v per-game awards; the per-game model naming series MVPs elsewhere |
 | 4 | `pog_rate_example.py <OE csv> <measure json> <gameid>` | printout | example rating on a 6 + 1.5 × z scale (superseded by step 5) |
 | 5 | `pog_pct_compare.py <OE csv> <measure json> <gameid>` | printout | percentile ratings from two scores: today's app formula (`gameStats` in `js/tournament.js`) and the quick model; reference = major-league player-games before 1 Sep, check on games from 1 Sep |
+| 6 | `pog_fit.py <OE csv> <dir> <out json>` | `research/model/pog/pog_fit.json` | the session 4 refit: only stats the new sim produces (kills, deaths, assists, kill participation, damage share, CS lead at 15, vision per minute, role); A today's app formula with one fitted temperature, B per-game awards, C per-game + series awards (series MVP chance = mean of the player's per-game chances over the games his team won; LPL / LCS / First Stand series left out so no game counts twice). Two held-out checks: games and series from 1 Sep, and whole leagues (fit on LPL, judge on LCS + First Stand; series fit without LCK, judge on LCK) |
 
 ## Results (quick model, not final)
 - Awards always go to the winning side (977 of 977 games; 916 of 916 series).
@@ -30,6 +31,33 @@ Scripts run from a scratch folder (Python + pandas, `python -I`); the Oracle's E
 - Percentile ratings on real games from 1 Sep: app formula winners 7.3 / losers 2.7 (11% of losers 5+); quick model 6.4 / 3.3 (25% of losers 5+).
 - BLG 3–0 DK game 1 (percentile of the quick model ÷ 10): Xun 9.2, Knight 8.9, Viper 5.8, ON 5.4, Bin 3.4; Lucid 3.6, Siwoo 3.6, Career 2.6, Smash 1.8, ShowMaker 1.1. Over the series the model names Xun; Leaguepedia's series MVP is Xun.
 
+## Refit with the sim's stats (step 6, 6 Nov)
+
+Held out by date (from 1 Sep: 86 games with per-game awards, LPL and LCS; 41 series, LCK, LEC, CBLOL and all 15 Worlds series):
+
+| Model | Games: right pick | Games: log loss | Series: right pick | Series: log loss |
+|---|---|---|---|---|
+| A today's app formula | 47.7% | 1.320 | 41.5% | 1.711 |
+| B per-game awards | 52.3% | 1.167 | 51.2% | 1.510 |
+| C per-game + series awards | 52.3% | 1.181 | 46.3% | 1.503 |
+
+Whole leagues held out (larger): per-game fitted on LPL only, judged on all 305 LCS + First Stand games; series fitted without LCK, judged on all 188 LCK series:
+
+| Model | LCS + FST: right pick | LCS + FST: log loss | LCK series: right pick | LCK series: log loss |
+|---|---|---|---|---|
+| A today's app formula | 48.9% | 1.214 | 41.5% | 1.520 |
+| B per-game awards | 59.3% | 1.091 | 47.9% | 1.390 |
+| C per-game + series awards | 57.4% | 1.086 | 47.3% | 1.372 |
+
+(A coin among five: 20%, log loss 1.609.)
+
+- **Both fitted models beat today's formula on every check**, by a clear margin (log loss 0.12–0.21 better).
+- **Series awards as extra training (C v B) are a wash so far:** slightly better log loss in three of four checks, slightly worse top pick in three of four; differences are within what 41–305 test cases can tell apart. Luke to decide whether to keep them in.
+- Fitted weights (C, per standard deviation): kills +1.00, deaths −0.52, damage share +0.50, vision +0.35, kill participation +0.32, assists +0.30, CS lead at 15 +0.23; roles v top: jungle +0.10, mid −0.43, support −0.16, ADC −1.54 (ADCs need more numbers for the same chance, as in real awards).
+- Role shares on the held-out games, model C v real: jungle 28% v 33%, mid 28% v 23%, ADC 18% v 20%, top 16% v 15%, support 10% v 9%.
+- Dropping the stats the sim doesn't make (damage taken, gold share, gold lead) costs a little against the quick model (LCS + First Stand right pick 59% v 61%).
+
 ## Still to do (session 4)
-- Refit with only the stats the new sim produces (no damage taken), add series awards as training data, hold out games from 1 Sep and the Worlds series.
-- Compare with today's formula on the same games; it ships only if it is better there.
+- **Version C chosen (Luke, 6 Nov):** per-game + series awards.
+- Ratings: percentile of the chosen model's score among real pro games in the role ÷ 10 (decision 6); recompute the reference table with the final weights.
+- Build into the app with the new sim (session 4), then confirm with Luke before the final commit.

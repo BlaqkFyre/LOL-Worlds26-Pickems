@@ -1,0 +1,155 @@
+{
+ "standardise_mean": {
+  "kills": 3.8602,
+  "deaths": 1.8343,
+  "assists": 9.2862,
+  "kp": 0.6832,
+  "damageshare": 0.2,
+  "csd15": 2.211,
+  "vspm": 2.0581
+ },
+ "standardise_sd": {
+  "kills": 2.9828,
+  "deaths": 1.5322,
+  "assists": 4.5392,
+  "kp": 0.1637,
+  "damageshare": 0.0902,
+  "csd15": 14.7114,
+  "vspm": 1.1854
+ },
+ "training": {
+  "per-game award games": 891,
+  "series (LCK, LEC, CBLOL, LCP, internationals)": 590
+ },
+ "held_out": {
+  "games": 86,
+  "series": 41,
+  "series_by_league": {
+   "CBLOL": 10,
+   "LCK": 8,
+   "LEC": 8,
+   "WLDs": 15
+  }
+ },
+ "A_app_formula": {
+  "temperature_weight": 0.829,
+  "games from 1 Sep (LPL, LCS)": {
+   "n": 86,
+   "right": 0.477,
+   "log_loss": 1.3199
+  },
+  "series from 1 Sep (LCK, LEC, CBLOL, Worlds)": {
+   "n": 41,
+   "right": 0.415,
+   "log_loss": 1.7111
+  }
+ },
+ "B_per_game_awards": {
+  "weights": {
+   "kills": 1.213,
+   "deaths": -0.535,
+   "assists": 0.637,
+   "kp": 0.164,
+   "damageshare": 0.426,
+   "csd15": 0.235,
+   "vspm": 0.528,
+   "r_jng": 0.075,
+   "r_mid": -0.542,
+   "r_bot": -1.504,
+   "r_sup": -0.721
+  },
+  "games from 1 Sep (LPL, LCS)": {
+   "n": 86,
+   "right": 0.523,
+   "log_loss": 1.1666
+  },
+  "series from 1 Sep (LCK, LEC, CBLOL, Worlds)": {
+   "n": 41,
+   "right": 0.512,
+   "log_loss": 1.5098
+  }
+ },
+ "C_plus_series_awards": {
+  "weights": {
+   "kills": 0.999,
+   "deaths": -0.523,
+   "assists": 0.304,
+   "kp": 0.315,
+   "damageshare": 0.502,
+   "csd15": 0.233,
+   "vspm": 0.348,
+   "r_jng": 0.097,
+   "r_mid": -0.429,
+   "r_bot": -1.535,
+   "r_sup": -0.156
+  },
+  "games from 1 Sep (LPL, LCS)": {
+   "n": 86,
+   "right": 0.523,
+   "log_loss": 1.1807
+  },
+  "series from 1 Sep (LCK, LEC, CBLOL, Worlds)": {
+   "n": 41,
+   "right": 0.463,
+   "log_loss": 1.5028
+  }
+ },
+ "chance": {
+  "game": "1 in 5 (log loss 1.609)",
+  "series": "about 1 in 5"
+ },
+ "role_share_held_out_games": {
+  "model_C": {
+   "bot": 0.179,
+   "jng": 0.284,
+   "mid": 0.277,
+   "sup": 0.103,
+   "top": 0.158
+  },
+  "real": {
+   "jng": 0.326,
+   "mid": 0.233,
+   "bot": 0.198,
+   "top": 0.151,
+   "sup": 0.093
+  }
+ },
+ "league_held_out": {
+  "A_app_formula": {
+   "LCS + First Stand games (all dates)": {
+    "n": 305,
+    "right": 0.489,
+    "log_loss": 1.214
+   },
+   "LCK series (all dates)": {
+    "n": 188,
+    "right": 0.415,
+    "log_loss": 1.5196
+   }
+  },
+  "B_per_game_awards": {
+   "LCS + First Stand games (all dates)": {
+    "n": 305,
+    "right": 0.593,
+    "log_loss": 1.0908
+   },
+   "LCK series (all dates)": {
+    "n": 188,
+    "right": 0.479,
+    "log_loss": 1.39
+   }
+  },
+  "C_plus_series_awards": {
+   "LCS + First Stand games (all dates)": {
+    "n": 305,
+    "right": 0.574,
+    "log_loss": 1.086
+   },
+   "LCK series (all dates)": {
+    "n": 188,
+    "right": 0.473,
+    "log_loss": 1.3717
+   }
+  }
+ }
+}
