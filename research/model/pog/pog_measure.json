@@ -1,0 +1,185 @@
+{
+ "games": {
+  "n": 977,
+  "by_league": {
+   "FST": 45,
+   "LCS": 260,
+   "LPL": 672
+  },
+  "award_on_winning_team": 1.0,
+  "role_share": {
+   "jng": 0.317,
+   "mid": 0.249,
+   "bot": 0.181,
+   "top": 0.154,
+   "sup": 0.099
+  },
+  "role_share_by_league": {
+   "FST": {
+    "jng": 0.311,
+    "mid": 0.267,
+    "bot": 0.2,
+    "top": 0.133,
+    "sup": 0.089
+   },
+   "LCS": {
+    "jng": 0.296,
+    "mid": 0.223,
+    "bot": 0.219,
+    "top": 0.131,
+    "sup": 0.131
+   },
+   "LPL": {
+    "jng": 0.326,
+    "mid": 0.257,
+    "bot": 0.165,
+    "top": 0.164,
+    "sup": 0.088
+   }
+  },
+  "award_to_winning_side_leader_in": {
+   "kills": 0.48,
+   "kda": 0.388,
+   "damageshare": 0.344,
+   "earnedgoldshare": 0.295,
+   "kp": 0.375,
+   "golddiffat15": 0.405,
+   "dpm": 0.344,
+   "assists": 0.133,
+   "visionscore": 0.099
+  }
+ },
+ "choice_model": {
+  "fit_on": "LPL Split 1, Split 1 playoffs, Split 2, Split 2 playoffs (winning side's five)",
+  "features_standardised": [
+   "kills",
+   "deaths",
+   "assists",
+   "damageshare",
+   "earnedgoldshare",
+   "kp",
+   "golddiffat15",
+   "vspm",
+   "damagetakenperminute",
+   "r_jng",
+   "r_mid",
+   "r_bot",
+   "r_sup"
+  ],
+  "weights": {
+   "kills": 0.8,
+   "deaths": -0.55,
+   "assists": 0.24,
+   "damageshare": 0.21,
+   "earnedgoldshare": 0.162,
+   "kp": 0.376,
+   "golddiffat15": 0.458,
+   "vspm": 0.509,
+   "damagetakenperminute": 0.45,
+   "r_jng": -0.067,
+   "r_mid": 0.041,
+   "r_bot": -0.853,
+   "r_sup": -0.052
+  },
+  "train": {
+   "games": 381,
+   "top_pick_right": 0.575,
+   "log_loss": 1.0764,
+   "uniform_log_loss": 1.6094
+  },
+  "LPL later (Split 3, Regional Finals, Grand Finals)": {
+   "games": 159,
+   "top_pick_right": 0.648,
+   "log_loss": 0.9896,
+   "uniform_log_loss": 1.6094
+  },
+  "LCS + First Stand (never fitted)": {
+   "games": 305,
+   "top_pick_right": 0.613,
+   "log_loss": 1.0421,
+   "uniform_log_loss": 1.6094
+  },
+  "most_kills_rule_on_LCS_FST": {
+   "games": 305,
+   "top_pick_right": 0.521,
+   "log_loss": 3.0678,
+   "uniform_log_loss": 1.6094
+  }
+ },
+ "series": {
+  "n": 916,
+  "by_league": {
+   "CBLOL": 117,
+   "EWC": 15,
+   "FST": 13,
+   "LCK": 188,
+   "LCP": 97,
+   "LCS": 26,
+   "LEC": 186,
+   "LPL": 246,
+   "MSI": 13,
+   "WLDs": 15
+  },
+  "mvp_on_series_winner": 1.0,
+  "role_share": {
+   "jng": 0.286,
+   "mid": 0.275,
+   "bot": 0.198,
+   "top": 0.157,
+   "sup": 0.084
+  },
+  "LPL_series_mvp_v_per_game": {
+   "series_with_both": 246,
+   "series_mvp_won_at_least_one_game_award": 0.951,
+   "series_mvp_is_the_unique_most_game_awards": 0.946,
+   "series_with_a_tie_for_most": 153
+  },
+  "per_game_model_names_series_mvp": {
+   "CBLOL": {
+    "series": 117,
+    "right": 0.521
+   },
+   "EWC": {
+    "series": 15,
+    "right": 0.333
+   },
+   "FST": {
+    "series": 13,
+    "right": 0.308
+   },
+   "LCK": {
+    "series": 188,
+    "right": 0.5
+   },
+   "LCP": {
+    "series": 97,
+    "right": 0.433
+   },
+   "LCS": {
+    "series": 26,
+    "right": 0.462
+   },
+   "LEC": {
+    "series": 186,
+    "right": 0.548
+   },
+   "LPL": {
+    "series": 213,
+    "right": 0.549
+   },
+   "MSI": {
+    "series": 13,
+    "right": 0.462
+   },
+   "WLDs": {
+    "series": 15,
+    "right": 0.333
+   },
+   "all": {
+    "series": 883,
+    "right": 0.507
+   }
+  },
+  "chance_level": "about 0.2 per series (five players on the winning side, before any stats)"
+ }
+}

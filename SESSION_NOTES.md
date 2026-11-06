@@ -36,9 +36,10 @@ _Live state only. Rules, start/end-of-session steps and the code map are in `CLA
 
 ## Open decisions (Luke)
 
-- **Draft styles in the game sim** (session 3): now timing-only (Luke, 5 Nov). In the final version they cost a little (0.635 with v 0.632 without from 1 Sep; 0.626 v 0.617 at Worlds); only draft pace → kills per minute is clearly real in held-out games. Keep all three, or keep only pace? (`research/sim3-report.md` §4)
-- **The app's "one damage type, easy to itemise against" hover-card warning** is untested (pro teams never draft one damage type; `research/comps-plan.md` option C). Remove, reword or keep, in session 4.
-- **Grub taker model** (session 3): doesn't hold from 1 Sep (worse than side only). Simplify to side only, or keep?
+- **Player of the Game and per-game ratings (session 4): CONFIRM WITH LUKE BEFORE SESSION 4'S FINAL COMMIT.** Agreed in principle 6 Nov (`research/sim-plan.md`, decision 6): Player of the Game from a model fitted on LPL / LCS / First Stand per-game awards, tested and extended with series awards (LCK, LEC and the rest); per-game rating = percentile of that fitted score among real pro games in the role ÷ 10, replacing today's hand-set formula. Award data, scripts and results: `research/pog/` (README) and `research/model/pog/`.
+- **Player cards and play-in games:** see What's next.
+
+Decided 6 Nov (details in `research/sim-plan.md`, "Five decisions before session 4"): keep all three draft styles and keep validating (siege and scaling against late-game timing; champion-to-style fit from outside labels); keep the grub taker model (let the engine play it out); no "one damage type" warning — a champ-select meter for magic / physical damage (maybe tankiness, CC / utility) instead, and the draft AI judges comps; v1 is the baseline and the final model must beat it.
 
 Decided 29 Oct (details in `research/sim-plan.md`):
 - **Ratings:** fitted ratings replace what's shown on the cards. Keep the idea: readable role skills + overall that are interesting and feed the match sim. **Plan the foundation with Luke first** (sim session 1).
@@ -54,7 +55,7 @@ Decided 29 Oct (details in `research/sim-plan.md`):
 
 | Watch-item | Trigger |
 |---|---|
-| Player of the Game isn't published by any source checked so far, so real POG isn't used. **New lead (30 Oct):** Leaguepedia's Main Event page now has an "MVP" column per series and "MVP Standings" (e.g. TES–BLG: Tian; several series show "None"). Not checked: where it comes from or whether it is the official award | Luke decides whether to look into it (also needed for sim session 4) |
+| Player of the Game: checked 6 Nov (see Open decisions). LPL per-game awards on Leaguepedia are complete for Split 3; LCK and Worlds are per series; Worlds main event has only 12 of 36 series filled | Luke chooses the source for session 4 |
 | Old sim overrates BLG against TES (76–90% in all 3 games, TES won 2-1); the ceiling issue keeps showing | The new sim (sim sessions 1–4) |
 | `build_from_oe.py` labels every "WLDs" row as "Worlds" in the H2H "Met at" list, including the 17–19 Sep qualifier rows its own header says aren't Worlds. Game counts aren't affected | Before the script becomes the match-day routine (sim session 5) |
 | `build_from_oe.py` always overwrites `js/h2h.js` and `js/worlds-live.js`; an option to write to another folder would make test runs safer | Same as above |
