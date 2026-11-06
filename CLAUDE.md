@@ -50,7 +50,7 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 ## Repo rules
 
 - **Cache version:** every change to `js/` or `css/` bumps `?v=N` on ALL 10 tags in `index.html` (9 scripts + `styles.css`). The version also goes in the commit title.
-- **Gitignored, never commit:** `research/*OraclesElixir*.csv` (78 MB raw data) and `Draft Game/draft-clash-save.json` (autosave).
+- **Gitignored, never commit:** `research/*OraclesElixir*.csv` (78 MB raw data), `research/local/` (gol.gg timelines, held-out sim games, matched award rows; see its README) and `Draft Game/draft-clash-save.json` (autosave). Save new large working data to `research/local/`, not only to a session's scratch folder (scratch folders change each session and Windows can clear them).
 - **Odds ceiling:** almost no matchup should sim above about 80% (see `research/backtest-2026.md`).
 - **Riot limits:** no Riot logos or artwork, free and non-commercial, keep the `ASSETS.icons` on/off switch in `js/assets.js` working.
 - **Imported run files are untrusted:** keep the field-by-field checks described in the README.
