@@ -100,6 +100,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 | `research/` | Data notes and sources: `worlds-live-2026.md`, `backtest-2026.md` (+ `backtest/`), `pro-meta-findings-2026-10-20.md` |
 | `research/sim-plan.md` | **Master copy** of the data-built simulator plan (5 sessions, test targets, risks, open decisions) |
 | `research/build/build_from_oe.py` | Rebuilds `js/h2h.js`, `research/model/h2h_2026.json` and the play-in tables in `js/worlds-live.js` from the Oracle's Elixir CSV, and checks the Swiss games (see Repo rules before running) |
+| `research/build/ko_rows.py` | Builds new `js/worlds-live.js` game rows from Oracle's Elixir rows (main CSV or a saved copy), printed for pasting in; reproduces the existing quarter-final rows exactly |
 | `research/model/` | Tables built from the Oracle's Elixir file (`h2h_2026.json`; sim session 1 results in `model/sim1/`) |
 | `research/sim2/`, `research/sim2-report.md` | Sim session 2 scripts, outside-source extracts (lolalytics, gol.gg, Leaguepedia) and notes (start with its README), and the part 1 report. Results in `research/model/sim2/` |
 | `research/sim3/`, `research/sim3-report.md` | Sim session 3: the minute-by-minute game-state sim (`s3_sim.py`), gol.gg timeline pull and fits, held-out tests (start with its README). Small tables in `research/model/sim3/`; raw timelines stay local. Comps options and their tests: `research/comps-plan.md` |

@@ -1,6 +1,32 @@
 # Real Worlds 2026 Swiss games — data and how the app uses them
 
-Updated 6 Nov 2026 (AEST): **61 games**: quarter-finals 1–3 (IG 3–1 TES, GEN 3–0 LYON, BLG 3–0 DK; sections below) and the whole Swiss stage (51 games): rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+Updated 10 Nov 2026 (AEST): **72 games**: semi-finals (GEN 3–0 IG, BLG 3–1 T1), quarter-finals 1–4 (IG 3–1 TES, GEN 3–0 LYON, BLG 3–0 DK, T1 3–1 KC; sections below) and the whole Swiss stage (51 games): rounds 1–3 (16 Bo1s on 23–24 Oct; on 25 Oct HLE vs IG, TES vs G2, DK 2-0 MKOI, GEN 2-1 LYON; on 26 Oct T1 vs CFO, BLG vs KC, LOS 2-0 TSW, TL 2-0 AL), round 4 (28 Oct: T1 2-0 MKOI, IG 2-1 LYON; 29 Oct: KC 2-0 CFO, TES 2-1 BLG; 30 Oct: LOS 2-1 TL, HLE 2-0 G2) and round 5 (31 Oct: KC 2-0 MKOI, LYON 2-1 LOS, BLG 2-0 HLE). Dates are US event days; the Oracle's Elixir file uses UTC. Data: `js/worlds-live.js`.
+
+## Quarter-final 4 and semi-finals: T1 3–1 KC, GEN 3–0 IG, BLG 3–1 T1 (added 10 Nov, v45)
+- **Source:** the full Oracle's Elixir download was too slow, so Luke saved the file's rows for 6–9 Nov UTC as `research/SF26Results.xlsx` (copied from the same data: the file's 165 columns, header row and game IDs). Checked in code: header identical to the main file's, 240 rows, no duplicates, no game already in the main file; each of the 11 Worlds games has 12 rows (10 players with every role once, 2 team rows) and the players' kills equal the team totals. Excel had turned the patch `16.20` into `16.2` (set back to 16.20) and dropped trailing zeros (values unchanged). Its 9 LCK academy (`LAS`) games are left out.
+- **Not checked against Leaguepedia** (Luke, 10 Nov: the copy is accurate for now). **To do: confirm every row against the full Oracle's Elixir file when it is downloaded** (run `build_from_oe.py` on a scratch copy and compare; game IDs should match exactly).
+- Games (US dates; UTC 6 Nov 22:13 to 9 Nov 00:56): QF4 T1 v KC — T1 (35:39, 23–7), T1 (29:42), KC (36:44), T1 (35:15); SF1 GEN v IG — GEN 33:38, 29:16, 40:08 (IG blue in game 3); SF2 BLG v T1 — BLG 30:25, T1 32:15, BLG 36:58, BLG 37:47. Final (14 Nov US): Gen.G v Bilibili Gaming.
+- Rows built with `research/build/ko_rows.py` (`r:"QF"` for QF4, `r:"SF"` for the semi-finals; the round label isn't shown anywhere in the app). The script was first checked by rebuilding the 10 existing quarter-final rows from the main file: 10 of 10 identical to the app's rows. 72 games now.
+- `build_from_oe.py` and `build_pro_matchups.py` on a scratch copy of the main file plus these 11 games (patch 16.20): 72/72 Worlds games OK; `js/h2h.js` to 9 Nov: BLG v T1 4–2 → 7–3, GEN v IG 1–0 → 4–0, KC v T1 2–4 → 3–7 (the only changes); `js/pro-matchups.js` 779 → 790 games. Its `worlds-live.js` output differed only in the play-in team list order, so that file was edited directly.
+
+## Out-of-sample check, quarter-final 4 and semi-finals (the app at v44, before this update; 3,000 simulated games per draft with the real picks)
+| Game | App's odds for the winner | Result |
+|---|---|---|
+| T1 vs KC G1 (T1 blue) | T1 76% | T1 won |
+| KC vs T1 G2 (KC blue) | T1 66% | T1 won |
+| KC vs T1 G3 (KC blue) | KC 36% | KC won |
+| KC vs T1 G4 (KC blue) | T1 67% | T1 won |
+| GEN vs IG G1 (GEN blue) | GEN 75% | GEN won |
+| GEN vs IG G2 (GEN blue) | GEN 93% | GEN won |
+| IG vs GEN G3 (IG blue) | GEN 87% | GEN won |
+| BLG vs T1 G1 (BLG blue) | BLG 55% | BLG won |
+| T1 vs BLG G2 (T1 blue) | T1 32% | T1 won |
+| BLG vs T1 G3 (BLG blue) | BLG 47% | BLG won |
+| T1 vs BLG G4 (T1 blue) | BLG 73% | BLG won |
+
+- Favourite won 8 of 11; log loss 0.494, Brier 0.164 (QF4 0.526; SF1 0.167; SF2 0.706). Two above the ~80% ceiling (GEN 93%, 87%).
+- Running total across all real Worlds main-event games scored before their data was added: 41 of 61 + 8 of 11 = **49 of 72 (68%)**.
+- The research models on all 21 knockout games (no drafts): v1 0.5224, the fixed v2 candidate 0.5104; favourite 16 v 17 of 21 (`research/sim2/README.md` step 15).
 
 ## Quarter-final 3: BLG 3–0 DK (added 6 Nov, v43)
 - **Newer Oracle's Elixir file** (Luke, 6 Nov AEST): 9,867 games, data to 6 Nov 00:00 UTC; one new Worlds series, BLG 3–0 DK (5 Nov US; 5–6 Nov UTC; patch 16.20).

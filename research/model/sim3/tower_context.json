@@ -1,0 +1,580 @@
+{
+ "games": 626,
+ "lane_tier": [
+  {
+   "tower": "T1 BOT",
+   "falls_per_team_game": 0.871,
+   "median_min": 18.4,
+   "q25_min": 15.8,
+   "q75_min": 21.2,
+   "blue_takes_share": 0.907,
+   "blue_median_min": 18.5,
+   "red_takes_share": 0.835,
+   "red_median_min": 18.1
+  },
+  {
+   "tower": "T1 MID",
+   "falls_per_team_game": 0.787,
+   "median_min": 20.0,
+   "q25_min": 17.5,
+   "q75_min": 24.5,
+   "blue_takes_share": 0.859,
+   "blue_median_min": 19.2,
+   "red_takes_share": 0.714,
+   "red_median_min": 21.1
+  },
+  {
+   "tower": "T1 TOP",
+   "falls_per_team_game": 0.891,
+   "median_min": 18.6,
+   "q25_min": 16.2,
+   "q75_min": 21.8,
+   "blue_takes_share": 0.925,
+   "blue_median_min": 17.8,
+   "red_takes_share": 0.856,
+   "red_median_min": 19.6
+  },
+  {
+   "tower": "T2 BOT",
+   "falls_per_team_game": 0.511,
+   "median_min": 26.8,
+   "q25_min": 23.8,
+   "q75_min": 31.0,
+   "median_gap_from_prev_tier_s": 514,
+   "blue_takes_share": 0.561,
+   "blue_median_min": 26.4,
+   "red_takes_share": 0.462,
+   "red_median_min": 27.5
+  },
+  {
+   "tower": "T2 MID",
+   "falls_per_team_game": 0.546,
+   "median_min": 26.8,
+   "q25_min": 24.1,
+   "q75_min": 31.0,
+   "median_gap_from_prev_tier_s": 386,
+   "blue_takes_share": 0.631,
+   "blue_median_min": 26.3,
+   "red_takes_share": 0.46,
+   "red_median_min": 27.5
+  },
+  {
+   "tower": "T2 TOP",
+   "falls_per_team_game": 0.442,
+   "median_min": 27.4,
+   "q25_min": 24.4,
+   "q75_min": 31.3,
+   "median_gap_from_prev_tier_s": 536,
+   "blue_takes_share": 0.516,
+   "blue_median_min": 26.8,
+   "red_takes_share": 0.369,
+   "red_median_min": 27.8
+  },
+  {
+   "tower": "T3 BOT",
+   "falls_per_team_game": 0.266,
+   "median_min": 30.0,
+   "q25_min": 26.4,
+   "q75_min": 34.1,
+   "median_gap_from_prev_tier_s": 87,
+   "blue_takes_share": 0.302,
+   "blue_median_min": 28.7,
+   "red_takes_share": 0.23,
+   "red_median_min": 30.8
+  },
+  {
+   "tower": "T3 MID",
+   "falls_per_team_game": 0.408,
+   "median_min": 30.5,
+   "q25_min": 27.0,
+   "q75_min": 34.1,
+   "median_gap_from_prev_tier_s": 145,
+   "blue_takes_share": 0.474,
+   "blue_median_min": 29.8,
+   "red_takes_share": 0.342,
+   "red_median_min": 30.7
+  },
+  {
+   "tower": "T3 TOP",
+   "falls_per_team_game": 0.185,
+   "median_min": 31.3,
+   "q25_min": 27.4,
+   "q75_min": 34.4,
+   "median_gap_from_prev_tier_s": 57,
+   "blue_takes_share": 0.22,
+   "blue_median_min": 31.2,
+   "red_takes_share": 0.15,
+   "red_median_min": 31.4
+  }
+ ],
+ "first_tower_lane_by_side": {
+  "blue": {
+   "TOP": 0.503,
+   "MID": 0.152,
+   "BOT": 0.345,
+   "n": 368
+  },
+  "red": {
+   "TOP": 0.279,
+   "MID": 0.136,
+   "BOT": 0.585,
+   "n": 258
+  }
+ },
+ "panel_rows": 118442,
+ "tower_minutes": 5810,
+ "fits": {
+  "TOP": {
+   "train": {
+    "n": 25011,
+    "towers": 1151,
+    "coef": {
+     "k_lane": [
+      0.267,
+      3.37
+     ],
+     "k_jng": [
+      -0.207,
+      -2.46
+     ],
+     "k_other": [
+      -0.039,
+      -0.53
+     ],
+     "d_lane": [
+      -0.145,
+      -1.51
+     ],
+     "dragon": [
+      0.252,
+      3.25
+     ],
+     "herald": [
+      0.207,
+      1.51
+     ],
+     "grub": [
+      -0.885,
+      -2.52
+     ],
+     "baron": [
+      1.109,
+      10.3
+     ],
+     "lead": [
+      0.184,
+      18.21
+     ],
+     "blue": [
+      0.325,
+      4.95
+     ],
+     "siege_lane_z": [
+      0.001,
+      0.03
+     ],
+     "siege_team_z": [
+      0.054,
+      1.13
+     ]
+    }
+   },
+   "test": {
+    "n": 14762,
+    "towers": 664,
+    "coef": {
+     "k_lane": [
+      0.099,
+      0.91
+     ],
+     "k_jng": [
+      -0.203,
+      -1.72
+     ],
+     "k_other": [
+      0.022,
+      0.22
+     ],
+     "d_lane": [
+      0.045,
+      0.36
+     ],
+     "dragon": [
+      0.116,
+      1.09
+     ],
+     "herald": [
+      0.271,
+      1.5
+     ],
+     "grub": [
+      0.068,
+      0.21
+     ],
+     "baron": [
+      1.019,
+      7.1
+     ],
+     "lead": [
+      0.204,
+      14.56
+     ],
+     "blue": [
+      0.338,
+      3.88
+     ],
+     "siege_lane_z": [
+      0.041,
+      0.87
+     ],
+     "siege_team_z": [
+      -0.054,
+      -0.82
+     ]
+    }
+   },
+   "passes": [
+    "baron",
+    "lead",
+    "blue"
+   ]
+  },
+  "MID": {
+   "train": {
+    "n": 24632,
+    "towers": 1279,
+    "coef": {
+     "k_lane": [
+      0.16,
+      2.02
+     ],
+     "k_jng": [
+      0.108,
+      1.37
+     ],
+     "k_other": [
+      0.121,
+      1.68
+     ],
+     "d_lane": [
+      -0.097,
+      -0.98
+     ],
+     "dragon": [
+      0.302,
+      3.91
+     ],
+     "herald": [
+      0.976,
+      8.01
+     ],
+     "grub": [
+      -18.224,
+      -0.0
+     ],
+     "baron": [
+      1.448,
+      15.1
+     ],
+     "lead": [
+      0.272,
+      24.23
+     ],
+     "blue": [
+      0.144,
+      2.2
+     ],
+     "siege_lane_z": [
+      -0.039,
+      -0.81
+     ],
+     "siege_team_z": [
+      -0.001,
+      -0.03
+     ]
+    }
+   },
+   "test": {
+    "n": 14585,
+    "towers": 766,
+    "coef": {
+     "k_lane": [
+      0.2,
+      1.91
+     ],
+     "k_jng": [
+      0.24,
+      2.29
+     ],
+     "k_other": [
+      0.193,
+      2.03
+     ],
+     "d_lane": [
+      -0.238,
+      -1.71
+     ],
+     "dragon": [
+      -0.041,
+      -0.38
+     ],
+     "herald": [
+      1.22,
+      7.52
+     ],
+     "grub": [
+      -17.231,
+      -0.0
+     ],
+     "baron": [
+      1.194,
+      9.91
+     ],
+     "lead": [
+      0.232,
+      16.66
+     ],
+     "blue": [
+      0.367,
+      4.32
+     ],
+     "siege_lane_z": [
+      0.012,
+      0.2
+     ],
+     "siege_team_z": [
+      0.021,
+      0.48
+     ]
+    }
+   },
+   "passes": [
+    "herald",
+    "baron",
+    "lead",
+    "blue"
+   ]
+  },
+  "BOT": {
+   "train": {
+    "n": 24853,
+    "towers": 1219,
+    "coef": {
+     "k_lane": [
+      0.142,
+      1.87
+     ],
+     "k_jng": [
+      0.043,
+      0.53
+     ],
+     "k_other": [
+      0.08,
+      1.09
+     ],
+     "d_lane": [
+      -0.049,
+      -0.62
+     ],
+     "dragon": [
+      0.088,
+      1.08
+     ],
+     "herald": [
+      0.129,
+      0.99
+     ],
+     "grub": [
+      -2.067,
+      -3.52
+     ],
+     "baron": [
+      1.675,
+      16.59
+     ],
+     "lead": [
+      0.22,
+      20.39
+     ],
+     "blue": [
+      -0.066,
+      -1.01
+     ],
+     "siege_lane_z": [
+      0.015,
+      0.33
+     ],
+     "siege_team_z": [
+      0.051,
+      1.45
+     ]
+    }
+   },
+   "test": {
+    "n": 14599,
+    "towers": 731,
+    "coef": {
+     "k_lane": [
+      -0.043,
+      -0.41
+     ],
+     "k_jng": [
+      -0.208,
+      -1.82
+     ],
+     "k_other": [
+      0.244,
+      2.53
+     ],
+     "d_lane": [
+      0.05,
+      0.46
+     ],
+     "dragon": [
+      0.218,
+      2.09
+     ],
+     "herald": [
+      0.249,
+      1.49
+     ],
+     "grub": [
+      -1.467,
+      -2.47
+     ],
+     "baron": [
+      1.8,
+      13.65
+     ],
+     "lead": [
+      0.244,
+      16.14
+     ],
+     "blue": [
+      -0.009,
+      -0.1
+     ],
+     "siege_lane_z": [
+      -0.02,
+      -0.28
+     ],
+     "siege_team_z": [
+      0.099,
+      2.22
+     ]
+    }
+   },
+   "passes": [
+    "grub",
+    "baron",
+    "lead"
+   ]
+  }
+ },
+ "fit_note": "coef = [log-odds per unit, t]; events = within the 120 s before the minute; lead per 1k gold; siege per sd",
+ "event_share": {
+  "BOT": {
+   "k_lane": [
+    0.378,
+    0.209
+   ],
+   "k_jng": [
+    0.307,
+    0.145
+   ],
+   "k_other": [
+    0.418,
+    0.228
+   ],
+   "d_lane": [
+    0.221,
+    0.221
+   ],
+   "dragon": [
+    0.215,
+    0.135
+   ],
+   "herald": [
+    0.082,
+    0.029
+   ],
+   "grub": [
+    0.003,
+    0.046
+   ],
+   "baron": [
+    0.238,
+    0.027
+   ]
+  },
+  "MID": {
+   "k_lane": [
+    0.296,
+    0.122
+   ],
+   "k_jng": [
+    0.351,
+    0.139
+   ],
+   "k_other": [
+    0.505,
+    0.284
+   ],
+   "d_lane": [
+    0.111,
+    0.138
+   ],
+   "dragon": [
+    0.239,
+    0.133
+   ],
+   "herald": [
+    0.111,
+    0.028
+   ],
+   "grub": [
+    0.0,
+    0.046
+   ],
+   "baron": [
+    0.249,
+    0.025
+   ]
+  },
+  "TOP": {
+   "k_lane": [
+    0.27,
+    0.142
+   ],
+   "k_jng": [
+    0.255,
+    0.149
+   ],
+   "k_other": [
+    0.423,
+    0.282
+   ],
+   "d_lane": [
+    0.132,
+    0.15
+   ],
+   "dragon": [
+    0.236,
+    0.136
+   ],
+   "herald": [
+    0.073,
+    0.03
+   ],
+   "grub": [
+    0.012,
+    0.045
+   ],
+   "baron": [
+    0.165,
+    0.032
+   ]
+  }
+ },
+ "event_share_note": "[share of tower-falling minutes with the event in the 120 s before, share of other at-risk minutes]"
+}

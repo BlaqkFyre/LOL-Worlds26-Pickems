@@ -327,12 +327,12 @@ Research only; the default sim is unchanged (300 of 300 seeded games identical).
 | v1 | 0.640 | 0.628 | | |
 
 - The combined version is worse at who-wins: **not kept**.
-- Lane × tier is mixed (0.004 worse from 1 Sep, 0.009 better at Worlds; noise about 0.0025 from 1 Sep, more on 80 Worlds games). It is a better tower-push input on held-out pushes and more realistic lane by lane. **Luke to decide** whether it goes into the sim.
+- Lane × tier is mixed (0.004 worse from 1 Sep, 0.009 better at Worlds; noise about 0.0025 from 1 Sep, more on 80 Worlds games). It is a better tower-push input on held-out pushes and more realistic lane by lane. **Luke decided (7 Nov): keep it in the sim and keep testing it** (to be switched on as the default next session, with the baseline re-run).
 - **None of these narrows the spread.** The biggest remaining gap is total kills per game (sd 12.4 v 7.3). Real fights per minute are less bursty than chance (dispersion 0.7–0.8) and real games vary less than chance given their state (7d), while the sim's kill totals add chance on top of chance (fight count × fight size). **Next test:** how kills per game build up in the sim v real (fights per game, kills per fight, and their link to game length).
 
 ## 8. Open items for Luke
 
-1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed: Luke to decide); the combined fix is not kept. Next test: how kills per game build up (sd 12.4 v 7.3).
+1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Next test: how kills per game build up (sd 12.4 v 7.3).
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?

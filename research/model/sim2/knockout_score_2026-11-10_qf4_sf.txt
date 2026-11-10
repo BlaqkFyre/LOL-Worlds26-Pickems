@@ -1,0 +1,68 @@
+games in both runs: 2855; largest change in v1 log-odds: 1.11e-16; games only in the new run: 11
+
+knockout games: 21
+  2026-11-03 22:14 IG (blue) v TES: blue won 1 | v1 blue 0.583 | candidate blue 0.550
+      Blue: Wei on Qiyana: 4 earlier games, pool 9, with mid 84 games, with ADC 69
+      Red: Tian on Vi: 12 earlier games, pool 12, with mid 99 games, with ADC 99
+  2026-11-03 23:07 IG (blue) v TES: blue won 0 | v1 blue 0.589 | candidate blue 0.565
+      Blue: Wei on Wukong: 12 earlier games, pool 9, with mid 84 games, with ADC 69
+      Red: Tian on Xin Zhao: 11 earlier games, pool 12, with mid 99 games, with ADC 99
+  2026-11-04 00:16 TES (blue) v IG: blue won 0 | v1 blue 0.507 | candidate blue 0.539
+      Blue: Tian on Skarner: 5 earlier games, pool 12, with mid 101 games, with ADC 101
+      Red: Wei on Jayce: 2 earlier games, pool 9, with mid 86 games, with ADC 71
+  2026-11-04 02:20 IG (blue) v TES: blue won 1 | v1 blue 0.582 | candidate blue 0.566
+      Blue: Wei on Naafiri: 10 earlier games, pool 9, with mid 86 games, with ADC 71
+      Red: Tian on Maokai: 3 earlier games, pool 12, with mid 101 games, with ADC 101
+  2026-11-04 22:13 GEN (blue) v LYON: blue won 1 | v1 blue 0.847 | candidate blue 0.840
+      Blue: Canyon on Qiyana: 3 earlier games, pool 10, with mid 133 games, with ADC 133
+      Red: Inspired on Lee Sin: 7 earlier games, pool 11, with mid 124 games, with ADC 124
+  2026-11-04 23:06 GEN (blue) v LYON: blue won 1 | v1 blue 0.848 | candidate blue 0.844
+      Blue: Canyon on Jarvan IV: 14 earlier games, pool 10, with mid 133 games, with ADC 133
+      Red: Inspired on Wukong: 16 earlier games, pool 11, with mid 124 games, with ADC 124
+  2026-11-04 23:54 GEN (blue) v LYON: blue won 1 | v1 blue 0.851 | candidate blue 0.851
+      Blue: Canyon on Pantheon: 16 earlier games, pool 10, with mid 133 games, with ADC 133
+      Red: Inspired on Trundle: 7 earlier games, pool 11, with mid 124 games, with ADC 124
+  2026-11-05 22:13 BLG (blue) v DK: blue won 1 | v1 blue 0.542 | candidate blue 0.596
+      Blue: Xun on Naafiri: 19 earlier games, pool 11, with mid 185 games, with ADC 185
+      Red: Lucid on Qiyana: 1 earlier games, pool 7, with mid 147 games, with ADC 147
+  2026-11-05 23:07 DK (blue) v BLG: blue won 0 | v1 blue 0.545 | candidate blue 0.516
+      Blue: Lucid on Jarvan IV: 33 earlier games, pool 7, with mid 147 games, with ADC 147
+      Red: Xun on Lee Sin: 17 earlier games, pool 11, with mid 185 games, with ADC 185
+  2026-11-06 00:00 DK (blue) v BLG: blue won 0 | v1 blue 0.499 | candidate blue 0.468
+      Blue: Lucid on Pantheon: 8 earlier games, pool 7, with mid 149 games, with ADC 149
+      Red: Xun on Trundle: 5 earlier games, pool 11, with mid 187 games, with ADC 187
+  2026-11-06 22:13 T1 (blue) v KC: blue won 1 | v1 blue 0.741 | candidate blue 0.749
+      Blue: Oner on Jarvan IV: 18 earlier games, pool 11, with mid 157 games, with ADC 157
+      Red: Yike on Lee Sin: 13 earlier games, pool 10, with mid 156 games, with ADC 156
+  2026-11-06 23:15 KC (blue) v T1: blue won 0 | v1 blue 0.333 | candidate blue 0.331
+      Blue: Yike on Pantheon: 14 earlier games, pool 10, with mid 156 games, with ADC 156
+      Red: Oner on Trundle: 7 earlier games, pool 11, with mid 157 games, with ADC 157
+  2026-11-07 00:03 KC (blue) v T1: blue won 1 | v1 blue 0.310 | candidate blue 0.318
+      Blue: Yike on Xin Zhao: 13 earlier games, pool 10, with mid 158 games, with ADC 158
+      Red: Oner on Sejuani: 1 earlier games, pool 11, with mid 159 games, with ADC 159
+  2026-11-07 01:06 KC (blue) v T1: blue won 0 | v1 blue 0.310 | candidate blue 0.304
+      Blue: Yike on Wukong: 18 earlier games, pool 10, with mid 158 games, with ADC 158
+      Red: Oner on Nocturne: 16 earlier games, pool 11, with mid 159 games, with ADC 159
+  2026-11-07 22:14 GEN (blue) v IG: blue won 1 | v1 blue 0.736 | candidate blue 0.748
+      Blue: Canyon on Qiyana: 4 earlier games, pool 10, with mid 136 games, with ADC 136
+      Red: Wei on Vi: 8 earlier games, pool 8, with mid 88 games, with ADC 73
+  2026-11-07 23:09 GEN (blue) v IG: blue won 1 | v1 blue 0.738 | candidate blue 0.754
+      Blue: Canyon on Lee Sin: 13 earlier games, pool 10, with mid 136 games, with ADC 136
+      Red: Wei on Nocturne: 15 earlier games, pool 8, with mid 88 games, with ADC 73
+  2026-11-08 00:00 IG (blue) v GEN: blue won 0 | v1 blue 0.310 | candidate blue 0.293
+      Blue: Wei on Naafiri: 11 earlier games, pool 8, with mid 90 games, with ADC 75
+      Red: Canyon on Wukong: 10 earlier games, pool 10, with mid 138 games, with ADC 138
+  2026-11-08 22:14 BLG (blue) v T1: blue won 1 | v1 blue 0.574 | candidate blue 0.577
+      Blue: Xun on Naafiri: 20 earlier games, pool 11, with mid 188 games, with ADC 188
+      Red: Oner on Nocturne: 17 earlier games, pool 11, with mid 161 games, with ADC 161
+  2026-11-08 23:04 T1 (blue) v BLG: blue won 1 | v1 blue 0.511 | candidate blue 0.516
+      Blue: Oner on Lee Sin: 15 earlier games, pool 11, with mid 161 games, with ADC 161
+      Red: Xun on Qiyana: 6 earlier games, pool 11, with mid 188 games, with ADC 188
+  2026-11-08 23:57 BLG (blue) v T1: blue won 1 | v1 blue 0.575 | candidate blue 0.581
+      Blue: Xun on Pantheon: 28 earlier games, pool 11, with mid 188 games, with ADC 188
+      Red: Oner on Jarvan IV: 19 earlier games, pool 11, with mid 161 games, with ADC 161
+  2026-11-09 00:56 T1 (blue) v BLG: blue won 0 | v1 blue 0.506 | candidate blue 0.500
+      Blue: Oner on Wukong: 10 earlier games, pool 11, with mid 164 games, with ADC 164
+      Red: Xun on Skarner: 6 earlier games, pool 12, with mid 191 games, with ADC 191
+  v1            log loss 0.5224  Brier 0.1722  favourite won 16 of 21
+  v2 candidate  log loss 0.5104  Brier 0.1666  favourite won 17 of 21
