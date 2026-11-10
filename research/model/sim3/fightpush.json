@@ -1,0 +1,90 @@
+{
+ "variant": "current",
+ "games_real": 231,
+ "games_sim": 924,
+ "structure_within_3min": {
+  "real": {
+   "lost by 2+": [
+    0.264,
+    640
+   ],
+   "even (-1..1)": [
+    0.488,
+    7190
+   ],
+   "won by 2-3": [
+    0.774,
+    482
+   ],
+   "won by 4+": [
+    0.943,
+    158
+   ]
+  },
+  "sim": {
+   "lost by 2+": [
+    0.322,
+    2295
+   ],
+   "even (-1..1)": [
+    0.508,
+    27926
+   ],
+   "won by 2-3": [
+    0.683,
+    1703
+   ],
+   "won by 4+": [
+    0.757,
+    592
+   ]
+  }
+ },
+ "win_within_4min_from_20": {
+  "real": {
+   "lost by 2+": [
+    0.012,
+    500
+   ],
+   "even (-1..1)": [
+    0.097,
+    4698
+   ],
+   "won by 2-3": [
+    0.332,
+    361
+   ],
+   "won by 4+": [
+    0.763,
+    139
+   ]
+  },
+  "sim": {
+   "lost by 2+": [
+    0.058,
+    1627
+   ],
+   "even (-1..1)": [
+    0.114,
+    18310
+   ],
+   "won by 2-3": [
+    0.216,
+    1169
+   ],
+   "won by 4+": [
+    0.314,
+    458
+   ]
+  }
+ },
+ "kills_last_3min": {
+  "real": 6.49,
+  "sim": 5.33
+ },
+ "short_games_under_26": {
+  "real": 0.074,
+  "sim": 0.201
+ },
+ "note": "[share, side-minutes]; structure = tower, inhibitor, nexus tower or nexus taken this minute or in the next two; win = the side wins before the end of minute m+3"
+}

@@ -330,9 +330,101 @@ Research only; the default sim is unchanged (300 of 300 seeded games identical).
 - Lane × tier is mixed (0.004 worse from 1 Sep, 0.009 better at Worlds; noise about 0.0025 from 1 Sep, more on 80 Worlds games). It is a better tower-push input on held-out pushes and more realistic lane by lane. **Luke decided (7 Nov): keep it in the sim and keep testing it** (to be switched on as the default next session, with the baseline re-run).
 - **None of these narrows the spread.** The biggest remaining gap is total kills per game (sd 12.4 v 7.3). Real fights per minute are less bursty than chance (dispersion 0.7–0.8) and real games vary less than chance given their state (7d), while the sim's kill totals add chance on top of chance (fight count × fight size). **Next test:** how kills per game build up in the sim v real (fights per game, kills per fight, and their link to game length).
 
+## 7g. How kills per game build up, sim v real (10 Nov)
+
+Script `research/sim3/s3_killbuild.py`, results `research/model/sim3/killbuild.json`. Held-out games from 1 Sep with timelines (231 real; the current sim, 4 runs each = 924). Kills are grouped into fights the same way for both (a gap of 20 s+ starts a new fight).
+
+| Per game | Real | Sim |
+|---|---|---|
+| Length (min): mean, sd | 32.8, 5.6 | 32.1, 7.1 |
+| Kills: mean, sd | 26.0, 7.0 | 27.7, 12.7 |
+| Kills per minute: mean, sd | 0.80, 0.22 | 0.85, 0.31 |
+| Kills per fight: mean | 2.22 | 2.50 |
+| Link between kill rate and length | −0.34 | +0.17 |
+
+**1. Long games are slower in real games, bloodier in the sim.** This is the biggest single difference:
+
+| Game length | Real: kills per min, kills | Sim: kills per min, kills |
+|---|---|---|
+| under 28 min | 0.91, 23.7 | 0.80, 19.6 |
+| 28–33 | 0.84, 25.6 | 0.83, 25.3 |
+| 33–38 | 0.74, 26.1 | 0.86, 30.3 |
+| 38+ | 0.71, 29.6 | 0.95, 40.6 |
+
+Real short games are bloody stomps (the kills are what end them); the sim's short games are quieter (the "quiet stomps" in 7d). Real long games slow down; the sim's keep fighting at a rising rate with ever bigger fights. So in the sim, kills go almost in step with length (link 0.62 against real 0.29), and the two spreads add up.
+
+**2. Fights are bigger and far more uneven in the sim**, at every stage after laning (same 20 s grouping):
+
+| Window (games that reach its end) | Real: fight size mean, variance | Sim: mean, variance | Real: kills variance | Sim: kills variance |
+|---|---|---|---|---|
+| 0:00–15:00 | 1.64, 1.11 | 1.86, 1.89 | 11.8 | 20.2 |
+| 15:00–25:00 | 2.18, 2.49 | 2.54, 3.91 | 18.4 | 32.7 |
+| 25:00–35:00 | 2.33, 2.66 | 3.27, 6.03 | 19.3 | 54.8 |
+
+- The number of fights is fine: fight starts per window are as regular as real ones (variance / mean 0.64–0.77 in both).
+- Real games hold themselves in check: when a stretch has more fights, they are smaller (link between fight count and fight size −0.29 at 15:00–25:00; sim 0.00), and a fight minute is followed by fewer fights the next minute (30% v 39% after a quiet minute; sim 33% v 36%).
+- Kills per minute played are higher in the sim after laning (14:00–19:59: 0.96 v 0.76; 25:00–29:59: 1.26 v 1.14; 30:00–34:59: 1.50 v 1.32; 35:00+: 1.70 v 1.55), while fight starts per minute are slightly lower. The sim draws fight size from one real table per broad stage (0–13, 14–24, 25–34, 35+), so 14:00–19:59 gets the bigger 20:00–24:59 fights, and nothing ties a fight's size to what just happened.
+
+**3. Fights per minute by gold lead:** real games fight a little more when the lead is big (0.40 per minute under 3k, 0.52 at 9–12k); the sim doesn't (0.36 and 0.35).
+
+**Reading.** The extra kill spread comes from (1) how kills and length go together and (2) fight sizes that aren't held in check, not from the number of fights. Both are things the sim's tables don't yet carry, so the fix is to fit them, not to set a number (Luke, 6 Nov).
+
+**The fixes, fitted and tested (10 Nov).**
+- **Fight types** (Luke: duels / 2v2s, skirmishes, team fights; `s3_fighttypes.py`, `fighttypes.json`). Types from the players seen in each fight's kills (larger side 1–2, 3, 4–5). Team fights carry 75% of all kills; their size grows from 2.6 to 3.6 kills from early to 35:00+, while duels and skirmishes stay at 1.0–1.4. Fitted on training games: a fight in the last minute makes a new one less likely (−0.33), recent kills make the next fight less likely to be a team fight (−0.30). These predict held-out fight counts better (from 1 Sep 0.7134 v 0.7156; Worlds 0.7050 v 0.7084); the type model is better from 1 Sep, slightly worse at Worlds (0.9113 v 0.9091).
+- **Won fights into pushes** (`s3_fightpush.py`, `fightpush.json`). Real teams turn won fights into towers and wins far more than the sim: a side that won the minute's fighting by 4+ kills takes a structure within 3 minutes 94% of the time (sim 76%) and, from 20:00, wins within 4 minutes 76% (sim 31%); 7.4% of real games end before 26:00 against 20% in the sim. The push fits had only this minute's net kills; added: last minute's net kills and "won by 4+" (`s3_rates.py` → `segment_push_fight` on top of lane × tier, `base_push_fight`). Held-out base pushes improve clearly (log loss 0.4211 v 0.4411 from 1 Sep; 0.3928 v 0.4111 Worlds), almost all from last minute's net kills (+0.39); tower pushes barely change. Caution: the "4+" cutoff was picked after seeing held-out games; its weights are small (+0.20 towers, −0.09 base), to be re-checked with it dropped.
+
+Full held-out test (fixed split, 200 sims per game, recalibrated on training games each time; lane × tier on in all; `research/local/sim3/out_7g_*`):
+
+| Version | Who wins, from 1 Sep | Worlds | Length sd (real 5.6) | Kills sd (real 7.3) | Games with a Baron (real 97%) | First-Baron team wins (real 84%) |
+|---|---|---|---|---|---|---|
+| Current (lane × tier) | 0.6385 | 0.6173 | 7.08 | 12.3 | 87% | 78.6% |
+| + fight types | 0.6429 | 0.6334 | 7.07 | 12.2 | 88% | 78.6% |
+| + won-fight pushes | **0.6311** | **0.6154** | 7.10 | 12.3 | 88% | 78.7% |
+| + both | 0.6379 | 0.6260 | 7.09 | 12.1 | 88% | 78.5% |
+| v1 (same games) | 0.6396 | 0.6278 | | | | |
+
+- **Won-fight pushes: clearly better at who wins on both sets** (0.6311 v 0.6385 from 1 Sep, 0.6154 v 0.6173 at Worlds), and ahead of v1 on both (0.6396, 0.6278). After a side wins a minute by 4+ kills the sim takes a structure within 3 minutes 80% of the time (was 74%; real 94%) and wins within 4 minutes 35% (was 32%; real 76%); games under 26:00 17% (was 20%; real 7%).
+- **Fight types: worse at who wins on both sets and no change to the spreads.** Not kept for now (the counts' "what just happened" terms alone could be re-tested).
+- **None of them narrows the spread** of length or kills. Real games end soon after a big won fight far more often than the sim's do, and short sim games stay quieter; the next lead is how the gold lead grows after 15:00 (the file has every game's gold lead at 20 and 25 minutes to compare) and how a won fight turns into the ending.
+
+## 7h. Tower context: lanes, tiers, what comes before a tower falls (7–10 Nov)
+
+Luke (7 Nov): record towers by lane × tier for all lanes; compare tower times with other objectives and kills (more towers after a solo laner dies? after a dragon?); side; comps (some champions' job is to push towers). Script `research/sim3/s3_tower_context.py`, results `research/model/sim3/tower_context.json` (printout `research/local/sim3/tower_context_run2.txt`). 626 timeline games matched to the file.
+
+**Checks.** Kill victims matched to a role through the file's champions: 17,239 of 17,253 kills (14 not found). Nexus towers left out: 1,272; the tower labels used are only T1–T3 in top, mid and bot. Fit fixed: in mid, no tower ever fell within 2 minutes after grubs, which sent that input to −18; the per-lane fits now use the same small ridge as `s3_rates.py`, so it stays finite (−1.3).
+
+**Towers by lane × tier (all 626 games; per team-game; side = the team that took it).**
+
+| Tower | Falls in | Median time | Middle half | Gap after the tower before it | Blue takes / red takes |
+|---|---|---|---|---|---|
+| T1 top / mid / bot | 89% / 79% / 87% | 18.6 / 20.0 / 18.4 min | 16.2–21.8 / 17.5–24.5 / 15.8–21.2 | — | 93/86% · 86/71% · 91/84% |
+| T2 top / mid / bot | 44% / 55% / 51% | 27.4 / 26.8 / 26.8 | 24.4–31.3 / 24.1–31.0 / 23.8–31.0 | 536 / 386 / 514 s | 52/37% · 63/46% · 56/46% |
+| T3 top / mid / bot | 19% / 41% / 27% | 31.3 / 30.5 / 30.0 | 27.4–34.4 / 27.0–34.1 / 26.4–34.1 | 57 / 145 / 87 s | 22/15% · 47/34% · 30/23% |
+
+- Blue takes every tower more often and mostly sooner than red.
+- First tower of the game: blue's comes from top 50%, bot 35%, mid 15%; red's from bot 59%, top 28%, mid 14%.
+- Mid T2 falls soonest after its T1 (386 s); T3s fall within 1–2.5 minutes of their T2 (the same push, as in section 5).
+
+**What comes before a tower falls.** One logistic fit per lane on every minute that lane's next tower is standing (118,442 lane-minutes, 5,810 tower falls), with events in the 2 minutes before, tier, 5-minute period, gold lead and side; fitted on games before 1 Sep, refitted on games from 1 Sep. Pass = same sign and |t| ≥ 2 on both.
+
+| Input (per lane: top / mid / bot) | Passes |
+|---|---|
+| Baron taken | all three (log-odds about +1.1 / +1.4 / +1.7) |
+| Gold lead (per 1k) | all three (+0.17–0.26) |
+| Blue side | top only (+0.29 / +0.26) |
+| Herald taken | mid only (+0.98 / +1.22) |
+| Killed that lane's enemy laner | mid only (+0.17 / +0.21) |
+| Grubs taken | bot (−1.7 / −1.2; negative, most likely timing: grubs come before towers start falling) |
+| Dragon taken, killed the enemy jungler or another lane's laner, lost own laner | none |
+| Lane's or team's champions' measured tower damage (siege) | none (team siege for bot only on the later games) |
+
+Share of tower-falling minutes with each event in the 2 minutes before, against other at-risk minutes (all games): a Baron 17–25% v 3%; a kill of that lane's laner 27–38% v 12–21%; a dragon 22–24% v 13–14%; a Herald 7–11% v 3%. Dragons and kills do sit before towers, but once lead and Baron are counted they add nothing that holds up.
+
+**For the sim (to test, fitted, not set):** the sim already has Baron, gold lead, net kills and Herald in its tower pushes, but with one Herald term for every lane and no lane-specific kill term. Candidates: a mid-only Herald term and "killed that lane's laner" for mid, each judged on held-out pushes like the lane × tier terms in 7f. No champion or comp siege effect holds up, which matches the draft-style validation (`research/comps-plan.md`): measured tower damage moves tower counts and first-tower time, not which lane falls.
+
 ## 8. Open items for Luke
 
-1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Next test: how kills per game build up (sd 12.4 v 7.3).
+1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Measured (7g, 10 Nov): the extra kill spread comes from fight sizes that aren't held in check and from kills going in step with length (real long games slow down, the sim's get bloodier), not from the number of fights. Proposed next: fit fight size and the next fight's chance on what just happened, and check how game endings follow fights (7g).
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?
 4. **Grub taker model** doesn't hold from 1 Sep: simplify to side only, or keep?

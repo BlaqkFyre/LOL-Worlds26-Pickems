@@ -1,0 +1,104 @@
+{
+ "settings": {
+  "team_half_life_days": 90.0,
+  "player_skill_penalty": 80.0
+ },
+ "choose_half_life_on_jul_aug": {
+  "none": {
+   "logloss": 0.6384,
+   "brier": 0.2232,
+   "fav": 0.631,
+   "n": 712
+  },
+  "60": {
+   "logloss": 0.6393,
+   "brier": 0.2232,
+   "fav": 0.628,
+   "n": 712
+  },
+  "120": {
+   "logloss": 0.6389,
+   "brier": 0.2232,
+   "fav": 0.626,
+   "n": 712
+  },
+  "240": {
+   "logloss": 0.6386,
+   "brier": 0.2232,
+   "fav": 0.629,
+   "n": 712
+  },
+  "480": {
+   "logloss": 0.6385,
+   "brier": 0.2232,
+   "fav": 0.629,
+   "n": 712
+  }
+ },
+ "chosen_half_life_days": "none",
+ "scores": {
+  "from 1 Sep": {
+   "fixed": {
+    "logloss": 0.6382,
+    "brier": 0.2241,
+    "fav": 0.645,
+    "n": 332
+   },
+   "walk_forward": {
+    "logloss": 0.6392,
+    "brier": 0.2245,
+    "fav": 0.645,
+    "n": 332
+   }
+  },
+  "Worlds": {
+   "fixed": {
+    "logloss": 0.6173,
+    "brier": 0.2159,
+    "fav": 0.649,
+    "n": 94
+   },
+   "walk_forward": {
+    "logloss": 0.6176,
+    "brier": 0.2158,
+    "fav": 0.67,
+    "n": 94
+   }
+  },
+  "Worlds knockouts (from 3 Nov)": {
+   "fixed": {
+    "logloss": 0.5224,
+    "brier": 0.1722,
+    "fav": 0.762,
+    "n": 21
+   },
+   "walk_forward": {
+    "logloss": 0.5216,
+    "brier": 0.1717,
+    "fav": 0.81,
+    "n": 21
+   }
+  }
+ },
+ "weights_fixed": {
+  "team_rating": 0.862,
+  "top_laning": 0.046,
+  "top_teamfight": -0.001,
+  "top_cons_side": 0.145,
+  "top_cons_dur": 0.047,
+  "top_cons_steady": 0.002,
+  "jng_early": 0.069,
+  "jng_objectives": 0.092,
+  "jng_teamfight": 0.031,
+  "mid_laning": 0.126,
+  "mid_mapimpact": -0.002,
+  "mid_damage": 0.084,
+  "bot_lane_own": 0.036,
+  "bot_lane_duo": 0.035,
+  "bot_damage": -0.006,
+  "bot_lategame": 0.114,
+  "sup_playmaking": 0.032,
+  "sup_mappresence": 0.044,
+  "sup_reliability": 0.035
+ }
+}

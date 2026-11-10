@@ -1,0 +1,246 @@
+{
+ "games_real": 231,
+ "games_sim": 924,
+ "runs_per_game": 4,
+ "per_game": {
+  "real": {
+   "min": [
+    32.82,
+    5.57
+   ],
+   "kills": [
+    26.0,
+    7.01
+   ],
+   "rate": [
+    0.8,
+    0.22
+   ],
+   "fights": [
+    11.92,
+    2.97
+   ],
+   "kpf": [
+    2.22,
+    0.46
+   ],
+   "corr_kills_length": 0.29,
+   "corr_rate_length": -0.34,
+   "var_log_kills": 0.0723,
+   "var_log_rate": 0.0768,
+   "var_log_min": 0.0277
+  },
+  "sim": {
+   "min": [
+    32.08,
+    7.05
+   ],
+   "kills": [
+    27.68,
+    12.72
+   ],
+   "rate": [
+    0.85,
+    0.31
+   ],
+   "fights": [
+    10.91,
+    3.7
+   ],
+   "kpf": [
+    2.5,
+    0.67
+   ],
+   "corr_kills_length": 0.62,
+   "corr_rate_length": 0.17,
+   "var_log_kills": 0.2434,
+   "var_log_rate": 0.1609,
+   "var_log_min": 0.0506
+  }
+ },
+ "per_game_note": "[mean, sd]; rate = kills per minute; kpf = kills per fight. log variances: var(log kills) = var(log rate) + var(log minutes) + 2 cov",
+ "k_0_15": {
+  "real": [
+   6.88,
+   3.43,
+   1.71
+  ],
+  "sim": [
+   7.86,
+   4.42,
+   2.49
+  ]
+ },
+ "k_15_25": {
+  "real": [
+   8.76,
+   4.17,
+   1.98
+  ],
+  "sim": [
+   9.12,
+   5.68,
+   3.54
+  ]
+ },
+ "window_note": "[mean, sd, variance / mean] of kills in the window, games that reach the window's end",
+ "f_0_15": {
+  "real": [
+   4.2,
+   0.74
+  ],
+  "sim": [
+   4.24,
+   0.77
+  ]
+ },
+ "f_15_25": {
+  "real": [
+   4.05,
+   0.64
+  ],
+  "sim": [
+   3.59,
+   0.76
+  ]
+ },
+ "by_phase": {
+  "real": {
+   "0-13": {
+    "fights_per_min": 0.275,
+    "kills_per_min": 0.446,
+    "mean_size": 1.62
+   },
+   "14-19": {
+    "fights_per_min": 0.403,
+    "kills_per_min": 0.76,
+    "mean_size": 1.89
+   },
+   "20-24": {
+    "fights_per_min": 0.407,
+    "kills_per_min": 1.052,
+    "mean_size": 2.58
+   },
+   "25-29": {
+    "fights_per_min": 0.429,
+    "kills_per_min": 1.142,
+    "mean_size": 2.66
+   },
+   "30-34": {
+    "fights_per_min": 0.498,
+    "kills_per_min": 1.322,
+    "mean_size": 2.65
+   },
+   "35+": {
+    "fights_per_min": 0.497,
+    "kills_per_min": 1.545,
+    "mean_size": 3.11
+   }
+  },
+  "sim": {
+   "0-13": {
+    "fights_per_min": 0.277,
+    "kills_per_min": 0.502,
+    "mean_size": 1.81
+   },
+   "14-19": {
+    "fights_per_min": 0.38,
+    "kills_per_min": 0.963,
+    "mean_size": 2.53
+   },
+   "20-24": {
+    "fights_per_min": 0.357,
+    "kills_per_min": 0.902,
+    "mean_size": 2.53
+   },
+   "25-29": {
+    "fights_per_min": 0.383,
+    "kills_per_min": 1.261,
+    "mean_size": 3.29
+   },
+   "30-34": {
+    "fights_per_min": 0.441,
+    "kills_per_min": 1.504,
+    "mean_size": 3.41
+   },
+   "35+": {
+    "fights_per_min": 0.446,
+    "kills_per_min": 1.701,
+    "mean_size": 3.82
+   }
+  }
+ },
+ "after_fight": {
+  "real": {
+   "P(fight next min | fight now)": 0.301,
+   "P(fight next min | none now)": 0.386,
+   "fight minutes in next 3 | fight now": 1.048,
+   "fight minutes in next 3 | none now": 1.107
+  },
+  "sim": {
+   "P(fight next min | fight now)": 0.329,
+   "P(fight next min | none now)": 0.357,
+   "fight minutes in next 3 | fight now": 1.044,
+   "fight minutes in next 3 | none now": 1.046
+  }
+ },
+ "after_fight_note": "minutes 14+; a fight minute = a minute in which a fight starts",
+ "after_big_fight": {
+  "real": {
+   "gap_s after 1-2 kill fight": 118,
+   "gap_s after 4+ kill fight": 137,
+   "share of fights 4+ kills": 0.202
+  },
+  "sim": {
+   "gap_s after 1-2 kill fight": 124,
+   "gap_s after 4+ kill fight": 113,
+   "share of fights 4+ kills": 0.252
+  }
+ },
+ "fights_per_min_by_lead": {
+  "real": {
+   "0-3k": [
+    0.4,
+    2368
+   ],
+   "3-6k": [
+    0.399,
+    1215
+   ],
+   "6-9k": [
+    0.428,
+    470
+   ],
+   "9-12k": [
+    0.519,
+    158
+   ],
+   "12-15k": [
+    0.583,
+    24
+   ]
+  },
+  "sim": {
+   "0-3k": [
+    0.36,
+    8911
+   ],
+   "3-6k": [
+    0.377,
+    4568
+   ],
+   "6-9k": [
+    0.407,
+    1836
+   ],
+   "9-12k": [
+    0.349,
+    671
+   ],
+   "12-15k": [
+    0.423,
+    272
+   ]
+  }
+ }
+}

@@ -93,6 +93,8 @@ class Sim:
         FB = P["gold_feedback"]
         if cal.get("seg_lane_tier", "off") == "on" and P.get("segment_push_lane_tier"):  # opt-in (6 Nov test): lane x tier push terms
             SPC = dict(P["segment_push_lane_tier"]["coef"]); SEGC = SPC
+        if cal.get("push_fight", "off") == "on" and P.get("segment_push_fight"):  # opt-in (10 Nov, 7g): won fights turn into towers and base pushes
+            SPC = dict(P["segment_push_fight"]["coef"]); SEGC = SPC; PUSHC = P["base_push_fight"]["coef"]
         if cal.get("within", "off") == "on" and P.get("segment_push_within"):  # opt-in (6 Nov test): lead effects fitted within games
             SPC = P["segment_push_within"]["coef"]; SEGC = SPC; PUSHC = P["base_push_within"]["coef"]; TAKC = P["taker_within"]; FB = P["gold_feedback_within"]
         # game form: the pooled gold-lead effect on who wins fights partly reflects "this team is stronger in this game";
@@ -113,7 +115,7 @@ class Sim:
         nxt = {"dragon": SPAWN["dragon"], "grub": SPAWN["grub"], "herald": SPAWN["herald"], "baron": SPAWN["baron"]}
         taken_once = {"grub": False, "herald": False}
         elder_mode = False; soul_type = None; drag_seq = []
-        steps = []; gd_at = {}; kill_log = []; winner = None; t_end = None
+        steps = []; gd_at = {}; kill_log = []; winner = None; t_end = None; prev_nf = 0; net = 0; prev_net = 0
         val = P["gold"]
         def add_gold(side, amount, roles=None):
             # every event's gold lands on the roles the way real team gold swings do (fitted shares, laning v after 15:00);
@@ -146,9 +148,23 @@ class Sim:
             fc = P["fights"]
             lam = math.exp(fc["intercept"] + self.ph[PHN[sum(m >= p for p in PH) - 1]] + fc["per_1k_abs_lead"] * min(abs(gd) / 1000, 15)
                            + fc["monster_up"] * mon_up + fc["buff_up"] * (bdir != 0 or edir != 0) + fc.get("pace_style", 0.0) * pace_s)
-            nf = self.count(rng, lam, "fights", m); net = 0; fought = nf > 0
+            TYPED = cal.get("fight_model") == "typed" and P.get("fight_typed")  # opt-in (10 Nov, report 7g): fight types, held in check
+            if TYPED:
+                FTc = P["fight_typed"]; cc = FTc["count"]["coef"]; ph_i = PHN[sum(m >= p for p in PH) - 1]
+                k2 = sum(1 for e_ in kill_log if t0 - 120 <= e_[0] < t0); fprev = 1 if prev_nf > 0 else 0
+                feat = {"per_1k_abs_lead": min(abs(gd) / 1000, 15), "monster_up": mon_up, "buff_up": (bdir != 0 or edir != 0)}
+                lam = math.exp(cc["intercept"] + cc.get(f"phase {ph_i}", 0.0) + sum(cc[k_] * v_ for k_, v_ in feat.items())
+                               + cc["pace_style"] * pace_s + cc["fight_last_minute"] * fprev + cc["log1p_kills_last_2min"] * math.log1p(k2))
+            nf = int(rng.poisson(lam)) if TYPED else self.count(rng, lam, "fights", m); prev_net = net; net = 0; fought = nf > 0; prev_nf = nf
             for _ in range(nf):
-                sizes, pr = self.fsize[FPH(m)]; n = int(rng.choice(sizes, p=pr))
+                if TYPED:
+                    zt = [0.0] + [tc["intercept"] + tc.get(f"phase {ph_i}", 0.0) + sum(tc[k_] * v_ for k_, v_ in feat.items()) + tc["log1p_kills_last_2min"] * math.log1p(k2)
+                                  for tc in (FTc["type"]["coef"]["skirmish"], FTc["type"]["coef"]["teamfight"])]
+                    pt = np.exp(np.array(zt) - max(zt)); ftype = ["small", "skirmish", "teamfight"][int(rng.choice(3, p=pt / pt.sum()))]
+                    st_ = FTc["size_table"][ftype][FPH(m)]; sizes = np.array([int(a_) for a_ in st_]); pr = np.array(list(st_.values())); pr = pr / pr.sum()
+                else:
+                    sizes, pr = self.fsize[FPH(m)]
+                n = int(rng.choice(sizes, p=pr))
                 ks = KSC
                 zk = cal.get("kill_z_phase", {}).get("0-13" if m < 14 else "14-24" if m < 25 else "25+", 1.0)  # opt-in (6 Nov test): strength in kills by phase
                 p = sig(ks["intercept"] + ks["per_1k_gold_lead"] * gd / 1000 + ks["per_v1_logit"] * z * zk + ks["baron"] * bdir + ks["elder"] * edir + form
@@ -239,7 +255,8 @@ class Sim:
                           + sc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
                           + sc.get("T2 x mid", 0.0) * (tier == 1 and L == "MID") + sc.get("T2 x bot", 0.0) * (tier == 1 and L == "BOT")
                           + sc.get("T3 x mid", 0.0) * (tier == 2 and L == "MID") + sc.get("T3 x bot", 0.0) * (tier == 2 and L == "BOT")
-                          + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0))
+                          + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0)
+                          + sc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + sc.get("won_fight_by_4plus", 0.0) * (sg * net >= 4 or sg * prev_net >= 4))
                     if SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
                         n = 0
                         if rng.random() < sig(xb):
@@ -264,7 +281,8 @@ class Sim:
                       + bc["enemy_inhibs_down"] * len(down) + bc["open_lanes"] * len(opn) + bc.get("siege_style", 0.0) * sg * siege_d + bc.get("siege_style_sum", 0.0) * siege_s
                       + bc.get("lane_just_opened", 0.0) * any(open_t[s][li] >= t0 - 60 for li in opn)
                       + bc.get("base_take_last_minute", 0.0) * (last_base[s] >= t0 - 60)
-                      + bc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net)))
+                      + bc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
+                      + bc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + bc.get("won_fight_by_4plus", 0.0) * (sg * net >= 4 or sg * prev_net >= 4))
                 sz, pr_ = self.push["inhib_down" if down else "no_inhib_down"]
                 npush = int(rng.choice(sz, p=pr_)) if rng.random() < sig(xb) else 0
                 if npush: last_base[s] = t0

@@ -74,7 +74,7 @@ res["first_tower_lane_by_side"] = {s: {ln: round(float((d.lane == ln).mean()), 3
 
 # ---- 2. panel
 ev = E[E.type.isin(["kill", "dragon", "herald", "grub", "baron"])].copy()
-rows = []
+rows = []; cov = {"kills": 0, "victim_role_found": 0}; vroles = {}
 for gid, ge in E.groupby("gid"):
     gm = gid2game[gid]; end = int(G.len[gid]); mins = end // 60
     gt = tw[tw.gid == gid]
@@ -83,6 +83,8 @@ for gid, ge in E.groupby("gid"):
         o_ = OPP[s]; ro = role_of.get((gm, o_), {}); rs = role_of.get((gm, s), {})
         kv = kills.assign(vrole=[(ro if sd == s else rs).get(key(v), "") for sd, v in zip(kills.side, kills.victim_champ)])
         my_k = kv[kv.side == s]; their_k = kv[kv.side == o_]
+        cov["kills"] += len(my_k); cov["victim_role_found"] += int((my_k.vrole != "").sum())
+        for v_ in my_k.vrole: vroles[v_ or "not found"] = vroles.get(v_ or "not found", 0) + 1
         objs = {t_: ge[(ge.type == t_) & (ge.side == s)].t.values for t_ in ("dragon", "herald", "grub", "baron")}
         for ln in LANES:
             down = gt[(gt.side == s) & (gt.lane == ln)].sort_values("t").t.values  # attacker's takes in this lane, in tier order
@@ -107,14 +109,16 @@ for gid, ge in E.groupby("gid"):
 D = pd.DataFrame(rows).dropna(subset=["lead"])
 D["siege_lane_z"] = D.siege_lane / D.siege_lane.std(); D["siege_team_z"] = D.siege_team / D.siege_team.std()
 res["panel_rows"] = int(len(D)); res["tower_minutes"] = int(D.y.sum())
+res["kill_victim_roles"] = {**cov, "by_role": vroles}
+res["nexus_towers_left_out"] = int((E.type == "tower").sum() - len(tw)); res["tower_labels_used"] = sorted(tw.detail.unique().tolist())
 
-def logit(X, y, it=50):
+def logit(X, y, it=50, l2=1.0):  # small ridge, as in s3_rates.py, so an input that never co-occurs with a tower (grubs in mid) stays finite
     b = np.zeros(X.shape[1])
     for _ in range(it):
         p = 1 / (1 + np.exp(-X @ b)); W = p * (1 - p)
-        H = X.T @ (X * W[:, None]) + 1e-6 * np.eye(X.shape[1]); b += np.linalg.solve(H, X.T @ (y - p))
+        H = X.T @ (X * W[:, None]) + l2 * np.eye(X.shape[1]); b += np.linalg.solve(H, X.T @ (y - p) - l2 * b)
     p = 1 / (1 + np.exp(-X @ b)); W = p * (1 - p)
-    se = np.sqrt(np.diag(np.linalg.inv(X.T @ (X * W[:, None]))))
+    se = np.sqrt(np.diag(np.linalg.inv(X.T @ (X * W[:, None]) + l2 * np.eye(X.shape[1]))))
     return b, se
 
 INP = ["k_lane", "k_jng", "k_other", "d_lane", "dragon", "herald", "grub", "baron", "lead", "blue", "siege_lane_z", "siege_team_z"]

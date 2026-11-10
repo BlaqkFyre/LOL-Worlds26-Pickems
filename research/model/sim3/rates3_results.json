@@ -278,6 +278,97 @@
    "baseline": 0.3958
   }
  },
+ "segment_push_within": {
+  "coef": {
+   "intercept": -2.2697,
+   "phase 14-19": 1.0195,
+   "phase 20-24": 0.9534,
+   "phase 25-29": 0.9428,
+   "phase 30-34": 1.211,
+   "phase 35+": 1.3671,
+   "tier T2": -1.2437,
+   "tier T3": -1.9963,
+   "mid": 0.1051,
+   "bot": 0.0867,
+   "per_1k_lane_lead": -0.1087,
+   "per_1k_team_lead": 0.1666,
+   "per_v1_logit": 0.0793,
+   "baron": 1.1645,
+   "elder": 0.5971,
+   "herald_last_3min": 0.3032,
+   "own_grubs": 0.1084,
+   "net_kills_this_minute": 0.1424,
+   "lane_segments_last_minute": -0.3141,
+   "T3_x_baron": -0.1654,
+   "siege_style_sum": 0.2023,
+   "game_mean_lane_lead": 0.1994,
+   "game_mean_team_lead": -0.025
+  },
+  "pooled_lane_lead": 0.005,
+  "pooled_team_lead": 0.1496
+ },
+ "segment_push_lane_tier": {
+  "coef": {
+   "intercept": -2.1324,
+   "phase 14-19": 1.0306,
+   "phase 20-24": 0.9647,
+   "phase 25-29": 0.9584,
+   "phase 30-34": 1.2257,
+   "phase 35+": 1.38,
+   "tier T2": -1.7073,
+   "tier T3": -2.4976,
+   "mid": -0.2238,
+   "bot": 0.0178,
+   "per_1k_lane_lead": 0.0229,
+   "per_1k_team_lead": 0.1476,
+   "per_v1_logit": 0.098,
+   "baron": 1.1596,
+   "elder": 0.6116,
+   "herald_last_3min": 0.3137,
+   "own_grubs": 0.1117,
+   "net_kills_this_minute": 0.1491,
+   "lane_segments_last_minute": -0.3411,
+   "T3_x_baron": -0.1686,
+   "siege_style_sum": 0.235,
+   "T2 x mid": 1.1383,
+   "T2 x bot": 0.237,
+   "T3 x mid": 1.0813,
+   "T3 x bot": 0.1266
+  },
+  "train": {
+   "n": 76866,
+   "logloss": 0.372,
+   "additive": 0.3748
+  },
+  "test": {
+   "n": 29445,
+   "logloss": 0.3769,
+   "additive": 0.3797
+  },
+  "worlds": {
+   "n": 15887,
+   "logloss": 0.3683,
+   "additive": 0.3715
+  }
+ },
+ "base_push_within": {
+  "coef": {
+   "intercept": -3.2092,
+   "from 25": 0.4233,
+   "from 35": 0.2826,
+   "per_1k_lead": 0.2202,
+   "per_v1_logit": 0.0506,
+   "baron": 0.4023,
+   "elder": 0.5681,
+   "enemy_inhibs_down": -0.1118,
+   "open_lanes": 0.715,
+   "siege_style_sum": -0.1548,
+   "lane_just_opened": 1.7454,
+   "base_take_last_minute": -3.1628,
+   "net_kills_this_minute": 0.5044,
+   "game_mean_lead": -0.2001
+  }
+ },
  "base_push_timing": {
   "coef": {
    "intercept": -3.4375,
@@ -305,6 +396,86 @@
   "worlds": {
    "n": 325,
    "logloss": 0.4111
+  }
+ },
+ "segment_push_fight": {
+  "coef": {
+   "intercept": -2.1349,
+   "phase 14-19": 1.0268,
+   "phase 20-24": 0.9515,
+   "phase 25-29": 0.9325,
+   "phase 30-34": 1.1868,
+   "phase 35+": 1.3354,
+   "tier T2": -1.693,
+   "tier T3": -2.4714,
+   "mid": -0.2231,
+   "bot": 0.0175,
+   "per_1k_lane_lead": 0.0224,
+   "per_1k_team_lead": 0.1388,
+   "per_v1_logit": 0.1,
+   "baron": 1.1642,
+   "elder": 0.6018,
+   "herald_last_3min": 0.3176,
+   "own_grubs": 0.113,
+   "net_kills_this_minute": 0.1405,
+   "lane_segments_last_minute": -0.3436,
+   "T3_x_baron": -0.1576,
+   "siege_style_sum": 0.2436,
+   "T2 x mid": 1.1436,
+   "T2 x bot": 0.2362,
+   "T3 x mid": 1.088,
+   "T3 x bot": 0.1292,
+   "net_kills_last_minute": 0.0569,
+   "won_fight_by_4plus": 0.1977
+  },
+  "train": {
+   "n": 76866,
+   "logloss": 0.3718,
+   "lane_tier": 0.372
+  },
+  "test": {
+   "n": 29445,
+   "logloss": 0.3766,
+   "lane_tier": 0.3769
+  },
+  "worlds": {
+   "n": 15887,
+   "logloss": 0.3681,
+   "lane_tier": 0.3683
+  }
+ },
+ "base_push_fight": {
+  "coef": {
+   "intercept": -3.5926,
+   "from 25": 0.4358,
+   "from 35": 0.2542,
+   "per_1k_lead": 0.0047,
+   "per_v1_logit": 0.0114,
+   "baron": 0.5979,
+   "elder": 0.6566,
+   "enemy_inhibs_down": -0.0308,
+   "open_lanes": 0.8625,
+   "siege_style_sum": -0.0884,
+   "lane_just_opened": 1.4854,
+   "base_take_last_minute": -3.3159,
+   "net_kills_this_minute": 0.5236,
+   "net_kills_last_minute": 0.3915,
+   "won_fight_by_4plus": -0.0873
+  },
+  "train": {
+   "n": 1636,
+   "logloss": 0.4155,
+   "timing": 0.4352
+  },
+  "test": {
+   "n": 578,
+   "logloss": 0.4211,
+   "timing": 0.4411
+  },
+  "worlds": {
+   "n": 325,
+   "logloss": 0.3928,
+   "timing": 0.4111
   }
  },
  "segments_A": {

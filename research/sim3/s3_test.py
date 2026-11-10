@@ -25,6 +25,7 @@ os.makedirs(OUT, exist_ok=True)
 ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
 P = json.load(open(PJ))
+if "typed" in OPTS: P["fight_typed"] = json.load(open(os.path.join(os.path.dirname(PJ), "fighttypes.json")))  # module level, so worker processes load it too
 sig = lambda x: 1 / (1 + np.exp(-x))
 
 def prep():  # runs in the main process only (workers on Windows re-import this file)
@@ -72,6 +73,8 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if PHASE_EPS: cal["fight_eps_phase"] = eps_ph
     if "zphase" in OPTS: cal["kill_z_phase"] = {"0-13": 1.24, "14-24": 1.48, "25+": 1.26}  # matched to real training games at the final gain (7e)
     if "lt" in OPTS: cal["seg_lane_tier"] = "on"
+    if "typed" in OPTS: cal["fight_model"] = "typed"  # fight types and what holds fights in check (10 Nov, report 7g)
+    if "pf" in OPTS: cal["push_fight"] = "on"  # won fights turn into tower and base pushes (10 Nov, report 7g; includes the lane x tier terms)
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
 

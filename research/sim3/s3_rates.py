@@ -230,6 +230,28 @@ bptW = logit_fit(XbW(trb), (trb.y.values > 0).astype(float))
 res["base_push_within"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b] + ["game_mean_lead"], np.round(bptW, 4)))}
 res["base_push_timing"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b], np.round(bpt, 4))),
                            **{s_: {"n": int((BASE.split == s_).sum()), "logloss": push_ll(BASE[BASE.split == s_], bpt)} for s_ in ["train", "test", "worlds"]}}
+# won fights turn into towers and endings (10 Nov, report 7g): real sides that win a minute's fighting by 4+ kills take a structure within
+# 3 minutes 94% of the time and win within 4 minutes 76% (sim 76% and 31%). The pooled fits carry this minute's net kills only, as a straight
+# line; added: last minute's net kills, and won the fighting by 4+ this minute or last (dead enemies leave the map open)
+_kk = ev[ev.type == "kill"].groupby(["gid", "m", "side"]).size().unstack("side").reindex(columns=["blue", "red"]).fillna(0)
+NKB = (_kk.blue - _kk.red).to_dict()
+def fight_terms(d):
+    sg = np.where(d.side == "blue", 1, -1)
+    prev = np.array([NKB.get((g_, m_ - 1), 0.0) for g_, m_ in zip(d.gid, d.m)]) * sg
+    return np.c_[np.clip(prev, -5, 5), ((d.net_k >= 4) | (prev >= 4)).astype(float)]
+XgF = lambda d: np.c_[XgLT(d), fight_terms(d)]
+bspF = logit_fit(XgF(trs), ypt)
+_llF = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgF(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
+res["segment_push_fight"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot", "net_kills_last_minute", "won_fight_by_4plus"], np.round(bspF, 4))),
+                             **{s_: {"n": int((SEG.split == s_).sum()), "logloss": _llF(SEG[SEG.split == s_], bspF), "lane_tier": _llLT(SEG[SEG.split == s_], bspLT)}
+                                for s_ in ["train", "test", "worlds"]}}
+trb = BASE[BASE.split == "train"]
+XbF = lambda d: np.c_[Xb(d), fight_terms(d)]
+bptF = logit_fit(XbF(trb), (trb.y.values > 0).astype(float))
+_llbF = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XbF(d) @ b)), 1e-6, 1 - 1e-6), (d.y.values > 0).astype(float)), 4)
+res["base_push_fight"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b] + ["net_kills_last_minute", "won_fight_by_4plus"], np.round(bptF, 4))),
+                          **{s_: {"n": int((BASE.split == s_).sum()), "logloss": _llbF(BASE[BASE.split == s_], bptF), "timing": push_ll(BASE[BASE.split == s_], bpt)}
+                             for s_ in ["train", "test", "worlds"]}}
 # comps option A: own draft's siege style x own lead (a siege comp that is ahead takes towers faster)
 XgA = lambda d, full=True: np.c_[Xg(d, full), d.siege_own * d.lead.clip(-15, 15)] if full else Xg(d, False)
 bgA = pois_fit(XgA(trs), trs.y.values)
