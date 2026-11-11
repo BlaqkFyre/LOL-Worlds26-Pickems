@@ -75,6 +75,7 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if "lt" in OPTS: cal["seg_lane_tier"] = "on"
     if "typed" in OPTS: cal["fight_model"] = "typed"  # fight types and what holds fights in check (10 Nov, report 7g)
     if "pf" in OPTS: cal["push_fight"] = "on"  # won fights turn into tower and base pushes (10 Nov, report 7g; includes the lane x tier terms)
+    if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
 

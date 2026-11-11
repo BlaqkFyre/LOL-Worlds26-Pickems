@@ -156,6 +156,10 @@ None open right now.
 
 Decided:
 
+- [x] **Testing rules for the rest of the sim work** (Luke, 10–11 Nov 2026 AEST):
+    - Two tests, always both: the fixed test (fit before 1 Sep, test from 1 Sep and Worlds) stays exactly as it is, and a walk-forward test runs alongside it (`research/plan-lanes-recency.md`).
+    - **Every tested sim version and its data is kept**, including ones "not kept" on a first test (fight types, won-fight pushes with each cutoff, lane × tier). **All of them are tested again over the Worlds results in session 4** before the app's version is chosen.
+    - No random-only lane results: lane-level play from each lane's players and champions where test games support it (the plan file above, Part A).
 - [x] **Five decisions before session 4** (Luke, 6 Nov 2026 AEST, answering the options shown in chat):
     1. **Player of the Game source: check first.** Claude reads Leaguepedia's per-series "MVP" column and looks for official per-game awards (read-only), reports where they come from and how complete they are, then Luke chooses. Fallback if neither holds up: a box-score rule, labelled as a rule, not as learned.
     2. **Draft styles: keep all three** (pace, siege, objectives) and keep validating them with results and research. Luke: siege should show itself in later games — late game is generally siege or scaling comps — so the sim needs to know which champions fit each style and which comps use them. Next research: champion-to-style fit (outside labels, not assumptions) and tests of siege and scaling against late-game timing (towers after 25 min, length), not only first-tower time. Pace → kills per minute is the only style effect confirmed so far. **Validation run 6 Nov (`research/comps-plan.md`):** measured siege (champions' real share of tower damage) passes on held-out games — more towers, first tower about 30 s earlier per standard deviation — but not more towers after 25:00; Riot classes (Artillery included) and lolalytics scaling don't hold up on held-out games yet.

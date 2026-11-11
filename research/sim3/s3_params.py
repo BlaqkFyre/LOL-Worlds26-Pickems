@@ -47,7 +47,8 @@ P = {"roles": ROLES, "lanes": lanes, "lane_cov15": cov15, "lane_cov10": cov10,
      "kill_side": E["kill_side"]["coef"], "fight_size_table": E["fight_size_table"], "two_sided_share_by_size": E["two_sided_share_by_size"],
      "taker": {k: v["coef"] for k, v in E["taker"].items()}, "gold": E["gold_per_event"], "gold_noise_sd": E["gold_noise_sd_per_min"],
      "gold_feedback": E["gold_lead_feedback"], "gold_feedback_within": E.get("gold_lead_feedback_within"), "taker_within": {k: v["coef"] for k, v in E.get("taker_within", {}).items()}, "segment_push_within": R.get("segment_push_within"), "segment_push_lane_tier": R.get("segment_push_lane_tier"), "base_push_within": R.get("base_push_within"),
-     "segment_push_fight": R.get("segment_push_fight"), "base_push_fight": R.get("base_push_fight"), "gold_swing_share": E["gold_swing_share"], "dragon_types": E["dragon_types"], "grubs_split": E["grubs_split"],
+     "segment_push_fight": R.get("segment_push_fight"), "base_push_fight": R.get("base_push_fight"),
+     "segment_push_fight_simple": R.get("segment_push_fight_simple"), "base_push_fight_simple": R.get("base_push_fight_simple"), "gold_swing_share": E["gold_swing_share"], "dragon_types": E["dragon_types"], "grubs_split": E["grubs_split"],
      "role_kill_share": T["before 1 Sep"]["role_kill_share"], "role_death_share": T["before 1 Sep"]["role_death_share"],
      "role_assist_per_team_kill": T["before 1 Sep"]["role_assist_per_team_kill"], "box": box}
 json.dump(P, open(OUTJ, "w"), indent=1)

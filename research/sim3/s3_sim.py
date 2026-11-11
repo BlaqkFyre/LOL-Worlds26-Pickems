@@ -93,8 +93,12 @@ class Sim:
         FB = P["gold_feedback"]
         if cal.get("seg_lane_tier", "off") == "on" and P.get("segment_push_lane_tier"):  # opt-in (6 Nov test): lane x tier push terms
             SPC = dict(P["segment_push_lane_tier"]["coef"]); SEGC = SPC
+        cutS = cutB = 99
         if cal.get("push_fight", "off") == "on" and P.get("segment_push_fight"):  # opt-in (10 Nov, 7g): won fights turn into towers and base pushes
             SPC = dict(P["segment_push_fight"]["coef"]); SEGC = SPC; PUSHC = P["base_push_fight"]["coef"]
+            cutS = P["segment_push_fight"].get("clear_fight_cutoff") or 99; cutB = P["base_push_fight"].get("clear_fight_cutoff") or 99  # fitted cutoffs (training games)
+        if cal.get("push_fight", "off") == "simple" and P.get("segment_push_fight_simple"):  # opt-in (11 Nov): last minute's kills edge only, no flag
+            SPC = dict(P["segment_push_fight_simple"]["coef"]); SEGC = SPC; PUSHC = P["base_push_fight_simple"]["coef"]
         if cal.get("within", "off") == "on" and P.get("segment_push_within"):  # opt-in (6 Nov test): lead effects fitted within games
             SPC = P["segment_push_within"]["coef"]; SEGC = SPC; PUSHC = P["base_push_within"]["coef"]; TAKC = P["taker_within"]; FB = P["gold_feedback_within"]
         # game form: the pooled gold-lead effect on who wins fights partly reflects "this team is stronger in this game";
@@ -256,7 +260,7 @@ class Sim:
                           + sc.get("T2 x mid", 0.0) * (tier == 1 and L == "MID") + sc.get("T2 x bot", 0.0) * (tier == 1 and L == "BOT")
                           + sc.get("T3 x mid", 0.0) * (tier == 2 and L == "MID") + sc.get("T3 x bot", 0.0) * (tier == 2 and L == "BOT")
                           + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0)
-                          + sc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + sc.get("won_fight_by_4plus", 0.0) * (sg * net >= 4 or sg * prev_net >= 4))
+                          + sc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + sc.get("clear_fight_win", 0.0) * (sg * net >= cutS or sg * prev_net >= cutS))
                     if SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
                         n = 0
                         if rng.random() < sig(xb):
@@ -282,7 +286,7 @@ class Sim:
                       + bc.get("lane_just_opened", 0.0) * any(open_t[s][li] >= t0 - 60 for li in opn)
                       + bc.get("base_take_last_minute", 0.0) * (last_base[s] >= t0 - 60)
                       + bc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
-                      + bc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + bc.get("won_fight_by_4plus", 0.0) * (sg * net >= 4 or sg * prev_net >= 4))
+                      + bc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + bc.get("clear_fight_win", 0.0) * (sg * net >= cutB or sg * prev_net >= cutB))
                 sz, pr_ = self.push["inhib_down" if down else "no_inhib_down"]
                 npush = int(rng.choice(sz, p=pr_)) if rng.random() < sig(xb) else 0
                 if npush: last_base[s] = t0
