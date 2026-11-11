@@ -91,7 +91,7 @@ class Sim:
         SEGC = SPC if SPC is not None else (P["segments_timing"] if TIM else P["segments"]); PUSHC = P["base_push_timing"] if TIM else P["base_push"]["coef"]
         KSC = P["kill_side_timing"] if TIM else P["kill_side"]; TAKC = P["taker_timing"] if TIM else P["taker"]
         FB = P["gold_feedback"]
-        if cal.get("seg_lane_tier", "off") == "on" and P.get("segment_push_lane_tier"):  # opt-in (6 Nov test): lane x tier push terms
+        if cal.get("seg_lane_tier", "on") == "on" and P.get("segment_push_lane_tier"):  # default from 11 Nov (Luke, 7 Nov: keep; tested 6 Nov, 7f): lane x tier push terms; "off" = the earlier sim
             SPC = dict(P["segment_push_lane_tier"]["coef"]); SEGC = SPC
         cutS = cutB = 99
         if cal.get("push_fight", "off") == "on" and P.get("segment_push_fight"):  # opt-in (10 Nov, 7g): won fights turn into towers and base pushes

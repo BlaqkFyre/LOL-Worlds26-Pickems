@@ -432,6 +432,21 @@ Share of tower-falling minutes with each event in the 2 minutes before, against 
 
 **For the sim (to test, fitted, not set):** the sim already has Baron, gold lead, net kills and Herald in its tower pushes, but with one Herald term for every lane and no lane-specific kill term. Candidates: a mid-only Herald term and "killed that lane's laner" for mid, each judged on held-out pushes like the lane × tier terms in 7f. No champion or comp siege effect holds up, which matches the draft-style validation (`research/comps-plan.md`): measured tower damage moves tower counts and first-tower time, not which lane falls.
 
+## 7i. Session 4 pre-work: lane × tier becomes the default sim (11 Nov)
+
+Luke's 7 Nov decision (keep the lane × tier push terms in the sim and keep testing them) is now in the code: `s3_sim.py` uses them unless told otherwise, and `s3_test.py ... nolt` runs the earlier sim. Every later test compares against this baseline.
+
+| Who wins (log loss, held out, 200 sims per game) | From 1 Sep (304 games) | Worlds (80 games) |
+|---|---|---|
+| Sim, lane × tier on (the default) | 0.6385 | 0.6173 |
+| Earlier sim (`nolt`) | 0.6348 | 0.6260 |
+| v1 | 0.6396 | 0.6278 |
+
+- **Nothing new was measured here.** These are the scores of the 10 Nov lane × tier run and the 6 Nov base run; the 7g comparisons already used 0.6385 / 0.6173 as "the current sim".
+- **How checked:** both versions were re-run with the current `params3.json` (458 s and 442 s). Calibration, scores and shape tables are the same as the saved runs, and all 60,800 simulated games (304 × 200) are identical in each (`research/local/sim3/out_s4_base` v `out_7g_lt`; `out_s4_nolt` v `out_t_base`).
+- **Worlds is still 80 games here.** The sim's test files were built on the 5 Nov file, so quarter-finals 3–4 and the semi-finals (14 games) are not in this test yet.
+- Scripts that build their own settings without naming the switch now get lane × tier too; results from before 11 Nov in sections 3 to 7e are from the earlier sim.
+
 ## 8. Open items for Luke
 
 1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Measured (7g, 10 Nov): the extra kill spread comes from fight sizes that aren't held in check and from kills going in step with length (real long games slow down, the sim's get bloodier), not from the number of fights. Proposed next: fit fight size and the next fight's chance on what just happened, and check how game endings follow fights (7g).

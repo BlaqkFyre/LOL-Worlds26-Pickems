@@ -72,7 +72,8 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     cal = {"gain": 1.0, "lane_mu": 1.0, "lane_k": 1.0, "fight_eps": best, "style_mode": MODE, "form": "off"}
     if PHASE_EPS: cal["fight_eps_phase"] = eps_ph
     if "zphase" in OPTS: cal["kill_z_phase"] = {"0-13": 1.24, "14-24": 1.48, "25+": 1.26}  # matched to real training games at the final gain (7e)
-    if "lt" in OPTS: cal["seg_lane_tier"] = "on"
+    if "lt" in OPTS: cal["seg_lane_tier"] = "on"  # the sim's default from 11 Nov, so "lt" changes nothing now
+    if "nolt" in OPTS: cal["seg_lane_tier"] = "off"  # the earlier sim, without the lane x tier push terms (kept for session 4's tests)
     if "typed" in OPTS: cal["fight_model"] = "typed"  # fight types and what holds fights in check (10 Nov, report 7g)
     if "pf" in OPTS: cal["push_fight"] = "on"  # won fights turn into tower and base pushes (10 Nov, report 7g; includes the lane x tier terms)
     if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)

@@ -6,3 +6,6 @@ research/*OraclesElixir*.csv
 
 # Local working data (gol.gg timelines, held-out sim games, matched award rows) - see research/local/README.md
 research/local/
+
+# Python cache folders made when research scripts run
+__pycache__/
