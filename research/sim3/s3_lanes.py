@@ -32,14 +32,22 @@ v1 = pd.read_csv(V1)[["gameid", "z_v1"]]
 L = L.merge(v1, on="gameid", how="left").dropna(subset=["gd10", "gd15", "z_v1"])
 L["skill_gap"] = L.skill_gap.fillna(0)
 L["pg"] = pd.cut(L.patch.str.split(".").str[1].astype(int), [0, 14, 18, 99], labels=["16.01-16.14", "16.15-16.18", "16.19-16.20"])
-TR = L.day < "2026-09-01"; TE = ~TR; WO = TE & (L.league == "WLDs")
+# Walk-forward (11 Nov): S3_CUTOFF = fit on games before that date (unset: before 1 Sep, the fixed test, unchanged).
+# S3_HALFLIFE (days, optional) = recent training games count more: weight 0.5 ** (days before the cutoff / half-life).
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); WF = "S3_CUTOFF" in os.environ
+HL = float(os.environ["S3_HALFLIFE"]) if os.environ.get("S3_HALFLIFE") else None
+TR = L.day < CUT; TE = ~TR; WO = TE & (L.league == "WLDs")
+L["w"] = 1.0 if HL is None else 0.5 ** ((pd.Timestamp(CUT) - pd.to_datetime(L.day)).dt.days.clip(lower=0) / HL)
 
 def champ_values(d, m):
     # champion-role average lead at minute m, from that champion's side of the lane
-    x = pd.concat([d[["position", "c_blue", f"gd{m}"]].rename(columns={"c_blue": "c", f"gd{m}": "v"}),
-                   d[["position", "c_red", f"gd{m}"]].rename(columns={"c_red": "c", f"gd{m}": "v"}).assign(v=lambda t: -t.v)])
-    g = x.groupby(["position", "c"]).v.agg(["sum", "count"])
-    return (g["sum"] / (g["count"] + K)).to_dict()
+    x = pd.concat([d[["position", "c_blue", f"gd{m}", "w"]].rename(columns={"c_blue": "c", f"gd{m}": "v"}),
+                   d[["position", "c_red", f"gd{m}", "w"]].rename(columns={"c_red": "c", f"gd{m}": "v"}).assign(v=lambda t: -t.v)])
+    if HL is None:
+        g = x.groupby(["position", "c"]).v.agg(["sum", "count"])
+        return (g["sum"] / (g["count"] + K)).to_dict()
+    g = x.assign(wv=x.w * x.v).groupby(["position", "c"])[["wv", "w"]].sum()  # weighted: K still pulls toward 0, in units of full-weight games
+    return (g.wv / (g.w + K)).to_dict()
 
 res = {"games": {"train": int(L[TR & (L.position == "top")].shape[0]), "test": int(L[TE & (L.position == "top")].shape[0]),
                  "worlds": int(L[WO & (L.position == "top")].shape[0])}, "fit": {}, "patch_groups": {}}
@@ -52,16 +60,20 @@ for m in MINS:
         d = L[L.position == ro]
         X = lambda q: np.c_[np.ones(len(q)), q.z_v1, q.skill_gap, q[f"cg{m}"]]
         tr, te, wo = d[TR[d.index]], d[TE[d.index]], d[WO[d.index]]
-        beta, *_ = np.linalg.lstsq(X(tr), tr[f"gd{m}"], rcond=None)
+        if HL is None: beta, *_ = np.linalg.lstsq(X(tr), tr[f"gd{m}"], rcond=None)
+        else:
+            sw = np.sqrt(tr.w.values); beta, *_ = np.linalg.lstsq(X(tr) * sw[:, None], tr[f"gd{m}"].values * sw, rcond=None)
         out = {}
         for nm, q in [("train", tr), ("from 1 Sep", te), ("Worlds", wo)]:
+            if not len(q): continue  # a walk-forward cutoff can leave a window empty
             y = q[f"gd{m}"].values; p = X(q) @ beta; base = tr[f"gd{m}"].mean()
             out[nm] = {"n": len(q), "r2": round(1 - ((y - p) ** 2).sum() / ((y - base) ** 2).sum(), 3),
                        "rmse": round(float(np.sqrt(((y - p) ** 2).mean()))), "sd": round(float(y.std()))}
         res["fit"][f"{ro} @{m}"] = out
         coef_rows.append(dict(role=ro, minute=m, intercept=beta[0], per_z=beta[1], per_skill_sd=beta[2], per_champ_gold=beta[3],
                               resid_sd=float(np.std(tr[f"gd{m}"] - X(tr) @ beta))))
-        resid[(ro, m)] = pd.Series(d[f"gd{m}"].values - X(d) @ beta, index=d.gameid.values)
+        dn = tr if WF else d  # lane noise: all games in the fixed version (as before); walk-forward uses training games only
+        resid[(ro, m)] = pd.Series(dn[f"gd{m}"].values - X(dn) @ beta, index=dn.gameid.values)
         for pg, q in d.groupby("pg", observed=True):
             res["patch_groups"].setdefault(f"{ro} @{m}", {})[str(pg)] = {"n": len(q), "sd": round(float(q[f"gd{m}"].std())),
                                                                         "blue_mean": round(float(q[f"gd{m}"].mean()))}

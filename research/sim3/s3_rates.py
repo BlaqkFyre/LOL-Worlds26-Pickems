@@ -26,7 +26,10 @@ import pandas as pd
 TM, TE, TGo, V1, OUT = sys.argv[1:6]; os.makedirs(OUT, exist_ok=True)
 M = pd.read_csv(TM, dtype={"gid": str}); M = M[M.gameid.notna() & (M.gameid != "AMBIGUOUS")].drop_duplicates("gameid")
 v1 = pd.read_csv(V1).set_index("gameid"); M["z"] = M.gameid.map(v1.z_v1); M = M[M.z.notna()].copy()
-M["split"] = np.where(M.date < "2026-09-01", "train", "test"); M.loc[M.tournament.str.startswith("Worlds"), "split"] = "worlds"
+# Walk-forward (11 Nov): with S3_CUTOFF set, fit on every game before that date (Worlds games before it included); without it,
+# the fixed test exactly as before.
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); WF = "S3_CUTOFF" in os.environ
+M["split"] = np.where(M.date < CUT, "train", "test"); M.loc[M.tournament.str.startswith("Worlds") & ((M.date >= CUT) | (not WF)), "split"] = "worlds"
 comp = pd.read_csv(sys.argv[6]).set_index("gameid")
 M["siege_d"] = M.gameid.map(comp.siege_blue - comp.siege_red).fillna(0); M["siege_s"] = M.gameid.map(comp.siege_blue + comp.siege_red).fillna(0)
 M["obj_s"] = M.gameid.map(comp.objectives_blue + comp.objectives_red).fillna(0);
@@ -153,7 +156,7 @@ Fp = pd.DataFrame(Fp, columns=["gid", "m", "split", "gd", "y", "mon_up", "buff",
 Mo = pd.DataFrame(Mo, columns=["gid", "m", "split", "kind", "since", "alead", "fight", "y", "first", "obj_s"]).dropna()
 PUSHD = pd.DataFrame(PUSH, columns=["split", "side", "size", "down"])
 res = {"games": M.split.value_counts().to_dict()}
-dummies = lambda m: np.array([[phase(x) == p for p in PHN[1:]] for x in m], dtype=float)
+dummies = lambda m: np.array([[phase(x) == p for p in PHN[1:]] for x in m], dtype=float).reshape(len(m), len(PHN) - 1)  # reshape: keeps its columns when a window has no minutes (walk-forward)
 
 def score(name, X, d, b, b0):
     return {s: {"n": int((d.split == s).sum()), "loss": round(pdev(np.exp(X(d[d.split == s]) @ b), d[d.split == s].y.values), 4),

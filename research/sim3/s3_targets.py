@@ -14,7 +14,8 @@ raw = pd.read_csv(CSV, low_memory=False, dtype={"patch": str})
 raw = raw[raw.league.isin(MAJOR) & ~((raw.league == "WLDs") & (raw.date < "2026-10-01"))]
 raw["minor"] = raw.patch.str.split(".").str[1].astype(int)
 T = raw[raw.position == "team"].copy(); Pl = raw[raw.position.isin(ROLES)].copy()
-W = {"before 1 Sep": T.date < "2026-09-01", "16.15+": T.minor >= 15, "from 1 Sep": T.date >= "2026-09-01", "Worlds": T.league == "WLDs"}
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01")  # walk-forward (11 Nov): "before 1 Sep" then means "before the cutoff" (the key name is kept because s3_params.py reads it)
+W = {"before 1 Sep": T.date < CUT, "16.15+": T.minor >= 15, "from 1 Sep": T.date >= "2026-09-01", "Worlds": T.league == "WLDs"}
 q = lambda s: {"mean": round(float(s.mean()), 2), "sd": round(float(s.std()), 2), "p10": round(float(s.quantile(.1)), 2),
                "median": round(float(s.median()), 2), "p90": round(float(s.quantile(.9)), 2)}
 res = {}

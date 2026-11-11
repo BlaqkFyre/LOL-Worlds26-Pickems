@@ -447,6 +447,58 @@ Luke's 7 Nov decision (keep the lane × tier push terms in the sim and keep test
 - **Worlds is still 80 games here.** The sim's test files were built on the 5 Nov file, so quarter-finals 3–4 and the semi-finals (14 games) are not in this test yet.
 - Scripts that build their own settings without naming the switch now get lane × tier too; results from before 11 Nov in sections 3 to 7e are from the earlier sim.
 
+## 7j. Session 4 pre-work: both tests for every version, and how much is chance (11–12 Nov)
+
+**In short:** at 1,000 sims per game, no sim version clearly beats the baseline. Every version is ahead of v1 on all games from 1 Sep and about level with v1 on Worlds games. Scores from 200 sims per game moved by chance by about 0.004 from 1 Sep and 0.007 at Worlds, so the smaller who-wins gaps reported in 7d to 7i cannot be relied on.
+
+**What was built**
+
+- **Walk-forward test** (`research/sim3/s3_walkforward.py`): for each week from 1 Sep, every fit is redone on the games before that week, the sim is calibrated on those games, and only that week's games are predicted. 11 weeks, 321 games, all 94 Worlds games.
+- **Half-life** (`research/sim3/s3_halflife.py`): in the walk-forward fits, laning weights recent games with a 120-day half-life and draft styles with 60 days, chosen by test on July–August weeks (Luke's choice, 11 Nov; numbers in `research/sim-plan.md`). The timeline-fitted parts use no fade. The fixed test uses no half-life.
+- **Full game set:** the skill table and features were rebuilt on the full file to 10 Nov UTC, so both tests cover 321 games from 1 Sep, 94 at Worlds and 21 knockout games (before: 304 / 80 / 7).
+
+**The seed finding**
+
+Each held-out game's seeds came from its place in the sorted game list. Adding 17 games moved later games' places, so 132 of the 304 shared games got different draws and different odds, with identical calibration. Four seedings of the same version (kills edge) on the same games, fixed test, 200 sims:
+
+| Seeding | From 1 Sep (321) | Worlds (94) |
+|---|---|---|
+| Usual seeds | 0.6356 | 0.6287 |
+| Seeds +200M | 0.6326 | 0.6168 |
+| Seeds +300M | 0.6327 | 0.6176 |
+| Seeds +400M | 0.6328 | 0.6233 |
+| All four pooled (800 sims) | 0.6314 | 0.6197 |
+
+Chance spread of the score by sims per game (standard deviation over 2,000 redraws, treating the pooled odds as each game's true sim odds): 200 sims 0.0041 from 1 Sep and 0.0074 at Worlds; 1,000 sims 0.0017 and 0.0033; 4,000 sims 0.0009 and 0.0017. Noisy odds also cost log loss: at 200 sims the average score is about 0.0025 worse than with exact odds, which v1 does not pay.
+
+**Luke's decision (12 Nov):** seeds by game ID (adding games never changes another game's draws; every version plays each game on the same seeds) and 1,000 sims per game, for both tests. `s3_test.py ... oldseeds` at 200 sims reproduces earlier runs.
+
+**Results at 1,000 sims** (who wins, log loss, lower is better; same 321 / 94 / 21 games in every column):
+
+| Version | Fixed, from 1 Sep | Fixed, Worlds | Walk-forward, from 1 Sep | Walk-forward, Worlds | Walk-forward, knockouts (21) |
+|---|---|---|---|---|---|
+| v1 | 0.6348 | 0.6173 | 0.6348 | 0.6173 | 0.5224 |
+| Baseline (default sim) | 0.6324 | 0.6158 | 0.6312 | 0.6203 | 0.5345 |
+| + kills edge (`pfs`) | 0.6326 | 0.6192 | 0.6315 | 0.6188 | 0.5327 |
+| + fight types (`typed`) | 0.6314 | 0.6152 | 0.6321 | 0.6190 | 0.5396 |
+| + pushes, fitted cutoff 2+ (`pf`) | 0.6307 | 0.6147 | 0.6328 | 0.6208 | 0.5365 |
+| + fight types and pushes (`typed,pf`) | 0.6310 | 0.6169 | 0.6272 | 0.6181 | 0.5383 |
+
+- **Between versions:** apart from one score, they sit within 0.002 of each other from 1 Sep and within 0.005 at Worlds, inside the chance spread. Fight types and pushes at 0.6272 (walk-forward, from 1 Sep) is the one larger gap, and its fixed-test lead is only 0.0014.
+- **Against v1:** every version is ahead from 1 Sep in both tests (by 0.002 to 0.008). At Worlds four of five are ahead in the fixed test and none in walk-forward, all by under 0.004. On the 21 knockout games v1 is ahead of every version (favourite 16 of 21 v 14).
+- **"Kills edge" as the candidate (7g, 7i):** its lead over the baseline at 200 sims does not hold at 1,000.
+- **Luke's decision (12 Nov):** two sims go into session 4: the baseline, and the baseline with fight types and pushes. The app ships one, or both with an option.
+
+**Not run or not measured**
+
+- **Pushes with a 4+ cutoff:** since 11 Nov the cutoff is chosen on training games (2+), so 4+ would have to be typed in by hand.
+- **Fixed-test knockout scores:** the fixed test does not print them.
+- **Chance from the number of games:** 94 Worlds games is a small sample in itself; only the sim's own draws were measured.
+- **Shared seeds:** whether they make the gap between two versions steadier than each score alone.
+- **The lane noise table** in the fixed test includes test games (small, predates this work, left as it is).
+
+**How checked:** every run exited cleanly with 321 / 94 / 21 games scored. `oldseeds` at 200 sims gave the baseline's earlier scores exactly (0.6360 / 0.6188). With no walk-forward setting the edited fit scripts reproduce the saved fits (11 Nov; not re-run after a later one-line fix for empty windows in `s3_rates.py`). Runs: `research/local/sim3/out_n1000_*`, `wf_hl/` (`wf_results_n1000.json`, `wf_results_n1000b.json`), `seed_noise/`.
+
 ## 8. Open items for Luke
 
 1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Measured (7g, 10 Nov): the extra kill spread comes from fight sizes that aren't held in check and from kills going in step with length (real long games slow down, the sim's get bloodier), not from the number of fights. Proposed next: fit fight size and the next fight's chance on what just happened, and check how game endings follow fights (7g).

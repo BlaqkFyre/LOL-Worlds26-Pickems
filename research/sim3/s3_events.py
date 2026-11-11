@@ -25,7 +25,10 @@ M = M[M.z.notna()].copy()
 comp = pd.read_csv(sys.argv[7]).set_index("gameid")
 M["obj_d"] = M.gameid.map(comp.objectives_blue - comp.objectives_red).fillna(0)
 M["skirm_d"] = M.gameid.map(comp.skirmish_blue - comp.skirmish_red).fillna(0)
-M["split"] = np.where(M.date < "2026-09-01", "train", "test"); M.loc[M.tournament.str.startswith("Worlds"), "split"] = "worlds"
+# Walk-forward (11 Nov): with S3_CUTOFF set, fit on every game before that date (Worlds games before it included); without it,
+# the fixed test exactly as before (fit before 1 Sep, Worlds games always kept apart).
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); WF = "S3_CUTOFF" in os.environ
+M["split"] = np.where(M.date < CUT, "train", "test"); M.loc[M.tournament.str.startswith("Worlds") & ((M.date >= CUT) | (not WF)), "split"] = "worlds"
 ev = pd.read_csv(TE, dtype={"gid": str}); ev = ev[ev.gid.isin(M.gid)].copy()
 go = pd.read_csv(TGo, dtype={"gid": str}); go = go[go.gid.isin(M.gid) & (go.kind == "gold")]
 sgn = np.where(go.side == "blue", 1, -1)
@@ -264,7 +267,7 @@ res["ending"] = {"games_with_nexus_row": round(float(M.gid.isin(NX.index).mean()
                  "first_inhib_to_end_s": {"median": int((info.len - INH).dropna().median()), "p10": int((info.len - INH).dropna().quantile(.1)),
                                           "p90": int((info.len - INH).dropna().quantile(.9))},
                  "length_s": {s: {"median": int(info[info.split == s].len.median()), "p10": int(info[info.split == s].len.quantile(.1)),
-                                  "p90": int(info[info.split == s].len.quantile(.9))} for s in ["train", "test", "worlds"]},
+                                  "p90": int(info[info.split == s].len.quantile(.9))} for s in ["train", "test", "worlds"] if (info.split == s).any()},
                  "games_without_inhib": round(float(1 - M.gid.isin(INH.index).mean()), 3)}
 # who wins: gold lead at 15/20/25 -> result (how decisive leads are, for checks)
 for mm in [15, 20, 25]:

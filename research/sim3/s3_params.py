@@ -25,7 +25,8 @@ R, E, T = J("rates3_results.json"), J("events3_results.json"), J("targets3.json"
 cols = ["gameid", "league", "date", "position", "kills", "assists", "teamkills", "earnedgoldshare", "damageshare", "vspm",
         "csdiffat15", "golddiffat15"]
 raw = pd.read_csv(CSV, low_memory=False, usecols=cols)
-raw = raw[raw.league.isin(MAJOR) & raw.position.isin(ROLES) & (raw.date < "2026-09-01")].copy()
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01")  # walk-forward (11 Nov): box-score norms from games before the cutoff; unset = before 1 Sep as before
+raw = raw[raw.league.isin(MAJOR) & raw.position.isin(ROLES) & (raw.date < CUT)].copy()
 raw["kp_share"] = np.where(raw.teamkills > 0, (raw.kills + raw.assists) / raw.teamkills.clip(lower=1), np.nan)
 box = {}
 for r in ROLES:

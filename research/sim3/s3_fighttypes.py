@@ -16,7 +16,9 @@ import pandas as pd
 TM, TE, TGo, V1, CO, OUT = sys.argv[1:7]
 M = pd.read_csv(TM, dtype={"gid": str}); M = M[M.gameid.notna() & (M.gameid != "AMBIGUOUS")].drop_duplicates("gameid")
 v1 = pd.read_csv(V1).set_index("gameid"); M = M[M.gameid.map(v1.z_v1).notna()].copy()
-M["split"] = np.where(M.date < "2026-09-01", "train", "test"); M.loc[M.tournament.str.startswith("Worlds"), "split"] = "worlds"
+import os  # walk-forward (11 Nov): S3_CUTOFF set = fit on every game before that date (Worlds included); unset = the fixed test as before
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); WF = "S3_CUTOFF" in os.environ
+M["split"] = np.where(M.date < CUT, "train", "test"); M.loc[M.tournament.str.startswith("Worlds") & ((M.date >= CUT) | (not WF)), "split"] = "worlds"
 comp = pd.read_csv(CO).set_index("gameid"); M["pace_s"] = M.gameid.map(comp.pace_blue + comp.pace_red).fillna(0)
 info = M.set_index("gid")
 ev = pd.read_csv(TE, dtype={"gid": str}); ev = ev[ev.gid.isin(M.gid)].copy()

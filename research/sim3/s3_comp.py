@@ -29,14 +29,24 @@ GROUP = {"siege": ["plates", "towers_s", "ftower"], "objectives": ["drag", "grub
 pvb = pd.read_csv(V1).set_index("gameid").p_v1
 tm["p_side"] = tm.gameid.map(pvb); tm.loc[tm.side == "Red", "p_side"] = 1 - tm.loc[tm.side == "Red", "p_side"]
 tm = tm.dropna(subset=["p_side"])
+# Walk-forward (11 Nov): S3_CUTOFF = champion styles from games before that date (unset: before 1 Sep, unchanged).
+# S3_HALFLIFE (days, optional) = recent games count more: weight 0.5 ** (days before the cutoff / half-life).
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01")
+HL = float(os.environ["S3_HALFLIFE"]) if os.environ.get("S3_HALFLIFE") else None
+wt = lambda d: 0.5 ** ((pd.Timestamp(CUT) - pd.to_datetime(d.day)).dt.days.clip(lower=0) / HL)
 for s in STATS:
     x = (tm.p_side - 0.5).abs() if s == "pace" else tm.p_side
-    m = (tm.day < "2026-09-01") & tm[s].notna()
-    b = np.polyfit(x[m], tm.loc[m, s], 1); tm[s] = tm[s] - np.polyval(b, x)
+    m = (tm.day < CUT) & tm[s].notna()
+    b = np.polyfit(x[m], tm.loc[m, s], 1, w=None if HL is None else np.sqrt(wt(tm[m]))); tm[s] = tm[s] - np.polyval(b, x)
 pl = pl.merge(tm[["gameid", "side"] + STATS], on=["gameid", "side"], how="inner")
-tr = pl[pl.day < "2026-09-01"]; g = tr.groupby(["champion", "position"]); sty = pd.DataFrame({"games": g.size()})
+tr = pl[pl.day < CUT].copy(); g = tr.groupby(["champion", "position"]); sty = pd.DataFrame({"games": g.size()})
+if HL is not None: tr["w"] = wt(tr)
 for s in STATS:
-    a = g[s].agg(["sum", "count"]); sty[s] = a["sum"] / (a["count"] + 20)
+    if HL is None:
+        a = g[s].agg(["sum", "count"]); sty[s] = a["sum"] / (a["count"] + 20)
+    else:  # weighted: the 20 still pulls toward 0, in units of full-weight games
+        ok = tr[s].notna(); a = tr[ok].assign(wv=tr.w[ok] * tr[s][ok]).groupby(["champion", "position"])[["wv", "w"]].sum()
+        sty[s] = (a.wv / (a.w + 20)).reindex(sty.index).fillna(0.0)
 for grp, ss in GROUP.items(): sty[grp] = sty[ss].mean(axis=1)
 allp = raw[raw.position.isin(ROLES)][["gameid", "side", "position", "champion"]]
 allp = allp.join(sty[list(GROUP)], on=["champion", "position"]).fillna({k: 0.0 for k in GROUP})

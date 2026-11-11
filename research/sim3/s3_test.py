@@ -10,7 +10,7 @@ C. Held-out: every game from 1 Sep and every Worlds game, N sims each (seeded). 
    file's real games in the same window (targets3.json).
 usage: python -I s3_test.py params3.json lanes3_features.csv v1_games.csv targets3.json tl_fights.csv comp3_games.csv <out_dir> [n_sims] [side|timing] [phase,zphase,lt]
   The final sim: n_sims 200, "timing". "phase" switches on the per-phase fight swing (tested 5 Nov, not kept; report 7d)."""
-import os, sys, json, math, importlib.util
+import os, sys, json, math, zlib, importlib.util
 from multiprocessing import Pool
 import numpy as np
 import pandas as pd
@@ -21,6 +21,10 @@ MODE = sys.argv[9] if len(sys.argv) > 9 else "side"  # draft styles: "side" (who
 OPTS = set(sys.argv[10].split(",")) if len(sys.argv) > 10 else set()  # opt-in variants: "phase" (per-phase fight swing, 7d), "zphase"
                                                                       # (strength in kills by phase, 7e), "lt" (lane x tier push terms, 7e)
 PHASE_EPS = "phase" in OPTS
+# Walk-forward (11 Nov; driver s3_walkforward.py): S3_CUTOFF = calibrate on games before that date and test games from it;
+# S3_TEST_END = test only games before that date, write wf_preds.csv (one row per game) and stop before the shape tables.
+# Both unset = the fixed test exactly as before (calibrate before 1 Sep, test everything from 1 Sep).
+CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); END = os.environ.get("S3_TEST_END")
 os.makedirs(OUT, exist_ok=True)
 ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
@@ -99,8 +103,11 @@ def play(args):
     return out
 COLS = ["gid", "blue_win", "sec", "kills", "towers", "dragons", "barons", "grubs", "heralds", "elders", "fb", "fd", "ft", "fe", "g15",
         *[f"r15_{r}" for r in ROLES], *[f"k_{sd}_{r}" for sd in ("b", "r") for r in ROLES], "capped", "soul", "fd_t", "fb_t", "ft_t", "prio5", "fg", "fh"]
-def run_many(gids, n, cal_, seed0=0):
-    jobs = [(g, {k: G[g][k] for k in ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s")}, [seed0 + 1000 * i + j for j in range(n)]) for i, g in enumerate(gids)]
+def run_many(gids, n, cal_, seed0=0, by_id=False):
+    # by_id (12 Nov): a game's seeds come from its game ID, so adding games to the list never changes another game's draws and
+    # every sim version plays each game with the same seeds. Otherwise seeds come from the game's place in the list (calibration; "oldseeds").
+    base = (lambda i, g: seed0 + zlib.crc32(g.encode()) * 10_000) if by_id else (lambda i, g: seed0 + 1000 * i)
+    jobs = [(g, {k: G[g][k] for k in ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s")}, [base(i, g) + j for j in range(n)]) for i, g in enumerate(gids)]
     with Pool(3, initializer=init, initargs=(cal_,)) as pool:
         rows = [r for chunk in pool.imap(play, jobs, chunksize=4) for r in chunk]
     return pd.DataFrame(rows, columns=COLS)
@@ -113,7 +120,7 @@ def logit_slope(z, y):
 
 if __name__ == "__main__":
     prep()
-    train = sorted(g for g in G if G[g]["day"] < "2026-09-01" and G[g]["y"] >= 0)
+    train = sorted(g for g in G if G[g]["day"] < CUT and G[g]["y"] >= 0)
     rng = np.random.default_rng(7); tr = list(rng.choice(train, size=min(300, len(train)), replace=False))
     real_tr = pd.DataFrame({g: G[g]["gd15"] for g in tr}, index=ROLES).T
     real_sd = real_tr.std(); real_team_sd = float(real_tr.sum(axis=1).std()); zt = np.array([G[g]["z"] for g in tr])
@@ -138,10 +145,18 @@ if __name__ == "__main__":
         cal["lane_mu"] = round(max(0.0, cal["lane_mu"] * (real_slope / sim_slope if sim_slope > 0 else 1) ** 0.9), 3)
     res["calibration"] = hist; res["cal"] = cal
     # ---------- C. held-out ----------
-    test = sorted(g for g in G if G[g]["day"] >= "2026-09-01" and G[g]["y"] >= 0)
-    S = run_many(test, NS, cal, seed0=1)
+    test = sorted(g for g in G if G[g]["day"] >= CUT and (END is None or G[g]["day"] < END) and G[g]["y"] >= 0)
+    # Held-out seeds (Luke, 12 Nov): by game ID, and run at 1,000 sims per game (at 200 the Worlds score moved about 0.007 by chance).
+    # "oldseeds" = seeds by place in the list, as every run before 12 Nov. S3_SEED = other draws, to measure sim noise.
+    S = run_many(test, NS, cal, seed0=1 + int(os.environ.get("S3_SEED", "0")), by_id="oldseeds" not in OPTS)
     S.to_csv(os.path.join(OUT, "sim3_heldout_games.csv.gz"), index=False, compression="gzip")
     ps = S.groupby("gid").blue_win.mean().clip(0.5 / NS, 1 - 0.5 / NS)
+    if END is not None:  # one walk-forward week: per-game odds only; the driver scores all weeks together
+        pd.DataFrame({"gameid": test, "day": [G[g]["day"] for g in test], "league": [G[g]["league"] for g in test], "y": [G[g]["y"] for g in test],
+                      "p_sim": ps.reindex(test).values, "p_v1": [G[g]["p_v1"] for g in test]}).to_csv(os.path.join(OUT, "wf_preds.csv"), index=False)
+        res["n_sims_per_game"] = NS; res["cutoff"] = CUT; res["test_end"] = END; res["train_games"] = len(train); res["test_games"] = len(test)
+        json.dump(res, open(os.path.join(OUT, "test3_results.json"), "w"), indent=1, default=float)
+        print(json.dumps({"cal": cal, "cutoff": CUT, "test_end": END, "train_games": len(train), "test_games": len(test)}, default=float)); sys.exit(0)
     T = json.load(open(TJ))
     def who(gids):
         y = np.array([G[g]["y"] for g in gids]); p = ps.loc[gids].values; pv = np.array([G[g]["p_v1"] for g in gids])
