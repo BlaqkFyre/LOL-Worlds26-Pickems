@@ -499,8 +499,96 @@ Chance spread of the score by sims per game (standard deviation over 2,000 redra
 
 **How checked:** every run exited cleanly with 321 / 94 / 21 games scored. `oldseeds` at 200 sims gave the baseline's earlier scores exactly (0.6360 / 0.6188). With no walk-forward setting the edited fit scripts reproduce the saved fits (11 Nov; not re-run after a later one-line fix for empty windows in `s3_rates.py`). Runs: `research/local/sim3/out_n1000_*`, `wf_hl/` (`wf_results_n1000.json`, `wf_results_n1000b.json`), `seed_noise/`.
 
+## 7k. Lane-level play, and the spread again (12 Nov)
+
+**In short:** lane-level play (each lane's lead at 15 built from that lane's players, champions and its own kills) is in the sim as an option and improves who-wins on both sims in both tests, most at Worlds. The spread of game length and kills is still too wide: four more fitted attempts did not narrow it. A bug was found in how the sim reads tower-push timing.
+
+**Luke's rules for this work (12 Nov):** keep every lane and input in the model even when its effect is small; a version that is marginally better or worse is acceptable if it adds depth to the sim's results. Values are fitted, never hand-picked.
+
+**Timeline data:** the 14 knockout timeline pages were parsed and matched (708 pages parsed; 640 matched to the file, was 626; all 10 champions fit in each; in the 14 new games the timeline and the file differ on kills for 2 team-sides and on Heralds for 1, `research/model/sim3/tl_check.json`).
+
+**What a lane's pre-game inputs explain** (`research/sim3/s3_lanelevel.py`, fitted before 1 Sep, held out from 1 Sep): lane skill and champion lane value explain 18% of the gold lead at 15 for top, 20% jungle, 13% mid and 10% for the bot duo (team strength alone: 2–7%). A lane's kills minus deaths is barely predictable before the game (1–3%). Extra inputs added about nothing, and the first dragon was not predicted better.
+
+**Lane-level play, version 2** (sim setting `cal["lane_level"] = "on"`; `s3_test.py ... ll`; fit in `research/model/sim3/lanelevel_fit.json`). A lane's gold lead at 15 is three fitted parts:
+
+1. the pre-game part (that lane's skill gap and champion lane value, plus team strength);
+2. gold from what happens in the game before 15:00: own kill about 310–390, own death about −5 to −240, own assist about 50–90, a team plate about 1–7, by role;
+3. leftover noise per role (sd 501 top, 334 jungle, 403 mid, 592 bot, 211 support).
+
+Who gets each early kill leans on the lane's expected pre-game lead (killer +0.433 per 1,000 gold; victim −0.008). Version 1 (the lane model at full strength with the real leftover links between lanes, no event gold) left the kill-to-gold link too weak and is superseded.
+
+**Who wins, 1,000 sims, log loss** (321 games from 1 Sep / 94 Worlds / 21 knockouts; chance spread about 0.002 / 0.003):
+
+| Version | Fixed, from 1 Sep | Fixed, Worlds | Walk-forward, from 1 Sep | Walk-forward, Worlds | Walk-forward, knockouts |
+|---|---|---|---|---|---|
+| v1 | 0.6348 | 0.6173 | 0.6348 | 0.6173 | 0.5224 |
+| Baseline | 0.6324 | 0.6158 | 0.6312 | 0.6203 | 0.5345 |
+| Baseline + lane-level (`ll`) | 0.6256 | 0.6049 | 0.6296 | 0.6114 | 0.5483 |
+| Fight types and pushes (`typed,pf`) | 0.6310 | 0.6169 | 0.6272 | 0.6181 | 0.5383 |
+| Fight types and pushes + lane-level (`typed,pf,ll`) | 0.6232 | 0.6019 | 0.6259 | 0.6074 | 0.5291 |
+
+- Lane-level gains on both sims in both tests. At Worlds the gain is about three times the chance spread in both tests; from 1 Sep it is clear in the fixed test and inside the chance spread in walk-forward.
+- Both lane-level sims beat v1 at Worlds in walk-forward, which no version did before.
+- On the 21 knockout games v1 is still ahead of every sim version (too few games to judge).
+- Lane-level version 1 on the fixed test, for the record: baseline 0.6311 / 0.6227, fight types and pushes 0.6275 / 0.6135.
+
+**Lane checks, version 2 v real, games from 1 Sep** (`s3_lanecheck.py`, `research/model/sim3/lanecheck_ll2.json`; baseline in brackets where measured):
+
+| Check | Real | Lane-level v2 |
+|---|---|---|
+| Kill–gold link by role (top, jng, mid, bot, sup) | 0.71 / 0.82 / 0.79 / 0.75 / 0.67 | 0.74 / 0.81 / 0.83 / 0.77 / 0.68 (baseline 0.62 / 0.66 / 0.66 / 0.67 / 0.58) |
+| Top lane lead at 15, sd | 911 | 944 (baseline 480) |
+| Lane lead explained by the lane model | 0.18 / 0.21 / 0.13 / 0.05 / 0.13 | 0.21 / 0.17 / 0.09 / 0.07 / 0.05 |
+| Top–bot lead link | 0.02 | 0.26 (baseline 0.94) |
+| Bot–support lead link | 0.63 | 0.47 |
+| Team lead at 15, sd | 2,596 | 2,848 |
+| First dragon to the bot-lane leader | 61% | 57% |
+| First tower falls mid | 12% | 25% (baseline also 25%) |
+| Length sd / kills sd | 5.6 / 7.3 | 7.0 / 12.3 (unchanged) |
+
+Open in the lanes: mid first towers (25% v 12%, same before this work), the top–bot link (0.26 v 0.02), team lead at 15 a little too spread.
+
+**The spread: where the sim's games go wrong** (`s3_spreadcheck.py`, 245 real held-out timeline games v 6 sims each with lane-level on; a shape check, not recalibrated; `research/model/sim3/spreadcheck_ll2.json`):
+
+| | Real | Sim |
+|---|---|---|
+| First inner tower (T2), median | 24.8 min | 21.4 min |
+| First inhibitor, earliest 10% of games | 24.7 min | 21.9 min |
+| Games under 24 min | 2.4% | 11.6% |
+| Kills in those short games | 23.3 | 16.9 |
+| Kills per minute, 0–5 min | 0.245 | 0.485 |
+| Kills per minute, 15–20 min | 0.79 | 0.94 |
+| Kills in games of 38–45 min | 28.1 | 37.4 |
+| Length–kills link | 0.28 | 0.62 |
+| Kills by 20:00, sd | 4.79 | 5.98 |
+
+Short sim games are quiet walkovers (structures fall too early) and long sim games are too bloody.
+
+**Bug found: tower-push game-phase terms.** The sim reads the phase terms for tower pushes from the older count fit (`P["segments"]`: +1.05 / +1.03 / +1.16 / +1.44 / +1.56), not from the push fit it uses (lane × tier: +1.03 / +0.96 / +0.96 / +1.23 / +1.38). So pushes from 20:00 come a little too often in every version, the baseline included. The corrected reading is an option (`cal["seg_phase"] = "own"`; `s3_test.py ... sp`), off by default so earlier runs replay. With it on alone the spread gets wider (length sd 7.84, kills sd 13.3), so the bug was partly hiding the long tail. **Luke to decide** whether it becomes the default (the baseline would be re-run on both tests).
+
+**Fitted attempts at the spread (all opt-in, off by default, none kept):**
+
+| Attempt | Switch | Held-out fit | In the sim |
+|---|---|---|---|
+| Early mid/bot first-tower terms and a damaged-tower term | `S3_EARLY_LANE=1` (`s3_rates.py`) | n/a | games 1.5 min too short; mid first towers unchanged |
+| Endings: base-push chance with kills edge × game time, and "does this push end the game" | `s3_test.py ... ends` | ends-the-game log loss 0.466 v 0.643 | games under 24 min 11.3% → 7.4%, but mean length 34.2 and sd 7.6: worse overall |
+| Tier × game-phase terms for T2 / T3 and an early-minute term for pushes and fights | `S3_TIER_PHASE=1` (`s3_rates.py`), with `sp` | pushes 0.3673 / 0.3585 v the current lane × tier fit 0.3769 / 0.3671 (clearly better; without lane × tier 0.3797 / 0.3703); fight starts 0.7111 / 0.7009 v 0.7156 / 0.7048 (same 640-game timeline set) | kills per minute 0–5 min 0.49 → 0.31 (real 0.25); T2 timing, short games (10.5%) and spreads (length 7.63, kills 13.1) not improved |
+
+Each minute's chances now fit real games better, yet whole games still come out wrong. That points at how one stage feeds the next (first tower → inner tower → inhibitor) and at the lack of a per-game pace (real quiet games stay quiet and run long). Next measurement: follow one lane at a time, real v sim, from its first tower to its second to its third, with the lead and kills at each step.
+
+**Outside check (read 12 Nov 2026 in the browser pane)**
+
+- **gol.gg, Worlds 2026 main event** (https://gol.gg/tournament/tournament-stats/Worlds%202026%20Main%20Event/ and its team table): 72 games, average length 33:28, 26 kills a game, shortest 23:51, longest 47:29, most kills 39. The saved Oracle's Elixir file gives the same (72 games, 33:28, 26.32, 23:51, 47:29, 39), and the team table's towers (12.03 a game) and plates (28.2 per team per game) match the file's 12.04 and 28.22. Gen.G, BLG, T1 and LYON were compared line by line (games, win rate, length, kills, towers, first tower %, gold difference at 15, plates, Barons, dragons): identical.
+- **League wiki, gold rules** (https://wiki.leagueoflegends.com/en-us/Champion_gold_bounties, https://wiki.leagueoflegends.com/en-us/Turret): a kill's base bounty is 300 at levels 1–6, plus 100 for first blood; assists share half the kill bounty, reduced early in the game. The fit's 310–390 per kill and 50–90 per assist fit that. Every lane turret has five plates worth 120 local gold each, and plates are no longer removed at 14:00 (which patch: not read).
+- **No published figure found** for first tower by lane, first inner tower or inhibitor timing, the share of games under 24 minutes, or bot lead and first dragon. Riot's patch notes, Leaguepedia and the Oracle's Elixir site were not opened.
+
+**Found from that check: plate gold in version 2 is near zero.** The fit's plate input is the file's `turretplates`, a team's plates over the whole game (about 28 per team; 56 a game in the timelines, of which about 13 fall before 15:00 and 11 before 14:00). So it got almost no weight (1–7 gold), and with lane-level on the sim skips its older plate gold before 15:00. Quick measurement on the timeline games (395 before 1 Sep to fit, 245 from 1 Sep to check; no pre-game inputs; scratch script, not saved in the repo): a plate before 15:00 in the role's own lane is worth 160 gold to top, 113 to mid, 143 to bot, 31 to support, and 20 for any plate to the jungler; a plate in another lane 10–26. Held-out share of the lane lead explained, without plates → with plates before 15:00: top 0.53 → 0.67, mid 0.60 → 0.68, bot 0.54 → 0.65, support 0.63 → 0.68, jungle 0.69 → 0.70. **Planned fix (version 3):** stage 1 on all file games (pre-game inputs, own kills, deaths, assists), stage 2 on the timeline games (own-lane and other-lane plate values per role), plate gold paid by lane before 15:00 in the sim; then the replay check, both tests and the lane checks. Version 2's scores above stand as tested.
+
+**How checked:** with every option off, 648 of 648 seeded games are identical to the committed sim after every edit, on both sims; with options on, the same seed replays the same game (648 of 648). With no setting, `s3_rates.py` gives the committed coefficients (only held-out score fields changed, from the 14 new timeline games). Fixed tests and the walk-forward exited cleanly with 321 / 94 / 21 games scored. The spread and attempt figures are from 6 sims per game (or 200-sim runs), not full tests. Runs: `research/local/sim3/out_n1000_ll2`, `out_n1000_typed_pf_ll2`, `wf_hl/` (`wf_results_n1000c.json`), `lanelevel/`, `fit_ends/`, `fit_tp/`.
+
 ## 8. Open items for Luke
 
+0. **12 Nov (7k):** the tower-push phase bug: make the corrected reading the default and re-run the baseline? Spread still open after four more attempts; next is the lane-by-lane tower timing measurement. Lane-level play is in as an option and improves who-wins.
 1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Measured (7g, 10 Nov): the extra kill spread comes from fight sizes that aren't held in check and from kills going in step with length (real long games slow down, the sim's get bloodier), not from the number of fights. Proposed next: fit fight size and the next fight's chance on what just happened, and check how game endings follow fights (7g).
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?

@@ -152,9 +152,17 @@ The biggest risk is overfitting: about 2,800 major-league games is enough for a 
 
 Open decisions for Luke:
 
-None open right now.
+- [ ] **Tower-push phase bug** (found 12 Nov, `research/sim3-report.md` 7k): make the corrected reading the sim's default and re-run the baseline on both tests, or leave it as an option?
 
 Decided:
+
+- [x] **How session 4 starts** (Luke, 12 Nov 2026 AEST, four answers):
+    1. **First build: the sim plus the draft review.** Other screens follow.
+    2. **Two sims: one default with a switch** to the other.
+    3. **Tables: refit on all games first**, shown side by side with the tables fitted before 1 Sep, before the app build. Luke: learning from all the Worlds games is very valuable even with fewer matches.
+    4. **Player of the Game: version C** (final confirmation still comes before session 4's final commit).
+    Before that, Luke wants the spread of game length and kills worked on further ("it seems that making the app will just show that is still an issue").
+- [x] **Lane-level play and the spread: keep every input** (Luke, 12 Nov 2026 AEST). Every lane and input stays in the model even when its effect is small ("do not throw out data"). A version that is marginally better or worse is acceptable if it adds depth to the sim's results. Values are formed from the data and checked against outside sites, never hand-picked. Result: lane-level play version 2 is in the sim as an option and improves who-wins on both sims in both tests (`research/sim3-report.md` 7k); the spread is still open.
 
 - [x] **Two sims go into session 4** (Luke, 12 Nov 2026 AEST). The baseline (the default game-state sim, lane × tier pushes on) and the baseline plus the extras (fight types and won-fight pushes with the fitted cutoff; `s3_test.py ... typed,pf`). The app's final sim is one of them, or both with an option to choose. Luke cares most about accuracy on Worlds games; the baseline is the simpler, better planned sim. Both are the same code with two settings, and the extras need their fitted tables shipped too. On both tests at 1,000 sims the two are level with each other and with v1 on Worlds, and both are ahead of v1 from 1 Sep (`research/sim3-report.md` 7j).
 - [x] **The sim tests use seeds by game ID and 1,000 sims per game** (Luke, 12 Nov 2026 AEST). This changes the fixed test, which until now stayed exactly as it was. Why: at 200 sims the score moved by chance more than the gaps being judged (the same version on the same 94 Worlds games scored 0.6168 to 0.6287 across four seedings), and seeds came from a game's place in the list, so adding games changed other games' draws. Now each held-out game's seeds come from its game ID, the same for every sim version. Calibration is unchanged. `s3_test.py ... oldseeds` at 200 sims reproduces every earlier run. Scores from before 12 Nov (200 sims) are not comparable with later ones.

@@ -30,6 +30,11 @@ ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
 P = json.load(open(PJ))
 if "typed" in OPTS: P["fight_typed"] = json.load(open(os.path.join(os.path.dirname(PJ), "fighttypes.json")))  # module level, so worker processes load it too
+# "ll" (12 Nov): lane-level play. Fits from s3_lanelevel.py: lanelevel_fit.json and lanelevel_features.csv, read from S3_LL_DIR
+# (default: the params file's folder).
+LLD = os.environ.get("S3_LL_DIR", os.path.dirname(PJ))
+if "ll" in OPTS: P["lane_level"] = json.load(open(os.path.join(LLD, "lanelevel_fit.json")))
+XKEYS = ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s") + (("ll_m0", "ll_e0") if "ll" in OPTS else ())
 sig = lambda x: 1 / (1 + np.exp(-x))
 
 def prep():  # runs in the main process only (workers on Windows re-import this file)
@@ -48,6 +53,10 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
         G[g].update({"siege_d": float(c.siege_blue - c.siege_red) if c is not None else 0.0, "obj_d": float(c.objectives_blue - c.objectives_red) if c is not None else 0.0,
                      "skirm_d": float(c.skirmish_blue - c.skirmish_red) if c is not None else 0.0, "pace_s": float(c.pace_blue + c.pace_red) if c is not None else 0.0,
                      "siege_s": float(c.siege_blue + c.siege_red) if c is not None else 0.0, "obj_s": float(c.objectives_blue + c.objectives_red) if c is not None else 0.0})
+    if "ll" in OPTS:
+        m0 = pd.read_csv(os.path.join(LLD, "lanelevel_features.csv")).set_index("gameid")
+        e0c = [f"e0_{r}" if f"e0_{r}" in m0.columns else f"m0_{r}" for r in ROLES]
+        G = {g: dict(v, ll_m0=m0.loc[g, [f"m0_{r}" for r in ROLES]].tolist(), ll_e0=m0.loc[g, e0c].tolist()) for g, v in G.items() if g in m0.index}
     for g in G: G[g]["y"] = int(v1.blue_win.get(g, -1)); G[g]["p_v1"] = float(v1.p_v1.get(g, np.nan))
 
     # ---------- A. per-fight swing ----------
@@ -80,6 +89,9 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if "nolt" in OPTS: cal["seg_lane_tier"] = "off"  # the earlier sim, without the lane x tier push terms (kept for session 4's tests)
     if "typed" in OPTS: cal["fight_model"] = "typed"  # fight types and what holds fights in check (10 Nov, report 7g)
     if "pf" in OPTS: cal["push_fight"] = "on"  # won fights turn into tower and base pushes (10 Nov, report 7g; includes the lane x tier terms)
+    if "ll" in OPTS: cal["lane_level"] = "on"  # lane-level play (12 Nov): lane leads from the fitted lane model, early kills lean to the lanes ahead
+    if "ends" in OPTS: cal["endings"] = "on"  # endings follow won fights (12 Nov): base-push chance and size read the kills edge and game time
+    if "sp" in OPTS: cal["seg_phase"] = "own"  # tower-push phase terms from the push fit in use (12 Nov: they were read from another fit)
     if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
@@ -99,15 +111,16 @@ def play(args):
                     g["first"].get("elder", ""), g["g15"], *g["roles15"], *[g["ps"][sd][r]["k"] for sd in ("blue", "red") for r in ROLES],
                     g["capped"], int(len(g["dr"][0]) >= 4 or len(g["dr"][1]) >= 4),
                     g["first_t"].get("dragon", -1), g["first_t"].get("baron", -1), g["first_t"].get("tower", -1), g["roles5"][1] + g["roles5"][3] + g["roles5"][4],
-                    g["first"].get("grub", ""), g["first"].get("herald", "")))
+                    g["first"].get("grub", ""), g["first"].get("herald", ""), *g["kd15"], g["first_tower_lane"]))
     return out
 COLS = ["gid", "blue_win", "sec", "kills", "towers", "dragons", "barons", "grubs", "heralds", "elders", "fb", "fd", "ft", "fe", "g15",
-        *[f"r15_{r}" for r in ROLES], *[f"k_{sd}_{r}" for sd in ("b", "r") for r in ROLES], "capped", "soul", "fd_t", "fb_t", "ft_t", "prio5", "fg", "fh"]
+        *[f"r15_{r}" for r in ROLES], *[f"k_{sd}_{r}" for sd in ("b", "r") for r in ROLES], "capped", "soul", "fd_t", "fb_t", "ft_t", "prio5", "fg", "fh",
+        *[f"kd15_{r}" for r in ROLES], "ft_lane"]
 def run_many(gids, n, cal_, seed0=0, by_id=False):
     # by_id (12 Nov): a game's seeds come from its game ID, so adding games to the list never changes another game's draws and
     # every sim version plays each game with the same seeds. Otherwise seeds come from the game's place in the list (calibration; "oldseeds").
     base = (lambda i, g: seed0 + zlib.crc32(g.encode()) * 10_000) if by_id else (lambda i, g: seed0 + 1000 * i)
-    jobs = [(g, {k: G[g][k] for k in ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s")}, [base(i, g) + j for j in range(n)]) for i, g in enumerate(gids)]
+    jobs = [(g, {k: G[g][k] for k in XKEYS}, [base(i, g) + j for j in range(n)]) for i, g in enumerate(gids)]
     with Pool(3, initializer=init, initargs=(cal_,)) as pool:
         rows = [r for chunk in pool.imap(play, jobs, chunksize=4) for r in chunk]
     return pd.DataFrame(rows, columns=COLS)
@@ -139,6 +152,7 @@ if __name__ == "__main__":
         print(hist[-1], flush=True)
         if it == 7: break
         cal["gain"] = round(cal["gain"] / max(0.3, b[1]) ** 0.8, 3)
+        if "ll" in OPTS: continue  # lane-level: the lane leads are the fitted model itself, so there is no lane_k / lane_mu to tune
         # lane noise scaled so the TEAM gold lead at 15 has the real spread (the five lanes move together more in the sim)
         sim_team_sd = float(S[[f"r15_{r}" for r in ROLES]].sum(axis=1).std())
         ratio = (real_team_sd / sim_team_sd) ** 2; cal["lane_k"] = round(max(0.02, cal["lane_k"] * ratio), 3)

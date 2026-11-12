@@ -75,6 +75,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 - **Count each real game once,** matched by game ID. Once the Oracle's Elixir file covers a day, it is the source of record over `js/worlds-live.js`. Same rule for the NerfPlz patch tables (they already include play-in games).
 - **Judge only on held-out games, with two tests** (Luke, 10 Nov). The fixed test keeps its split for the whole of testing (train before 1 Sep, test after, plus Worlds games as they're played). A walk-forward test runs alongside it (for each week from 1 Sep, fit on every earlier game, recent games weighted by a half-life chosen on July–August only, predict that week). Both run at 1,000 sims per game with seeds by game ID (Luke, 12 Nov: at 200 sims the score moved by chance more than the gaps being judged). Every version reports both scores. The new sim ships only if it beats the current one on those games.
 - **Few parameters, shrink toward averages.** About 2,800 major-league games supports a simple model, not hundreds of free parameters.
+- **Keep every input** (Luke, 12 Nov). A lane or input stays in the model even when its measured effect is small. A version that is marginally better or worse on the tests is acceptable if it adds depth to the sim's results.
 - **Ship small tables only.** The raw file stays local; the app gets small JS tables built from it.
 - **Seeded randomness:** the same seed must replay the same game.
 - **Minor leagues stay out of fitting** (player history and champion pools only, e.g. 369) unless Luke decides otherwise.

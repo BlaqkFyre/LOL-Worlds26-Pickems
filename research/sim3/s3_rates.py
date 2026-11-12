@@ -75,12 +75,12 @@ for g, gi in info.iterrows():
     # base pushes: base takes by one side less than 30 s apart are one push (real pushes run across minute boundaries)
     pstart = {"blue": [], "red": []}
     for sd_ in ("blue", "red"):
-        bt = np.sort(base[base.side == sd_].t.values); i = 0
+        bt = np.sort(base[base.side == sd_].t.values); i = 0; nex_t = base[(base.side == sd_) & (base.type == "nexus")].t.values
         while i < len(bt):
             j = i
             while j + 1 < len(bt) and bt[j + 1] - bt[j] <= 30: j += 1
             dn = int(((inh.t < bt[i]) & (inh.t > bt[i] - 300) & (inh.side == sd_)).any())
-            pstart[sd_].append(bt[i]); PUSH.append((gi.split, sd_, j - i + 1, dn)); i = j + 1
+            pstart[sd_].append(bt[i]); PUSH.append((gi.split, sd_, j - i + 1, dn, g, int(bt[i] // 60), int(((nex_t >= bt[i]) & (nex_t <= bt[j])).any()))); i = j + 1
     pstart = {k: np.array(v) for k, v in pstart.items()}
     he = e[e.type == "herald"]; gr = e[e.type == "grub"]
     # monster windows
@@ -121,7 +121,7 @@ for g, gi in info.iterrows():
                 if done >= 15: continue
                 ll = sum(RD.get((g, m, ro), np.nan) for ro in roles) * sg / 1000
                 y = int(((lt >= t0) & (lt < t1)).sum())
-                SEG.append((g, m, gi.split, side, lane, done // 5, ll, lead, gi.z * sg, bb, ee, hr, gq, gi.siege_d * sg, gi.siege_s, netk, gi.siege_b if sg > 0 else gi.siege_r, y))
+                SEG.append((g, m, gi.split, side, lane, done // 5, ll, lead, gi.z * sg, bb, ee, hr, gq, gi.siege_d * sg, gi.siege_s, netk, gi.siege_b if sg > 0 else gi.siege_r, y, done % 5))
             if opn:
                 tk = base[(base.t >= t0) & (base.t < t1) & (base.side == side)]
                 prev = int(((base.t >= t0 - 60) & (base.t < t0) & (base.side == side)).any())  # kept pushing last minute
@@ -134,7 +134,7 @@ for g, gi in info.iterrows():
                 if tk is not None and tk < max(t0, s_): continue
                 Mo.append((g, m, gi.split, k, max(0, (t0 - s_) // 60), abs(gd) / 1000 if gd == gd else np.nan, nf > 0,
                            int(tk is not None and t0 <= tk < t1), int(ui == fdi), gi.obj_s))
-SEG = pd.DataFrame(SEG, columns=["gid", "m", "split", "side", "lane", "tier", "lane_lead", "lead", "z", "baron", "elder", "herald3", "grubs", "siege", "siege_s", "net_k", "siege_own", "y"]).dropna()
+SEG = pd.DataFrame(SEG, columns=["gid", "m", "split", "side", "lane", "tier", "lane_lead", "lead", "z", "baron", "elder", "herald3", "grubs", "siege", "siege_s", "net_k", "siege_own", "y", "in_tower"]).dropna()
 # a push already rolling in this lane: segments this side took in the same lane the minute before (consecutive minutes only)
 SEG = SEG.sort_values(["gid", "side", "lane", "m"])
 _g = SEG.groupby(["gid", "side", "lane"])
@@ -154,7 +154,7 @@ SEG["push"] = SEG.push.fillna(0)
 BASE = pd.DataFrame(BASE, columns=["gid", "m", "split", "side", "lead", "z", "baron", "elder", "inhib_down", "open", "siege", "siege_s", "just_opened", "prev_push", "net_k", "siege_own", "y", "nx_taken", "taken_inhib_down"]).dropna()
 Fp = pd.DataFrame(Fp, columns=["gid", "m", "split", "gd", "y", "mon_up", "buff", "pace_s"]).dropna()
 Mo = pd.DataFrame(Mo, columns=["gid", "m", "split", "kind", "since", "alead", "fight", "y", "first", "obj_s"]).dropna()
-PUSHD = pd.DataFrame(PUSH, columns=["split", "side", "size", "down"])
+PUSHD = pd.DataFrame(PUSH, columns=["split", "side", "size", "down", "gid", "m", "ends"])
 res = {"games": M.split.value_counts().to_dict()}
 dummies = lambda m: np.array([[phase(x) == p for p in PHN[1:]] for x in m], dtype=float).reshape(len(m), len(PHN) - 1)  # reshape: keeps its columns when a window has no minutes (walk-forward)
 
@@ -217,11 +217,32 @@ res["segment_push_within"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum"
                               "pooled_lane_lead": round(float(bsp[names_g.index("per_1k_lane_lead")]), 4), "pooled_team_lead": round(float(bsp[names_g.index("per_1k_team_lead")]), 4)}
 # lane x tier version (6 Nov): real side-lane T2s hold much longer after their T1 than mid's (T1 to T2 median: top 547 s, mid 371 s,
 # bot 516 s), which an additive lane + tier model averages away; four interaction terms, judged on held-out pushes
-LT = lambda d: np.c_[(d.tier == 1) & (d.lane == "MID"), (d.tier == 1) & (d.lane == "BOT"), (d.tier == 2) & (d.lane == "MID"), (d.tier == 2) & (d.lane == "BOT")].astype(float)
+# 12 Nov: two more terms for the first tower while plates are up (before 14:00). Real mid lanes lose far fewer plates than side lanes
+# (1.3 a side by 14:00 against 2.0 top and 2.1 bot) but more tower hits afterwards, which one "mid" term for the whole game averages away
+# (the sim's first tower was mid 25% of the time; real 12-15%). A third term: the segments already down on this tower (0-4), since real
+# pushes often start on a tower that is already damaged (side lanes before 14:00: half of pushes start with 1-4 segments down).
+# Tested 12 Nov and NOT kept: the first tower stayed mid 24% of the time and games came out 1.5 min too short. Off unless S3_EARLY_LANE=1.
+EARLY_LANE = bool(os.environ.get("S3_EARLY_LANE"))
+# 12 Nov (spread of game length): tier x game-phase terms. With one fixed difficulty per tier for the whole game the sim's inner towers fall
+# too early (first T2 median 21.4 min v real 24.8; first inhibitor by 21.9 min in 10% of sim games v 24.7 real), which gives quiet short games
+# (11.6% under 24 min v 2.4% real). Real teams almost never take T2s and T3s early, whatever the lead. Opt-in: S3_TIER_PHASE=1.
+TIER_PHASE = bool(os.environ.get("S3_TIER_PHASE"))
+# Same switch, one more term each for tower pushes and fight starts: "minutes_before_14" (minute - 14 before 14:00, else 0). The first
+# phase (0:00-13:59) had one flat rate, but real plates go from 0.09 a minute (0-3 min) to 1.68 (11-14 min) and kills from 0.13 to 0.80,
+# so the sim took plates and kills far too early (kills a minute 0-5 min: sim 0.49, real 0.25; first tower by 8:30 in 10% of sim games, real 12:09).
+TPN = ([f"T{t + 1} x phase {p_}" for t in (1, 2) for p_ in PHN[1:]] + ["minutes_before_14"]) if TIER_PHASE else []
+LTN = ["T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot"] + (["T1 early x mid", "T1 early x bot", "tower_segments_down"] if EARLY_LANE else []) + TPN
+def LT(d):
+    c = [(d.tier == 1) & (d.lane == "MID"), (d.tier == 1) & (d.lane == "BOT"), (d.tier == 2) & (d.lane == "MID"), (d.tier == 2) & (d.lane == "BOT")]
+    if EARLY_LANE: c += [(d.tier == 0) & (d.m < 14) & (d.lane == "MID"), (d.tier == 0) & (d.m < 14) & (d.lane == "BOT"), d.in_tower]
+    if TIER_PHASE:
+        ph_ = np.array([phase(x) for x in d.m.values])
+        c += [(d.tier.values == t) & (ph_ == p_) for t in (1, 2) for p_ in PHN[1:]] + [np.minimum(d.m.values, 14) - 14]
+    return np.c_[tuple(c)].astype(float)
 XgLT = lambda d, full=True: np.c_[Xg(d), LT(d)] if full else Xg(d, False)
 bspLT = logit_fit(XgLT(trs), ypt)
 _llLT = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgLT(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
-res["segment_push_lane_tier"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot"], np.round(bspLT, 4))),
+res["segment_push_lane_tier"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum"] + LTN, np.round(bspLT, 4))),
                                  **{s_: {"n": int((SEG.split == s_).sum()), "logloss": _llLT(SEG[SEG.split == s_], bspLT), "additive": spush_ll(SEG[SEG.split == s_], bsp)}
                                     for s_ in ["train", "test", "worlds"]}}
 _mu = np.exp(Xg(trs) @ bgt); _r = (trs.y.values - _mu) ** 2 / _mu
@@ -261,7 +282,7 @@ XgF = lambda d: np.c_[XgLT(d), fight_terms(d, cS)]
 bspF = logit_fit(XgF(trs), ypt)
 _llF = lambda d, b: round(lg(np.clip(1 / (1 + np.exp(-XgF(d) @ b)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
 _fn = lambda c: ["net_kills_last_minute"] + (["clear_fight_win"] if c is not None else [])
-res["segment_push_fight"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot"] + _fn(cS), np.round(bspF, 4))),
+res["segment_push_fight"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum"] + LTN + _fn(cS), np.round(bspF, 4))),
                              "clear_fight_cutoff": cS, "cutoff_check_training_only": chkS,
                              **{s_: {"n": int((SEG.split == s_).sum()), "logloss": _llF(SEG[SEG.split == s_], bspF), "lane_tier": _llLT(SEG[SEG.split == s_], bspLT)}
                                 for s_ in ["train", "test", "worlds"]}}
@@ -277,12 +298,37 @@ res["base_push_fight"] = {"coef": dict(zip([n if n != "siege_style" else "siege_
 # simplest version (11 Nov): last minute's kills edge only, no clear-fight-win flag (nothing to choose)
 XgFs = lambda d: np.c_[XgLT(d), fight_terms(d, None)]; bspFs = logit_fit(XgFs(trs), ypt)
 _llFs = lambda d: round(lg(np.clip(1 / (1 + np.exp(-XgFs(d) @ bspFs)), 1e-6, 1 - 1e-6), (d.push.values > 0).astype(float)), 4)
-res["segment_push_fight_simple"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum", "T2 x mid", "T2 x bot", "T3 x mid", "T3 x bot", "net_kills_last_minute"], np.round(bspFs, 4))),
+res["segment_push_fight_simple"] = {"coef": dict(zip(names_g[:-1] + ["siege_style_sum"] + LTN + ["net_kills_last_minute"], np.round(bspFs, 4))),
                                     **{s_: {"n": int((SEG.split == s_).sum()), "logloss": _llFs(SEG[SEG.split == s_]), "lane_tier": _llLT(SEG[SEG.split == s_], bspLT)} for s_ in ["train", "test", "worlds"]}}
 XbFs = lambda d: np.c_[Xb(d), fight_terms(d, None)]; bptFs = logit_fit(XbFs(trb), (trb.y.values > 0).astype(float))
 _llbFs = lambda d: round(lg(np.clip(1 / (1 + np.exp(-XbFs(d) @ bptFs)), 1e-6, 1 - 1e-6), (d.y.values > 0).astype(float)), 4)
 res["base_push_fight_simple"] = {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b] + ["net_kills_last_minute"], np.round(bptFs, 4))),
                                  **{s_: {"n": int((BASE.split == s_).sum()), "logloss": _llbFs(BASE[BASE.split == s_]), "timing": push_ll(BASE[BASE.split == s_], bpt)} for s_ in ["train", "test", "worlds"]}}
+# endings after won fights (12 Nov; the spread of game length and kills). Real games end soon after a clearly won fight far more often
+# than the sim's (7g), so in the sim bloody games don't end early and long games keep fighting. Two fitted pieces, training games only:
+#   start  the base-push chance with the kills edge of this and last minute counting more as the game goes on (death timers grow with
+#          game time, so the same fight win leaves the base open for longer): two "x time" terms, time = (minute - 25) / 10
+#   size   real pushes come in two kinds: small (1-2 structures) or the push that ends the game (the nexus falls in it; 45% of pushes
+#          that start with no inhibitor down take 4). So: the chance a push ends the game, on the two minutes' kills edge, an enemy
+#          inhibitor already down, game time and kills edge x time; then the size from real pushes of that kind (by inhibitor state).
+#          The sim drew the size from one table per inhibitor state, whatever the fight.
+_tm = lambda d: (d.m.values - 25) / 10
+XbE = lambda d: np.c_[XbFs(d), d.net_k.clip(-5, 5).values * _tm(d), fight_terms(d, None)[:, 0] * _tm(d)]
+bptE = logit_fit(XbE(trb), (trb.y.values > 0).astype(float))
+_llbE = lambda d: round(lg(np.clip(1 / (1 + np.exp(-XbE(d) @ bptE)), 1e-6, 1 - 1e-6), (d.y.values > 0).astype(float)), 4)
+PUSHD["nk2"] = np.clip([(NKB.get((g_, m_), 0.0) + NKB.get((g_, m_ - 1), 0.0)) * (1 if s_ == "blue" else -1) for g_, m_, s_ in zip(PUSHD.gid, PUSHD.m, PUSHD.side)], -5, 8)
+XsE = lambda d, full=True: np.c_[np.ones(len(d)), d.down, d.nk2, (d.m - 25) / 10, d.nk2 * (d.m - 25) / 10] if full else np.c_[np.ones(len(d)), d.down]
+_ptr = PUSHD[PUSHD.split == "train"]; bsE = logit_fit(XsE(_ptr), _ptr.ends.values.astype(float)); bsE0 = logit_fit(XsE(_ptr, False), _ptr.ends.values.astype(float))
+_ell = lambda d, b_, full=True: round(lg(np.clip(1 / (1 + np.exp(-XsE(d, full) @ b_)), 1e-6, 1 - 1e-6), d.ends.values.astype(float)), 4)
+_tab = lambda q: {str(k): round(float(v), 4) for k, v in q["size"].clip(upper=6).value_counts(normalize=True).sort_index().items()}
+res["endings"] = {"start": {"coef": dict(zip([n if n != "siege_style" else "siege_style_sum" for n in names_b] + ["net_kills_last_minute", "net_kills_this_minute_x_time", "net_kills_last_minute_x_time"], np.round(bptE, 4))),
+                            **{s_: {"n": int((BASE.split == s_).sum()), "logloss": _llbE(BASE[BASE.split == s_]), "no_time_terms": _llbFs(BASE[BASE.split == s_])} for s_ in ["train", "test", "worlds"]}},
+                  "ends_game": {"coef": dict(zip(["intercept", "enemy_inhib_down", "kills_edge_2min", "time", "kills_edge_2min_x_time"], np.round(bsE, 4))),
+                                "note": "chance that a base push ends the game; time = (minute - 25) / 10; kills edge of this and last minute, clipped to -5..8",
+                                "train_share": round(float(_ptr.ends.mean()), 4),
+                                **{s_: {"n": int((PUSHD.split == s_).sum()), "logloss": _ell(PUSHD[PUSHD.split == s_], bsE), "inhib_state_only": _ell(PUSHD[PUSHD.split == s_], bsE0, False)}
+                                   for s_ in ["train", "test", "worlds"] if (PUSHD.split == s_).any()}},
+                  "size_by_kind": {f"{st}|{kd}": _tab(_ptr[(_ptr.down == dn) & (_ptr.ends == en)]) for st, dn in [("no_inhib_down", 0), ("inhib_down", 1)] for kd, en in [("ends", 1), ("other", 0)]}}
 # comps option A: own draft's siege style x own lead (a siege comp that is ahead takes towers faster)
 XgA = lambda d, full=True: np.c_[Xg(d, full), d.siege_own * d.lead.clip(-15, 15)] if full else Xg(d, False)
 bgA = pois_fit(XgA(trs), trs.y.values)
@@ -308,9 +354,10 @@ res["first_tower_time_s"] = {"median": int(T1.groupby("gid").t.min().median()), 
 # fights
 def Xf(d, full=True):
     base = np.c_[np.ones(len(d)), dummies(d.m.values)]
+    if TIER_PHASE: base = np.c_[base, np.minimum(d.m.values, 14) - 14]  # in the phase-only comparison too
     return base if not full else np.c_[base, (d.gd.abs() / 1000).clip(0, 15), d.mon_up, d.buff, d.pace_s]
 tr = Fp[Fp.split == "train"]; bf = pois_fit(Xf(tr), tr.y.values); b0 = pois_fit(Xf(tr, False), tr.y.values)
-res["fights"] = {"coef": dict(zip(["intercept", *[f"phase {p}" for p in PHN[1:]], "per_1k_abs_lead", "monster_up", "buff_up", "pace_style"], np.round(bf, 4))),
+res["fights"] = {"coef": dict(zip(["intercept", *[f"phase {p}" for p in PHN[1:]], *(["minutes_before_14"] if TIER_PHASE else []), "per_1k_abs_lead", "monster_up", "buff_up", "pace_style"], np.round(bf, 4))),
                  **{s: {"n": int((Fp.split == s).sum()), "loss": round(pdev(np.exp(Xf(Fp[Fp.split == s]) @ bf), Fp[Fp.split == s].y.values), 4),
                         "phase_only": round(pdev(np.exp(Xf(Fp[Fp.split == s], False) @ b0), Fp[Fp.split == s].y.values), 4)} for s in ["train", "test", "worlds"]}}
 res["fights"]["dispersion_by_phase"] = dispersion(Xf, tr, bf)

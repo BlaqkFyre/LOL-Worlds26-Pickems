@@ -64,6 +64,17 @@ class Sim:
         self.push = {}
         for st, ps_ in P["base_push"].get("size_dist_by_state", {"no_inhib_down": P["base_push"]["size_dist"], "inhib_down": P["base_push"]["size_dist"]}).items():
             self.push[st] = (np.array([int(k) for k in ps_]), np.array(list(ps_.values())) / sum(ps_.values()))
+        # lane-level play (opt-in, 12 Nov; fits from s3_lanelevel.py): each role's lead at 15 is the fitted lane model at full
+        # strength with the real leftover spread, and early kills lean toward the roles winning their lane
+        self.LL = None
+        if P.get("lane_level"):
+            ll = P["lane_level"]; kr = ll["kill_role"]; lk = "lean_per_1k_expected_lead" if "event_gold" in ll else "lean_per_1k_own_lead"
+            self.LL = {"chol": np.linalg.cholesky(np.array(ll["cov15"]) + np.eye(5)), "z": np.array([ll["coef"][r]["z"] for r in ROLES]),
+                       "ak": np.array(kr["killer"]["role_intercepts"]), "bk": kr["killer"][lk],
+                       "av": np.array(kr["victim"]["role_intercepts"]), "bv": kr["victim"][lk], "ev": None}
+            if "event_gold" in ll:  # second version: early kills, deaths, assists and plates move the role's gold by their fitted worth
+                eg = ll["event_gold"]; self.LL["ev"] = {k: np.array([eg[r][k] for r in ROLES]) for k in ("own_kill", "own_death", "own_assist", "team_plate")}
+                self.LL["z_pre"] = np.array([ll["coef_pregame"][r]["z"] for r in ROLES])
         dt = P["dragon_types"]["first_two_share"]; self.dtypes = list(dt.keys()); self.dprob = np.array(list(dt.values())); self.dprob /= self.dprob.sum()
 
     def count(self, rng, mu, kind, m):
@@ -99,6 +110,8 @@ class Sim:
             cutS = P["segment_push_fight"].get("clear_fight_cutoff") or 99; cutB = P["base_push_fight"].get("clear_fight_cutoff") or 99  # fitted cutoffs (training games)
         if cal.get("push_fight", "off") == "simple" and P.get("segment_push_fight_simple"):  # opt-in (11 Nov): last minute's kills edge only, no flag
             SPC = dict(P["segment_push_fight_simple"]["coef"]); SEGC = SPC; PUSHC = P["base_push_fight_simple"]["coef"]
+        ENDS = P["endings"] if (cal.get("endings", "off") == "on" and P.get("endings")) else None  # opt-in (12 Nov): endings follow won fights
+        if ENDS is not None: PUSHC = ENDS["start"]["coef"]
         if cal.get("within", "off") == "on" and P.get("segment_push_within"):  # opt-in (6 Nov test): lead effects fitted within games
             SPC = P["segment_push_within"]["coef"]; SEGC = SPC; PUSHC = P["base_push_within"]["coef"]; TAKC = P["taker_within"]; FB = P["gold_feedback_within"]
         # game form: the pooled gold-lead effect on who wins fights partly reflects "this team is stronger in this game";
@@ -106,7 +119,13 @@ class Sim:
         form = 0.0
         if P.get("kill_side_within") and cal.get("form", "off") == "within":  # opt-in; tested 5 Nov and not kept (report 7d)
             KSC = dict(P["kill_side_within"]["coef"], per_v1_logit=KSC["per_v1_logit"]); form = rng.normal(0, P["kill_side_within"]["game_form_sd"])
-        lane_end = cal["lane_mu"] * self.lane_mean(x, z, 15) + math.sqrt(cal["lane_k"]) * (self.L15 @ rng.standard_normal(5))
+        LL = self.LL if (cal.get("lane_level", "off") == "on" and self.LL is not None and "ll_m0" in x) else None
+        if LL is not None:  # x["ll_m0"]: the fitted lead per role without the z term (v1's own log-odds, not scaled by gain)
+            lane_end = np.array(x["ll_m0"], float) + LL["z"] * x["z"] + LL["chol"] @ rng.standard_normal(5)
+            # what the kill lean reads: first version the lane's drawn result; second version the lead expected before the game
+            lean = lane_end if LL["ev"] is None else np.array(x["ll_e0"], float) + LL["z_pre"] * x["z"]
+        else:
+            lane_end = cal["lane_mu"] * self.lane_mean(x, z, 15) + math.sqrt(cal["lane_k"]) * (self.L15 @ rng.standard_normal(5))
         farm = np.zeros(5); gold = np.zeros(5)                 # per role, blue minus red: farm part and everything else
         K = np.zeros((2, 5), int); D = np.zeros((2, 5), int); A = np.zeros((2, 5), int); SOLO = np.zeros((2, 5), int)
         seg = [[0, 0, 0], [0, 0, 0]]                           # segments side s has taken in each enemy lane (15 = lane open)
@@ -114,7 +133,7 @@ class Sim:
         inhib_back = [[-1, -1, -1], [-1, -1, -1]]             # when side s's enemy inhibitor in each lane comes back (-1 = up)
         open_t = [[None] * 3, [None] * 3]; last_base = [-1e9, -1e9]                      # minute each enemy lane opened (inhibitor turret down)
         nx_towers = [2, 2]; drag = [[], []]; soul = [None, None]; elder_n = [0, 0]; barons = [0, 0]; grubs = [0, 0]; heralds = [0, 0]
-        towers = [0, 0]; inhibs = [0, 0]; first = {}; ftime = {}
+        towers = [0, 0]; inhibs = [0, 0]; first = {}; ftime = {}; first_lane = {}
         baron_until = [-1, -1]; elder_until = [-1, -1]; herald_t = [-1e9, -1e9]
         nxt = {"dragon": SPAWN["dragon"], "grub": SPAWN["grub"], "herald": SPAWN["herald"], "baron": SPAWN["baron"]}
         taken_once = {"grub": False, "herald": False}
@@ -124,6 +143,7 @@ class Sim:
         def add_gold(side, amount, roles=None):
             # every event's gold lands on the roles the way real team gold swings do (fitted shares, laning v after 15:00);
             # `roles` is kept for the play-by-play only
+            if LL is not None and m < 15: return  # the lane leads to 15:00 already hold this gold (they were fitted to real leads)
             sgn = 1 if side == 0 else -1
             gold[:] += sgn * amount * (self.sw_lane if m < 15 else self.sw_late)
         def note(t, side, kind, text):
@@ -135,6 +155,7 @@ class Sim:
             lane_lead = lambda s, L: (1 if s == 0 else -1) * (farm[LANE_ROLES[L]].sum() + gold[LANE_ROLES[L]].sum())
             gd = farm.sum() + gold.sum(); gd_at[m] = gd
             if m in (5, 10, 15): gd_at[f"roles{m}"] = (farm + gold).copy()
+            if m == 15: gd_at["kd15"] = (K[0] - D[0]) - (K[1] - D[1])  # each role's kills minus deaths by 15:00, blue minus red (for the lane checks)
             role_lead = farm + gold
             # --- laning / gold drift ---
             if m < 15:
@@ -151,7 +172,8 @@ class Sim:
             # --- fights ---
             fc = P["fights"]
             lam = math.exp(fc["intercept"] + self.ph[PHN[sum(m >= p for p in PH) - 1]] + fc["per_1k_abs_lead"] * min(abs(gd) / 1000, 15)
-                           + fc["monster_up"] * mon_up + fc["buff_up"] * (bdir != 0 or edir != 0) + fc.get("pace_style", 0.0) * pace_s)
+                           + fc["monster_up"] * mon_up + fc["buff_up"] * (bdir != 0 or edir != 0) + fc.get("pace_style", 0.0) * pace_s
+                           + fc.get("minutes_before_14", 0.0) * (min(m, 14) - 14))
             TYPED = cal.get("fight_model") == "typed" and P.get("fight_typed")  # opt-in (10 Nov, report 7g): fight types, held in check
             if TYPED:
                 FTc = P["fight_typed"]; cc = FTc["count"]["coef"]; ph_i = PHN[sum(m >= p for p in PH) - 1]
@@ -179,14 +201,25 @@ class Sim:
                     s = 0 if rng.random() < p else 1; o = 1 - s
                     alive_v = [i for i in range(5) if i not in dead[o]]
                     if not alive_v: continue
-                    wv = self.dw[alive_v] / self.dw[alive_v].sum(); v = int(rng.choice(alive_v, p=wv)); dead[o].add(v)
+                    early_ll = LL is not None and m < 15
+                    if early_ll:  # victim: roles behind in their own lane die more (fitted lean)
+                        wv = np.exp(LL["av"][alive_v] + LL["bv"] * (1 if o == 0 else -1) * lean[alive_v] / 1000); wv /= wv.sum()
+                    else: wv = self.dw[alive_v] / self.dw[alive_v].sum()
+                    v = int(rng.choice(alive_v, p=wv)); dead[o].add(v)
                     alive_k = [i for i in range(5) if i not in dead[s]] or list(range(5))
-                    wk = self.kw[alive_k] / self.kw[alive_k].sum(); k = int(rng.choice(alive_k, p=wk))
+                    if early_ll:  # killer: roles ahead in their own lane get more of the kills (fitted lean)
+                        wk = np.exp(LL["ak"][alive_k] + LL["bk"] * (1 if s == 0 else -1) * lean[alive_k] / 1000); wk /= wk.sum()
+                    else: wk = self.kw[alive_k] / self.kw[alive_k].sum()
+                    k = int(rng.choice(alive_k, p=wk))
                     ast = [i for i in range(5) if i != k and i not in dead[s] and rng.random() < self.ap[i]]
                     K[s, k] += 1; D[o, v] += 1
                     for i in ast: A[s, i] += 1
                     if not ast: SOLO[s, k] += 1
                     add_gold(s, val["kill"], [k] * 2 + ast)
+                    if early_ll and LL["ev"] is not None:
+                        sg_ = 1 if s == 0 else -1; E_ = LL["ev"]
+                        gold[k] += sg_ * E_["own_kill"][k]; gold[v] -= sg_ * E_["own_death"][v]
+                        for i in ast: gold[i] += sg_ * E_["own_assist"][i]
                     net += 1 if s == 0 else -1
                     first.setdefault("blood", s)
                     tk = tf + 3 * j; kill_log.append((tk, s, k, v))
@@ -246,12 +279,15 @@ class Sim:
                     first.setdefault("baron", s); ftime.setdefault("baron", tt); note(tt, s, "baron", "Baron Nashor")
             # --- towers: segments lane by lane, then base ---
             sc = SEGC
+            # 12 Nov: the phase terms were always read from the segment-count fit (P["segments"]), not from the push fit in use, so pushes
+            # from 20:00 came too often (+0.07 to +0.22 on the log-odds). cal["seg_phase"] = "own" reads them from the push fit in use.
+            seg_ph = {p_: sc.get(f"phase {p_}", 0.0) for p_ in PHN} if cal.get("seg_phase", "segments") == "own" else self.seg_ph
             for s in (0, 1):
                 sg = 1 if s == 0 else -1; o = 1 - s
                 for li, L in enumerate(LANES):
                     if seg[s][li] >= 15: continue
                     tier = seg[s][li] // 5
-                    xb = (sc["intercept"] + self.seg_ph[PHN[sum(m >= p for p in PH) - 1]] + sc["tier T2"] * (tier == 1) + sc["tier T3"] * (tier == 2)
+                    xb = (sc["intercept"] + seg_ph[PHN[sum(m >= p for p in PH) - 1]] + sc["tier T2"] * (tier == 1) + sc["tier T3"] * (tier == 2)
                           + sc["mid"] * (L == "MID") + sc["bot"] * (L == "BOT") + sc["per_1k_lane_lead"] * max(-8, min(8, lane_lead(s, L) / 1000))
                           + sc["per_1k_team_lead"] * max(-15, min(15, sg * gd / 1000)) + sc["per_v1_logit"] * sg * z
                           + sc["baron"] * (baron_until[s] > t0) + sc["elder"] * (elder_until[s] > t0)
@@ -259,6 +295,8 @@ class Sim:
                           + sc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
                           + sc.get("T2 x mid", 0.0) * (tier == 1 and L == "MID") + sc.get("T2 x bot", 0.0) * (tier == 1 and L == "BOT")
                           + sc.get("T3 x mid", 0.0) * (tier == 2 and L == "MID") + sc.get("T3 x bot", 0.0) * (tier == 2 and L == "BOT")
+                          + sc.get("T1 early x mid", 0.0) * (tier == 0 and m < 14 and L == "MID") + sc.get("T1 early x bot", 0.0) * (tier == 0 and m < 14 and L == "BOT") + sc.get("tower_segments_down", 0.0) * (seg[s][li] % 5)
+                          + (sc.get(f"T{tier + 1} x phase {PHN[sum(m >= p for p in PH) - 1]}", 0.0) if tier else 0.0) + sc.get("minutes_before_14", 0.0) * (min(m, 14) - 14)
                           + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0)
                           + sc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + sc.get("clear_fight_win", 0.0) * (sg * net >= cutS or sg * prev_net >= cutS))
                     if SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
@@ -271,8 +309,9 @@ class Sim:
                     for _ in range(n):
                         seg[s][li] += 1
                         add_gold(s, val["plate_early"] if m < 14 else val["plate"], LANE_ROLES[L])
+                        if LL is not None and LL["ev"] is not None and m < 14: gold[:] += sg * LL["ev"]["team_plate"]
                         if seg[s][li] % 5 == 0:
-                            towers[s] += 1; add_gold(s, val["tower"], LANE_ROLES[L]); first.setdefault("tower", s); ftime.setdefault("tower", t0 + 30)
+                            towers[s] += 1; add_gold(s, val["tower"], LANE_ROLES[L]); first.setdefault("tower", s); ftime.setdefault("tower", t0 + 30); first_lane.setdefault("tower", L)
                             note(t0 + rng.uniform(0, 59), s, "tower", f"T{seg[s][li] // 5} {L}")
                 opn = [li for li in range(3) if seg[s][li] >= 15]
                 for li in opn:
@@ -286,9 +325,18 @@ class Sim:
                       + bc.get("lane_just_opened", 0.0) * any(open_t[s][li] >= t0 - 60 for li in opn)
                       + bc.get("base_take_last_minute", 0.0) * (last_base[s] >= t0 - 60)
                       + bc.get("net_kills_this_minute", 0.0) * max(-5, min(5, sg * net))
-                      + bc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + bc.get("clear_fight_win", 0.0) * (sg * net >= cutB or sg * prev_net >= cutB))
-                sz, pr_ = self.push["inhib_down" if down else "no_inhib_down"]
-                npush = int(rng.choice(sz, p=pr_)) if rng.random() < sig(xb) else 0
+                      + bc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + bc.get("clear_fight_win", 0.0) * (sg * net >= cutB or sg * prev_net >= cutB)
+                      + (bc.get("net_kills_this_minute_x_time", 0.0) * max(-5, min(5, sg * net)) + bc.get("net_kills_last_minute_x_time", 0.0) * max(-5, min(5, sg * prev_net))) * (m - 25) / 10)
+                if ENDS is not None:  # is this the push that ends the game (fitted chance)? then its size from real pushes of that kind
+                    npush = 0
+                    if rng.random() < sig(xb):
+                        ec = ENDS["ends_game"]["coef"]; nk2 = max(-5, min(8, sg * (net + prev_net))); tm_ = (m - 25) / 10
+                        kind = "ends" if rng.random() < sig(ec["intercept"] + ec["enemy_inhib_down"] * bool(down) + ec["kills_edge_2min"] * nk2 + ec["time"] * tm_ + ec["kills_edge_2min_x_time"] * nk2 * tm_) else "other"
+                        tb = ENDS["size_by_kind"][("inhib_down" if down else "no_inhib_down") + "|" + kind]
+                        npush = int(rng.choice([int(k_) for k_ in tb], p=np.array(list(tb.values())) / sum(tb.values())))
+                else:
+                    sz, pr_ = self.push["inhib_down" if down else "no_inhib_down"]
+                    npush = int(rng.choice(sz, p=pr_)) if rng.random() < sig(xb) else 0
                 if npush: last_base[s] = t0
                 for _ in range(npush):
                     down = [li for li in range(3) if inhib_back[s][li] > t0]
@@ -328,6 +376,7 @@ class Sim:
                 "roles5": [float(v) for v in gd_at.get("roles5", np.full(5, np.nan))],
                 "g15": float(gd_at.get(15, np.nan)), "gd": {k: float(v) for k, v in gd_at.items() if isinstance(k, int)},
                 "roles15": [float(v) for v in gd_at.get("roles15", np.full(5, np.nan))], "roles10": [float(v) for v in gd_at.get("roles10", np.full(5, np.nan))],
+                "kd15": [int(v) for v in gd_at.get("kd15", (K[0] - D[0]) - (K[1] - D[1]))], "first_tower_lane": first_lane.get("tower", ""),
                 "capped": capped, "steps": sorted(steps, key=lambda e: e["t"]) if log else []}
 
 

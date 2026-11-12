@@ -1,0 +1,276 @@
+{
+ "from 1 Sep": {
+  "real": {
+   "games_or_sims": 321,
+   "lead_sd": {
+    "top": 911,
+    "jng": 896,
+    "mid": 775,
+    "bot": 1084,
+    "sup": 451
+   },
+   "team_lead_sd": 2596,
+   "lead_corr": {
+    "top-bot": 0.018,
+    "jng-mid": 0.234,
+    "bot-sup": 0.627,
+    "top-mid": 0.207
+   },
+   "r2_on_lane_model": {
+    "top": 0.176,
+    "jng": 0.211,
+    "mid": 0.129,
+    "bot": 0.049,
+    "sup": 0.129
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.71,
+    "jng": 0.819,
+    "mid": 0.785,
+    "bot": 0.751,
+    "sup": 0.672
+   },
+   "kd15_sd": {
+    "top": 2.14,
+    "jng": 2.36,
+    "mid": 2.19,
+    "bot": 2.46,
+    "sup": 1.51
+   },
+   "first_tower_lane": {
+    "TOP": 0.424,
+    "MID": 0.118,
+    "BOT": 0.457
+   },
+   "first_tower_lane_n": 245,
+   "first_dragon_to_bot_leader_at_15": 0.611
+  },
+  "ll2": {
+   "games_or_sims": 321000,
+   "lead_sd": {
+    "top": 944,
+    "jng": 842,
+    "mid": 843,
+    "bot": 1019,
+    "sup": 453
+   },
+   "team_lead_sd": 2848,
+   "lead_corr": {
+    "top-bot": 0.259,
+    "jng-mid": 0.356,
+    "bot-sup": 0.467,
+    "top-mid": 0.303
+   },
+   "r2_on_lane_model": {
+    "top": 0.212,
+    "jng": 0.173,
+    "mid": 0.094,
+    "bot": 0.07,
+    "sup": 0.053
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.736,
+    "jng": 0.814,
+    "mid": 0.825,
+    "bot": 0.765,
+    "sup": 0.68
+   },
+   "kd15_sd": {
+    "top": 2.06,
+    "jng": 2.43,
+    "mid": 2.34,
+    "bot": 2.17,
+    "sup": 1.67
+   },
+   "first_tower_lane": {
+    "TOP": 0.399,
+    "MID": 0.251,
+    "BOT": 0.35
+   },
+   "first_tower_lane_n": 321000,
+   "first_dragon_to_bot_leader_at_15": 0.566
+  },
+  "typed_pf_ll2": {
+   "games_or_sims": 321000,
+   "lead_sd": {
+    "top": 947,
+    "jng": 847,
+    "mid": 849,
+    "bot": 1025,
+    "sup": 457
+   },
+   "team_lead_sd": 2873,
+   "lead_corr": {
+    "top-bot": 0.26,
+    "jng-mid": 0.361,
+    "bot-sup": 0.47,
+    "top-mid": 0.309
+   },
+   "r2_on_lane_model": {
+    "top": 0.213,
+    "jng": 0.171,
+    "mid": 0.094,
+    "bot": 0.072,
+    "sup": 0.056
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.738,
+    "jng": 0.816,
+    "mid": 0.828,
+    "bot": 0.768,
+    "sup": 0.685
+   },
+   "kd15_sd": {
+    "top": 2.08,
+    "jng": 2.44,
+    "mid": 2.36,
+    "bot": 2.17,
+    "sup": 1.68
+   },
+   "first_tower_lane": {
+    "TOP": 0.401,
+    "MID": 0.249,
+    "BOT": 0.35
+   },
+   "first_tower_lane_n": 321000,
+   "first_dragon_to_bot_leader_at_15": 0.565
+  }
+ },
+ "Worlds": {
+  "real": {
+   "games_or_sims": 94,
+   "lead_sd": {
+    "top": 1000,
+    "jng": 790,
+    "mid": 682,
+    "bot": 1049,
+    "sup": 385
+   },
+   "team_lead_sd": 2243,
+   "lead_corr": {
+    "top-bot": -0.117,
+    "jng-mid": 0.183,
+    "bot-sup": 0.543,
+    "top-mid": 0.219
+   },
+   "r2_on_lane_model": {
+    "top": 0.229,
+    "jng": 0.247,
+    "mid": 0.163,
+    "bot": -0.051,
+    "sup": 0.078
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.751,
+    "jng": 0.76,
+    "mid": 0.683,
+    "bot": 0.691,
+    "sup": 0.683
+   },
+   "kd15_sd": {
+    "top": 2.14,
+    "jng": 1.96,
+    "mid": 1.76,
+    "bot": 2.11,
+    "sup": 1.51
+   },
+   "first_tower_lane": {
+    "TOP": 0.436,
+    "MID": 0.106,
+    "BOT": 0.457
+   },
+   "first_tower_lane_n": 94,
+   "first_dragon_to_bot_leader_at_15": 0.553
+  },
+  "ll2": {
+   "games_or_sims": 94000,
+   "lead_sd": {
+    "top": 936,
+    "jng": 871,
+    "mid": 844,
+    "bot": 1013,
+    "sup": 460
+   },
+   "team_lead_sd": 2876,
+   "lead_corr": {
+    "top-bot": 0.257,
+    "jng-mid": 0.368,
+    "bot-sup": 0.474,
+    "top-mid": 0.319
+   },
+   "r2_on_lane_model": {
+    "top": 0.199,
+    "jng": 0.218,
+    "mid": 0.09,
+    "bot": 0.05,
+    "sup": 0.069
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.737,
+    "jng": 0.811,
+    "mid": 0.831,
+    "bot": 0.773,
+    "sup": 0.686
+   },
+   "kd15_sd": {
+    "top": 2.07,
+    "jng": 2.46,
+    "mid": 2.36,
+    "bot": 2.19,
+    "sup": 1.7
+   },
+   "first_tower_lane": {
+    "TOP": 0.399,
+    "MID": 0.252,
+    "BOT": 0.349
+   },
+   "first_tower_lane_n": 94000,
+   "first_dragon_to_bot_leader_at_15": 0.568
+  },
+  "typed_pf_ll2": {
+   "games_or_sims": 94000,
+   "lead_sd": {
+    "top": 945,
+    "jng": 875,
+    "mid": 857,
+    "bot": 1022,
+    "sup": 465
+   },
+   "team_lead_sd": 2920,
+   "lead_corr": {
+    "top-bot": 0.26,
+    "jng-mid": 0.377,
+    "bot-sup": 0.482,
+    "top-mid": 0.329
+   },
+   "r2_on_lane_model": {
+    "top": 0.198,
+    "jng": 0.215,
+    "mid": 0.093,
+    "bot": 0.055,
+    "sup": 0.075
+   },
+   "kd15_corr_with_gold": {
+    "top": 0.743,
+    "jng": 0.812,
+    "mid": 0.837,
+    "bot": 0.776,
+    "sup": 0.689
+   },
+   "kd15_sd": {
+    "top": 2.1,
+    "jng": 2.48,
+    "mid": 2.4,
+    "bot": 2.2,
+    "sup": 1.7
+   },
+   "first_tower_lane": {
+    "TOP": 0.399,
+    "MID": 0.249,
+    "BOT": 0.352
+   },
+   "first_tower_lane_n": 94000,
+   "first_dragon_to_bot_leader_at_15": 0.568
+  }
+ }
+}

@@ -1,0 +1,463 @@
+{
+ "cutoff": "2026-09-01",
+ "events": {
+  "top gd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 898.716,
+   "models": {
+    "A": {
+     "train": 0.0241,
+     "from 1 Sep": 0.0216,
+     "Worlds": 0.0403,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 71.049,
+      "z": 201.063
+     }
+    },
+    "B": {
+     "train": 0.1945,
+     "from 1 Sep": 0.1812,
+     "Worlds": 0.2103,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 95.757,
+      "z": 98.665,
+      "skill_top": 178.148,
+      "cgold_top": 318.364
+     }
+    },
+    "C": {
+     "train": 0.2059,
+     "from 1 Sep": 0.1786,
+     "Worlds": 0.2312,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 92.463,
+      "z": 98.674,
+      "skill_top": 172.215,
+      "cgold_top": 369.725,
+      "ckd_top": 92.223,
+      "strength_top": -41.232,
+      "comfort_top": -10.905
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.704
+  },
+  "top kd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 2.079,
+   "models": {
+    "A": {
+     "train": 0.0058,
+     "from 1 Sep": 0.0162,
+     "Worlds": 0.0413,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.18,
+      "z": 0.228
+     }
+    },
+    "B": {
+     "train": 0.0135,
+     "from 1 Sep": 0.0135,
+     "Worlds": 0.0201,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.181,
+      "z": 0.141,
+      "skill_top": 0.18,
+      "cgold_top": -0.085
+     }
+    },
+    "C": {
+     "train": 0.0376,
+     "from 1 Sep": 0.0255,
+     "Worlds": 0.0147,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.167,
+      "z": 0.132,
+      "skill_top": 0.163,
+      "cgold_top": 0.124,
+      "ckd_top": 0.39,
+      "strength_top": 0.023,
+      "comfort_top": 0.023
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.704
+  },
+  "jng gd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 774.418,
+   "models": {
+    "A": {
+     "train": 0.0244,
+     "from 1 Sep": 0.0193,
+     "Worlds": 0.0264,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 60.335,
+      "z": 174.628
+     }
+    },
+    "B": {
+     "train": 0.1053,
+     "from 1 Sep": 0.2034,
+     "Worlds": 0.2375,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 56.286,
+      "z": 128.438,
+      "skill_jng": 72.025,
+      "cgold_jng": 213.317
+     }
+    },
+    "C": {
+     "train": 0.1058,
+     "from 1 Sep": 0.2109,
+     "Worlds": 0.2471,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 56.42,
+      "z": 126.937,
+      "skill_jng": 72.011,
+      "cgold_jng": 225.103,
+      "ckd_jng": -17.152,
+      "strength_jng": -2.419,
+      "comfort_jng": 7.921
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.829
+  },
+  "jng kd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 2.403,
+   "models": {
+    "A": {
+     "train": 0.0124,
+     "from 1 Sep": 0.0035,
+     "Worlds": 0.011,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.126,
+      "z": 0.386
+     }
+    },
+    "B": {
+     "train": 0.0245,
+     "from 1 Sep": 0.0249,
+     "Worlds": -0.0263,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.124,
+      "z": 0.292,
+      "skill_jng": 0.155,
+      "cgold_jng": 0.23
+     }
+    },
+    "C": {
+     "train": 0.0402,
+     "from 1 Sep": -0.0096,
+     "Worlds": -0.0541,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.121,
+      "z": 0.286,
+      "skill_jng": 0.154,
+      "cgold_jng": 0.013,
+      "ckd_jng": 0.376,
+      "strength_jng": 0.014,
+      "comfort_jng": 0.067
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.829
+  },
+  "mid gd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 819.436,
+   "models": {
+    "A": {
+     "train": 0.0473,
+     "from 1 Sep": 0.0676,
+     "Worlds": 0.0842,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 61.776,
+      "z": 257.109
+     }
+    },
+    "B": {
+     "train": 0.1358,
+     "from 1 Sep": 0.1311,
+     "Worlds": 0.1557,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 66.815,
+      "z": 164.608,
+      "skill_mid": 126.067,
+      "cgold_mid": 216.189
+     }
+    },
+    "C": {
+     "train": 0.1393,
+     "from 1 Sep": 0.1297,
+     "Worlds": 0.1636,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 67.758,
+      "z": 158.118,
+      "skill_mid": 123.71,
+      "cgold_mid": 224.68,
+      "ckd_mid": 17.686,
+      "strength_mid": -25.931,
+      "comfort_mid": 42.379
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.807
+  },
+  "mid kd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 2.316,
+   "models": {
+    "A": {
+     "train": 0.015,
+     "from 1 Sep": 0.028,
+     "Worlds": 0.027,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.18,
+      "z": 0.41
+     }
+    },
+    "B": {
+     "train": 0.0253,
+     "from 1 Sep": 0.0294,
+     "Worlds": 0.0339,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.185,
+      "z": 0.324,
+      "skill_mid": 0.115,
+      "cgold_mid": 0.211
+     }
+    },
+    "C": {
+     "train": 0.0734,
+     "from 1 Sep": 0.032,
+     "Worlds": 0.0651,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.175,
+      "z": 0.326,
+      "skill_mid": 0.124,
+      "cgold_mid": 0.047,
+      "ckd_mid": 0.54,
+      "strength_mid": -0.052,
+      "comfort_mid": 0.073
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.807
+  },
+  "duo gd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 1355.763,
+   "models": {
+    "A": {
+     "train": 0.0486,
+     "from 1 Sep": 0.0201,
+     "Worlds": -0.078,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 46.79,
+      "z": 430.937
+     }
+    },
+    "B": {
+     "train": 0.1081,
+     "from 1 Sep": 0.1003,
+     "Worlds": 0.0685,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 49.771,
+      "z": 272.884,
+      "skill_bot": 182.487,
+      "skill_sup": -10.966,
+      "cgold_bot": 169.01,
+      "cgold_sup": 215.205
+     }
+    },
+    "C": {
+     "train": 0.1165,
+     "from 1 Sep": 0.0735,
+     "Worlds": 0.0235,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 48.67,
+      "z": 284.12,
+      "skill_bot": 172.404,
+      "skill_sup": -4.999,
+      "cgold_bot": 161.83,
+      "cgold_sup": 215.179,
+      "ckd_bot": 11.178,
+      "ckd_sup": 25.053,
+      "strength_bot": -30.991,
+      "strength_sup": -121.937,
+      "comfort_bot": -24.369,
+      "comfort_sup": -34.744,
+      "synergy": 38.604,
+      "together": 32.85
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.816
+  },
+  "duo kd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 3.431,
+   "models": {
+    "A": {
+     "train": 0.0186,
+     "from 1 Sep": 0.0079,
+     "Worlds": -0.0321,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.075,
+      "z": 0.674
+     }
+    },
+    "B": {
+     "train": 0.0286,
+     "from 1 Sep": 0.0271,
+     "Worlds": -0.0172,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.08,
+      "z": 0.447,
+      "skill_bot": 0.282,
+      "skill_sup": 0.038,
+      "cgold_bot": 0.192,
+      "cgold_sup": 0.088
+     }
+    },
+    "C": {
+     "train": 0.0458,
+     "from 1 Sep": 0.0164,
+     "Worlds": -0.0442,
+     "measure": "R2 (share of spread explained; higher is better)",
+     "weights_per_sd": {
+      "const": 0.095,
+      "z": 0.445,
+      "skill_bot": 0.252,
+      "skill_sup": 0.05,
+      "cgold_bot": 0.011,
+      "cgold_sup": -0.043,
+      "ckd_bot": 0.34,
+      "ckd_sup": 0.305,
+      "strength_bot": -0.032,
+      "strength_sup": -0.146,
+      "comfort_bot": -0.105,
+      "comfort_sup": -0.084,
+      "synergy": 0.056,
+      "together": 0.123
+     }
+    }
+   },
+   "corr_gold_with_kd": 0.816
+  },
+  "duo fd": {
+   "n": {
+    "train": 2267,
+    "from 1 Sep": 321,
+    "Worlds": 94
+   },
+   "sd_train": 0.484,
+   "models": {
+    "A": {
+     "train": 0.6567,
+     "from 1 Sep": 0.6644,
+     "Worlds": 0.7161,
+     "measure": "log loss (lower is better)",
+     "weights_per_sd": {
+      "const": -0.552,
+      "z": 0.288
+     }
+    },
+    "B": {
+     "train": 0.6488,
+     "from 1 Sep": 0.6701,
+     "Worlds": 0.714,
+     "measure": "log loss (lower is better)",
+     "weights_per_sd": {
+      "const": -0.562,
+      "z": 0.27,
+      "skill_bot": 0.025,
+      "skill_sup": -0.086,
+      "cgold_bot": 0.158,
+      "cgold_sup": 0.187
+     }
+    },
+    "C": {
+     "train": 0.6455,
+     "from 1 Sep": 0.6663,
+     "Worlds": 0.7228,
+     "measure": "log loss (lower is better)",
+     "weights_per_sd": {
+      "const": -0.569,
+      "z": 0.239,
+      "skill_bot": 0.015,
+      "skill_sup": -0.084,
+      "cgold_bot": 0.136,
+      "cgold_sup": 0.244,
+      "ckd_bot": 0.03,
+      "ckd_sup": -0.061,
+      "strength_bot": 0.009,
+      "strength_sup": -0.148,
+      "comfort_bot": 0.029,
+      "comfort_sup": 0.064,
+      "synergy": 0.13,
+      "together": 0.045
+     }
+    }
+   }
+  }
+ }
+}

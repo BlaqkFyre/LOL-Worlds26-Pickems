@@ -7,7 +7,8 @@ Walk-forward: for each week from <start> that has major-league games, every fit 
   half-life  lanes and draft styles (fitted from the file alone, history back to January) can weight recent games more
              (S3_HALFLIFE, days); the timeline-fitted parts use no fade (timelines only start in late July). Luke, 11 Nov.
   versions   base (the default sim: lane x tier pushes), nolt (the earlier sim), pfs (+ last minute's kills edge), pf (+ the
-             clear-fight flag, cutoff chosen on that week's training games), typed (fight types), typed_pf (both)
+             clear-fight flag, cutoff chosen on that week's training games), typed (fight types), typed_pf (both),
+             ll and typed_pf_ll (12 Nov: lane-level play on the baseline and on typed_pf)
 Finished steps are skipped, so a stopped run can be started again. Every step's printout goes to a log file beside its output.
 Scores: all weeks' per-game odds together, for games from 1 Sep, Worlds, and the Worlds knockouts (from 3 Nov), with v1 on the
 same games (v1's team ratings are already refitted every day).
@@ -23,7 +24,8 @@ opt = lambda i, d: sys.argv[i] if len(sys.argv) > i and sys.argv[i] not in ("", 
 VERSIONS = opt(9, "base,pfs").split(","); NS = int(opt(10, "200")); START, STOP = opt(11, "2026-09-01"), opt(12, "2026-12-31")
 HL_LANES, HL_COMP, ONLY = opt(13, "none"), opt(14, "none"), opt(15, None)
 TAG = opt(16, "")  # added to each version's folder and result file names, so a re-run (e.g. more sims) can reuse the saved weekly fits
-OPTS = {"base": "none", "nolt": "nolt", "pfs": "pfs", "pf": "pf", "typed": "typed", "typed_pf": "typed,pf"}
+OPTS = {"base": "none", "nolt": "nolt", "pfs": "pfs", "pf": "pf", "typed": "typed", "typed_pf": "typed,pf",
+        "ll": "ll", "typed_pf_ll": "typed,pf,ll"}  # 12 Nov: lane-level play (s3_lanelevel.py fits, redone each week) on the two sims
 for v in VERSIONS:
     if v not in OPTS: sys.exit(f"unknown version {v}; choose from {sorted(OPTS)}")
 MAJOR = {"LCK", "LPL", "LEC", "LCS", "LCP", "CBLOL", "FST", "MSI", "EWC", "WLDs"}
@@ -66,6 +68,9 @@ for a, b, n in weeks:
     t["rates"] = run("s3_rates", "s3_rates.py", [TM, TE, TGO, V1, fit, comp], os.path.join(fit, "rates3_results.json"), cut)
     if any("typed" in v for v in VERSIONS):
         t["fighttypes"] = run("s3_fighttypes", "s3_fighttypes.py", [TM, TE, TGO, V1, comp, os.path.join(fit, "fighttypes.json")], os.path.join(fit, "fighttypes.json"), cut)
+    if any(v.endswith("ll") for v in VERSIONS):  # lane-level fits on the games before this week (no fade of their own; the champion lane values in feats carry the laning half-life)
+        t["lanelevel"] = run("s3_lanelevel", "s3_lanelevel.py", [CSV, V1, feats, os.path.join(fit, "lanelevel.json"), TM, TE, os.path.join(fit, "lanelevel_fit.json"),
+                             os.path.join(fit, "lanelevel_features.csv")], os.path.join(fit, "lanelevel_fit.json"), cut)
     t["targets"] = run("s3_targets", "s3_targets.py", [CSV, fit], os.path.join(fit, "targets3.json"), cut)
     t["params"] = run("s3_params", "s3_params.py", [CSV, fit, os.path.join(fit, "params3.json")], os.path.join(fit, "params3.json"), cut)
     for v in VERSIONS:
