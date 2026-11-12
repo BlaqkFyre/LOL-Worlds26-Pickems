@@ -73,7 +73,10 @@ class Sim:
                        "ak": np.array(kr["killer"]["role_intercepts"]), "bk": kr["killer"][lk],
                        "av": np.array(kr["victim"]["role_intercepts"]), "bv": kr["victim"][lk], "ev": None}
             if "event_gold" in ll:  # second version: early kills, deaths, assists and plates move the role's gold by their fitted worth
-                eg = ll["event_gold"]; self.LL["ev"] = {k: np.array([eg[r][k] for r in ROLES]) for k in ("own_kill", "own_death", "own_assist", "team_plate")}
+                # plates: version 3 fits (12 Nov) carry a value for a plate in the role's own lane and one for another lane, paid before
+                # 15:00; version 2 fits carry one small "team_plate" value, paid before 14:00 (kept so its runs replay)
+                eg = ll["event_gold"]; pk = ("own_lane_plate", "other_lane_plate") if "own_lane_plate" in eg["top"] else ("team_plate",)
+                self.LL["ev"] = {k: np.array([eg[r][k] for r in ROLES]) for k in ("own_kill", "own_death", "own_assist") + pk}
                 self.LL["z_pre"] = np.array([ll["coef_pregame"][r]["z"] for r in ROLES])
         dt = P["dragon_types"]["first_two_share"]; self.dtypes = list(dt.keys()); self.dprob = np.array(list(dt.values())); self.dprob /= self.dprob.sum()
 
@@ -280,8 +283,9 @@ class Sim:
             # --- towers: segments lane by lane, then base ---
             sc = SEGC
             # 12 Nov: the phase terms were always read from the segment-count fit (P["segments"]), not from the push fit in use, so pushes
-            # from 20:00 came too often (+0.07 to +0.22 on the log-odds). cal["seg_phase"] = "own" reads them from the push fit in use.
-            seg_ph = {p_: sc.get(f"phase {p_}", 0.0) for p_ in PHN} if cal.get("seg_phase", "segments") == "own" else self.seg_ph
+            # from 20:00 came too often (+0.07 to +0.22 on the log-odds). cal["seg_phase"] = "own" reads them from the push fit in use:
+            # the default from 12 Nov (Luke: fix it). cal["seg_phase"] = "segments" is the sim as it was, so earlier runs replay.
+            seg_ph = {p_: sc.get(f"phase {p_}", 0.0) for p_ in PHN} if cal.get("seg_phase", "own") == "own" else self.seg_ph
             for s in (0, 1):
                 sg = 1 if s == 0 else -1; o = 1 - s
                 for li, L in enumerate(LANES):
@@ -309,7 +313,11 @@ class Sim:
                     for _ in range(n):
                         seg[s][li] += 1
                         add_gold(s, val["plate_early"] if m < 14 else val["plate"], LANE_ROLES[L])
-                        if LL is not None and LL["ev"] is not None and m < 14: gold[:] += sg * LL["ev"]["team_plate"]
+                        if LL is not None and LL["ev"] is not None:
+                            if "own_lane_plate" in LL["ev"]:
+                                if m < 15:
+                                    pv = LL["ev"]["other_lane_plate"].copy(); own_ = LANE_ROLES[L] + [1]; pv[own_] = LL["ev"]["own_lane_plate"][own_]; gold[:] += sg * pv
+                            elif m < 14: gold[:] += sg * LL["ev"]["team_plate"]
                         if seg[s][li] % 5 == 0:
                             towers[s] += 1; add_gold(s, val["tower"], LANE_ROLES[L]); first.setdefault("tower", s); ftime.setdefault("tower", t0 + 30); first_lane.setdefault("tower", L)
                             note(t0 + rng.uniform(0, 59), s, "tower", f"T{seg[s][li] // 5} {L}")

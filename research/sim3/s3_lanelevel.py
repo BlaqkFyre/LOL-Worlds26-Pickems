@@ -18,8 +18,11 @@ usage: python -I s3_lanelevel.py <OE csv> v1_games.csv lanes3_features.csv <out_
 
 With the four extra arguments it also writes the fits for the sim's lane-level option (cal["lane_level"] = "on"; s3_test.py ... ll):
   fit_json      per role: the gold lead at 15 from z, every lane input (bot and sup also get the duo's synergy and time
-                together) AND the early events that move gold: the role's own kills, deaths and assists by 15 and the team's
-                turret plates (all blue minus red), so in the sim a kill or plate moves the lane's gold by its fitted worth;
+                together) AND the early events that move gold: the role's own kills, deaths and assists by 15 (blue minus
+                red), so in the sim a kill moves the lane's gold by its fitted worth. Plates (version 3, 12 Nov): a second
+                stage on the timeline games only (the file has no plates by lane or time; its turretplates is the whole game's
+                count): what stage 1 leaves unexplained, on the plates taken before 15:00 in the role's own lane and in the
+                other lanes (jungle: any lane). The leftover spread is then measured on those timeline games;
                 how the five lanes' leftover leads move together (training games only); the same model without the events
                 (the lane's expected lead before the game); and the early-kill lean: for kills before 15:00 in the timelines,
                 which role on the killing side gets the kill and which role on the other side dies, against that role's
@@ -146,14 +149,21 @@ if len(sys.argv) > 8:
     piv = lambda col: (P2[P2.side == "Blue"].pivot_table(index="gameid", columns="position", values=col)
                        - P2[P2.side == "Red"].pivot_table(index="gameid", columns="position", values=col)).reindex(G.index)
     Kd, Dd, Ad = piv("killsat15"), piv("deathsat15"), piv("assistsat15")
-    tp = TM[TM.side == "Blue"].set_index("gameid").turretplates - TM[TM.side == "Red"].set_index("gameid").turretplates
-    G["ev_plates"] = tp.reindex(G.index)
+    # plates before 15:00 by lane, blue minus red (timeline games only)
+    tm_ = pd.read_csv(TMF, dtype={"gid": str}).dropna(subset=["gameid"]); tm_ = tm_[tm_.gameid.isin(G.index)]
+    pe = pd.read_csv(TEF, dtype={"gid": str}); pe = pe[(pe.type == "plate") & (pe.t < 900) & pe.gid.isin(tm_.gid)]
+    PLD = pe.assign(sg=np.where(pe.side == "blue", 1.0, -1.0)).pivot_table(index="gid", columns="detail", values="sg", aggfunc="sum").reindex(tm_.gid).fillna(0.0)
+    PLD.index = tm_.gameid.values; PLD = PLD.reindex(columns=["TOP", "MID", "BOT"]).fillna(0.0); PLD = PLD[~PLD.index.duplicated()]
+    OWN = {"top": "TOP", "jng": None, "mid": "MID", "bot": "BOT", "sup": "BOT"}
+    def plate_x(r, idx):  # own-lane and other-lane plate gaps for a role (jungle: one column, any lane)
+        q = PLD.reindex(idx); tot = q.sum(axis=1)
+        return np.c_[tot.values] if OWN[r] is None else np.c_[q[OWN[r]].values, (tot - q[OWN[r]]).values]
     for r in ROLES: G[f"ev_k_{r}"] = Kd[r]; G[f"ev_d_{r}"] = Dd[r]; G[f"ev_a_{r}"] = Ad[r]
-    fit = {"cutoff": CUT, "inputs": {}, "coef": {}, "coef_pregame": {}, "event_gold": {}, "r2": {}, "r2_pregame": {}}
+    fit = {"cutoff": CUT, "inputs": {}, "coef": {}, "coef_pregame": {}, "event_gold": {}, "r2": {}, "r2_pregame": {}, "plates": {}}
     resid = {}; M0 = pd.DataFrame(index=G.index)
     for r in ROLES:
         cols = [f"skill_{r}", f"cgold_{r}", f"ckd_{r}", f"strength_{r}", f"comfort_{r}"] + (["synergy", "together"] if r in ("bot", "sup") else [])
-        evc = [f"ev_k_{r}", f"ev_d_{r}", f"ev_a_{r}", "ev_plates"]
+        evc = [f"ev_k_{r}", f"ev_d_{r}", f"ev_a_{r}"]
         d = G.dropna(subset=[f"gd_{r}", "z"] + evc); tr = d[d.day < CUT]; base = tr[f"gd_{r}"].mean()
         sets = [("train", tr), ("from cutoff", d[d.day >= CUT]), ("Worlds", d[(d.day >= CUT) & (d.league == "WLDs")])]
         r2 = lambda X, b: {nm: round(float(1 - ((q[f"gd_{r}"] - X(q) @ b) ** 2).sum() / ((q[f"gd_{r}"] - base) ** 2).sum()), 4) for nm, q in sets if len(q)}
@@ -162,10 +172,26 @@ if len(sys.argv) > 8:
         b, *_ = np.linalg.lstsq(X(tr), tr[f"gd_{r}"], rcond=None); b0, *_ = np.linalg.lstsq(X0(tr), tr[f"gd_{r}"], rcond=None)
         nc = len(cols)
         fit["inputs"][r] = cols; fit["coef"][r] = {"const": float(b[0]), "z": float(b[1]), **{c_: float(v) for c_, v in zip(cols, b[2:2 + nc])}}
-        fit["event_gold"][r] = {"own_kill": float(b[2 + nc]), "own_death": float(b[3 + nc]), "own_assist": float(b[4 + nc]), "team_plate": float(b[5 + nc])}
+        # stage 2 (timeline games): the plates before 15:00. Plates go with the stage 1 inputs (stronger teams and lanes with kills take
+        # more of them), so stage 1's weights already hold part of what plates do. Paying plates on top of those weights counted that part
+        # twice (first run, 12 Nov: the sim's team lead at 15 followed team strength 1,441 gold per unit against 748 real). So: the plates'
+        # own worth is fitted on the part of the plate gap the stage 1 inputs don't predict, and the stage 1 weights give back the share
+        # that belongs to plates (the usual two-step form of fitting everything together).
+        dt = d[d.index.isin(PLD.index)]; r1 = dt[f"gd_{r}"].values - X(dt) @ b; Xp = plate_x(r, dt.index); ttr = (dt.day < CUT).values
+        Gm, *_ = np.linalg.lstsq(X(dt)[ttr], Xp[ttr], rcond=None)   # plate gap predicted from the stage 1 inputs
+        b2, *_ = np.linalg.lstsq((Xp - X(dt) @ Gm)[ttr], r1[ttr], rcond=None)
+        b_stage1 = b; b = b - Gm @ b2
+        fit["coef"][r] = {"const": float(b[0]), "z": float(b[1]), **{c_: float(v) for c_, v in zip(cols, b[2:2 + nc])}}
+        own_v, oth_v = float(b2[0]), float(b2[-1])
+        fit["event_gold"][r] = {"own_kill": float(b[2 + nc]), "own_death": float(b[3 + nc]), "own_assist": float(b[4 + nc]), "own_lane_plate": own_v, "other_lane_plate": oth_v}
+        sc_ = lambda msk, pred: round(float(1 - ((dt[f"gd_{r}"].values[msk] - pred[msk]) ** 2).sum() / ((dt[f"gd_{r}"].values[msk] - base) ** 2).sum()), 4) if msk.sum() else None
+        p1 = X(dt) @ b_stage1; p2 = X(dt) @ b + Xp @ b2; wl = (dt.league == "WLDs").values
+        fit["plates"][r] = {"n_train": int(ttr.sum()), "n_from_cutoff": int((~ttr).sum()),
+                            "r2_timeline_games": {"train": {"no plates": sc_(ttr, p1), "with plates": sc_(ttr, p2)}, "from cutoff": {"no plates": sc_(~ttr, p1), "with plates": sc_(~ttr, p2)},
+                                                  "Worlds": {"no plates": sc_(~ttr & wl, p1), "with plates": sc_(~ttr & wl, p2)}}}
         fit["coef_pregame"][r] = {"const": float(b0[0]), "z": float(b0[1]), **{c_: float(v) for c_, v in zip(cols, b0[2:])}}
         fit["r2"][r] = r2(X, b); fit["r2_pregame"][r] = r2(X0, b0)
-        resid[r] = pd.Series(tr[f"gd_{r}"].values - X(tr) @ b, index=tr.index)
+        resid[r] = pd.Series((dt[f"gd_{r}"].values - p2)[ttr], index=dt.index[ttr])  # leftover after the plates, timeline training games
         M0[f"m0_{r}"] = b[0] + G[cols].values @ b[2:2 + nc]; M0[f"e0_{r}"] = b0[0] + G[cols].values @ b0[2:]
         G[f"exp_{r}"] = M0[f"e0_{r}"] + b0[1] * G.z
     R15 = pd.DataFrame(resid).dropna()[ROLES]
@@ -211,6 +237,7 @@ if len(sys.argv) > 8:
         fit["kill_role"][who] = out
     json.dump(fit, open(FITJ, "w"), indent=1)
     M0.round(2).to_csv(FEATC, index_label="gameid")
+    for r in ROLES: print(r, "plates", fit["plates"][r])
     for r in ROLES: print(r, "with events", fit["r2"][r], "| before the game", fit["r2_pregame"][r], "| event gold", {k: round(v) for k, v in fit["event_gold"][r].items()}, "| z", round(fit["coef"][r]["z"]), "v", round(fit["coef_pregame"][r]["z"]))
     print("leftover sd", fit["resid_sd15"]); print("leftover corr", fit["resid_corr15"])
     for w in ("killer", "victim"): print(w, round(fit["kill_role"][w]["lean_per_1k_expected_lead"], 3), fit["kill_role"][w]["logloss"])

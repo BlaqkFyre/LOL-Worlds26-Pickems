@@ -152,16 +152,58 @@ The biggest risk is overfitting: about 2,800 major-league games is enough for a 
 
 Open decisions for Luke:
 
-- [ ] **Tower-push phase bug** (found 12 Nov, `research/sim3-report.md` 7k): make the corrected reading the sim's default and re-run the baseline on both tests, or leave it as an option?
+- [ ] **Session 4 plan, first build** (drafted 12 Nov, below): Luke to OK it, starting with steps 1 and 2 (research only).
+- [ ] **Which sim is the app's default** (the other sits behind the switch): waits for the corrected-sim re-runs (`research/sim3-report.md` 7l).
+- [ ] **Full tests for lane-level version 3 and the corrected sim:** only the short Worlds-only test has been run. Run the fixed test on all 321 games and the walk-forward before the app ships, or accept the short test?
+
+### Session 4 plan, first build: the new sim plus draft review (drafted 12 Nov 2026 AEST, not yet OK'd)
+
+**Worked example: Gen.G (blue) v Invictus Gaming, Worlds semi-final game 1, 7 Nov** (file game `LOLTMNT02_487213`; a played game, so the app's numbers can be checked against what the research scripts saved). Kiin Olaf, Canyon Qiyana, Chovy Cassiopeia, Ruler Jhin, Duro Leona v TheShy Kled, Wei Vi, Rookie Syndra, JiaQi Xayah, Meiko Rakan. Real: Gen.G won in 33:38, 29 kills to 9, +2,948 gold at 15. What the research sim was given (tables fitted before 1 Sep; the all-games refit will shift them a little):
+
+| Input | Value |
+|---|---|
+| Team strength (v1) | z 1.026, Gen.G 73.6% |
+| Lane skill gap (top, jng, mid, bot, sup) | +0.07, −0.10, +0.17, −0.40, −0.09 |
+| Champion lane value at 15 | −183, +495, +74, −121, −78 gold |
+| Draft styles, both teams together | pace +0.07, siege +0.11, objectives +0.13 |
+| Lane-level part from each lane's skill and champion inputs (`m0`, from the version 3 fit; version 2's values differ and are the ones in use; before team strength, kills and plates) | −144, +544, −12, −100, −42 gold |
+| Lane-level expected lead before the game (`e0` plus its team-strength term × z) | −64, +763, +355, −92, +4 gold |
+
+**The draft through each file**
+1. New `js/sim-tables.js`, built by a script from the fitted results (never hand-edited): event parameters (`params3.json`), fight types, the lane-level fit, team ratings, the 80 Worlds players' lane skills, champion lane values, champion styles. The fitted pieces are under about 100 KB by file size; the player-history tables (a player's earlier games on a champion, champion-role strength, bot-duo synergy and time together) are not sized yet.
+2. New `js/sim-engine.js`: (a) an input builder that turns the two teams and ten picks into the table above (check: it reproduces those numbers for the example); (b) the game sim, a port of `research/sim3/s3_sim.py` (397 lines), with its own seeded random generator (the app uses `Math.random()` today).
+3. `js/core.js`: `simGame()` (called from draft review at 600 runs, `runGame` at 1,500, and `js/tournament.js` at 300 plus AI games) calls the new sim and returns the same fields as now; the old sim stays behind a switch. `analysis()`: "before draft" from team strength, "after draft" from runs of the new sim.
+4. `js/tournament.js`: `pack()` unchanged. `gameStats()` gets Player of the Game version C and the percentile rating (Luke's final confirmation first).
+5. `index.html`: two new script tags, cache v45 → v46 on every tag (12 after the change; the header comment in `js/worlds-live.js` gets its fix in the same bump).
+
+**Order of work**
+1. Refit on all games, side by side with the pre-1 Sep tables (Luke: refit first). About 30–40 min: fit chain about 10 min (measured: 520 s a round, lane-level 52 s, fight types 25 s), Worlds runs about 10 min per sim. No held-out games remain after this refit, so the side-by-side shows how much tables and odds move, not whether they are better.
+2. Read what the plan still depends on, then fill the gaps with Luke: how v1 is built from team and player ratings (not read yet); every field `simView` and `gameStats` read from a game; the history inputs lane-level play needs and how to freeze them into small tables. About 15–20 min.
+3. Tables script and `js/sim-tables.js`.
+4. Port the sim.
+5. Wire `simGame()` and draft review, with the switch.
+6. Browser check in a new tab (desktop and 375 px, console clean), cache bump.
+
+**How the port is checked:** JS and Python random generators differ, so games cannot match one for one. For the example and a set of other games, 1,000 JS runs against 1,000 Python runs must agree on win rate, length, kills, towers and gold at 15 within sampling error; the same seed replays the same game in the app; every tournament run still starts 0–0 and the new sim ignores the app's "form" adjustments.
+
+**Not yet known:** the new sim's speed in the browser at 300–1,500 runs; the size of the player-history tables; which sim is the default.
 
 Decided:
+
+- [x] **12 Nov 2026 AEST, later in the session (Luke):**
+    - **Tower-push phase bug: fix it.** The corrected reading is the sim's default (`cal["seg_phase"]`, default `"own"`); `s3_test.py ... oldsp` replays earlier runs. Every earlier score is from the sim before the fix.
+    - **Lane-level version 3 (plates by lane) is used if reasonably level with version 2.** Its first fit was level on the short test, but on the corrected sim the corrected fit is worse than version 2 (0.6103 v 0.6068; 0.6109 v 0.6022; `research/sim3-report.md` 7l), so **version 2 stays in use** and version 3 is re-tested after the gold-lead work.
+    - **Shorter testing:** the 94 Worlds games at 1,000 sims (`S3_TEST_LEAGUE=WLDs`), about 10 min a version. A screen, not the two-test rule; see the open decision above.
+    - **App work starts alongside the research** (the plan above).
+    - **No patch data from after 16.20 for now** (the 3 LCP games on 16.22 stay out of `js/pro-matchups.js`).
+    - **Explore the gold lead at 15** (too wide and too tied to team strength in every sim; 7l).
 
 - [x] **How session 4 starts** (Luke, 12 Nov 2026 AEST, four answers):
     1. **First build: the sim plus the draft review.** Other screens follow.
     2. **Two sims: one default with a switch** to the other.
     3. **Tables: refit on all games first**, shown side by side with the tables fitted before 1 Sep, before the app build. Luke: learning from all the Worlds games is very valuable even with fewer matches.
     4. **Player of the Game: version C** (final confirmation still comes before session 4's final commit).
-    Before that, Luke wants the spread of game length and kills worked on further ("it seems that making the app will just show that is still an issue").
+    Before that, Luke wanted the spread of game length and kills worked on further ("it seems that making the app will just show that is still an issue"). Changed later the same day: app work starts alongside the research (entry above).
 - [x] **Lane-level play and the spread: keep every input** (Luke, 12 Nov 2026 AEST). Every lane and input stays in the model even when its effect is small ("do not throw out data"). A version that is marginally better or worse is acceptable if it adds depth to the sim's results. Values are formed from the data and checked against outside sites, never hand-picked. Result: lane-level play version 2 is in the sim as an option and improves who-wins on both sims in both tests (`research/sim3-report.md` 7k); the spread is still open.
 
 - [x] **Two sims go into session 4** (Luke, 12 Nov 2026 AEST). The baseline (the default game-state sim, lane × tier pushes on) and the baseline plus the extras (fight types and won-fight pushes with the fitted cutoff; `s3_test.py ... typed,pf`). The app's final sim is one of them, or both with an option to choose. Luke cares most about accuracy on Worlds games; the baseline is the simpler, better planned sim. Both are the same code with two settings, and the extras need their fitted tables shipped too. On both tests at 1,000 sims the two are level with each other and with v1 on Worlds, and both are ahead of v1 from 1 Sep (`research/sim3-report.md` 7j).

@@ -564,7 +564,7 @@ Open in the lanes: mid first towers (25% v 12%, same before this work), the top�
 
 Short sim games are quiet walkovers (structures fall too early) and long sim games are too bloody.
 
-**Bug found: tower-push game-phase terms.** The sim reads the phase terms for tower pushes from the older count fit (`P["segments"]`: +1.05 / +1.03 / +1.16 / +1.44 / +1.56), not from the push fit it uses (lane × tier: +1.03 / +0.96 / +0.96 / +1.23 / +1.38). So pushes from 20:00 come a little too often in every version, the baseline included. The corrected reading is an option (`cal["seg_phase"] = "own"`; `s3_test.py ... sp`), off by default so earlier runs replay. With it on alone the spread gets wider (length sd 7.84, kills sd 13.3), so the bug was partly hiding the long tail. **Luke to decide** whether it becomes the default (the baseline would be re-run on both tests).
+**Bug found: tower-push game-phase terms.** The sim reads the phase terms for tower pushes from the older count fit (`P["segments"]`: +1.05 / +1.03 / +1.16 / +1.44 / +1.56), not from the push fit it uses (lane × tier: +1.03 / +0.96 / +0.96 / +1.23 / +1.38). So pushes from 20:00 come a little too often in every version, the baseline included. The corrected reading is an option (`cal["seg_phase"] = "own"`; `s3_test.py ... sp`), off by default so earlier runs replay. With it on alone the spread gets wider (length sd 7.84, kills sd 13.3), so the bug was partly hiding the long tail. **Decided later on 12 Nov (Luke): it is the default** (section 7l).
 
 **Fitted attempts at the spread (all opt-in, off by default, none kept):**
 
@@ -582,13 +582,77 @@ Each minute's chances now fit real games better, yet whole games still come out 
 - **League wiki, gold rules** (https://wiki.leagueoflegends.com/en-us/Champion_gold_bounties, https://wiki.leagueoflegends.com/en-us/Turret): a kill's base bounty is 300 at levels 1–6, plus 100 for first blood; assists share half the kill bounty, reduced early in the game. The fit's 310–390 per kill and 50–90 per assist fit that. Every lane turret has five plates worth 120 local gold each, and plates are no longer removed at 14:00 (which patch: not read).
 - **No published figure found** for first tower by lane, first inner tower or inhibitor timing, the share of games under 24 minutes, or bot lead and first dragon. Riot's patch notes, Leaguepedia and the Oracle's Elixir site were not opened.
 
-**Found from that check: plate gold in version 2 is near zero.** The fit's plate input is the file's `turretplates`, a team's plates over the whole game (about 28 per team; 56 a game in the timelines, of which about 13 fall before 15:00 and 11 before 14:00). So it got almost no weight (1–7 gold), and with lane-level on the sim skips its older plate gold before 15:00. Quick measurement on the timeline games (395 before 1 Sep to fit, 245 from 1 Sep to check; no pre-game inputs; scratch script, not saved in the repo): a plate before 15:00 in the role's own lane is worth 160 gold to top, 113 to mid, 143 to bot, 31 to support, and 20 for any plate to the jungler; a plate in another lane 10–26. Held-out share of the lane lead explained, without plates → with plates before 15:00: top 0.53 → 0.67, mid 0.60 → 0.68, bot 0.54 → 0.65, support 0.63 → 0.68, jungle 0.69 → 0.70. **Planned fix (version 3):** stage 1 on all file games (pre-game inputs, own kills, deaths, assists), stage 2 on the timeline games (own-lane and other-lane plate values per role), plate gold paid by lane before 15:00 in the sim; then the replay check, both tests and the lane checks. Version 2's scores above stand as tested.
+**Found from that check: plate gold in version 2 is near zero.** The fit's plate input is the file's `turretplates`, a team's plates over the whole game (about 28 per team; 56 a game in the timelines, of which about 13 fall before 15:00 and 11 before 14:00). So it got almost no weight (1–7 gold), and with lane-level on the sim skips its older plate gold before 15:00. Quick measurement on the timeline games (395 before 1 Sep to fit, 245 from 1 Sep to check; no pre-game inputs; scratch script, not saved in the repo): a plate before 15:00 in the role's own lane is worth 160 gold to top, 113 to mid, 143 to bot, 31 to support, and 20 for any plate to the jungler; a plate in another lane 10–26. Held-out share of the lane lead explained, without plates → with plates before 15:00: top 0.53 → 0.67, mid 0.60 → 0.68, bot 0.54 → 0.65, support 0.63 → 0.68, jungle 0.69 → 0.70. **Fix (version 3): built the same day, section 7l.** Version 2's scores above stand as tested.
 
 **How checked:** with every option off, 648 of 648 seeded games are identical to the committed sim after every edit, on both sims; with options on, the same seed replays the same game (648 of 648). With no setting, `s3_rates.py` gives the committed coefficients (only held-out score fields changed, from the 14 new timeline games). Fixed tests and the walk-forward exited cleanly with 321 / 94 / 21 games scored. The spread and attempt figures are from 6 sims per game (or 200-sim runs), not full tests. Runs: `research/local/sim3/out_n1000_ll2`, `out_n1000_typed_pf_ll2`, `wf_hl/` (`wf_results_n1000c.json`), `lanelevel/`, `fit_ends/`, `fit_tp/`.
 
+## 7l. Plates by lane (lane-level version 3), the gold lead at 15, and the tower-push fix as default (12 Nov, evening)
+
+**In short:** plate gold is now fitted by lane and comes out at the game's own figure (about 120 gold a plate). On the short Worlds test version 3 is level with version 2. Every sim's gold lead at 15 is too wide and too tied to team strength; one cause (a double-count in the first plate fit) is fixed, the older gap is open. The tower-push phase fix is now the sim's default.
+
+**Luke's decisions (12 Nov):** fix the tower-push bug; use version 3 if reasonably level; shorter testing on the 94 Worlds games at 1,000 sims; explore the gold lead; begin the app work alongside (plan in `research/sim-plan.md`).
+
+**The short test.** `S3_TEST_LEAGUE=WLDs` makes `s3_test.py` play only the 94 Worlds games (about 10 minutes a version: 566 s and 658 s measured, against about 21 minutes). Calibration is unchanged and seeds are by game ID, so these games' odds are exactly what the full test would give them. It is a screen: the other 227 games from 1 Sep and the walk-forward have not been run for anything in this section.
+
+**Version 3 fit** (`s3_lanelevel.py`; local fits `research/local/sim3/ll_fit3b/`):
+1. Stage 1, all file games before the cutoff (2,267): the lane's lead at 15 on the pre-game inputs and the role's own kills, deaths and assists. The whole-game plate term is gone.
+2. Stage 2, timeline games before the cutoff (395): plates before 15:00 in the role's own lane and in the other lanes (jungle: any lane).
+3. Leftover noise from those timeline games after both stages.
+
+**First try and the double-count.** Stage 2 was first fitted on what stage 1 left over and paid on top of stage 1's weights. Strong teams and lanes with kills take more plates, so stage 1's weights already held part of the plates' effect and it was counted twice: on training games the sim's team lead at 15 moved 1,441 gold per unit of team strength (real 748; version 2 1,023; baseline 1,072), and the Worlds lead at 15 widened (median 2,142; version 2 1,789; real 1,399). **Corrected:** the plate values are fitted on the part of the plate gap that stage 1's inputs do not predict, and stage 1's weights give back the plates' share (the two-step form of fitting everything together). Values, first try → corrected:
+
+| Role | Own-lane plate | Other-lane plate | Lane lead explained, held-out timeline games (no plates → with plates, corrected fit) |
+|---|---|---|---|
+| Top | 98 → 133 gold | 3 → 15 | 0.67 → 0.75 |
+| Mid | 70 → 95 | 15 → 24 | 0.69 → 0.73 |
+| Bot | 94 → 122 | −9 → 7 | 0.60 → 0.68 |
+| Support | 18 → 25 | 6 → 10 | 0.71 → 0.73 |
+| Jungle | 14 → 20 (any lane) | n/a | 0.83 → 0.84 |
+
+The laner values now sit on the wiki's 120 gold a plate. With the corrected fit the lane's weight on team strength falls to about zero (top −29, jungle 0, mid −5, bot 27, support 9 per unit; version 2: 31, 14, 32, 30, 25): strength reaches the lane through the kills and plates it produces. Leftover sd 416 / 336 / 353 / 554 / 198 (version 2: 501 / 334 / 403 / 592 / 211).
+
+**Short Worlds test, first-try version 3 on the sim before the tower-push fix** (94 games, 1,000 sims; log loss, favourite won):
+
+| Sim | Version 3, first try | Version 2 | v1 |
+|---|---|---|---|
+| Baseline + lane-level | 0.6067, 67.0% | 0.6049, 64.9% | 0.6173, 64.9% |
+| Fight types and pushes + lane-level | 0.6054, 66.0% | 0.6019, 64.9% | |
+
+Level within about the chance spread (0.003). Length sd 7.05 and kills sd 12.18 are unchanged.
+
+**The gold lead at 15 is too wide in every sim, and too tied to strength.** Worlds games, absolute team lead at 15: real median 1,399 (sd 1,377); baseline 1,715 (1,847); version 2 1,789 (1,846). The team ahead at 15 wins 67.5% of real Worlds games and 74% in the sims. On a sample of training games (300 games, 24 sims each, from each run's calibration) the team lead at 15 moves 748 gold per unit of team strength in real games and 1,072 in the baseline. In the baseline, calibration had already turned the lane's own strength term down to 0.051 of its fitted size and the lane noise to 0.023 (its floor is 0.02), so the link most likely comes through early kills following team strength more than real ones do. That last step is a reading of the settings, not a measurement: early kills by team strength, real v sim, is the next thing to measure.
+
+**Tower-push fix as default.** `cal["seg_phase"]` now defaults to `"own"` (7k's bug); `"segments"` (`s3_test.py ... oldsp`) is the sim as it was. It changes 452 of 648 check games, so every score before this point is from the uncorrected sim.
+
+**Corrected-sim re-runs** (Worlds-only, 94 games, 1,000 sims; runs in `research/local/sim3/out_wlds_sp_*`; v1 0.6173, favourite 64.9%):
+
+| Sim, tower-push fix on | Log loss | Favourite | Before the fix | Length mean / sd | Kills sd | Lead at 15, median |
+|---|---|---|---|---|---|---|
+| Baseline | 0.6187 | 64.9% | 0.6158 | 32.6 / 7.54 | 13.0 | 1,709 |
+| Fight types and pushes | 0.6134 | 67.0% | 0.6169 | 32.9 / 7.72 | 12.8 | 1,732 |
+| Baseline + lane-level version 3 (corrected plate fit) | 0.6103 | 63.8% | version 2: 0.6049; version 3 first try: 0.6067 | 32.3 / 7.53 | 12.9 | 2,010 |
+| Fight types and pushes + lane-level version 3 (corrected) | 0.6109 | 66.0% | version 2: 0.6019; first try: 0.6054 | 32.6 / 7.72 | 12.8 | 2,039 |
+| Real Worlds games | | | | 33.1 / 5.78 | 6.2 | 1,399 |
+
+- **The tower-push fix by itself** moves the two sims without lane-level in opposite directions (baseline +0.0029, fight types and pushes −0.0035), about the chance spread (0.003). Game length moves closer to real on average (32.3–32.9 against 31.9 before; real 33.1) but the spread gets wider (sd 7.5–7.7 against 7.0–7.1; real 5.78), as 7k's check suggested.
+- **Lane-level still helps on the corrected sim:** 0.6187 → 0.6103 on the baseline; 0.6134 → 0.6109 on fight types and pushes (the second inside the chance spread). Both lane-level sims are ahead of v1; the baseline alone is not.
+- **Version 3 against version 2 on the corrected sim** (two more runs, `out_wlds_sp_ll2`, `out_wlds_sp_typed_pf_ll2`; 567 s and 606 s):
+
+  | Sim, tower-push fix on | Version 2 | Version 3 (corrected plate fit) | Gap |
+  |---|---|---|---|
+  | Baseline + lane-level | 0.6068, favourite 66.0% | 0.6103, 63.8% | 0.0035 |
+  | Fight types and pushes + lane-level | 0.6022, favourite 66.0% | 0.6109, 66.0% | 0.0087 |
+
+  **Version 3 is worse at who wins on both sims:** by about the chance spread on the baseline and by nearly three times it on fight types and pushes. The tower-push fix barely moves version 2 (0.6049 → 0.6068; 0.6019 → 0.6022), so the drop in the lane-level rows above comes from the plate fit, not from the fix. Version 2 also keeps the narrower lead at 15 (median 1,783 and 1,807 against 2,010 and 2,039; real 1,399; per unit of team strength on the training sample 1,010 and 1,077 against 1,199 and 1,298; real 748). Length and kills spreads are the same in both (sd 7.45–7.71 and 12.85–12.9). **So version 3 is not "reasonably level" on the corrected sim: version 2 stays the lane-level fit in use; version 3 stays in the code and local fits.** Its plate values are closer to the game's rules, but paying plates by lane adds to a lead at 15 that is already too wide; the gold-lead work (early kills and team strength) comes first, then version 3 can be tested again. Best sim on this test: fight types and pushes + lane-level version 2, 0.6022 (v1 0.6173).
+- **Gold lead at 15 with the corrected plate fit:** better than the first try but still wider than version 2 (median 2,010 against 1,789; real 1,399; per unit of team strength on the training sample 1,199 and 1,298 against version 2's 1,023 and 1,109, first try 1,441 and 1,550, real 748). So paying plates by lane still adds to a lead that was already too wide.
+- Run times: 607, 685, 543 and 596 seconds.
+
+**How checked:** 648 seeded games each time. With the first plate fit: options off identical to the committed sim (648), version 2's fit identical (648), version 3 replays by seed (648). After the default changed: `seg_phase="segments"` identical to the committed default (648), the new default identical to the committed sim with the fix switched on (648), version 2 lane-level with `"segments"` identical to committed (648), version 3 replays by seed (648). Scores read from the saved result files. Not run: the fixed test on all 321 games and the walk-forward for anything in this section.
+
 ## 8. Open items for Luke
 
-0. **12 Nov (7k):** the tower-push phase bug: make the corrected reading the default and re-run the baseline? Spread still open after four more attempts; next is the lane-by-lane tower timing measurement. Lane-level play is in as an option and improves who-wins.
+0a. **12 Nov, evening (7l):** full tests for version 3 and the corrected sim, or accept the short Worlds test? Gold lead at 15 too wide and too tied to strength in every sim (early kills follow strength too much): next thing to measure. Session 4 plan drafted in `research/sim-plan.md`, waiting for Luke's OK.
+0. **12 Nov (7k):** the tower-push phase bug (decided the same day: fixed as the default, 7l). Spread still open after four more attempts; next is the lane-by-lane tower timing measurement. Lane-level play is in as an option and improves who-wins.
 1. **Spread of games:** length and kills vary too much from game to game. Tested and not kept: per-game tempo, within-game "form", per-phase fight swing (7d), within-game lead effects for pushes and takers (7e). Found (7e): second-tier towers fall about 3 minutes early in the sim. Tested (7f): lane × tier push terms fix the per-lane pattern and predict held-out pushes better but don't narrow the spread (who-wins mixed; Luke, 7 Nov: keep them in the sim and keep testing); the combined fix is not kept. Measured (7g, 10 Nov): the extra kill spread comes from fight sizes that aren't held in check and from kills going in step with length (real long games slow down, the sim's get bloodier), not from the number of fights. Proposed next: fit fight size and the next fight's chance on what just happened, and check how game endings follow fights (7g).
 2. **Baron:** too few games have one (88% against 97%), and the first-Baron team wins too rarely (78.5% against 84.4%).
 3. **Draft styles in timing-only mode cost a little** in the final version. Keep (realism, and pace is supported), or keep only pace?

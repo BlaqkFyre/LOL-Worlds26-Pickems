@@ -25,6 +25,9 @@ PHASE_EPS = "phase" in OPTS
 # S3_TEST_END = test only games before that date, write wf_preds.csv (one row per game) and stop before the shape tables.
 # Both unset = the fixed test exactly as before (calibrate before 1 Sep, test everything from 1 Sep).
 CUT = os.environ.get("S3_CUTOFF", "2026-09-01"); END = os.environ.get("S3_TEST_END")
+# S3_TEST_LEAGUE (12 Nov; Luke: a shorter test): test only that league's held-out games (e.g. WLDs = the 94 Worlds games). Calibration is
+# unchanged and seeds are by game ID, so those games' odds are exactly what the full test gives them. Both result blocks then hold that league.
+TLG = os.environ.get("S3_TEST_LEAGUE")
 os.makedirs(OUT, exist_ok=True)
 ROLES = ["top", "jng", "mid", "bot", "sup"]
 spec = importlib.util.spec_from_file_location("s3_sim", os.path.join(HERE, "s3_sim.py")); simmod = importlib.util.module_from_spec(spec); spec.loader.exec_module(simmod)
@@ -91,7 +94,8 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if "pf" in OPTS: cal["push_fight"] = "on"  # won fights turn into tower and base pushes (10 Nov, report 7g; includes the lane x tier terms)
     if "ll" in OPTS: cal["lane_level"] = "on"  # lane-level play (12 Nov): lane leads from the fitted lane model, early kills lean to the lanes ahead
     if "ends" in OPTS: cal["endings"] = "on"  # endings follow won fights (12 Nov): base-push chance and size read the kills edge and game time
-    if "sp" in OPTS: cal["seg_phase"] = "own"  # tower-push phase terms from the push fit in use (12 Nov: they were read from another fit)
+    if "sp" in OPTS: cal["seg_phase"] = "own"  # tower-push phase terms from the push fit in use; the sim's default from 12 Nov, so "sp" changes nothing now
+    if "oldsp" in OPTS: cal["seg_phase"] = "segments"  # the sim before the 12 Nov fix (phase terms read from the segment-count fit); replays earlier runs
     if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
@@ -159,7 +163,7 @@ if __name__ == "__main__":
         cal["lane_mu"] = round(max(0.0, cal["lane_mu"] * (real_slope / sim_slope if sim_slope > 0 else 1) ** 0.9), 3)
     res["calibration"] = hist; res["cal"] = cal
     # ---------- C. held-out ----------
-    test = sorted(g for g in G if G[g]["day"] >= CUT and (END is None or G[g]["day"] < END) and G[g]["y"] >= 0)
+    test = sorted(g for g in G if G[g]["day"] >= CUT and (END is None or G[g]["day"] < END) and G[g]["y"] >= 0 and (TLG is None or G[g]["league"] == TLG))
     # Held-out seeds (Luke, 12 Nov): by game ID, and run at 1,000 sims per game (at 200 the Worlds score moved about 0.007 by chance).
     # "oldseeds" = seeds by place in the list, as every run before 12 Nov. S3_SEED = other draws, to measure sim noise.
     S = run_many(test, NS, cal, seed0=1 + int(os.environ.get("S3_SEED", "0")), by_id="oldseeds" not in OPTS)
@@ -218,6 +222,6 @@ if __name__ == "__main__":
     wg = [g for g in test if G[g]["league"] == "WLDs"]; sg = [g for g in test]
     res["who_wins"] = {"from 1 Sep": who(sg), "Worlds": who(wg)}
     res["shape"] = {"from 1 Sep": shape(S, T["from 1 Sep"], TIM["from 1 Sep"]), "Worlds": shape(S[S.gid.isin(wg)], T["Worlds"], TIM["Worlds"])}
-    res["n_sims_per_game"] = NS
+    res["n_sims_per_game"] = NS; res["test_league"] = TLG
     json.dump(res, open(os.path.join(OUT, "test3_results.json"), "w"), indent=1, default=float)
     print(json.dumps({k: res[k] for k in ["cal", "who_wins", "shape"]}, indent=1, default=float))
