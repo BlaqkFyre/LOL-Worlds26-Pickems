@@ -147,7 +147,7 @@ class Sim {
     const nxt = {dragon: SPAWN.dragon, grub: SPAWN.grub, herald: SPAWN.herald, baron: SPAWN.baron};
     const takenOnce = {grub: false, herald: false};
     let elderMode = false, soulType = null; const dragSeq = [];
-    const steps = [], gdAt = {}, kd = {}, killLog = []; let winner = null, tEnd = null, prevNf = 0, net = 0, prevNet = 0, gd = 0, m = 0;
+    const steps = [], gdAt = {}, kd = {}, killLog = [], fights = []; let fid = 0; let winner = null, tEnd = null, prevNf = 0, net = 0, prevNet = 0, gd = 0, m = 0;
     const val = P.gold;
     const sd = s => s === 0 ? 1 : -1;
     const addGold = (side, amount) => { if(LL && m < 15) return; const w = m < 15 ? this.swLane : this.swLate; for(let i = 0; i < 5; i++) gold[i] += sd(side) * amount * w[i]; };
@@ -184,12 +184,12 @@ class Sim {
       const nf = TYPED ? rng.poisson(lam) : this.count(rng, lam, "fights", m);
       prevNet = net; net = 0; const fought = nf > 0 ? 1 : 0; prevNf = nf;
       for(let f = 0; f < nf; f++){
-        let sizes, pr;
+        let sizes, pr, ftype = null; const fk = [0, 0];
         if(TYPED){ const TC = (EKC && FTc.type_early) ? FTc.type_early.coef : FTc.type.coef;
           const zt = [0, ...["skirmish", "teamfight"].map(t => { const tc = TC[t];
             return tc.intercept + g0(tc, "phase " + ph, 0) + Object.keys(feat).reduce((s, k) => s + tc[k] * feat[k], 0) + tc.log1p_kills_last_2min * Math.log1p(k2) + ewTerm(tc); })];
           const mx = Math.max(...zt), pt = norm(zt.map(v => Math.exp(v - mx)));
-          const ftype = rng.pick(["small", "skirmish", "teamfight"], pt);
+          ftype = rng.pick(["small", "skirmish", "teamfight"], pt);
           [sizes, pr] = table(EKC && m < 14 && FTc.size_table_early ? FTc.size_table_early[ftype][m < 5 ? "0-4" : m < 10 ? "5-9" : "10-13"] : FTc.size_table[ftype][FPH(m)]);
         } else [sizes, pr] = this.fsize[FPH(m)];
         const n = rng.pick(sizes, pr), ks = KSC;
@@ -218,7 +218,7 @@ class Sim {
             if(LL && LL.ev && m < 15){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
             net += sd(s); setd(first, "blood", s);
             const tk = at(tf + 3 * j); killLog.push([tk, s, k, v, ast]);
-            note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast});
+            fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
           const aliveV = [0, 1, 2, 3, 4].filter(i => !dead[o].has(i));
@@ -241,7 +241,7 @@ class Sim {
             inv[s].add(k); ast.forEach(i => inv[s].add(i)); inv[o].add(v); [k, v, ...ast].forEach(i => { if(LANEID[i] >= 0) lanesIn.add(LANEID[i]); });
             net += sd(s); setd(first, "blood", s);
             const tk = at(tf + 3 * j); killLog.push([tk, s, k, v, ast]);
-            note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast});
+            fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
           const earlyLL = LL && m < 15;
@@ -256,8 +256,11 @@ class Sim {
           if(earlyLL && LL.ev){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
           net += sd(s); setd(first, "blood", s);
           const tk = at(tf + 3 * j); killLog.push([tk, s, k, v]);
-          note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast});
+          fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
         }
+        /* the fight's record for the play-by-play (13 Nov; no random draws): kills each side, the fight type drawn, gold lead going in */
+        if(log && (fk[0] || fk[1])) fights.push({t: Math.floor(tf), f: fid, b: fk[0], r: fk[1], type: ftype, gd});
+        fid++;
       }
       /* monsters */
       const taker = (kind, feats) => { const c = TAKC[kind] || TAKC.dragon; let xb = c.blue_side + c.per_v1_logit * z;
@@ -382,8 +385,60 @@ class Sim {
       first: Object.fromEntries(Object.entries(first).map(([k, v]) => [k, ["blue", "red"][v]])), first_t: Object.fromEntries(Object.entries(ftime).map(([k, v]) => [k, Math.floor(v)])),
       roles5: kd.roles5 || nan5, g15: gdAt[15] != null ? gdAt[15] : NaN, gd: gdAt, roles15: kd.roles15 || nan5, roles10: kd.roles10 || nan5,
       kd15: kd.kd15 || ROLES.map((r, i) => (K[0][i] - D[0][i]) - (K[1][i] - D[1][i])), first_tower_lane: firstLane.tower || "",
-      capped, steps: log ? steps.sort((a, b) => a.t - b.t) : []};
+      capped, steps: log ? steps.sort((a, b) => a.t - b.t) : [], fights};
   }
 }
-window.SIM_ENGINE = {Sim, RNG, ROLES};
+/* ---- app bridge (sim session 4, 13 Nov): the sim's inputs from js/sim-tables.js, as research/sim4/s4_tables.py builds them ----
+   ids are the app's team ids (e.g. "GEN"); champs = {top, jng, mid, bot, sup} champion names. Lookups missing from the tables count 0
+   (as in the fit: a champion or pair never seen adds nothing). */
+const lg1 = n => Math.log1p(n || 0);
+/* v1, who wins before the draft (research/local/sim1/v1_all/v1_league_fresh.py): team part, plus each player's skill estimates with the
+   league shift for the home league, blue minus red */
+function v1z(T, blueId, redId){
+  const V = T.v1, tb = V.teams[blueId] || {team: 0, league: 0, home: ""}, tr = V.teams[redId] || {team: 0, league: 0, home: ""};
+  const team = (tb.team + tb.league - tr.team - tr.league + V.blue) / V.temp * V.w.team_part;
+  let players = 0;
+  [[blueId, tb, 1], [redId, tr, -1]].forEach(([id, t, sg]) => { const Lh = V.league_strength[t.home] || 0;
+    ROLES.forEach(r => { const p = T.players[id + "|" + r]; if(!p) return;
+      T.main_skills[r].forEach(f => { const e = p.skills[f]; if(e != null) players += sg * (V.w[r + "_" + f] || 0) * (e + V.league_shift[r] * Lh); }); }); });
+  return {z: team + players, team, players};
+}
+function sideFeats(T, id, champs){
+  const f = {}, st = {siege: 0, objectives: 0, skirmish: 0, pace: 0}, SK = {siege: "sieg", objectives: "obje", skirmish: "skir", pace: "pace"};
+  ROLES.forEach(r => { const c = champs[r], cr = (T.champs[c] || {})[r] || {}, p = T.players[id + "|" + r];
+    f["comfort_" + r] = lg1(((T.comfort[id + "|" + r]) || {})[c]); f["strength_" + r] = cr.str || 0;
+    f["cgold_" + r] = cr.cgold || 0; f["ckd_" + r] = cr.ckd || 0; f["skill_" + r] = p && p.lane_skill != null ? p.lane_skill : null;
+    for(const k in st) st[k] += cr[SK[k]] || 0; });
+  f.together = lg1(T.together[id]); f.synergy = T.synergy[champs.bot + "|" + champs.sup] || 0;
+  return {f, st};
+}
+/* x for Sim.run, plus what the result screen shows "on paper" (each role's expected gold lead at 15, blue minus red) */
+function inputs(T, blueId, redId, champsB, champsR){
+  const V = v1z(T, blueId, redId), B = sideFeats(T, blueId, champsB), R = sideFeats(T, redId, champsR), LLF = T.P.lane_level;
+  ROLES.forEach(r => { if(B.f["skill_" + r] == null || R.f["skill_" + r] == null){ B.f["skill_" + r] = 0; R.f["skill_" + r] = 0; } });
+  const m0 = [], e0 = [], exp15 = [];
+  ROLES.forEach(r => { const cs = LLF.inputs[r], c = LLF.coef[r], cp = LLF.coef_pregame[r];
+    m0.push(cs.reduce((s, k) => s + c[k] * (B.f[k] - R.f[k]), c.const)); e0.push(cs.reduce((s, k) => s + cp[k] * (B.f[k] - R.f[k]), cp.const));
+    exp15.push(m0[m0.length - 1] + c.z * V.z); });
+  const sb = B.st, sr = R.st;
+  return {x: {z: V.z, ll_m0: m0, ll_e0: e0, siege_d: sb.siege - sr.siege, obj_d: sb.objectives - sr.objectives, skirm_d: sb.skirmish - sr.skirmish,
+    pace_s: sb.pace + sr.pace, siege_s: sb.siege + sr.siege, obj_s: sb.objectives + sr.objectives}, v1: V, exp15, featB: B.f, featR: R.f};
+}
+/* Player of the Game, version C (research/sim4/s4_pog.py; Luke 6 Nov): each player's score from the box score; the rating is that score's
+   percentile among real major-league games in the role (2026, before the tables' cutoff), / 10; the award is drawn among the winning five
+   with chances from the fitted choice model (score + role term), so awards by role come out as in real games.
+   st = {k, d, a, kp, dmgS, csd, vpm} */
+const POG_X = {kills: "k", deaths: "d", assists: "a", kp: "kp", damageshare: "dmgS", csd15: "csd", vspm: "vpm"};
+function pogScore(T, st){ const G = T.pog; let s = 0; for(const c in POG_X) s += G.w[c] * (st[POG_X[c]] - G.mean[c]) / G.sd[c]; return s; }
+function pogRating(T, role, st){
+  const q = T.pog.pct[role], s = pogScore(T, st);
+  if(s <= q[0]) return 0; if(s >= q[q.length - 1]) return 10;
+  let i = 0; while(q[i + 1] < s) i++;
+  const lo = q[i], hi = q[i + 1]; return (i + (hi > lo ? (s - lo) / (hi - lo) : 0.5)) / 10;
+}
+function pogChances(T, stats){  /* stats[role] for the winning side → {role: chance} */
+  const u = ROLES.map(r => pogScore(T, stats[r]) + (T.pog.w["r_" + r] || 0)), mx = Math.max(...u), e = u.map(x => Math.exp(x - mx)), s = e.reduce((a, b) => a + b, 0);
+  const o = {}; ROLES.forEach((r, i) => { o[r] = e[i] / s; }); return o;
+}
+window.SIM_ENGINE = {Sim, RNG, ROLES, v1z, inputs, pogScore, pogRating, pogChances};
 })();

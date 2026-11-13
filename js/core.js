@@ -543,7 +543,7 @@ const winP=(a,b)=>1/(1+Math.exp(-(a-b)/9));
 function draftEdge(){const A=draftScore(DS.me),B=draftScore(DS.opp);return Math.max(-3,Math.min(3,(A.score-B.score)*0.6))}
 function analysis(){
   const A=draftScore(DS.me),B=draftScore(DS.opp),edge=draftEdge();
-  const base=winP(team(DS.me).ov,team(DS.opp).ov);let mw=0;const meBlue=sideOf(DS.me)==="blue";for(let q=0;q<600;q++){const r=simGame(true);if((r.winner==="blue")===meBlue)mw++}const withD=mw/600;
+  const dm=useData(),base=dm?(p=>sideOf(DS.me)==="blue"?p:1-p)(1/(1+Math.exp(-dataInputs().v1.z))):winP(team(DS.me).ov,team(DS.opp).ov);let mw=0;const meBlue=sideOf(DS.me)==="blue";for(let q=0;q<600;q++){const r=simGame(true);if((r.winner==="blue")===meBlue)mw++}const withD=mw/600;
   const col=d=>{const t=team(d.id);return `<div class="an ${sideOf(d.id)}"><h3>${esc(t.name)} <small>${sideOf(d.id)} side</small></h3>
     <div class="kpis"><span><b>${d.comf}/5</b>comfort picks</span><span><b>${d.meta}%</b>avg meta presence</span><span><b>${d.syn>0?"+":""}${d.syn}</b>synergy lift</span><span><b>${d.bans.filter(b=>b.hit.length).length}/5</b>bans on comfort</span></div>
     <table class="tt full"><thead><tr><th>Role</th><th>Player</th><th>Champion</th><th>Fit</th></tr></thead><tbody>${d.rows.sort((a,b)=>ROLES.indexOf(a.r)-ROLES.indexOf(b.r)).map(r=>`<tr><td>${r.r}</td><td data-tp="${d.id}|${ROLES.indexOf(r.r)}" tabindex="0" class="hov">${esc(r.pl.n)}</td><td data-tc="${esc(r.c)}" tabindex="0" class="hov">${esc(r.c)}</td><td>${r.x?`<span class="chip meta">Comfort ${r.x[1]?r.x[1]+"g ":""}${r.x[2]}%</span>`:`<span class="chip off">Off-pool</span>`} <span class="notes tcol" style="color:${tierCol(tierOf(r.pr))}">${tierOf(r.pr)}</span></td></tr>`).join("")}</tbody></table>
@@ -552,7 +552,7 @@ function analysis(){
     <div class="notes"><b>Denied:</b> ${d.denied.length?d.denied.map(x=>`${esc(x.c)} from ${x.who.map(o=>o.p.n).join(", ")}`).join("; "):"none"}</div>
     ${d.lostComf.length?`<div class="notes"><b>Off their comfort:</b> ${d.lostComf.map(esc).join(", ")}</div>`:""}</div>`};
   return `<div class="panel" style="display:grid;gap:12px"><h3 style="font-size:20px;text-transform:uppercase">Draft review</h3>
-    <div class="verdict"><div><span class="notes">Before draft</span><b>${Math.round(base*100)}%</b></div><div><span class="notes">After draft</span><b>${Math.round(withD*100)}%</b></div><div class="notes">${esc(team(DS.me).name)} win chance for this game. Before = team ratings only; after = 600 simulated games using these picks (comfort, meta strength, synergy).</div></div>
+    <div class="verdict"><div><span class="notes">Before draft</span><b>${Math.round(base*100)}%</b></div><div><span class="notes">After draft</span><b>${Math.round(withD*100)}%</b></div><div class="notes">${esc(team(DS.me).name)} win chance for this game. ${dm?"Before = the team-and-player model fitted to 2026 pro games (teams, leagues, players' skill estimates, side); after = 600 games of the data-built sim with these picks (champion lane values, comfort, champion strength, bot-lane synergy, draft styles).":"Before = team ratings only; after = 600 simulated games using these picks (comfort, meta strength, synergy)."}</div></div>
     <div class="board">${col(sideOf(DS.me)==="blue"?A:B)}${col(sideOf(DS.me)==="blue"?B:A)}</div>
     ${DS.tour?(DS.sim?"":`<div class="ctrls"><button class="btn primary" data-act="tplay">Play this game</button></div>`):DS.series&&!DS.sim?`<div class="ctrls"><button class="btn primary" data-act="splay">Play game ${DS.series.games.length+1}</button></div>`:""}
     ${DS.sim?simView():""}</div>`;
@@ -586,7 +586,8 @@ const STAR={k:12,die:0.8,assist:85,fight:0.08,pog:0.35,supElite:0.12};
    Tuned to LCK 2026 (RFT.GG): average game ~32 min, team taking Baron wins ~85%, team taking Elder wins ~75%. */
 const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:5.5,soulFight:0.5,baronPush:1.2,elderPush:1.5,goldPush:5000,latePush:12,endBar:3.0,bounty:1.0,goldFade:8};
 function wpick(o){const e=Object.entries(o);let s=e.reduce((x,[,w])=>x+w,0)*Math.random();for(const [k,w] of e){if((s-=w)<=0)return k}return e[0][0]}
-function simGame(quiet){
+/* the classic rule-based sim (behind the switch in the ⓘ panel since sim session 4) */
+function simGameOld(quiet){
   const B=teamStr(idOnSide("blue")),R=teamStr(idOnSide("red")),S={blue:B,red:R},opp=s=>s==="blue"?"red":"blue";
   const g={fights:[],el:{blue:0,red:0},inh:{blue:0,red:0},soul:null,solo:{blue:{},red:{}},jd:0,gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},gr:{blue:0,red:0},ev:[],gl:[[0,0]],kda:{blue:{},red:{}},lanes:{}};
   ROLES.forEach(r=>{g.kda.blue[r]=[0,0,0];g.kda.red[r]=[0,0,0]});
@@ -656,6 +657,69 @@ function simGame(quiet){
   if(!quiet&&typeof gameStats==="function")gameStats(g);
   return g;
 }
+/* ---- the data-built sim (sim session 4, 13 Nov 2026): js/sim-engine.js run on the tables in js/sim-tables.js ----
+   Every kill, fight, objective and tower is a random draw from chances fitted to real 2026 pro games; the classic sim stays behind the
+   switch in the ⓘ panel (window.SIM_MODE, set by ui.js). The game record keeps the shape pack() stores. */
+const SIM_CAL={data:"default","data-alt":"alt"},ENG_ROLE={TOP:"top",JGL:"jng",MID:"mid",ADC:"bot",SUP:"sup"};
+const dataReady=()=>typeof SIM_ENGINE!=="undefined"&&typeof SIM_TABLES!=="undefined";
+const simMode=()=>{const m=window.SIM_MODE;return m==="classic"||m==="data-alt"?m:"data"};
+const useData=()=>simMode()!=="classic"&&dataReady();
+const SIMS={};let SIM_IN=null;
+function dataInputs(){const b=idOnSide("blue"),r=idOnSide("red"),ch=id=>{const o={},ps=picksOf(id);ROLES.forEach(R=>{const p=ps.find(x=>x.r===R);o[ENG_ROLE[R]]=p?p.c:""});return o};
+  const cb=ch(b),cr=ch(r),key=[b,r,...Object.values(cb),...Object.values(cr)].join("|");
+  if(!SIM_IN||SIM_IN.key!==key)SIM_IN={key,b,r,cb,cr,...SIM_ENGINE.inputs(SIM_TABLES,b,r,cb,cr)};return SIM_IN}
+function simGame(quiet){if(!useData())return simGameOld(quiet);
+  const k=SIM_CAL[simMode()],sim=SIMS[k]||(SIMS[k]=new SIM_ENGINE.Sim(SIM_TABLES.P,SIM_TABLES.cal[k]));
+  const I=dataInputs(),seed=Math.floor(Math.random()*4503599627370496),o=sim.run(I.x,seed,!quiet);
+  return quiet?{winner:o.winner}:dataGame(o,I,seed)}
+const DRAG_NAME={ocean:"Ocean",cloud:"Cloud",chemtech:"Chemtech",hextech:"Hextech",fire:"Infernal",mountain:"Mountain"};
+const TIER_NAME={T1:"outer",T2:"inner",T3:"inhibitor"};
+const FIGHT_NAME={small:"Fight",skirmish:"Skirmish",teamfight:"Teamfight"};
+/* the sim's game → the app's game record (the fields simView, gameStats' readers and pack() use) */
+function dataGame(o,I,seed){const T=SIM_TABLES,E=SIM_ENGINE,ids={blue:I.b,red:I.r},chs={blue:I.cb,red:I.cr},opp=s=>s==="blue"?"red":"blue";
+  const mk=s=>{const t=team(ids[s]),P={};ROLES.forEach((R,i)=>{P[R]={pl:t.p[i],c:chs[s][ENG_ROLE[R]]}});return {id:ids[s],P}};
+  const S={blue:mk("blue"),red:mk("red")},two=a=>({blue:a[0],red:a[1]}),mins=o.sec/60,fin=v=>Number.isFinite(v)?v:0;
+  const g={data:true,seed,B:S.blue,R:S.red,winner:o.winner,time:Math.floor(o.sec/60),sec:o.sec%60,k:two(o.kills),tw:two(o.towers),dr:{blue:o.dr[0].length,red:o.dr[1].length},
+    ba:two(o.ba),gr:two(o.grubs),el:two(o.elders),inh:two(o.inhibs),soul:o.soul[0]?"blue":o.soul[1]?"red":null,g15:Math.round(fin(o.g15)),
+    lanes:{TOP:fin(o.roles15[0]),JGL:fin(o.roles15[1]),MID:fin(o.roles15[2]),BOT:fin(o.roles15[3])+fin(o.roles15[4])},
+    exp15:{TOP:I.exp15[0],JGL:I.exp15[1],MID:I.exp15[2],BOT:I.exp15[3]+I.exp15[4]},v1p:1/(1+Math.exp(-I.v1.z)),kda:{blue:{},red:{}},solo:{blue:{},red:{}},ps:{blue:{},red:{}},jd:0};
+  g.gl=Object.keys(o.gd).map(Number).filter(m=>m<=mins).sort((a,b)=>a-b).map(m=>[m,Math.round(o.gd[m])]);
+  if(g.gl.length)g.gl.push([Math.round(mins*100)/100,g.gl[g.gl.length-1][1]]);
+  /* box score and rating (Player of the Game version C: percentile of the fitted score among real games in the role / 10) */
+  ["blue","red"].forEach(s=>ROLES.forEach(R=>{const e=o.ps[s][ENG_ROLE[R]],vpm=e.vis/Math.max(1,mins);
+    g.kda[s][R]=[e.k,e.d,e.a];g.solo[s][R]=e.solo;
+    g.ps[s][R]={k:e.k,d:e.d,a:e.a,kp:e.kp,dmgS:e.dmgS,csd:e.csd,vis:Math.round(vpm*100)/100,solo:e.solo,won:s===o.winner,
+      rt:E.pogRating(T,ENG_ROLE[R],{k:e.k,d:e.d,a:e.a,kp:e.kp,dmgS:e.dmgS,csd:e.csd,vpm})}}));
+  /* the award: drawn among the winning five with the fitted chances (its own seeded stream, so the same seed gives the same award) */
+  const w=o.winner,st={};ROLES.forEach(R=>{const p=g.ps[w][R];st[ENG_ROLE[R]]={k:p.k,d:p.d,a:p.a,kp:p.kp,dmgS:p.dmgS,csd:p.csd,vpm:o.ps[w][ENG_ROLE[R]].vis/Math.max(1,mins)}});
+  const ch=E.pogChances(T,st);let u=E.RNG(seed+1).random(),pr=ROLES[ROLES.length-1];for(const R of ROLES){u-=ch[ENG_ROLE[R]];if(u<0){pr=R;break}}
+  const pp=g.ps[w][pr];
+  g.pog={s:w,r:pr,n:S[w].P[pr].pl.n,c:S[w].P[pr].c,rt:pp.rt,why:`${pp.k}/${pp.d}/${pp.a} · ${Math.round(pp.kp*100)}% KP · ${Math.round(pp.dmgS*100)}% team damage · award chance ${Math.round(ch[ENG_ROLE[pr]]*100)}%`};
+  /* fights: [minute, winner side (null on an even trade), label, gold lead going in, second, blue kills, red kills, fight id] */
+  g.fights=o.fights.map(f=>[Math.floor(f.t/60),f.b>f.r?"blue":f.r>f.b?"red":null,FIGHT_NAME[f.type]||"Fight",Math.round(f.gd),f.t,f.b,f.r,f.f]);
+  /* play-by-play from the sim's events: every kill named (killer and victim; assists stay in the box score), a fight's kills on one line */
+  const nm=(s,i)=>{const R=ROLES[i];return `${S[s].P[R].pl.n} (${S[s].P[R].c})`},tn=s=>team(ids[s]).name,byF={},seen=new Set(),dn={blue:0,red:0};let fb=false;
+  o.steps.forEach(e=>{if(e.kind==="kill")(byF[e.f]=byF[e.f]||[]).push(e)});
+  const one=x=>`${nm(x.side,x.k)} kills ${nm(opp(x.side),x.v)}${x.ast&&!x.ast.length?" (solo)":""}`;
+  g.ev=[];
+  o.steps.forEach(e=>{let s=e.side,txt;
+    if(e.kind==="kill"){if(seen.has(e.f))return;seen.add(e.f);const ks=byF[e.f],F=g.fights.find(x=>x[7]===e.f);
+      if(ks.length===1)txt=one(e);
+      else{const b=ks.filter(x=>x.side==="blue").length,r=ks.length-b;s=b>r?"blue":r>b?"red":"";
+        txt=`${F?F[2]:"Fight"}: ${s?`${tn(s)} win ${Math.max(b,r)}–${Math.min(b,r)}`:`even trade ${b}–${r}`} · ${ks.map(one).join("; ")}`}
+      if(!fb){txt+=" — first blood";fb=true}}
+    else if(e.kind==="dragon"){dn[s]++;const ty=e.text.replace(" dragon","");txt=`${tn(s)} take the ${DRAG_NAME[ty]||ty} dragon (${dn[s]})`}
+    else if(e.kind==="soul"){const ty=e.text.replace(" soul","");txt=`${tn(s)} claim the ${DRAG_NAME[ty]||ty} soul`}
+    else if(e.kind==="elder")txt=`${tn(s)} take the Elder Dragon`;
+    else if(e.kind==="grubs"){const n=parseInt(e.text,10);txt=`${tn(s)} take ${n===3?"all 3":n+" of 3"} void grubs`}
+    else if(e.kind==="herald")txt=`${tn(s)} take the Rift Herald`;
+    else if(e.kind==="baron")txt=`${tn(s)} take Baron Nashor`;
+    else if(e.kind==="tower"){const m=e.text.match(/^(T[123]) (TOP|MID|BOT)$/);txt=m?`${tn(s)} destroy the ${m[2].toLowerCase()} ${TIER_NAME[m[1]]} tower`:`${tn(s)} destroy a Nexus tower`}
+    else if(e.kind==="inhib")txt=`${tn(s)} destroy the ${e.text.split(" ")[1].toLowerCase()} inhibitor`;
+    else if(e.kind==="nexus")txt=`${tn(s)} destroy the Nexus`;
+    else return;
+    g.ev.push([Math.floor(e.t/60),s,txt,e.t])});
+  return g}
 function runGame(){const N=1500;let bw=0;for(let i=0;i<N;i++)if(simGame(true).winner==="blue")bw++;DS.sim={g:simGame(false),bwin:bw/N};}
 function goldChart(gl,time){const W=600,H=140,P=24,mx=Math.max(3000,...gl.map(x=>Math.abs(x[1])));const X=m=>P+(m/Math.max(time,30))*(W-2*P),Y=v=>H/2-(v/mx)*(H/2-12);
   const pts=gl.map(([m,v])=>`${X(m).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
@@ -665,28 +729,29 @@ function simView(){
   const {g,bwin}=DS.sim,blueId=idOnSide("blue"),redId=idOnSide("red"),w=g.winner,wid=w==="blue"?blueId:redId;
   const pct=Math.round((w==="blue"?bwin:1-bwin)*100);
   const sb=s=>{const id=s==="blue"?blueId:redId,T=s==="blue"?g.B:g.R;return `<div class="an ${s}"><h3>${esc(team(id).name)} <small>${s} · ${g.k[s]} kills · ${g.tw[s]} towers · ${g.dr[s]} dragons · ${g.ba[s]} barons</small></h3><table class="tt full stab4"><thead><tr><th>Role</th><th>Player</th><th>Champion</th><th>K/D/A</th><th>DMG%</th><th>CSD@15</th><th>Rating</th></tr></thead><tbody>${ROLES.map((r,i)=>`<tr><td>${r}</td><td class="hov" data-tp="${id}|${i}" tabindex="0">${esc(T.P[r].pl.n)}</td><td><span class="cname hov" data-tc="${esc(T.P[r].c)}" tabindex="0">${icon(T.P[r].c,26)}${esc(T.P[r].c)}</span></td><td class="num">${g.kda[s][r].join("/")}</td>${g.ps?`<td class="num">${Math.round(g.ps[s][r].dmgS*100)}%</td><td class="num">${g.ps[s][r].csd>0?"+":""}${g.ps[s][r].csd}</td><td class="num">${g.pog&&g.pog.s===s&&g.pog.r===r?"★ ":""}${g.ps[s][r].rt.toFixed(1)}</td>`:""}</tr>`).join("")}</tbody></table></div>`};
-  const lane=L=>{const d=g.lanes[L];const s=d>0?"blue":"red";return `<span class="chip ${Math.abs(d)<2?"off":s==="blue"?"bl":"rd"}">${L}: ${Math.abs(d)<2?"even":team(s==="blue"?blueId:redId).id+" ahead"}</span>`};
+  const k1=v=>(v>0?"+":"")+(v/1000).toFixed(1)+"k",gch=(lab,d,sfx)=>{const z=Math.abs(d)<50;return `<span class="chip ${z?"off":d>0?"bl":"rd"}">${lab}: ${z?"even":team(d>0?blueId:redId).id+" +"+(Math.abs(d)/1000).toFixed(1)+"k"}${sfx||""}</span>`};
+  const lane=L=>{const d=g.lanes[L];if(g.data)return gch(L,d);const s=d>0?"blue":"red";return `<span class="chip ${Math.abs(d)<2?"off":s==="blue"?"bl":"rd"}">${L}: ${Math.abs(d)<2?"even":team(s==="blue"?blueId:redId).id+" ahead"}</span>`};
   const fx=(lab,b,r)=>{const d=b-r;return `<span class="chip ${Math.abs(d)<1?"off":d>0?"bl":"rd"}">${lab}: ${Math.abs(d)<1?"even":(d>0?team(blueId).id:team(redId).id)+" +"+Math.abs(d).toFixed(1)}</span>`};
   /* this game's story: lanes, gold at 15, objectives, fights won and the fight that ended it */
   const tid=x=>team(x==="blue"?blueId:redId).id,sch=(lab,x)=>`<span class="chip ${x?x==="blue"?"bl":"rd":"off"}">${lab}</span>`;
-  const g15=(g.gl.find(x=>x[0]>=14)||[0,0])[1],fw={blue:g.fights.filter(f=>f[1]==="blue").length,red:g.fights.filter(f=>f[1]==="red").length};
-  const lead=(a,b)=>a>b?"blue":b>a?"red":null,mm=t=>`${t}:${String((t*37)%60).padStart(2,"0")}`;
-  const last=g.fights[g.fights.length-1];
+  const g15=g.g15!=null?g.g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],fw={blue:g.fights.filter(f=>f[1]==="blue").length,red:g.fights.filter(f=>f[1]==="red").length};
+  const lead=(a,b)=>a>b?"blue":b>a?"red":null,clk=x=>`${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`,mm=(t,f)=>f&&f[4]!=null?clk(f[4]):`${t}:${String((t*37)%60).padStart(2,"0")}`;
+  const last=[...g.fights].reverse().find(f=>f[1]);
   const story=[sch(`Gold @15: ${Math.abs(g15)<500?"even":tid(g15>0?"blue":"red")+" +"+(Math.abs(g15)/1000).toFixed(1)+"k"}`,Math.abs(g15)<500?null:g15>0?"blue":"red"),
     sch(`Dragons ${g.dr.blue}–${g.dr.red}`,lead(g.dr.blue,g.dr.red)),sch(`Barons ${g.ba.blue}–${g.ba.red}`,lead(g.ba.blue,g.ba.red)),sch(`Towers ${g.tw.blue}–${g.tw.red}`,lead(g.tw.blue,g.tw.red)),
-    sch(`Fights won ${fw.blue}–${fw.red}`,lead(fw.blue,fw.red)),last?sch(`Decided: ${last[2].toLowerCase()} at ${mm(last[0])} → ${tid(last[1])}`,last[1]):""].join("");
+    sch(`Fights won ${fw.blue}–${fw.red}`,lead(fw.blue,fw.red)),last?sch(`${g.data?"Last fight":"Decided"}: ${last[2].toLowerCase()} at ${mm(last[0],last)} → ${tid(last[1])}`,last[1]):""].join("");
   /* upset: the winner was under 25% to win this draft — find where it turned */
   const upset=pct<25;let turn="";
   if(upset){const ws=w,sg=v=>ws==="blue"?v:-v;const behind=g.fights.filter(f=>f[1]===ws&&sg(f[3])<=0);
     const f=behind.length?behind[behind.length-1]:last;
-    if(!behind.length&&sg(g15)>=500)turn=`${esc(team(wid).name)} won the laning phase (+${(sg(g15)/1000).toFixed(1)}k gold at 15) and never gave the lead back, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`;else turn=`${esc(team(wid).name)} turned it at ${mm(f[0])}: won the ${esc(f[2].toLowerCase())}${sg(f[3])<0?` from ${(Math.abs(f[3])/1000).toFixed(1)}k gold down`:""}${f!==last?` and the deciding fight at ${mm(last[0])}`:""}, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`}
+    if(!behind.length&&sg(g15)>=500)turn=`${esc(team(wid).name)} won the laning phase (+${(sg(g15)/1000).toFixed(1)}k gold at 15) and never gave the lead back, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`;else turn=`${esc(team(wid).name)} turned it at ${mm(f[0],f)}: won the ${esc(f[2].toLowerCase())}${sg(f[3])<0?` from ${(Math.abs(f[3])/1000).toFixed(1)}k gold down`:""}${f!==last?` and the deciding fight at ${mm(last[0],last)}`:""}, despite ${esc(team(wid===blueId?redId:blueId).name)}'s edge on paper.`}
   return `<div class="sim"><div class="result ${w}"><span class="eyebrow" style="color:inherit">Simulated game</span><b>${esc(team(wid).name)} win${upset?` <span class="upset">Upset</span>`:""}</b><span>${g.time}:${String(g.sec).padStart(2,"0")} · kills ${g.k.blue}–${g.k.red} · this draft wins for ${team(wid).id} in ${pct}% of simulations</span>${upset?`<span class="pogline">${turn}</span>`:""}${g.pog?`<span class="pogline">Player of the Game: <b>${esc(g.pog.n)}</b> (${esc(g.pog.c)}) · rating ${g.pog.rt.toFixed(1)} · ${esc(g.pog.why)}</span>`:""}</div>
-    <div class="ctrls"><span class="notes">This game:</span>${lane("TOP")}${lane("MID")}${lane("BOT")}${story}</div>
-    <div class="ctrls"><span class="notes">On paper:</span>${fx("Jungle early",g.B.jgl,g.R.jgl)}${fx("Objectives",g.B.obj,g.R.obj)}${fx("Teamfights",g.B.tf,g.R.tf)}${fx("Late game",g.B.late,g.R.late)}${sch(`Pre-game: ${tid(bwin>=.5?"blue":"red")} ${Math.round(Math.max(bwin,1-bwin)*100)}%`,bwin>=.5?"blue":"red")}</div>
+    <div class="ctrls"><span class="notes">This game:</span>${g.data?`<span class="notes">gold at 15</span>${lane("TOP")}${lane("JGL")}${lane("MID")}${lane("BOT")}`:`${lane("TOP")}${lane("MID")}${lane("BOT")}`}${story}</div>
+    ${g.data?`<div class="ctrls"><span class="notes">On paper:</span><span class="notes">expected gold at 15</span>${["TOP","JGL","MID","BOT"].map(L=>gch(L,g.exp15[L])).join("")}${sch(`Before draft: ${tid(g.v1p>=.5?"blue":"red")} ${Math.round(Math.max(g.v1p,1-g.v1p)*100)}%`,g.v1p>=.5?"blue":"red")}</div>`:`<div class="ctrls"><span class="notes">On paper:</span>${fx("Jungle early",g.B.jgl,g.R.jgl)}${fx("Objectives",g.B.obj,g.R.obj)}${fx("Teamfights",g.B.tf,g.R.tf)}${fx("Late game",g.B.late,g.R.late)}${sch(`Pre-game: ${tid(bwin>=.5?"blue":"red")} ${Math.round(Math.max(bwin,1-bwin)*100)}%`,bwin>=.5?"blue":"red")}</div>`}
     ${goldChart(g.gl,g.time)}
     <div class="board">${sb("blue")}${sb("red")}</div>
-    <div><div class="eyebrow">Play-by-play</div><ol class="pbp">${g.ev.map(([t,s,x])=>`<li class="${s}"><span class="num">${t}:${String((t*37)%60).padStart(2,"0")}</span>${esc(x)}</li>`).join("")}</ol></div>
-    <p class="notes" style="font-size:12px;margin:0">"This game" shows what happened in this simulation; "On paper" shows the teams' rating edges going in. Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>
+    <div><div class="eyebrow">Play-by-play</div><ol class="pbp">${g.ev.map(([t,s,x,sx])=>`<li class="${s}"><span class="num">${sx!=null?clk(sx):`${t}:${String((t*37)%60).padStart(2,"0")}`}</span>${esc(x)}</li>`).join("")}</ol></div>
+    ${g.data?`<p class="notes" style="font-size:12px;margin:0">This is one run of the data-built sim: every kill, fight, objective and tower is a random draw from chances fitted to 2026 pro games (the Oracle's Elixir file and gol.gg timelines). Team strength comes from the team-and-player model; the draft moves each lane's expected gold at 15 (champion lane values, comfort, champion strength, bot-lane synergy) and when things happen (draft styles). "This game" shows the gold leads at 15 in this run; "On paper" shows the expected leads and the win chance before the draft. A player's rating is where the game ranks among real pro games in that role (8.0 = better than 80% of them). Player of the Game is drawn among the winners with chances from a model fitted to real awards. Run it again for a different game.</p>`:`<p class="notes" style="font-size:12px;margin:0">"This game" shows what happened in this simulation; "On paper" shows the teams' rating edges going in. Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>`}
     ${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:DS.series?(seriesDone()?`<button class="btn primary" data-act="sview">See the series result</button>`:`<button class="btn primary" data-act="snext">Continue to game ${DS.series.games.length+1}</button>`):""}</div>`;
 }
 /* ---- render ---- */
@@ -729,7 +794,7 @@ function seriesGame(){const S=DS.series,last=S.games[S.games.length-1];
   Object.assign(DS,{me:S.me,opp:S.opp,fp:"blue",fmt:S.fearless?"fearless":"bo1",locked:seriesLocked(),steps:[],sim:null,game:S.games.length+1,fresh:-1,q:"",roleF:"ALL",ai:S.ai,showUsed:false});
   renderDraft();queueAI();window.scrollTo({top:document.getElementById("v-draft").offsetTop-60,behavior:"smooth"})}
 function playSeriesGame(){if(seriesDone())return;runGame();const g=DS.sim.g,rec=pack(g),pct=Math.round((g.winner==="blue"?DS.sim.bwin:1-DS.sim.bwin)*100);
-  Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec)}
+  Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:g.g15!=null?g.g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec)}
 /* per-player series totals from the stored games */
 function seriesPlayers(id,S){S=S||{games:DS.series.games};const t=team(id);return ROLES.map((r,i)=>{const o={pl:t.p[i],r,g:0,k:0,d:0,a:0,rt:0,pts:0,champs:[]};
   S.games.forEach(gm=>{const sd=gm.blue===id?"blue":"red",p=gm.ps[sd][r];o.g++;o.k+=p.k;o.d+=p.d;o.a+=p.a;o.rt+=p.rt;o.champs.push([p.c,gm.winner===id]);if(gm.pog.team===id&&gm.pog.r===r)o.pts+=100});

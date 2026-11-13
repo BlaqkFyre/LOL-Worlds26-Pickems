@@ -13,14 +13,17 @@ What goes in (all fitted or counted from real games; Luke 13 Nov: the history ta
            duo has played together; as of the cutoff
 Check: --check <gameid> rebuilds one played game's inputs with history as of that game's day and compares them with the fit
 folder's saved per-game inputs (lane-level m0 / e0 and draft styles), which must match.
-usage (repo root): python -I research/sim4/s4_tables.py <OE csv> <v1_games.csv> <sim1 build dir> <fit dir> <replay dir> <league_fresh.json>
-                   <earlykills.json> <out js> [--cutoff 2026-11-10] [--check <gameid>]"""
+usage (repo root): python -I research/sim4/s4_tables.py <OE csv> <v1_games.csv> <sim1 build dir> <fit dir> <calibration dir> <league_fresh.json>
+                   <app params dir> <out js> [--cutoff 2026-11-10] [--check <gameid>] [--pog research/model/pog/pog_app.json]
+  app params dir: fighttypes.json (with the early-window keys), earlykills.json, participants.json, firstdragon.json, all fitted on the same
+  games (research/local/sim4/app_params); calibration dir: default/ and alt/ test3_results.json from the same tables with every chosen option on.
+  --pog: Player of the Game version C and the rating table (research/sim4/s4_pog.py)."""
 import os, sys, json, math, runpy, contextlib, io
 from collections import defaultdict
 import numpy as np, pandas as pd
 a = sys.argv[1:]
 opt = lambda k, d: a[a.index(k) + 1] if k in a else d
-CSV, V1, B1, FIT, REP, LFJ, EKJ, OUTJS = a[:8]; CUTD = opt("--cutoff", "2026-11-10"); CHECK = opt("--check", None)
+CSV, V1, B1, FIT, REP, LFJ, APD, OUTJS = a[:8]; CUTD = opt("--cutoff", "2026-11-10"); CHECK = opt("--check", None); POGJ = opt("--pog", None)
 ROLES = ["top", "jng", "mid", "bot", "sup"]; MAJOR = {"LCK", "LPL", "LEC", "LCS", "LCP", "CBLOL", "FST", "MSI", "EWC", "WLDs"}
 SKILL = {"top": "e_laning", "jng": "e_early", "mid": "e_laning", "bot": "e_lane_own", "sup": "e_playmaking"}
 MAIN = {"top": ["laning", "teamfight", "cons_side", "cons_dur", "cons_steady"], "jng": ["early", "objectives", "teamfight"],
@@ -141,13 +144,17 @@ for (c_, r), v in strength.items(): champs[c_].setdefault(r, {})["str"] = round(
 for (c_, r), row in STY.iterrows():
     for k_ in ["siege", "objectives", "skirmish", "pace"]:
         if row[k_]: champs[c_].setdefault(r, {})[k_[:4]] = round(float(row[k_]), 5)
-P = pick(os.path.join(FIT, "params3.json")); P["fight_typed"] = pick(os.path.join(FIT, "fighttypes.json")); P["lane_level"] = LLF
-P["early_kills"] = {k_: v for k_, v in pick(EKJ).items() if k_ in ("pair", "assist", "cutoff")}
-cal = {"default": pick(os.path.join(REP, "w_typed_pf_ll2", "test3_results.json"))["cal"], "alt": pick(os.path.join(REP, "w_ll2", "test3_results.json"))["cal"]}
+P = pick(os.path.join(FIT, "params3.json")); P["fight_typed"] = pick(os.path.join(APD, "fighttypes.json")); P["lane_level"] = LLF
+P["early_kills"] = {k_: v for k_, v in pick(os.path.join(APD, "earlykills.json")).items() if k_ in ("pair", "assist", "cutoff")}
+P["fight_players"] = {k_: v for k_, v in pick(os.path.join(APD, "participants.json")).items() if k_ in ("players", "killer", "victim", "assist", "cutoff")}
+_fd = pick(os.path.join(APD, "firstdragon.json")); P["taker_first_dragon"] = {"side": _fd["taker"], "timing": _fd["taker_timing"]}
+for k_ in ("fight_size_table", "fights"): assert k_ in P  # the base tables the sim reads
+cal = {"default": pick(os.path.join(REP, "default", "test3_results.json"))["cal"], "alt": pick(os.path.join(REP, "alt", "test3_results.json"))["cal"]}
 T = {"built": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M"), "cutoff": CUTD, "fit_dir": FIT.replace("\\", "/"), "P": P, "cal": cal,
      "v1": {"temp": TEMP, "blue": round(float(bt[-1]), 5), "w": W, "league_shift": CR, "league_strength": Lnew, "teams": teams},
      "players": players, "champs": champs, "comfort": comfort, "synergy": {f"{b_}|{s_}": round(v, 5) for (b_, s_), v in syn.items()}, "together": together,
      "skill_key": SKILL, "main_skills": MAIN}
+if POGJ: _pg = pick(POGJ); T["pog"] = {k_: _pg[k_] for k_ in ("cutoff", "mean", "sd", "w", "pct")}
 js = ("/* Tables for the new game sim (js/sim-engine.js). BUILT BY research/sim4/s4_tables.py, never edit by hand.\n   Every value is fitted or counted "
       f"from real games before {CUTD} (the Oracle's Elixir file and the gol.gg timelines); a tournament run never changes them. */\n"
       "window.SIM_TABLES = " + json.dumps(T, separators=(",", ":"), default=float) + ";\n")

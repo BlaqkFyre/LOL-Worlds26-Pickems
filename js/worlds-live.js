@@ -16,7 +16,7 @@
    Updated 6 Nov 2026.
    Quarter-final 4 (6 Nov US, T1 3-1 KC, 4 games, r:"QF") and semi-finals 1-2 (7 Nov US, GEN 3-0 IG; 8 Nov US, BLG 3-1 T1; 7 games,
    r:"SF"): from Luke's saved copy of the Oracle's Elixir rows for 6-9 Nov (research/SF26Results.xlsx, same columns and game IDs),
-   before the full file was downloaded; to be confirmed against the full file when it arrives. Updated 10 Nov 2026.
+   before the full file was downloaded; confirmed against the full file on 11 Nov (0 of 21,516 fields differ; research/worlds-live-2026.md). Updated 10 Nov 2026.
    bans:null = bans not published yet (counted out of ban rates).
    pl rows: [role, player, champion, kills, deaths, assists, cs, cs diff at 15, damage share, kill participation]
    obj rows: [dragons, barons, heralds, voidgrubs, towers] (null where not published) */

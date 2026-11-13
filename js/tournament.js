@@ -247,7 +247,7 @@ function pack(g){
   const ps = {}; ["blue","red"].forEach(s => { ps[s] = {}; ROLES.forEach(r => { const p = g.ps[s][r]; ps[s][r] = {c:(s === "blue" ? g.B : g.R).P[r].c, k:p.k, d:p.d, a:p.a, kp:+p.kp.toFixed(3), dmgS:+p.dmgS.toFixed(3), csd:p.csd, vis:p.vis, solo:p.solo, rt:+p.rt.toFixed(2)}; }); });
   return {blue, red, winner: g.winner === "blue" ? blue : red, time:g.time, sec:g.sec, kills:{...g.k},
     steps: DS.steps.map(s => [s.t, s.k, s.c, s.r || ""]), ps, pog:{...g.pog, team: g.pog.s === "blue" ? blue : red},
-    dr:{...g.dr}, ba:{...g.ba}, g15:(g.gl.find(x => x[0] >= 14) || [0,0])[1]};
+    dr:{...g.dr}, ba:{...g.ba}, g15:g.g15 != null ? g.g15 : (g.gl.find(x => x[0] >= 14) || [0,0])[1]};
 }
 function playAIGame(m){
   const gi = m.games.length, blue = blueFor(m, gi), red = blue === m.a ? m.b : m.a;

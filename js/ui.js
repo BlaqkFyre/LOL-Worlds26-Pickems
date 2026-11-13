@@ -3,6 +3,8 @@
   const root = document.documentElement;
   const get = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
   const set = (k, v) => { try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} };
+  /* game simulator switch (sim session 4): "data" (default), "data-alt" or "classic"; read by simGame() in core.js */
+  window.SIM_MODE = get("lolw26-sim") || "data";
   const dark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
 
   function syncThemeBtn(){
@@ -27,6 +29,9 @@
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeBtn);
     tb && tb.addEventListener("click", () => { const next = dark() ? "light" : "dark"; root.dataset.theme = next; set("lolw26-theme", next); syncThemeBtn(); });
     ws && ws.addEventListener("change", () => setWorlds(ws.value));
+    const ss = document.getElementById("simSel");
+    if(ss){ ss.value = ["data", "data-alt", "classic"].includes(window.SIM_MODE) ? window.SIM_MODE : "data";
+      ss.addEventListener("change", () => { window.SIM_MODE = ss.value; set("lolw26-sim", ss.value === "data" ? null : ss.value); }); }
 
     /* popover: opens on click/tap, or on hover with a pointer; closes on outside click or Esc */
     if(ab && pop){

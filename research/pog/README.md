@@ -57,7 +57,7 @@ Whole leagues held out (larger): per-game fitted on LPL only, judged on all 305 
 - Role shares on the held-out games, model C v real: jungle 28% v 33%, mid 28% v 23%, ADC 18% v 20%, top 16% v 15%, support 10% v 9%.
 - Dropping the stats the sim doesn't make (damage taken, gold share, gold lead) costs a little against the quick model (LCS + First Stand right pick 59% v 61%).
 
-## Still to do (session 4)
-- **Version C chosen (Luke, 6 Nov):** per-game + series awards.
-- Ratings: percentile of the chosen model's score among real pro games in the role ÷ 10 (decision 6); recompute the reference table with the final weights.
-- Build into the app with the new sim (session 4), then confirm with Luke before the final commit.
+## In the app (13 Nov, v46)
+- **Version C chosen (Luke, 6 Nov) and built into the app (Luke, 13 Nov):** `research/sim4/s4_pog.py <OE csv> research/local/pog research/model/pog/pog_fit.json research/model/pog/pog_app.json`. It first refits on games before 1 Sep and matches `pog_fit.json` (largest gap 0.0005), then refits on every award to 10 Nov (977 per-game award games, 631 series): kills +1.00, deaths −0.49, damage share +0.46, vision +0.34, kill participation +0.33, assists +0.30, CS lead at 15 +0.24; roles v top: jungle +0.07, mid −0.44, support −0.23, ADC −1.50.
+- **Rating:** the score (no role term) as a percentile among 5,732 real major-league games per role before 10 Nov, ÷ 10 (101 quantiles per role in `pog_app.json`, copied into `js/sim-tables.js`). Real games from 1 Sep: winners 6.70, losers 3.28, losers rated 5+ 23%.
+- **The award:** drawn among the winning five with the model's chances (role shares on all award games, model v real: jungle 29% v 32%, mid 27% v 25%, ADC 19% v 18%, top 16% v 15%, support 9% v 10%). In 400 app games: jungle 31%, mid 24%, ADC 16%, top 16%, support 13%; winners' rating 5.99 (sim box scores less one-sided than real).
