@@ -827,3 +827,4 @@ html:root[data-worlds="sunset"] .subtabs button[aria-selected="true"]{background
 @media (max-width:1100px){.stab4 .hl{display:none}.stab4 .hs{display:inline}}
 .stab4 .cnm{display:inline-block;max-width:7.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
 @media (max-width:640px){.gsum{grid-template-columns:minmax(0,1fr)}.stab4 .rcol,.stab4 .cnm,.stab4 .hl,.stab4 .hc{display:none}.tt.full.stab4{font-size:12px}.stab4 :is(th,td){padding-left:2px;padding-right:2px;white-space:nowrap}.stab4 .pogs{display:none}.stab4 .pnm{display:inline-block;max-width:5em;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}.stab4 td.pog{color:var(--gold);font-weight:700}.sim .board .an{padding:10px 6px}.panel:has(>.sim){padding-left:10px;padding-right:10px}}
+.gcopyta{width:100%;box-sizing:border-box;font:12px var(--mono);background:var(--offbg);color:var(--fg);border:1px solid var(--line);padding:6px}

@@ -759,8 +759,31 @@ function simView(){
     <div class="board">${sb("blue")}${sb("red")}</div>
     <div><div class="eyebrow">Play-by-play</div><ol class="pbp">${g.ev.map(([t,s,x,sx])=>`<li class="${s}"><span class="num">${sx!=null?clk(sx):`${t}:${String((t*37)%60).padStart(2,"0")}`}</span>${esc(x)}</li>`).join("")}</ol></div>
     ${g.data?`<p class="notes" style="font-size:12px;margin:0">This is one run of the data-built sim: every kill, fight, objective and tower is a random draw from chances fitted to 2026 pro games (the Oracle's Elixir file and gol.gg timelines). Team strength comes from the team-and-player model; the draft moves each lane's expected gold at 15 (champion lane values, comfort, champion strength, bot-lane synergy) and when things happen (draft styles). "Gold at 15" compares this run's leads with the leads this draft is expected to give. A player's rating is where the game ranks among real pro games in that role (8.0 = better than 80% of them). Player of the Game is drawn among the winners with chances from a model fitted to real awards. Run it again for a different game.</p>`:`<p class="notes" style="font-size:12px;margin:0">"This game" shows what happened in this simulation; "On paper" shows the teams' rating edges going in. Each phase uses the players' attribute ratings for that phase (laning, early jungle, objectives, teamfights, late game), adjusted by their champion and, in lane, by the champion matchup where METAsrc has data: +3 or more on a comfort pick (scaled by win rate), −3 off their pool, plus up to +2 for meta strength and the team's synergy lift in fights. Random variance is added to every phase, so run it again for a different game.</p>`}
-    ${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:DS.series?(seriesDone()?`<button class="btn primary" data-act="sview">See the series result</button>`:`<button class="btn primary" data-act="snext">Continue to game ${DS.series.games.length+1}</button>`):""}</div>`;
+    <div class="ctrls">${DS.tour?`<button class="btn primary" data-act="tnext">${DS.tour.next}</button>`:DS.series?(seriesDone()?`<button class="btn primary" data-act="sview">See the series result</button>`:`<button class="btn primary" data-act="snext">Continue to game ${DS.series.games.length+1}</button>`):""}<button class="btn" data-act="gcopy" title="Copies this game as text (draft, score, box score, play-by-play, seed) to paste into a chat">Copy game data</button></div><div class="gcopybox"></div></div>`;
 }
+/* the game as plain text for pasting into a chat (Luke, 14 Nov): version, sim, seed (the data sim replays from it), draft, score, box score, play-by-play */
+function gameText(){if(!DS.sim)return "";const {g,bwin}=DS.sim,bid=idOnSide("blue"),rid=idOnSide("red"),T=s=>team(s==="blue"?bid:rid).id,wT=T(g.winner);
+  const ver=((document.querySelector('script[src*="core.js"]')||{}).src||"").match(/v=(\d+)/),mode=g.data?{data:"data model","data-alt":"data model, simpler fights"}[simMode()]:"classic";
+  const clk=x=>`${Math.floor(x/60)}:${String(Math.round(x)%60).padStart(2,"0")}`,k1=d=>Math.abs(d)<50?"even":`${T(d>0?"blue":"red")} +${(Math.abs(d)/1000).toFixed(1)}k`;
+  const pct=(p,s)=>`${T(p>=.5?"blue":"red")} ${Math.round(Math.max(p,1-p)*100)}%`,fw={blue:g.fights.filter(f=>f[1]==="blue").length,red:g.fights.filter(f=>f[1]==="red").length};
+  const ctx=DS.tour?(()=>{const m=typeof M==="function"?M(DS.tour.mid):null;return m?`Worlds run, ${m.id}, game ${m.games.length} of Bo${m.bo}`:"Worlds run"})():DS.series?`Champ Select series, Bo${DS.series.bo}${DS.series.fearless?" Fearless":""}, game ${DS.series.games.length}`:"single game";
+  const L=[`Pick'Em Lab simulated game · v${ver?ver[1]:"?"} · ${mode}${g.seed!=null?` · seed ${g.seed}`:""}`,ctx,
+    `${T("blue")} (blue) v ${T("red")} (red): ${wT} win in ${g.time}:${String(g.sec).padStart(2,"0")}`,
+    `Odds: ${g.data?`before draft ${pct(g.v1p)} · `:""}this draft ${pct(bwin)}`,
+    `Score ${T("blue")}-${T("red")}: kills ${g.k.blue}-${g.k.red} · towers ${g.tw.blue}-${g.tw.red} · dragons ${g.dr.blue}-${g.dr.red}${g.soul?` (soul ${T(g.soul)})`:""} · Barons ${g.ba.blue}-${g.ba.red} · fights won ${fw.blue}-${fw.red}`];
+  if(g.data)L.push(`Gold at 15 (this game | expected): ${["TOP","JGL","MID","BOT"].map(x=>`${x} ${k1(g.lanes[x])} | ${k1(g.exp15[x])}`).join(" · ")} · team ${k1(g.g15)} | ${k1(["TOP","JGL","MID","BOT"].reduce((a,x)=>a+g.exp15[x],0))}`);
+  ["blue","red"].forEach(s=>{const id=s==="blue"?bid:rid;L.push(`Bans ${T(s)}: ${bansOf(id).map(b=>b.c).join(", ")||"none"}`)});
+  L.push("Box score (role player champion K/D/A dmg% csd@15 rating):");
+  ["blue","red"].forEach(s=>{const P=s==="blue"?g.B:g.R;L.push(`${T(s)}${g.winner===s?" (won)":""}`);ROLES.forEach(r=>{const p=g.ps[s][r];
+    L.push(`  ${r} ${P.P[r].pl.n} ${P.P[r].c} ${g.kda[s][r].join("/")} ${Math.round(p.dmgS*100)}% ${p.csd>0?"+":""}${p.csd} ${p.rt.toFixed(1)}${g.pog&&g.pog.s===s&&g.pog.r===r?" POG":""}`)})});
+  if(g.pog)L.push(`Player of the Game: ${g.pog.n} (${g.pog.c}) ${g.pog.rt.toFixed(1)} · ${g.pog.why}`);
+  L.push("Play-by-play:");g.ev.forEach(([t,s,x,sx])=>L.push(`${sx!=null?clk(sx):t+":00"} ${s?T(s):"--"} ${x}`));
+  return L.join("\n")}
+function copyGame(b){const t=gameText(),box=b.closest(".sim")&&b.closest(".sim").querySelector(".gcopybox");
+  const show=()=>{if(box)box.innerHTML=`<p class="notes" style="margin:6px 0">Couldn't copy automatically: select the text below and copy it.</p><textarea class="gcopyta" readonly rows="8">${esc(t)}</textarea>`};
+  const done=()=>{b.textContent="Copied";setTimeout(()=>{b.textContent="Copy game data"},2000)};
+  const legacy=()=>{try{const ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);const ok=document.execCommand("copy");ta.remove();ok?done():show()}catch(e){show()}};
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(done).catch(legacy);else legacy()}
 /* ---- render ---- */
 function teamPanel(id){
   const t=team(id),sd=sideOf(id),ps=picksOf(id),bs=bansOf(id),i=DS.steps.length,nxt=i<20?SEQ[i]:null,isNext=nxt&&actorId(nxt[0])===id;
@@ -908,6 +931,7 @@ document.addEventListener("click",e=>{
   else if(a==="snew"){clearTimeout(aiTimer);if(DS.series)DS.side=DS.series.side0;DS.series=null;DS.steps=[];DS.sim=null;DS.locked=[];DS.fmt="bo1";DS.ai=true;renderDraft()}
   else if(a==="srematch"){const S=DS.series;Object.assign(DS,{me:S.me,opp:S.opp,side:S.side0,ai:S.ai,sbo:String(S.bo),sfear:S.fearless?"yes":"no"});startSeries()}
   else if(a==="custom")pickTyped();
+  else if(a==="gcopy")copyGame(b);
 });
 document.addEventListener("change",e=>{
   const t=e.target;
