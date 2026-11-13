@@ -689,14 +689,14 @@ function dataGame(o,I,seed){const T=SIM_TABLES,E=SIM_ENGINE,ids={blue:I.b,red:I.
     exp15:{TOP:I.exp15[0],JGL:I.exp15[1],MID:I.exp15[2],BOT:I.exp15[3]+I.exp15[4]},v1p:1/(1+Math.exp(-I.v1.z)),kda:{blue:{},red:{}},solo:{blue:{},red:{}},ps:{blue:{},red:{}},jd:0};
   g.gl=Object.keys(o.gd).map(Number).filter(m=>m<=mins).sort((a,b)=>a-b).map(m=>[m,Math.round(o.gd[m])]);
   if(g.gl.length)g.gl.push([Math.round(mins*100)/100,g.gl[g.gl.length-1][1]]);
-  /* box score and rating (Player of the Game version C: percentile of the fitted score among real games in the role / 10) */
+  /* box score and rating (Player of the Game version C: percentile of the award model's full score among real games of every role / 10) */
   ["blue","red"].forEach(s=>ROLES.forEach(R=>{const e=o.ps[s][ENG_ROLE[R]],vpm=e.vis/Math.max(1,mins);
     g.kda[s][R]=[e.k,e.d,e.a];g.solo[s][R]=e.solo;
     g.ps[s][R]={k:e.k,d:e.d,a:e.a,kp:e.kp,dmgS:e.dmgS,csd:e.csd,vis:Math.round(vpm*100)/100,solo:e.solo,won:s===o.winner,
       rt:E.pogRating(T,ENG_ROLE[R],{k:e.k,d:e.d,a:e.a,kp:e.kp,dmgS:e.dmgS,csd:e.csd,vpm})}}));
-  /* the award: drawn among the winning five with the fitted chances (its own seeded stream, so the same seed gives the same award) */
+  /* the award: the winner with the highest fitted chance (= the highest rating; Luke 14 Nov: performance decides it, no draw) */
   const w=o.winner,st={};ROLES.forEach(R=>{const p=g.ps[w][R];st[ENG_ROLE[R]]={k:p.k,d:p.d,a:p.a,kp:p.kp,dmgS:p.dmgS,csd:p.csd,vpm:o.ps[w][ENG_ROLE[R]].vis/Math.max(1,mins)}});
-  const ch=E.pogChances(T,st);let u=E.RNG(seed+1).random(),pr=ROLES[ROLES.length-1];for(const R of ROLES){u-=ch[ENG_ROLE[R]];if(u<0){pr=R;break}}
+  const ch=E.pogChances(T,st),pr=ROLES.reduce((a,R)=>ch[ENG_ROLE[R]]>ch[ENG_ROLE[a]]?R:a,ROLES[0]);
   const pp=g.ps[w][pr];
   g.pog={s:w,r:pr,n:S[w].P[pr].pl.n,c:S[w].P[pr].c,rt:pp.rt,why:`${pp.k}/${pp.d}/${pp.a} · ${Math.round(pp.kp*100)}% KP · ${Math.round(pp.dmgS*100)}% team damage · award chance ${Math.round(ch[ENG_ROLE[pr]]*100)}%`};
   /* fights: [minute, winner side (null on an even trade), label, gold lead going in, second, blue kills, red kills, fight id] */

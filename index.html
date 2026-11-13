@@ -11,7 +11,7 @@
 <meta name="description" content="Worlds 2026 tournament simulator, champ select drafter, player power bars and meta tools for League of Legends Pick'Em.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@500;600;700&family=Press+Start+2P&display=swap">
-<link rel="stylesheet" href="css/styles.css?v=49">
+<link rel="stylesheet" href="css/styles.css?v=50">
 <script>try{var t=localStorage.getItem("lolw26-theme"),w=localStorage.getItem("lolw26-worlds");if(t)document.documentElement.dataset.theme=t;if(w&&w!=="off")document.documentElement.dataset.worlds=w}catch(e){}</script>
 </head>
 <body>
@@ -34,7 +34,7 @@
     <p><strong>Favourite picks:</strong> each player's three most-played champions in 2026 pro play (games, win rate) from mid.gg player pages. LOS players come from their Sheep Esports player pages, with CBLOL playoff stats from Sheep's event stats.</p>
     <p><strong>Meta status and champion cards:</strong> blended pick + ban presence from NerfPlz pro tables — the Worlds patch 26.20 (25 games) weighted ×4 with patches 26.16–26.20 (465 games) for 90%, plus the 2026 season (2,723 games) for 10%. Win rates are shrunk toward 50% for small samples. Builds, roles and play-in users come from NerfPlz champion pages (Leaguepedia data). Champion cards and player cards show this tournament's own numbers first; the pro research drives draft suggestions, the AI and the simulation.</p>
     <p><strong>Game simulator:</strong> <select id="simSel" aria-label="Game simulator"><option value="data">Data model (default)</option><option value="data-alt">Data model, simpler fights</option><option value="classic">Classic (rule-based)</option></select></p>
-    <p><strong>Game odds:</strong> the default simulator is built from data. It plays a pro game minute by minute, and every kill, fight, objective, tower and gold swing is a random draw from chances fitted to 2026 major-league games (the Oracle's Elixir file and gol.gg timelines). Team strength comes from a team-and-player model fitted to the same games; the draft changes each lane's expected gold and when things happen. It was judged on games it never saw, Worlds included; a tournament run never changes its tables. "Simpler fights" leaves out the fitted fight types. Player ratings are where a game ranks among real pro games in that role, and Player of the Game is drawn among the winners with chances from a model fitted to real awards. The classic simulator is rule-based with random rolls; its win odds were checked against 711 real 2026 pro series and recalibrated. Details: research/sim-plan.md and research/backtest-2026.md in the GitHub repo.</p>
+    <p><strong>Game odds:</strong> the default simulator is built from data. It plays a pro game minute by minute, and every kill, fight, objective, tower and gold swing is a random draw from chances fitted to 2026 major-league games (the Oracle's Elixir file and gol.gg timelines). Team strength comes from a team-and-player model fitted to the same games; the draft changes each lane's expected gold and when things happen. It was judged on games it never saw, Worlds included; a tournament run never changes its tables. "Simpler fights" leaves out the fitted fight types. Player ratings use a model fitted to real Player of the Game awards (K/D/A, kill participation, damage share, CS at 15, vision, and how often each role wins the award): a rating is where the game ranks among real pro games of every role, and Player of the Game goes to the winner rated highest. The classic simulator is rule-based with random rolls; its win odds were checked against 711 real 2026 pro series and recalibrated. Details: research/sim-plan.md and research/backtest-2026.md in the GitHub repo.</p>
     <p><strong>Real Worlds games:</strong> the Swiss and knockout games played so far (picks, bans, player stats and objectives, from NerfPlz, gol.gg, dpm.lol and pickorban.com; checked against the Oracle's Elixir data file) feed the champion cards' Worlds meta, pairs and counters, players' champion pools, draft suggestions, and a small capped "Worlds form" update to player skills (at most ±1 per game and ±3 in total, compared with the average for that role at Worlds). Simulated tournaments still start at 0-0; real results never set simulated standings.</p>
     <p><strong>Region badges:</strong> the coloured badge before a team or player shows its league seed (e.g. <em>#1</em>) in its region's colour; hover it for the region. Colours: <span style="color:#4f46e5">■</span> LCK, <span style="color:#be123c">■</span> LPL, <span style="color:#0f766e">■</span> LEC, <span style="color:#475569">■</span> LCS, <span style="color:#b45309">■</span> LCP, <span style="color:#15803d">■</span> CBLOL.</p>
     <p><strong>Images:</strong> champion square icons load from Riot's Data Dragon. Teams are shown as colour badges only — no team or Riot logos.</p>
@@ -119,16 +119,16 @@
 </div>
 
 
-<script src="js/ui.js?v=49"></script>
-<script src="js/data.js?v=49"></script>
-<script src="js/champions.js?v=49"></script>
-<script src="js/assets.js?v=49"></script>
-<script src="js/worlds-live.js?v=49"></script>
-<script src="js/h2h.js?v=49"></script>
-<script src="js/pro-matchups.js?v=49"></script>
-<script src="js/sim-tables.js?v=49"></script>
-<script src="js/sim-engine.js?v=49"></script>
-<script src="js/tournament.js?v=49"></script>
-<script src="js/core.js?v=49"></script>
+<script src="js/ui.js?v=50"></script>
+<script src="js/data.js?v=50"></script>
+<script src="js/champions.js?v=50"></script>
+<script src="js/assets.js?v=50"></script>
+<script src="js/worlds-live.js?v=50"></script>
+<script src="js/h2h.js?v=50"></script>
+<script src="js/pro-matchups.js?v=50"></script>
+<script src="js/sim-tables.js?v=50"></script>
+<script src="js/sim-engine.js?v=50"></script>
+<script src="js/tournament.js?v=50"></script>
+<script src="js/core.js?v=50"></script>
 </body>
 </html>

@@ -424,17 +424,23 @@ function inputs(T, blueId, redId, champsB, champsR){
   return {x: {z: V.z, ll_m0: m0, ll_e0: e0, siege_d: sb.siege - sr.siege, obj_d: sb.objectives - sr.objectives, skirm_d: sb.skirmish - sr.skirmish,
     pace_s: sb.pace + sr.pace, siege_s: sb.siege + sr.siege, obj_s: sb.objectives + sr.objectives}, v1: V, exp15, featB: B.f, featR: R.f};
 }
-/* Player of the Game, version C (research/sim4/s4_pog.py; Luke 6 Nov): each player's score from the box score; the rating is that score's
-   percentile among real major-league games in the role (2026, before the tables' cutoff), / 10; the award is drawn among the winning five
-   with chances from the fitted choice model (score + role term), so awards by role come out as in real games.
+/* Player of the Game, version C (research/sim4/s4_pog.py; Luke 6 Nov): each player's score from the box score plus the fitted role term
+   (the award model's full score). Rating, one scale for every role (Luke 14 Nov: supports rated too high): that full score's percentile
+   among all real major-league player-games (2026, before the tables' cutoff), / 10. The reference has the same number of games in each
+   role, so the all-role percentile is the average of the within-role percentiles of (full score - that role's term).
+   The award goes to the winner with the highest full score (research/sim4/pog_options_test.py: right 52% on held-out award games v 41%
+   for a draw); pogChances still gives each winner's fitted chance for display.
    st = {k, d, a, kp, dmgS, csd, vpm} */
 const POG_X = {kills: "k", deaths: "d", assists: "a", kp: "kp", damageshare: "dmgS", csd15: "csd", vspm: "vpm"};
 function pogScore(T, st){ const G = T.pog; let s = 0; for(const c in POG_X) s += G.w[c] * (st[POG_X[c]] - G.mean[c]) / G.sd[c]; return s; }
-function pogRating(T, role, st){
-  const q = T.pog.pct[role], s = pogScore(T, st);
-  if(s <= q[0]) return 0; if(s >= q[q.length - 1]) return 10;
+function pctIn(q, s){
+  if(s <= q[0]) return 0; if(s >= q[q.length - 1]) return 100;
   let i = 0; while(q[i + 1] < s) i++;
-  const lo = q[i], hi = q[i + 1]; return (i + (hi > lo ? (s - lo) / (hi - lo) : 0.5)) / 10;
+  const lo = q[i], hi = q[i + 1]; return i + (hi > lo ? (s - lo) / (hi - lo) : 0.5);
+}
+function pogRating(T, role, st){
+  const w = T.pog.w, u = pogScore(T, st) + (w["r_" + role] || 0);
+  return ROLES.reduce((a, r) => a + pctIn(T.pog.pct[r], u - (w["r_" + r] || 0)), 0) / ROLES.length / 10;
 }
 function pogChances(T, stats){  /* stats[role] for the winning side → {role: chance} */
   const u = ROLES.map(r => pogScore(T, stats[r]) + (T.pog.w["r_" + r] || 0)), mx = Math.max(...u), e = u.map(x => Math.exp(x - mx)), s = e.reduce((a, b) => a + b, 0);

@@ -1,0 +1,76 @@
+{
+ "held out: games from 1 Sep, weights fitted before 1 Sep": {
+  "games": 86,
+  "now: top-rated winner is the real POG": 0.512,
+  "now: POG draw, expected share right": 0.405,
+  "now: POG draw, log loss": 1.1806,
+  "A/B: top full-score winner is the real POG": 0.523,
+  "award share by role": {
+   "now (draw, expected)": {
+    "top": 0.158,
+    "jng": 0.284,
+    "mid": 0.277,
+    "bot": 0.179,
+    "sup": 0.102
+   },
+   "now (top-rated winner)": {
+    "top": 0.221,
+    "jng": 0.244,
+    "mid": 0.244,
+    "bot": 0.186,
+    "sup": 0.105
+   },
+   "A/B (top full score)": {
+    "top": 0.151,
+    "jng": 0.337,
+    "mid": 0.326,
+    "bot": 0.174,
+    "sup": 0.012
+   },
+   "real": {
+    "top": 0.151,
+    "jng": 0.326,
+    "mid": 0.233,
+    "bot": 0.198,
+    "sup": 0.093
+   }
+  }
+ },
+ "all award games, app weights (in-sample)": {
+  "games": 977,
+  "now: top-rated winner is the real POG": 0.541,
+  "now: POG draw, expected share right": 0.439,
+  "now: POG draw, log loss": 1.0946,
+  "A/B: top full-score winner is the real POG": 0.585,
+  "award share by role": {
+   "now (draw, expected)": {
+    "top": 0.156,
+    "jng": 0.294,
+    "mid": 0.271,
+    "bot": 0.186,
+    "sup": 0.094
+   },
+   "now (top-rated winner)": {
+    "top": 0.197,
+    "jng": 0.219,
+    "mid": 0.233,
+    "bot": 0.201,
+    "sup": 0.15
+   },
+   "A/B (top full score)": {
+    "top": 0.142,
+    "jng": 0.337,
+    "mid": 0.306,
+    "bot": 0.197,
+    "sup": 0.018
+   },
+   "real": {
+    "top": 0.154,
+    "jng": 0.317,
+    "mid": 0.249,
+    "bot": 0.181,
+    "sup": 0.099
+   }
+  }
+ }
+}
