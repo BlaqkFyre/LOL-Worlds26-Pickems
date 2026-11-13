@@ -247,12 +247,16 @@ const picksOf=id=>DS.steps.map((s,i)=>({...s,i})).filter(s=>s.k==="pick"&&s.t===
 const bansOf=id=>DS.steps.map((s,i)=>({...s,i})).filter(s=>s.k==="ban"&&s.t===id);
 function openRoles(id){const used=new Set(picksOf(id).map(p=>p.r));return ROLES.filter(r=>!used.has(r))}
 function comfortIn(id,c){return team(id).p.filter(p=>poolOf(p).some(x=>x[0]===c)).map(p=>({p,x:poolOf(p).find(x=>x[0]===c)}))}
+/* roles a team still had open before draft step i; a ban or pick only denies a player whose role is still open (a flex champion counts
+   through any player in an open role who plays it) */
+const openAt=(id,i)=>{const used=new Set(DS.steps.slice(0,i).filter(s=>s.k==="pick"&&s.t===id).map(s=>s.r));return ROLES.filter(r=>!used.has(r))};
+const comfortOpen=(id,c,i)=>{const op=openAt(id,i==null?DS.steps.length:i);return comfortIn(id,c).filter(o=>op.includes(o.p.role))};
 function scoreFor(c,actor,kind){
   const other=otherId(actor),pres=presOf(c),why=[];let s=pres*0.5;
   if(pres)why.push(`${tierOf(pres)}-tier meta (${pres}%)`);
   if(kind==="ban"){
-    comfortIn(other,c).forEach(({p,x})=>{s+=25+Math.min(x[1]||10,20);why.push(`${p.n}'s comfort (${x[1]?x[1]+"g, ":""}${x[2]}%)`)});
-    if(comfortIn(actor,c).length){s-=15;why.push(`your ${comfortIn(actor,c).map(o=>o.p.n).join(", ")} plays it`)}
+    comfortOpen(other,c).forEach(({p,x})=>{s+=25+Math.min(x[1]||10,20);why.push(`${p.n}'s comfort (${x[1]?x[1]+"g, ":""}${x[2]}%)`)});
+    if(comfortOpen(actor,c).length){s-=15;why.push(`your ${comfortOpen(actor,c).map(o=>o.p.n).join(", ")} plays it`)}
     picksOf(actor).forEach(p=>{const m=matchup(c,p.c);if(m!=null&&m>=52&&[...(ROLEMAP[c]||[])].includes(p.r)){s+=(m-50)*3;why.push(`counters your ${p.c} (${m}%)`)}});
     const W=wrOf(c);if(W&&W.adj>52)s+=(W.adj-50)*0.8;
     if(DS.steps.length>=12){const need=[...(ROLEMAP[c]||[])].filter(r=>openRoles(other).includes(r));if(!need.length)s*=0.3;else why.push(`they still need ${need.join("/")}`)}
@@ -269,7 +273,7 @@ function scoreFor(c,actor,kind){
   if(CHAMP_DB[c]&&CHAMP_DB[c].so)s*=0.5;
   picksOf(actor).forEach(p=>{const l=SYN[c+"|"+p.c];if(l!=null){s+=l*4;why.push(`${l>0?"+":""}${l} with ${p.c}`)}
     const m=typeof WORLDS_LIVE!=="undefined"&&WORLDS_LIVE.mates[[c,p.c].sort().join("|")];if(m&&m.g>=2){const net=m.w-(m.g-m.w);if(net){s+=Math.max(-3,Math.min(3,net))*2;why.push(`${m.w}-${m.g-m.w} with ${p.c} at Worlds`)}}});
-  const deny=comfortIn(other,c);if(deny.length){s+=8;why.push(`denies ${deny.map(o=>o.p.n).join(", ")}`)}
+  const deny=comfortOpen(other,c);if(deny.length){s+=8;why.push(`denies ${deny.map(o=>o.p.n).join(", ")}`)}
   picksOf(other).filter(p=>roles.includes(p.r)).forEach(p=>{const m=matchup(c,p.c);if(m!=null){s+=(m-50)*3;why.push(m>=50?`beats ${p.c} (${m}%)`:`countered by ${p.c} (${m}%)`)}});
   return {c,s,why,roles};
 }
@@ -533,8 +537,8 @@ function draftScore(id){
   ps.forEach(p=>{const pl=t.p[ROLES.indexOf(p.r)],x=pl.picks.find(y=>y[0]===p.c),pr=presOf(p.c);meta+=pr;if(x)comf++;
     rows.push({r:p.r,pl,c:p.c,x,pr})});
   for(let a=0;a<ps.length;a++)for(let b=a+1;b<ps.length;b++){const l=SYN[ps[a].c+"|"+ps[b].c];if(l!=null){syn+=l;pairs.push([ps[a].c,ps[b].c,l])}}
-  const bans=bansOf(id).map(b=>{const hit=comfortIn(other,b.c);return {c:b.c,hit,pr:presOf(b.c)}});
-  const denied=ps.filter(p=>comfortIn(other,p.c).length).map(p=>({c:p.c,who:comfortIn(other,p.c)}));
+  const bans=bansOf(id).map(b=>{const hit=comfortOpen(other,b.c,b.i);return {c:b.c,hit,pr:presOf(b.c)}});
+  const denied=ps.filter(p=>comfortOpen(other,p.c,p.i).length).map(p=>({c:p.c,who:comfortOpen(other,p.c,p.i)}));
   const lostComf=team(id).p.filter(pl=>pl.picks.length&&!rows.some(r=>r.pl===pl&&r.x)).map(pl=>pl.n);
   const score=meta/5*0.05+comf*1.0+syn*0.25+bans.filter(b=>b.hit.length).length*0.4;
   return {id,rows,meta:Math.round(meta/Math.max(1,ps.length)),comf,syn:Math.round(syn*10)/10,pairs,bans,denied,score,lostComf};
