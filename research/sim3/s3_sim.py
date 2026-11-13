@@ -23,7 +23,7 @@ Each minute:
                      catch-up term and noise
 Calibration (cal): gain (how strongly v1 strength turns into every event chance, one number), lane_mu / lane_k (lane
 farm part, since kills and plates also move gold), fight_eps (per-fight swing). None of these sets a result."""
-import json, math
+import json, math, itertools
 import numpy as np
 
 ROLES = ["top", "jng", "mid", "bot", "sup"]
@@ -79,6 +79,22 @@ class Sim:
                 self.LL["ev"] = {k: np.array([eg[r][k] for r in ROLES]) for k in ("own_kill", "own_death", "own_assist") + pk}
                 self.LL["z_pre"] = np.array([ll["coef_pregame"][r]["z"] for r in ROLES])
         dt = P["dragon_types"]["first_two_share"]; self.dtypes = list(dt.keys()); self.dprob = np.array(list(dt.values())); self.dprob /= self.dprob.sum()
+        # fight players (opt-in, 13 Nov; research/sim4/s4_participants.py): every (side A set, side B set) pair's chance per window x kills group
+        self.FP = None
+        if P.get("fight_players"):
+            fp = P["fight_players"]["players"]; subs = [frozenset(c) for n_ in range(1, 6) for c in itertools.combinations(range(5), n_)]
+            WN_ = ["0-4", "5-9", "10-14", "15-24", "25+"]; NBN_ = ["1", "2", "3+"]; probs = []
+            pairs = list(itertools.combinations(range(5), 2))
+            LWN_ = ["0-4", "5-9", "10-14", "15+"]
+            WITH = {lw: np.array([sum(fp["same_side_pair"][lw][f"{ROLES[i]}+{ROLES[j]}"] for i, j in pairs if i in s_ and j in s_) for s_ in subs]) for lw in LWN_}
+            CROSS = {lw: np.array([[sum(fp["across"][lw][f"{ROLES[i]}~{ROLES[j]}"] for i in a_ for j in b_) for b_ in subs] for a_ in subs]) for lw in LWN_}
+            for wi_, w_ in enumerate(WN_):
+                within, cross = WITH[LWN_[min(wi_, 3)]], CROSS[LWN_[min(wi_, 3)]]
+                for nb_ in NBN_:
+                    ra = fp["role_A"][f"{w_}|{nb_}"]; rb = fp["role_B"][f"{w_}|{nb_}"]
+                    ua = np.array([sum(ra[ROLES[i]] for i in s_) for s_ in subs]) + within; ub = np.array([sum(rb[ROLES[i]] for i in s_) for s_ in subs]) + within
+                    u = (ua[:, None] + ub[None, :] + cross).reshape(-1); pz = np.exp(u - u.max()); probs.append(pz / pz.sum())
+            self.FP = {"subs": [sorted(x) for x in subs], "probs": probs, "WN": WN_, "k": P["fight_players"]["killer"], "v": P["fight_players"]["victim"], "a": P["fight_players"]["assist"]}
 
     def count(self, rng, mu, kind, m):
         """Draw a count with mean mu and the fitted leftover burstiness for this phase (negative binomial; Poisson if none)."""
@@ -129,6 +145,22 @@ class Sim:
             lean = lane_end if LL["ev"] is None else np.array(x["ll_e0"], float) + LL["z_pre"] * x["z"]
         else:
             lane_end = cal["lane_mu"] * self.lane_mean(x, z, 15) + math.sqrt(cal["lane_k"]) * (self.L15 @ rng.standard_normal(5))
+        # lane-aware early kills (opt-in, 13 Nov; research/sim4/s4_earlykills.py): before 15:00 killer and victim are drawn as a pair
+        # (lanes, lean on expected leads, who is already in the fight), then assists; fight counts, types and sizes get early-window terms
+        # cal["early_kills"]: "on" = both parts; "pairs" = only the kill pairs and assists; "counts" = only the early fight counts, types and sizes;
+        # "pairs_flat" = only the kill pairs, with the sim's usual flat assist rates; "on_flat" = kill pairs (flat assists) + early counts (13 Nov tests)
+        EKM = cal.get("early_kills", "off"); EK = EKM in ("on", "pairs", "pairs_flat", "on_flat") and bool(P.get("early_kills")); EKC = EKM in ("on", "counts", "on_flat")
+        EKP = P["early_kills"]["pair"] if EK else None; EKA = P["early_kills"]["assist"] if EK else None
+        EWN = ["0-4", "5-9", "10-14"]; LANEID = [0, -1, 1, 2, 2]; e_lead = lean if (LL is not None and LL["ev"] is not None) else None
+        # events keep their order (opt-in, 13 Nov): each event happens no earlier than the one before it, so a minute's events keep the
+        # order the sim plays them and nothing comes after the Nexus. Same random draws; only the times (and what they feed) move.
+        EO = cal.get("event_order", "off") == "on"; cur = [0.0]
+        FPon = cal.get("fight_players", "off") == "on" and self.FP is not None  # who is in each fight (13 Nov): kills and assists only among them
+        # the game's first dragon has its own fitted taker (opt-in, 13 Nov; research/sim4/s4_firstdragon.py): lane leads incl. bot duo and top
+        FDT = (P["taker_first_dragon"]["timing" if TIM else "side"]) if (cal.get("first_dragon_taker", "off") == "on" and P.get("taker_first_dragon")) else None
+        def at(d_):
+            if not EO: return d_
+            cur[0] = max(cur[0], d_); return cur[0]
         farm = np.zeros(5); gold = np.zeros(5)                 # per role, blue minus red: farm part and everything else
         K = np.zeros((2, 5), int); D = np.zeros((2, 5), int); A = np.zeros((2, 5), int); SOLO = np.zeros((2, 5), int)
         seg = [[0, 0, 0], [0, 0, 0]]                           # segments side s has taken in each enemy lane (15 = lane open)
@@ -178,19 +210,22 @@ class Sim:
                            + fc["monster_up"] * mon_up + fc["buff_up"] * (bdir != 0 or edir != 0) + fc.get("pace_style", 0.0) * pace_s
                            + fc.get("minutes_before_14", 0.0) * (min(m, 14) - 14))
             TYPED = cal.get("fight_model") == "typed" and P.get("fight_typed")  # opt-in (10 Nov, report 7g): fight types, held in check
+            ew = 0 if m < 5 else 1 if m < 10 else 2
+            ew_term = lambda c_: (c_.get("early 0-4", 0.0) * (m < 5) + c_.get("early 5-9", 0.0) * (5 <= m < 10)) if (EKC and TYPED) else 0.0
             if TYPED:
-                FTc = P["fight_typed"]; cc = FTc["count"]["coef"]; ph_i = PHN[sum(m >= p for p in PH) - 1]
+                FTc = P["fight_typed"]; cc = FTc["count_early"]["coef"] if (EKC and FTc.get("count_early")) else FTc["count"]["coef"]; ph_i = PHN[sum(m >= p for p in PH) - 1]
                 k2 = sum(1 for e_ in kill_log if t0 - 120 <= e_[0] < t0); fprev = 1 if prev_nf > 0 else 0
                 feat = {"per_1k_abs_lead": min(abs(gd) / 1000, 15), "monster_up": mon_up, "buff_up": (bdir != 0 or edir != 0)}
                 lam = math.exp(cc["intercept"] + cc.get(f"phase {ph_i}", 0.0) + sum(cc[k_] * v_ for k_, v_ in feat.items())
-                               + cc["pace_style"] * pace_s + cc["fight_last_minute"] * fprev + cc["log1p_kills_last_2min"] * math.log1p(k2))
+                               + cc["pace_style"] * pace_s + cc["fight_last_minute"] * fprev + cc["log1p_kills_last_2min"] * math.log1p(k2) + ew_term(cc))
             nf = int(rng.poisson(lam)) if TYPED else self.count(rng, lam, "fights", m); prev_net = net; net = 0; fought = nf > 0; prev_nf = nf
             for _ in range(nf):
                 if TYPED:
-                    zt = [0.0] + [tc["intercept"] + tc.get(f"phase {ph_i}", 0.0) + sum(tc[k_] * v_ for k_, v_ in feat.items()) + tc["log1p_kills_last_2min"] * math.log1p(k2)
-                                  for tc in (FTc["type"]["coef"]["skirmish"], FTc["type"]["coef"]["teamfight"])]
+                    TC = FTc["type_early"]["coef"] if (EKC and FTc.get("type_early")) else FTc["type"]["coef"]
+                    zt = [0.0] + [tc["intercept"] + tc.get(f"phase {ph_i}", 0.0) + sum(tc[k_] * v_ for k_, v_ in feat.items()) + tc["log1p_kills_last_2min"] * math.log1p(k2) + ew_term(tc)
+                                  for tc in (TC["skirmish"], TC["teamfight"])]
                     pt = np.exp(np.array(zt) - max(zt)); ftype = ["small", "skirmish", "teamfight"][int(rng.choice(3, p=pt / pt.sum()))]
-                    st_ = FTc["size_table"][ftype][FPH(m)]; sizes = np.array([int(a_) for a_ in st_]); pr = np.array(list(st_.values())); pr = pr / pr.sum()
+                    st_ = FTc["size_table_early"][ftype]["0-4" if m < 5 else "5-9" if m < 10 else "10-13"] if (EKC and m < 14 and FTc.get("size_table_early")) else FTc["size_table"][ftype][FPH(m)]; sizes = np.array([int(a_) for a_ in st_]); pr = np.array(list(st_.values())); pr = pr / pr.sum()
                 else:
                     sizes, pr = self.fsize[FPH(m)]
                 n = int(rng.choice(sizes, p=pr))
@@ -199,11 +234,72 @@ class Sim:
                 p = sig(ks["intercept"] + ks["per_1k_gold_lead"] * gd / 1000 + ks["per_v1_logit"] * z * zk + ks["baron"] * bdir + ks["elder"] * edir + form
                         + ks.get("skirmish_style_early", 0.0) * skirm_d * (m < 15)
                         + rng.normal(0, cal.get("fight_eps_phase", {}).get("0-13" if m < 14 else "14-24" if m < 25 else "25+", cal["fight_eps"])))
-                tf = t0 + rng.uniform(0, 55); dead = [set(), set()]
+                tf = at(t0 + rng.uniform(0, 55)); dead = [set(), set()]; inv = [set(), set()]; lanes_in = set()
                 for j in range(n):
                     s = 0 if rng.random() < p else 1; o = 1 - s
+                    if FPon:  # fight players: drawn with the first kill (side A = that kill's side), then every kill among them
+                        fpw = 0 if m < 5 else 1 if m < 10 else 2 if m < 15 else 3 if m < 25 else 4; FPd = self.FP
+                        if j == 0:
+                            ci = int(rng.choice(len(FPd["probs"][0]), p=FPd["probs"][fpw * 3 + (0 if n == 1 else 1 if n == 2 else 2)]))
+                            part = {s: FPd["subs"][ci // 31], o: FPd["subs"][ci % 31]}
+                        ck = [i for i in part[s] if i not in dead[s]]; cv = [i for i in part[o] if i not in dead[o]]
+                        if not ck or not cv: continue
+                        sgs, sgo = (1 if s == 0 else -1), (1 if o == 0 else -1); wn_ = FPd["WN"][fpw]
+                        def pick_role(c_, tab, sg_):
+                            u_ = np.array([tab["role"][wn_][ROLES[i]] + tab["lean_per_1k_before_15"] * (sg_ * e_lead[i] / 1000 if (m < 15 and e_lead is not None) else 0.0) for i in c_])
+                            pz = np.exp(u_ - u_.max()); return c_[int(rng.choice(len(c_), p=pz / pz.sum()))]
+                        k = pick_role(ck, FPd["k"], sgs); v = pick_role(cv, FPd["v"], sgo)
+                        dead[o].add(v); fa = FPd["a"]
+                        nbf = 0 if n == 1 else 1 if n == 2 else 2
+                        ast = [i for i in ck if i != k and i not in dead[s] and rng.random() < sig(fa["window " + wn_] + (fa["role " + ROLES[i]] if i else 0.0)
+                               + fa["same_lane_as_killer"] * (LANEID[i] >= 0 and LANEID[i] == LANEID[k]) + fa["same_lane_as_victim"] * (LANEID[i] >= 0 and LANEID[i] == LANEID[v])
+                               + fa["one_kill_fight"] * (nbf == 0) + fa["two_kill_fight"] * (nbf == 1) + fa["already_in_a_kill"] * (i in inv[s]))]
+                        inv[s].update([k] + ast)
+                        K[s, k] += 1; D[o, v] += 1
+                        for i in ast: A[s, i] += 1
+                        if not ast: SOLO[s, k] += 1
+                        add_gold(s, val["kill"], [k] * 2 + ast)
+                        if LL is not None and LL["ev"] is not None and m < 15:
+                            E_ = LL["ev"]; gold[k] += sgs * E_["own_kill"][k]; gold[v] -= sgs * E_["own_death"][v]
+                            for i in ast: gold[i] += sgs * E_["own_assist"][i]
+                        net += 1 if s == 0 else -1; first.setdefault("blood", s)
+                        tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
+                        note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)")); continue
                     alive_v = [i for i in range(5) if i not in dead[o]]
                     if not alive_v: continue
+                    if EK and m < 15:  # lane-aware early kills: the pair, then assists (13 Nov)
+                        alive_k = [i for i in range(5) if i not in dead[s]] or list(range(5)); sgs, sgo = (1 if s == 0 else -1), (1 if o == 0 else -1)
+                        pairs, u = [], []
+                        for k in alive_k:
+                            for v in alive_v:
+                                pn = ROLES[k] + ">" + ROLES[v]
+                                x_ = (EKP["pair"][pn] + EKP["window"][EWN[ew]][pn] + EKP["lean_killer_per_1k"] * (sgs * e_lead[k] / 1000 if e_lead is not None else 0.0)
+                                      + EKP["lean_victim_per_1k"] * (sgo * e_lead[v] / 1000 if e_lead is not None else 0.0))
+                                if j > 0:
+                                    x_ += (EKP["follow_killer_in_fight"] * (k in inv[s]) + EKP["follow_victim_in_fight"] * (v in inv[o])
+                                           + EKP["follow_killer_lane_in_fight"] * (LANEID[k] >= 0 and LANEID[k] in lanes_in) + EKP["follow_victim_lane_in_fight"] * (LANEID[v] >= 0 and LANEID[v] in lanes_in))
+                                pairs.append((k, v)); u.append(x_)
+                        u = np.array(u); pu = np.exp(u - u.max()); pu = pu / pu.sum()
+                        k, v = pairs[int(rng.choice(len(pairs), p=pu))]
+                        dead[o].add(v)
+                        if EKM in ("pairs_flat", "on_flat"): ast = [i for i in alive_k if i != k and i not in dead[s] and rng.random() < self.ap[i]]
+                        else:
+                            ast = [i for i in alive_k if i != k and i not in dead[s] and rng.random() < sig(EKA["window " + EWN[ew]] + (EKA["role " + ROLES[i]] if i else 0.0)
+                                   + EKA["same_lane_as_killer"] * (LANEID[i] >= 0 and LANEID[i] == LANEID[k]) + EKA["same_lane_as_victim"] * (LANEID[i] >= 0 and LANEID[i] == LANEID[v])
+                                   + EKA["already_in_fight"] * (j > 0 and i in inv[s]))]
+                        K[s, k] += 1; D[o, v] += 1
+                        for i in ast: A[s, i] += 1
+                        if not ast: SOLO[s, k] += 1
+                        add_gold(s, val["kill"], [k] * 2 + ast)
+                        if LL is not None and LL["ev"] is not None:
+                            E_ = LL["ev"]; gold[k] += sgs * E_["own_kill"][k]; gold[v] -= sgs * E_["own_death"][v]
+                            for i in ast: gold[i] += sgs * E_["own_assist"][i]
+                        inv[s].update([k] + ast); inv[o].add(v)
+                        for i in [k, v] + ast:
+                            if LANEID[i] >= 0: lanes_in.add(LANEID[i])
+                        net += 1 if s == 0 else -1; first.setdefault("blood", s)
+                        tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
+                        note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)")); continue
                     early_ll = LL is not None and m < 15
                     if early_ll:  # victim: roles behind in their own lane die more (fitted lean)
                         wv = np.exp(LL["av"][alive_v] + LL["bv"] * (1 if o == 0 else -1) * lean[alive_v] / 1000); wv /= wv.sum()
@@ -225,7 +321,7 @@ class Sim:
                         for i in ast: gold[i] += sg_ * E_["own_assist"][i]
                     net += 1 if s == 0 else -1
                     first.setdefault("blood", s)
-                    tk = tf + 3 * j; kill_log.append((tk, s, k, v))
+                    tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
                     note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)"))
             # --- monsters ---
             def taker(kind, feats):
@@ -245,8 +341,11 @@ class Sim:
                 kind = "elder" if elder_mode else "dragon"
                 if rng.random() < take_chance(kind if kind in P["monsters"] else "dragon"):
                     feats = {k: lanef[k] for k in (["gd", "jng", "bot2", "mid", "net60k", "objk", "first1k"] if kind == "dragon" else ["gd", "net60k", "objk"])}
-                    s = taker(kind if kind in P["taker"] else "dragon", feats)
-                    tt = max(t0, nxt["dragon"]) + rng.uniform(0, 50)
+                    if FDT is not None and kind == "dragon" and first_drag:
+                        xb_ = FDT["blue_side"] + FDT["per_v1_logit"] * z + sum(FDT.get(f_ + "_per_1k", 0.0) * lanef[f_] / 1000 for f_ in ["gd", "jng", "bot2", "mid", "top", "net60k", "objk"])
+                        s = 0 if rng.random() < sig(xb_) else 1
+                    else: s = taker(kind if kind in P["taker"] else "dragon", feats)
+                    tt = at(max(t0, nxt["dragon"]) + rng.uniform(0, 50))
                     if kind == "elder":
                         elder_n[s] += 1; elder_until[s] = tt + ELDER_BUFF; nxt["dragon"] = tt + 360
                         first.setdefault("elder", s); note(tt, s, "elder", "Elder Dragon")
@@ -267,7 +366,7 @@ class Sim:
                 if not taken_once[kind] and nxt[kind] < t0 + 60 and kind in P["monsters"]:
                     if rng.random() < take_chance(kind):
                         s = taker(kind, {k: lanef[k] for k in ["gd", "jng", "top", "mid", "net60k", "objk"]})
-                        tt = max(t0, nxt[kind]) + rng.uniform(0, 50); taken_once[kind] = True
+                        tt = at(max(t0, nxt[kind]) + rng.uniform(0, 50)); taken_once[kind] = True
                         if kind == "grub":
                             n_own = 3 if rng.random() < P["grubs_split"]["one_team_all"] else 2
                             grubs[s] += n_own; grubs[1 - s] += 3 - n_own; first.setdefault("grub", s); add_gold(s, val["grub"] * n_own); add_gold(1 - s, val["grub"] * (3 - n_own))
@@ -277,7 +376,7 @@ class Sim:
             if nxt["baron"] is not None and nxt["baron"] < t0 + 60:
                 if rng.random() < take_chance("baron"):
                     s = taker("baron", {k: lanef[k] for k in ["gd", "net60k", "objk"]})
-                    tt = max(t0, nxt["baron"]) + rng.uniform(0, 50)
+                    tt = at(max(t0, nxt["baron"]) + rng.uniform(0, 50))
                     barons[s] += 1; baron_until[s] = tt + BARON_BUFF; nxt["baron"] = tt + 360; add_gold(s, val["baron"])
                     first.setdefault("baron", s); ftime.setdefault("baron", tt); note(tt, s, "baron", "Baron Nashor")
             # --- towers: segments lane by lane, then base ---
@@ -319,8 +418,9 @@ class Sim:
                                     pv = LL["ev"]["other_lane_plate"].copy(); own_ = LANE_ROLES[L] + [1]; pv[own_] = LL["ev"]["own_lane_plate"][own_]; gold[:] += sg * pv
                             elif m < 14: gold[:] += sg * LL["ev"]["team_plate"]
                         if seg[s][li] % 5 == 0:
-                            towers[s] += 1; add_gold(s, val["tower"], LANE_ROLES[L]); first.setdefault("tower", s); ftime.setdefault("tower", t0 + 30); first_lane.setdefault("tower", L)
-                            note(t0 + rng.uniform(0, 59), s, "tower", f"T{seg[s][li] // 5} {L}")
+                            towers[s] += 1; add_gold(s, val["tower"], LANE_ROLES[L]); first.setdefault("tower", s); twt = at(t0 + rng.uniform(0, 59))
+                            ftime.setdefault("tower", twt if EO else t0 + 30); first_lane.setdefault("tower", L)
+                            note(twt, s, "tower", f"T{seg[s][li] // 5} {L}")
                 opn = [li for li in range(3) if seg[s][li] >= 15]
                 for li in opn:
                     if open_t[s][li] is None: open_t[s][li] = t0
@@ -349,7 +449,7 @@ class Sim:
                 for _ in range(npush):
                     down = [li for li in range(3) if inhib_back[s][li] > t0]
                     up_inh = [li for li in opn if inhib_back[s][li] <= t0]
-                    tt = t0 + rng.uniform(0, 59)
+                    tt = at(t0 + rng.uniform(0, 59))
                     if down and (not up_inh or rng.random() < P["nexus_tier_share"]):
                         if nx_towers[s] > 0:
                             nx_towers[s] -= 1; towers[s] += 1; add_gold(s, val["tower"]); note(tt, s, "tower", "nexus tower")

@@ -129,6 +129,26 @@ for t in TYPES:
         d = FT[(FT.split == "train") & (FT.type == t) & (FT.stg == stg)]
         if len(d) < 20: d = FT[(FT.split == "train") & (FT.type == t)]
         res["size_table"][t][stg] = {str(int(k_)): round(float(v), 4) for k_, v in d.n.clip(upper=8).value_counts(normalize=True).sort_index().items()}
+# ---- early windows (13 Nov, sim session 4; Luke: early kills follow the lanes): the same count and type models with two extra
+# terms for minutes 0-4 and 5-9 (inside the 0-13 phase), and size tables for 0-4 / 5-9 / 10-13. Extra keys only; nothing above changes.
+EW = lambda d: np.c_[(d.m.values < 5), (d.m.values >= 5) & (d.m.values < 10)].astype(float)
+b1e = pois_fit(np.c_[X1(tr), EW(tr)], tr.y.values)
+res["count_early"] = {"coef": dict(zip(NC + ["early 0-4", "early 5-9"], np.round(b1e, 4))),
+                      **{s: {"with_recent": res["count"][s]["with_recent"],
+                             "with_early": round(pdev(np.exp(np.c_[X1(PAN[PAN.split == s]), EW(PAN[PAN.split == s])] @ b1e), PAN[PAN.split == s].y.values), 5)}
+                         for s in ("train", "test", "worlds")}}
+BTe = mn_fit(np.c_[XT(ftr), EW(ftr)], ftr.yi.values)
+res["type_early"] = {"coef": {t: dict(zip(NT + ["early 0-4", "early 5-9"], np.round(BTe[:, i - 1], 4))) for i, t in enumerate(TYPES) if i > 0}, "base": "small",
+                     **{s: {"full": res["type"][s]["full"], "with_early": round(mn_ll(np.c_[XT(FT[FT.split == s]), EW(FT[FT.split == s])], BTe, FT[FT.split == s].yi.values), 4)}
+                        for s in ("train", "test", "worlds")}}
+ESTG = lambda m: "0-4" if m < 5 else "5-9" if m < 10 else "10-13"
+res["size_table_early"] = {}
+for t in TYPES:
+    res["size_table_early"][t] = {}
+    for stg in ("0-4", "5-9", "10-13"):
+        d = FT[(FT.split == "train") & (FT.type == t) & (FT.m < 14) & (FT.m.map(ESTG) == stg)]
+        if len(d) < 20: d = FT[(FT.split == "train") & (FT.type == t) & (FT.m < 14)]
+        res["size_table_early"][t][stg] = {str(int(k_)): round(float(v), 4) for k_, v in d.n.clip(upper=8).value_counts(normalize=True).sort_index().items()}
 res["size_mean"] = {s: FT[FT.split == s].groupby(["type", "stg"]).n.mean().round(2).unstack().to_dict() for s in ("train", "test")}
 res["kills_share_by_type"] = {s: (FT[FT.split == s].groupby("type").n.sum() / FT[FT.split == s].n.sum()).round(3).to_dict() for s in ("train", "test")}
 json.dump(res, open(OUT, "w"), indent=1, default=float)

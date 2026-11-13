@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sim port check</title>
+<style>body{font:14px system-ui,sans-serif;margin:16px;background:#fff;color:#111}table{border-collapse:collapse;margin:8px 0}td,th{border:1px solid #ccc;padding:3px 6px;text-align:right}th{background:#f3f3f3}.bad{background:#fdd}.ok{background:#efe}</style></head>
+<body><h1>JS sim v Python sim</h1><p id="st">Loading…</p><div id="out"></div>
+<script src="../../js/sim-engine.js"></script>
+<script>
+/* Sim session 4 (13 Nov 2026): runs js/sim-engine.js on the games in research/local/sim4/port_ref.json (made by port_ref.py) with
+   the same tables, calibration, inputs and number of sims, and compares the averages with the Python sim's. Serve the repo root
+   (python -m http.server) and open /research/sim4/port_check.html. Gaps are shown in standard errors of the difference (|z| > 3 flagged). */
+(async () => {
+  const st = document.getElementById("st"), out = document.getElementById("out");
+  if(location.search.includes("noauto")){ st.textContent = "Loaded (no auto check)."; return; }  /* ?noauto: just load the engine, for console checks */
+  const R = await (await fetch("../local/sim4/port_ref.json")).json(), N = R.n, ROLES = SIM_ENGINE.ROLES;
+  const keys = ["blue_win", "len_min", "kills", "towers", "dragons", "barons", "g15"], sdk = {len_min: "len_sd", kills: "kills_sd", g15: "g15_sd"};
+  const res = {verdict: {}, worst: {}, pooled: {}, replay: null, ms: {}};
+  // same seed, same game
+  { const sim = new SIM_ENGINE.Sim(R.P, R.cal.typed_pf_ll), g = Object.keys(R.x)[0];
+    const a = sim.run(R.x[g], 7, true), b = sim.run(R.x[g], 7, true); res.replay = JSON.stringify(a) === JSON.stringify(b) && a.steps.length > 0; }
+  let html = `<p>Same seed replays the same game (with play-by-play): <b>${res.replay}</b></p>`;
+  for(const v of Object.keys(R.cal)){
+    const sim = new SIM_ENGINE.Sim(R.P, R.cal[v]); let rows = "", worst = 0; const pj = {}, pp = {}; keys.forEach(k => { pj[k] = 0; pp[k] = 0; });
+    const t0 = performance.now(); let games = 0;
+    for(const g of Object.keys(R.x)){
+      const a = []; for(let j = 0; j < N; j++){ const o = sim.run(R.x[g], 1 + j); games++;
+        a.push([o.winner === "blue" ? 1 : 0, o.sec / 60, o.kills[0] + o.kills[1], o.towers[0] + o.towers[1], o.dr[0].length + o.dr[1].length, o.ba[0] + o.ba[1], o.g15]); }
+      const col = i => a.map(r => r[i]).filter(x => !Number.isNaN(x)), mean = x => x.reduce((s, y) => s + y, 0) / x.length;
+      const sdv = x => { const m = mean(x); return Math.sqrt(x.reduce((s, y) => s + (y - m) ** 2, 0) / x.length); };
+      const js = {}; keys.forEach((k, i) => { js[k] = mean(col(i)); if(sdk[k]) js[sdk[k]] = sdv(col(i)); });
+      const py = R.py[v][g]; let cells = "";
+      keys.forEach(k => { const se = k === "blue_win" ? Math.sqrt(Math.max(0.01, py.blue_win * (1 - py.blue_win)) * 2 / N) : k in sdk ? py[sdk[k]] * Math.sqrt(2 / N) : Math.sqrt(Math.max(0.05, py[k]) * 2 / N);
+        const zz = (js[k] - py[k]) / se; worst = Math.max(worst, Math.abs(zz)); pj[k] += js[k]; pp[k] += py[k];
+        cells += `<td class="${Math.abs(zz) > 3 ? "bad" : ""}">${js[k].toFixed(k === "g15" ? 0 : 3)} / ${py[k].toFixed(k === "g15" ? 0 : 3)} (${zz.toFixed(1)})</td>`; });
+      rows += `<tr><td style="text-align:left">${g}</td>${cells}</tr>`;
+    }
+    res.ms[v] = Math.round((performance.now() - t0) / games * 1000) / 1000; res.worst[v] = +worst.toFixed(2);
+    const ng = Object.keys(R.x).length; res.pooled[v] = {}; keys.forEach(k => { res.pooled[v][k] = [+(pj[k] / ng).toFixed(3), +(pp[k] / ng).toFixed(3)]; });
+    html += `<h2>${v}</h2><p>JS / Python (gap in standard errors), ${N} sims per game · JS ${res.ms[v]} ms per game · largest gap ${worst.toFixed(2)}</p>
+      <table><tr><th>game</th>${keys.map(k => `<th>${k}</th>`).join("")}</tr>${rows}<tr><th>average</th>${keys.map(k => `<th>${res.pooled[v][k][0]} / ${res.pooled[v][k][1]}</th>`).join("")}</tr></table>`;
+    out.innerHTML = html;
+  }
+  window.PORT_CHECK = res; st.textContent = "Done.";
+})().catch(e => { document.getElementById("st").textContent = "Error: " + e; window.PORT_CHECK = {error: String(e)}; });
+</script></body></html>

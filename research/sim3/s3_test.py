@@ -37,6 +37,12 @@ if "typed" in OPTS: P["fight_typed"] = json.load(open(os.path.join(os.path.dirna
 # (default: the params file's folder).
 LLD = os.environ.get("S3_LL_DIR", os.path.dirname(PJ))
 if "ll" in OPTS: P["lane_level"] = json.load(open(os.path.join(LLD, "lanelevel_fit.json")))
+# "ek" (13 Nov, session 4): lane-aware early kills, fits from research/sim4/s4_earlykills.py (earlykills.json beside the params file;
+# fighttypes.json there must carry the early-window keys). "eo": events keep their order inside a minute.
+if "fdt" in OPTS:  # "fdt": the first dragon's own taker (13 Nov)
+    _fd = json.load(open(os.path.join(os.path.dirname(PJ), "firstdragon.json"))); P["taker_first_dragon"] = {"side": _fd["taker"], "timing": _fd["taker_timing"]}
+if "fpl" in OPTS: P["fight_players"] = json.load(open(os.path.join(os.path.dirname(PJ), "participants.json")))  # "fpl": who is in each fight (13 Nov)
+if OPTS & {"ek", "ekp", "ekpf", "ekf"}: P["early_kills"] = json.load(open(os.path.join(os.path.dirname(PJ), "earlykills.json")))  # "ekp" / "ekc": one part only
 XKEYS = ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s") + (("ll_m0", "ll_e0") if "ll" in OPTS else ())
 sig = lambda x: 1 / (1 + np.exp(-x))
 
@@ -96,6 +102,14 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if "ends" in OPTS: cal["endings"] = "on"  # endings follow won fights (12 Nov): base-push chance and size read the kills edge and game time
     if "sp" in OPTS: cal["seg_phase"] = "own"  # tower-push phase terms from the push fit in use; the sim's default from 12 Nov, so "sp" changes nothing now
     if "oldsp" in OPTS: cal["seg_phase"] = "segments"  # the sim before the 12 Nov fix (phase terms read from the segment-count fit); replays earlier runs
+    if "ek" in OPTS: cal["early_kills"] = "on"  # lane-aware early kills (13 Nov)
+    if "ekp" in OPTS: cal["early_kills"] = "pairs"  # only the kill pairs and assists
+    if "ekc" in OPTS: cal["early_kills"] = "counts"  # only the early fight counts, types and sizes
+    if "ekpf" in OPTS: cal["early_kills"] = "pairs_flat"  # only the kill pairs, with the usual flat assist rates
+    if "fdt" in OPTS: cal["first_dragon_taker"] = "on"  # the first dragon's own fitted taker
+    if "fpl" in OPTS: cal["fight_players"] = "on"  # fight players: kills and assists only among the players in the fight
+    if "ekf" in OPTS: cal["early_kills"] = "on_flat"  # kill pairs with flat assists + early fight counts, types and sizes
+    if "eo" in OPTS: cal["event_order"] = "on"  # events keep their order inside a minute (13 Nov)
     if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)
     res = {"fight_eps": {"value": best, **info_all, "by_phase": {k_: {"value": eps_ph[k_], **info_ph[k_]} for k_ in eps_ph}}}
     print("fight_eps", res["fight_eps"], flush=True)
@@ -163,7 +177,10 @@ if __name__ == "__main__":
         cal["lane_mu"] = round(max(0.0, cal["lane_mu"] * (real_slope / sim_slope if sim_slope > 0 else 1) ** 0.9), 3)
     res["calibration"] = hist; res["cal"] = cal
     # ---------- C. held-out ----------
-    test = sorted(g for g in G if G[g]["day"] >= CUT and (END is None or G[g]["day"] < END) and G[g]["y"] >= 0 and (TLG is None or G[g]["league"] == TLG))
+    # S3_TEST_FROM (13 Nov, session 4 refit): play games from this date even if they are training games (an in-sample replay, e.g. the
+    # Worlds games after the refit on all games; not a held-out test). Unset = from the cutoff, as before.
+    FROM = os.environ.get("S3_TEST_FROM", CUT)
+    test = sorted(g for g in G if G[g]["day"] >= FROM and (END is None or G[g]["day"] < END) and G[g]["y"] >= 0 and (TLG is None or G[g]["league"] == TLG))
     # Held-out seeds (Luke, 12 Nov): by game ID, and run at 1,000 sims per game (at 200 the Worlds score moved about 0.007 by chance).
     # "oldseeds" = seeds by place in the list, as every run before 12 Nov. S3_SEED = other draws, to measure sim noise.
     S = run_many(test, NS, cal, seed0=1 + int(os.environ.get("S3_SEED", "0")), by_id="oldseeds" not in OPTS)
