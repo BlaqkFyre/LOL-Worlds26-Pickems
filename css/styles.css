@@ -814,3 +814,16 @@ html:root[data-worlds="sunset"] .hl,html:root[data-worlds="sunset"] .tick{backgr
 html:root[data-worlds="sunset"] .tick b{background:#6b2e0e;color:#ffd7ad}
 html:root[data-worlds="sunset"] .tabs button[aria-selected="true"],html:root[data-worlds="sunset"] .btn.primary{background:linear-gradient(90deg,#f9b44a,#f2725b);color:#2a1606;border-color:transparent}
 html:root[data-worlds="sunset"] .subtabs button[aria-selected="true"]{background:#f9b44a;border-color:#f9b44a;color:#2a1606}
+
+/* data-sim result (v47): score by team and lane gold at 15, side by side on desktop, stacked on phones; end-of-game table fits a phone */
+.gsum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gtab{width:100%;font-size:13px}.gtab th,.gtab td{padding:4px 8px;border-top:1px solid var(--line)}.gtab thead th{border-top:0}
+.gtab tbody th{text-align:left;color:var(--muted);font-weight:600;text-transform:none;letter-spacing:0;font-size:12px}
+.gtab td,.gtab thead th:not(:first-child){text-align:center;font-family:var(--mono)}
+.gtab .bt,.gline .bt{color:var(--bside)}.gtab .rt,.gline .rt{color:var(--rside)}.gtab td.ev{color:var(--muted)}.gtab td.ld{font-weight:700}
+.gtab tr.tot th,.gtab tr.tot td{font-weight:700}
+.gline{margin:0}
+.stab4 .hs{display:none}
+@media (max-width:1100px){.stab4 .hl{display:none}.stab4 .hs{display:inline}}
+.stab4 .cnm{display:inline-block;max-width:7.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
+@media (max-width:640px){.gsum{grid-template-columns:minmax(0,1fr)}.stab4 .rcol,.stab4 .cnm,.stab4 .hl,.stab4 .hc{display:none}.tt.full.stab4{font-size:12px}.stab4 :is(th,td){padding-left:2px;padding-right:2px;white-space:nowrap}.stab4 .pogs{display:none}.stab4 .pnm{display:inline-block;max-width:5em;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}.stab4 td.pog{color:var(--gold);font-weight:700}.sim .board .an{padding:10px 6px}.panel:has(>.sim){padding-left:10px;padding-right:10px}}
