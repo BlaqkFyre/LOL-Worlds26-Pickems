@@ -1,0 +1,71 @@
+{
+ "name": "lane_edges",
+ "started_utc": "2026-11-14T04:17:51",
+ "script": {
+  "path": "research\\laning\\s5_lane_edges.py",
+  "sha256": "f37a8f8d9560f90b150075da96b6efbc1351c5435ef9ef176d81e06821efc44a",
+  "git_commit": "529caf2",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "minor_16_20": false
+ },
+ "inputs": [
+  {
+   "path": "research\\2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  },
+  {
+   "path": "research\\local\\sim3\\out_11nov\\lanes3_features.csv",
+   "bytes": 1071224,
+   "modified": "2026-11-11T13:55:26",
+   "sha256": "747c08c4d7ae274b0d4fcf7918c44bbe8ddad50aaa5266c56968e29dce821c1e"
+  }
+ ],
+ "status": "ok",
+ "error": null,
+ "seconds": 89.3,
+ "results": {
+  "y15 Worlds mse | current sim inputs": 579093,
+  "y15 Worlds mse | role + side only": 665451,
+  "y15 Worlds mse | + player lane skill": 660881,
+  "y15 Worlds mse | + champion": 585092,
+  "y15 Worlds mse | + matchup": 582618,
+  "y15 Worlds mse | + comfort (games on champ)": 582488,
+  "y15 Worlds mse | + player x champion": 581789,
+  "y15 Worlds mse | + team strength (v1, as the current sim)": 581491,
+  "y15 2026 mse | current sim inputs": 641545,
+  "y15 2026 mse | role + side only": 744104,
+  "y15 2026 mse | + player lane skill": 715259,
+  "y15 2026 mse | + champion": 658659,
+  "y15 2026 mse | + matchup": 657084,
+  "y15 2026 mse | + comfort (games on champ)": 657668,
+  "y15 2026 mse | + player x champion": 657611,
+  "y15 2026 mse | + team strength (v1, as the current sim)": 650291,
+  "y10 Worlds mse | current sim inputs": 225231,
+  "y10 Worlds mse | role + side only": 254688,
+  "y10 Worlds mse | + player lane skill": 249750,
+  "y10 Worlds mse | + champion": 218388,
+  "y10 Worlds mse | + matchup": 218122,
+  "y10 Worlds mse | + comfort (games on champ)": 218539,
+  "y10 Worlds mse | + player x champion": 218089,
+  "y10 Worlds mse | + team strength (v1, as the current sim)": 216964,
+  "y10 2026 mse | current sim inputs": 216658,
+  "y10 2026 mse | role + side only": 246403,
+  "y10 2026 mse | + player lane skill": 240790,
+  "y10 2026 mse | + champion": 220323,
+  "y10 2026 mse | + matchup": 220006,
+  "y10 2026 mse | + comfort (games on champ)": 220401,
+  "y10 2026 mse | + player x champion": 220874,
+  "y10 2026 mse | + team strength (v1, as the current sim)": 219362
+ },
+ "outputs": [
+  {
+   "path": "research\\model\\laning\\lane_edges.json",
+   "sha256": "69e1364492a0b9fa53516bfd69050b0060550779fce9b7c403fddf507d1b7611"
+  }
+ ],
+ "not_written_because_failed": []
+}

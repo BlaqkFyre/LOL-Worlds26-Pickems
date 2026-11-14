@@ -1,0 +1,40 @@
+{
+ "fights before 14:00 (not even)": 2314,
+ "blue won": 0.533,
+ "2026 from 1 Sep (non-Worlds)": {
+  "side only": 0.6918,
+  "+ pre-game players and champions": 0.6932,
+  "+ team strength": 0.6845,
+  "+ lane state at the time": 0.6792,
+  "lane state only": 0.6849,
+  "n": 511
+ },
+ "Worlds day by day": {
+  "side only": 0.6894,
+  "+ pre-game players and champions": 0.6772,
+  "+ team strength": 0.6675,
+  "+ lane state at the time": 0.6608,
+  "lane state only": 0.673,
+  "n": 301
+ },
+ "coefficients (all fights): blue side, pre-game per 1k, team strength, state per 1k": [
+  0.027,
+  0.176,
+  0.304,
+  0.305
+ ],
+ "blue wins by pre-game edge fifth (weakest to strongest)": [
+  0.467,
+  0.503,
+  0.558,
+  0.521,
+  0.618
+ ],
+ "pre-game edge by fifth, mean per 1k": [
+  -0.29,
+  -0.06,
+  0.08,
+  0.22,
+  0.47
+ ]
+}

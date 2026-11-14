@@ -1,0 +1,207 @@
+{
+ "timeline games": 640,
+ "by league": {
+  "LCK": 153,
+  "LEC": 137,
+  "LCS": 103,
+  "CBLOL": 102,
+  "WLDs": 94,
+  "EWC": 51
+ },
+ "early kills matched to roles": [
+  4263,
+  4288
+ ],
+ "jungler lanes": {
+  "kills": 2902,
+  "share by lane (all)": {
+   "bot": 0.375,
+   "jng": 0.247,
+   "mid": 0.191,
+   "top": 0.187
+  },
+  "stability: bot minus top share, junglers with 15+ kills per half (before 1 Sep)": {
+   "ids": 24,
+   "corr odd v even": -0.305
+  },
+  "k chosen (training)": 160,
+  "held-out log loss of the kill's lane (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league average": 1.3502,
+    "own habit": 1.3517,
+    "n": 634
+   },
+   "Worlds day by day": {
+    "league average": 1.3719,
+    "own habit": 1.3747,
+    "n": 376
+   }
+  }
+ },
+ "jungler pace (early kills involved)": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": 0.378
+  },
+  "k chosen (training)": 40,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 1.4753,
+    "own habit": 1.4734,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 1.2823,
+    "own habit": 1.3227,
+    "n": 188
+   }
+  },
+  "average per game": 2.267
+ },
+ "mid roams (kills in other lanes)": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": 0.333
+  },
+  "k chosen (training)": 40,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 1.2878,
+    "own habit": 1.2844,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 1.2633,
+    "own habit": 1.2838,
+    "n": 188
+   }
+  },
+  "average per game": 0.771
+ },
+ "support roams (kills in top, mid, jungle)": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": 0.41
+  },
+  "k chosen (training)": 5,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 1.391,
+    "own habit": 1.4513,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 1.3147,
+    "own habit": 1.3554,
+    "n": 188
+   }
+  },
+  "average per game": 1.038
+ },
+ "solo kills top": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": -0.102
+  },
+  "k chosen (training)": 1000000000.0,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 0.544,
+    "own habit": 0.544,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 0.6183,
+    "own habit": 0.6183,
+    "n": 188
+   }
+  },
+  "average per game": 0.124
+ },
+ "solo kills mid": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": 0.081
+  },
+  "k chosen (training)": 40,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 0.3949,
+    "own habit": 0.3941,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 0.3865,
+    "own habit": 0.3904,
+    "n": 188
+   }
+  },
+  "average per game": 0.062
+ },
+ "solo kills bot": {
+  "stability (games before 1 Sep, 8+ per half)": {
+   "ids": 23,
+   "corr odd v even": 0.17
+  },
+  "k chosen (training)": 1000000000.0,
+  "held-out Poisson deviance (lower is better)": {
+   "2026 from 1 Sep (non-Worlds)": {
+    "league mean": 0.1097,
+    "own habit": 0.1097,
+    "n": 302
+   },
+   "Worlds day by day": {
+    "league mean": 0.1189,
+    "own habit": 0.1189,
+    "n": 188
+   }
+  },
+  "average per game": 0.032
+ },
+ "team priority: first dragon": {
+  "k chosen (training)": 40,
+  "2026 from 1 Sep (non-Worlds)": {
+   "side + strength + lanes": 0.5908,
+   "+ team habit": 0.59,
+   "n": 227
+  },
+  "Worlds day by day": {
+   "side + strength + lanes": 0.7672,
+   "+ team habit": 0.7691,
+   "n": 94
+  },
+  "stability (teams with 20+ games per half, before 1 Sep)": {
+   "teams": 54,
+   "corr odd v even": 0.267
+  },
+  "coefficients (all games before 1 Sep): intercept (blue), v1, lanes per 1k at 10": [
+   -0.647,
+   0.077,
+   1.173,
+   0.642
+  ]
+ },
+ "team priority: grubs (2+ of 3)": {
+  "k chosen (training)": 10,
+  "2026 from 1 Sep (non-Worlds)": {
+   "side + strength + lanes": 0.6685,
+   "+ team habit": 0.6567,
+   "n": 227
+  },
+  "Worlds day by day": {
+   "side + strength + lanes": 0.6699,
+   "+ team habit": 0.6341,
+   "n": 94
+  },
+  "stability (teams with 20+ games per half, before 1 Sep)": {
+   "teams": 54,
+   "corr odd v even": 0.596
+  },
+  "coefficients (all games before 1 Sep): intercept (blue), v1, lanes per 1k at 10": [
+   0.522,
+   -0.018,
+   0.728,
+   0.275
+  ]
+ }
+}

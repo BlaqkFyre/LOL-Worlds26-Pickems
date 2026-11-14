@@ -1,0 +1,132 @@
+{
+ "rows": {
+  "plate side-lane-minutes": 42014,
+  "first dragons": 639,
+  "grubs": 1920,
+  "lane kill side-lane-minutes": 61440
+ },
+ "averages": {
+  "plates per side-lane-minute": 0.16,
+  "blue takes first dragon": 0.388,
+  "blue first dragon at Worlds": 0.5,
+  "blue takes a grub": 0.623
+ },
+ "A. plates (Poisson deviance)": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "minute and lane": 0.6156,
+   "+ lane gold edge": 0.6118,
+   "+ laners dead": 0.6085,
+   "+ plates already off": 0.6045,
+   "+ own grubs": 0.6031,
+   "n": 9907
+  },
+  "Worlds day by day": {
+   "minute and lane": 0.6159,
+   "+ lane gold edge": 0.6061,
+   "+ laners dead": 0.6064,
+   "+ plates already off": 0.6031,
+   "+ own grubs": 0.6028,
+   "n": 6159
+  },
+  "coefficients (all): edge per 1k, enemy laners dead, own dead, plates off, own grubs": [
+   0.387,
+   0.454,
+   -0.106,
+   -0.233,
+   0.068
+  ]
+ },
+ "B. first dragon taker (log loss)": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "side only": 0.6444,
+   "+ strength and lanes at the time": 0.5319,
+   "+ kills in the 60 s before": 0.5303,
+   "+ Worlds term": 0.5303,
+   "n": 150
+  },
+  "Worlds day by day": {
+   "side only": 0.7246,
+   "+ strength and lanes at the time": 0.7181,
+   "+ kills in the 60 s before": 0.7316,
+   "+ Worlds term": 0.6972,
+   "n": 94
+  },
+  "coefficients (all): side, strength, bot, mid, jng per 1k, net kills 60 s, Worlds": [
+   -0.856,
+   0.273,
+   1.524,
+   0.108,
+   0.517,
+   0.402,
+   0.709
+  ]
+ },
+ "C. grub taker (log loss)": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "side only": 0.6535,
+   "+ strength and lanes at the time": 0.6991,
+   "+ kills in the 60 s before": 0.691,
+   "+ team grubs priority": 0.6757,
+   "+ Worlds term": 0.6757,
+   "n": 453
+  },
+  "Worlds day by day": {
+   "side only": 0.6625,
+   "+ strength and lanes at the time": 0.6612,
+   "+ kills in the 60 s before": 0.6501,
+   "+ team grubs priority": 0.6458,
+   "+ Worlds term": 0.6495,
+   "n": 282
+  },
+  "coefficients (all): side, strength, top, mid, jng per 1k, net kills 60 s, team priority, Worlds": [
+   0.54,
+   -0.014,
+   0.335,
+   0.349,
+   0.138,
+   0.437,
+   0.056,
+   1.433
+  ]
+ },
+ "D. lane kills (Poisson deviance)": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "minute and lane": 0.349,
+   "+ lane gold edge now": 0.349,
+   "+ pre-game players and champions": 0.3489,
+   "pre-game only": 0.3489,
+   "n": 14496
+  },
+  "Worlds day by day": {
+   "minute and lane": 0.358,
+   "+ lane gold edge now": 0.3576,
+   "+ pre-game players and champions": 0.3571,
+   "pre-game only": 0.3572,
+   "n": 9024
+  },
+  "coefficients (all): edge now per 1k, pre-game per 1k": [
+   0.092,
+   0.202
+  ]
+ },
+ "D. solo kills (Poisson deviance)": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "minute and lane": 0.045,
+   "+ lane gold edge now": 0.0448,
+   "+ pre-game players and champions": 0.0449,
+   "pre-game only": 0.0449,
+   "n": 14496
+  },
+  "Worlds day by day": {
+   "minute and lane": 0.0515,
+   "+ lane gold edge now": 0.0517,
+   "+ pre-game players and champions": 0.0517,
+   "pre-game only": 0.0515,
+   "n": 9024
+  },
+  "coefficients (all): edge now per 1k, pre-game per 1k": [
+   0.409,
+   -0.082
+  ]
+ }
+}

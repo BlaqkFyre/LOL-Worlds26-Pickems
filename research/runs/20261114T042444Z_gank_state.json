@@ -1,0 +1,49 @@
+{
+ "name": "gank_state",
+ "started_utc": "2026-11-14T04:21:08",
+ "script": {
+  "path": "research\\laning\\s5_gank_state.py",
+  "sha256": "aa6981abedbe4ced7b9e04d9e5fe2dfcbfd64553a768d415a0e1575faf6aef94",
+  "git_commit": "529caf2",
+  "uncommitted_edits": true
+ },
+ "params": {},
+ "inputs": [
+  {
+   "path": "research\\2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  },
+  {
+   "path": "research\\model\\sim3\\tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research\\local\\sim3\\tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research\\local\\sim3\\tl_gold.csv",
+   "bytes": 11603130,
+   "modified": "2026-11-12T11:01:47",
+   "sha256": "fbf6239e9b7314c901440f4173eb3a6e5b2f4433fd9e277875bb0dc232e41473"
+  }
+ ],
+ "record": "20261114T042444Z_gank_state.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 216.1,
+ "results": {},
+ "outputs": [
+  {
+   "path": "research\\model\\laning\\gank_state.json",
+   "sha256": "9406fa060fce35cffe9430c833875460eb7ce10da0d6cf7c2dc3ced67f173c5b"
+  }
+ ],
+ "not_written_because_failed": []
+}

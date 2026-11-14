@@ -1,0 +1,131 @@
+{
+ "timeline games": 640,
+ "early kills with a jungler / mid / support": {
+  "jng": 2902,
+  "mid": 2282,
+  "sup": 2750
+ },
+ "A. gank lane (jungler's early kills)": {
+  "kills": 2902,
+  "share by lane": {
+   "bot": 0.375,
+   "jng": 0.247,
+   "mid": 0.191,
+   "top": 0.187
+  },
+  "2026 from 1 Sep (non-Worlds)": {
+   "lane constants": 1.3502,
+   "game state": 1.3491,
+   "n": 634
+  },
+  "Worlds day by day": {
+   "lane constants": 1.3719,
+   "game state": 1.372,
+   "n": 376
+  },
+  "coefficients (all games)": {
+   "const jng": 0.253,
+   "const mid": -0.007,
+   "const bot": 0.618,
+   "lane edge per 1k": -0.05,
+   "lane edge size per 1k": 0.07,
+   "dragon up x bot": 0.093,
+   "grubs up x top": -0.18
+  }
+ },
+ "C. mid roams: lane of the mid's early kills": {
+  "kills": 2282,
+  "share by lane": {
+   "bot": 0.311,
+   "mid": 0.305,
+   "jng": 0.262,
+   "top": 0.121
+  },
+  "2026 from 1 Sep (non-Worlds)": {
+   "lane constants": 1.3318,
+   "game state": 1.3345,
+   "n": 493
+  },
+  "Worlds day by day": {
+   "lane constants": 1.3499,
+   "game state": 1.3532,
+   "n": 267
+  },
+  "coefficients (all games)": {
+   "const jng": 0.762,
+   "const mid": 0.927,
+   "const bot": 0.916,
+   "lane edge per 1k": -0.076,
+   "lane edge size per 1k": -0.003,
+   "dragon up x bot": 0.048,
+   "grubs up x top": -0.048,
+   "own lane edge per 1k x other lanes": 0.229
+  }
+ },
+ "C. support roams: lane of the support's early kills": {
+  "kills": 2750,
+  "share by lane": {
+   "bot": 0.517,
+   "jng": 0.224,
+   "mid": 0.146,
+   "top": 0.113
+  },
+  "2026 from 1 Sep (non-Worlds)": {
+   "lane constants": 1.1751,
+   "game state": 1.1758,
+   "n": 539
+  },
+  "Worlds day by day": {
+   "lane constants": 1.1458,
+   "game state": 1.1466,
+   "n": 367
+  },
+  "coefficients (all games)": {
+   "const jng": 0.702,
+   "const mid": 0.278,
+   "const bot": 1.613,
+   "lane edge per 1k": -0.075,
+   "lane edge size per 1k": -0.087,
+   "dragon up x bot": -0.126,
+   "grubs up x top": 0.162,
+   "own lane edge per 1k x other lanes": -0.007
+  }
+ },
+ "B. gank pace (jungler-involved kills per side-minute, Poisson deviance)": {
+  "side-minutes": 15360,
+  "k for the jungle champion's rate (training)": 1000000000.0,
+  "2026 from 1 Sep (non-Worlds)": {
+   "minute only": 0.7084,
+   "+ game state": 0.7029,
+   "+ game state + jungle champion": 0.7029
+  },
+  "Worlds day by day": {
+   "minute only": 0.6853,
+   "+ game state": 0.6882,
+   "+ game state + jungle champion": 0.6882
+  },
+  "coefficients (all games)": {
+   "const": -2.137,
+   "4-6": -0.088,
+   "6-8": 0.24,
+   "8-10": 0.554,
+   "10-12": 0.719,
+   "12-14": 0.742,
+   "dragon up": 0.169,
+   "grubs up": 0.165,
+   "largest lane edge per 1k": -0.082,
+   "team edge per 1k": 0.09,
+   "log champion rate": 0.004
+  },
+  "jungle champions with the highest early-kill rate (shrunk, per game before 14:00)": [
+   "Lee Sin 2.25",
+   "Pantheon 2.25",
+   "Vi 2.25",
+   "Jarvan IV 2.25",
+   "Poppy 2.25",
+   "Shyvana 2.25",
+   "Sejuani 2.25",
+   "Jayce 2.25"
+  ]
+ }
+}

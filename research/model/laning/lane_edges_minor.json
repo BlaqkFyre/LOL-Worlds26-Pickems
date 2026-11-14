@@ -1,0 +1,456 @@
+{
+ "rows": 14715,
+ "minor_16_20": true,
+ "y15": {
+  "chosen on training games (fit < 1 Aug, judge Aug)": {
+   "k": {
+    "player": 20,
+    "champ": 5,
+    "pair": 80,
+    "pc": 640
+   },
+   "half_life_days": {
+    "p": null,
+    "c": null
+   }
+  },
+  "Worlds day by day": {
+   "current sim inputs": {
+    "mse": 579093.2769694544,
+    "winner_right": 0.6340425531914894,
+    "n": 470,
+    "by role mse": {
+     "top": 785150,
+     "jng": 472250,
+     "mid": 388504,
+     "bot": 1117015,
+     "sup": 132547
+    }
+   },
+   "role + side only": {
+    "mse": 665887.4302564913,
+    "winner_right": 0.5404255319148936,
+    "n": 470,
+    "by role mse": {
+     "top": 992412,
+     "jng": 617719,
+     "mid": 460715,
+     "bot": 1112050,
+     "sup": 146540
+    }
+   },
+   "+ player lane skill": {
+    "mse": 661074.4483182527,
+    "winner_right": 0.5680851063829787,
+    "n": 470,
+    "by role mse": {
+     "top": 951700,
+     "jng": 647036,
+     "mid": 443263,
+     "bot": 1121613,
+     "sup": 141760
+    }
+   },
+   "+ champion": {
+    "mse": 588415.49468861,
+    "winner_right": 0.6276595744680851,
+    "n": 470,
+    "by role mse": {
+     "top": 773886,
+     "jng": 495648,
+     "mid": 434185,
+     "bot": 1109972,
+     "sup": 128386
+    }
+   },
+   "+ matchup": {
+    "mse": 585782.2075498428,
+    "winner_right": 0.6085106382978723,
+    "n": 470,
+    "by role mse": {
+     "top": 768561,
+     "jng": 493034,
+     "mid": 435709,
+     "bot": 1101957,
+     "sup": 129650
+    }
+   },
+   "+ comfort (games on champ)": {
+    "mse": 585469.8079076124,
+    "winner_right": 0.6148936170212767,
+    "n": 470,
+    "by role mse": {
+     "top": 769352,
+     "jng": 493173,
+     "mid": 438650,
+     "bot": 1097291,
+     "sup": 128883
+    }
+   },
+   "+ player x champion": {
+    "mse": 584739.2644016593,
+    "winner_right": 0.6170212765957447,
+    "n": 470,
+    "by role mse": {
+     "top": 768867,
+     "jng": 493291,
+     "mid": 437655,
+     "bot": 1095178,
+     "sup": 128706
+    }
+   },
+   "+ team strength (v1, as the current sim)": {
+    "mse": 584061.3027900978,
+    "winner_right": 0.6276595744680851,
+    "n": 470,
+    "by role mse": {
+     "top": 746052,
+     "jng": 493218,
+     "mid": 422146,
+     "bot": 1130001,
+     "sup": 128890
+    }
+   }
+  },
+  "2026 from 1 Sep (non-Worlds)": {
+   "current sim inputs": {
+    "mse": 641544.8486735733,
+    "winner_right": 0.5973568281938326,
+    "n": 1135
+   },
+   "role + side only": {
+    "mse": 744103.641767729,
+    "winner_right": 0.5259911894273128,
+    "n": 1135
+   },
+   "+ player lane skill": {
+    "mse": 715258.5398662685,
+    "winner_right": 0.5770925110132159,
+    "n": 1135
+   },
+   "+ champion": {
+    "mse": 658658.7055060994,
+    "winner_right": 0.613215859030837,
+    "n": 1135
+   },
+   "+ matchup": {
+    "mse": 657083.9828475005,
+    "winner_right": 0.6158590308370044,
+    "n": 1135
+   },
+   "+ comfort (games on champ)": {
+    "mse": 657667.550692199,
+    "winner_right": 0.6167400881057269,
+    "n": 1135
+   },
+   "+ player x champion": {
+    "mse": 657611.2851504118,
+    "winner_right": 0.6167400881057269,
+    "n": 1135
+   },
+   "+ team strength (v1, as the current sim)": {
+    "mse": 650291.0787227281,
+    "winner_right": 0.6193832599118942,
+    "n": 1135
+   }
+  }
+ },
+ "y10": {
+  "chosen on training games (fit < 1 Aug, judge Aug)": {
+   "k": {
+    "player": 20,
+    "champ": 10,
+    "pair": 160,
+    "pc": 80
+   },
+   "half_life_days": {
+    "p": null,
+    "c": null
+   }
+  },
+  "Worlds day by day": {
+   "current sim inputs": {
+    "mse": 225231.33667204826,
+    "winner_right": 0.6063829787234043,
+    "n": 470,
+    "by role mse": {
+     "top": 289293,
+     "jng": 233278,
+     "mid": 155494,
+     "bot": 352061,
+     "sup": 96030
+    }
+   },
+   "role + side only": {
+    "mse": 254739.68093855077,
+    "winner_right": 0.5404255319148936,
+    "n": 470,
+    "by role mse": {
+     "top": 358879,
+     "jng": 286263,
+     "mid": 169269,
+     "bot": 357388,
+     "sup": 101899
+    }
+   },
+   "+ player lane skill": {
+    "mse": 249728.5972628516,
+    "winner_right": 0.5446808510638298,
+    "n": 470,
+    "by role mse": {
+     "top": 347961,
+     "jng": 289051,
+     "mid": 162815,
+     "bot": 345905,
+     "sup": 102912
+    }
+   },
+   "+ champion": {
+    "mse": 217937.06268729852,
+    "winner_right": 0.6340425531914894,
+    "n": 470,
+    "by role mse": {
+     "top": 275404,
+     "jng": 229930,
+     "mid": 154981,
+     "bot": 335961,
+     "sup": 93409
+    }
+   },
+   "+ matchup": {
+    "mse": 217570.26260583187,
+    "winner_right": 0.6319148936170212,
+    "n": 470,
+    "by role mse": {
+     "top": 275635,
+     "jng": 228992,
+     "mid": 154840,
+     "bot": 334861,
+     "sup": 93523
+    }
+   },
+   "+ comfort (games on champ)": {
+    "mse": 217690.5595186771,
+    "winner_right": 0.6297872340425532,
+    "n": 470,
+    "by role mse": {
+     "top": 274675,
+     "jng": 229850,
+     "mid": 157461,
+     "bot": 333722,
+     "sup": 92745
+    }
+   },
+   "+ player x champion": {
+    "mse": 217321.9372165837,
+    "winner_right": 0.6234042553191489,
+    "n": 470,
+    "by role mse": {
+     "top": 274643,
+     "jng": 232380,
+     "mid": 155538,
+     "bot": 332410,
+     "sup": 91638
+    }
+   },
+   "+ team strength (v1, as the current sim)": {
+    "mse": 216091.9602563605,
+    "winner_right": 0.6361702127659574,
+    "n": 470,
+    "by role mse": {
+     "top": 269899,
+     "jng": 233703,
+     "mid": 152897,
+     "bot": 332236,
+     "sup": 91725
+    }
+   }
+  },
+  "2026 from 1 Sep (non-Worlds)": {
+   "current sim inputs": {
+    "mse": 216658.11268559028,
+    "winner_right": 0.6070484581497797,
+    "n": 1135
+   },
+   "role + side only": {
+    "mse": 246402.8639474953,
+    "winner_right": 0.5330396475770925,
+    "n": 1135
+   },
+   "+ player lane skill": {
+    "mse": 240789.9017551019,
+    "winner_right": 0.5709251101321586,
+    "n": 1135
+   },
+   "+ champion": {
+    "mse": 220323.01441528078,
+    "winner_right": 0.6123348017621145,
+    "n": 1135
+   },
+   "+ matchup": {
+    "mse": 220005.68770338013,
+    "winner_right": 0.614977973568282,
+    "n": 1135
+   },
+   "+ comfort (games on champ)": {
+    "mse": 220401.1716176308,
+    "winner_right": 0.6105726872246696,
+    "n": 1135
+   },
+   "+ player x champion": {
+    "mse": 220874.23743002248,
+    "winner_right": 0.6114537444933921,
+    "n": 1135
+   },
+   "+ team strength (v1, as the current sim)": {
+    "mse": 219362.30458995572,
+    "winner_right": 0.6167400881057269,
+    "n": 1135
+   }
+  }
+ },
+ "player lane skill stability (gold at 15, odd v even games before 1 Sep)": {
+  "top": {
+   "players": 53,
+   "corr odd v even": 0.726
+  },
+  "jng": {
+   "players": 53,
+   "corr odd v even": 0.568
+  },
+  "mid": {
+   "players": 52,
+   "corr odd v even": 0.669
+  },
+  "bot": {
+   "players": 55,
+   "corr odd v even": 0.671
+  },
+  "sup": {
+   "players": 46,
+   "corr odd v even": 0.594
+  }
+ },
+ "largest effects, gold at 15 (fit on every game)": {
+  "top": {
+   "players top": [
+    "Nevid +405",
+    "1Jiang +292",
+    "Naak Nako +281",
+    "Rooster +272",
+    "Zest +242",
+    "nonnein +242",
+    "DuDu +237",
+    "Kryze +228"
+   ],
+   "champions top": [
+    "Twisted Fate +835",
+    "Irelia +688",
+    "Tristana +616",
+    "Akali +552",
+    "Kennen +492",
+    "Nidalee +460",
+    "Fiora +460",
+    "Varus +429"
+   ],
+   "comfort per log-game": 26.0,
+   "per unit of team strength": 115.2
+  },
+  "jng": {
+   "players top": [
+    "IDEA +337",
+    "j1n5 +205",
+    "SCARY +202",
+    "Yuuji +184",
+    "STEPZ +174",
+    "Listo +169",
+    "ITU Vixen +154",
+    "SkewMond +151"
+   ],
+   "champions top": [
+    "Qiyana +652",
+    "Jayce +527",
+    "Kha'Zix +510",
+    "Viego +408",
+    "Locke +339",
+    "Lillia +284",
+    "Hecarim +254",
+    "Diana +228"
+   ],
+   "comfort per log-game": 4.6,
+   "per unit of team strength": 124.4
+  },
+  "mid": {
+   "players top": [
+    "Crow +370",
+    "Despair +353",
+    "Solbon +333",
+    "Knight +332",
+    "Feisty +261",
+    "Hinata +239",
+    "Chovy +236",
+    "Caps +214"
+   ],
+   "champions top": [
+    "LeBlanc +441",
+    "Vel'Koz +414",
+    "Pantheon +408",
+    "Twisted Fate +356",
+    "Yasuo +309",
+    "Mel +305",
+    "Fizz +287",
+    "Jayce +245"
+   ],
+   "comfort per log-game": 34.8,
+   "per unit of team strength": 159.3
+  },
+  "bot": {
+   "players top": [
+    "Xdp +512",
+    "Peyz +431",
+    "tuokaZ +385",
+    "HARPOON +379",
+    "Berserker +351",
+    "JiaQi +318",
+    "Kojima +291",
+    "Doggo +277"
+   ],
+   "champions top": [
+    "Draven +1033",
+    "Samira +378",
+    "Mel +324",
+    "Locke +253",
+    "Caitlyn +220",
+    "Anivia +206",
+    "Vayne +151",
+    "Lux +133"
+   ],
+   "comfort per log-game": 16.2,
+   "per unit of team strength": 203.6
+  },
+  "sup": {
+   "players top": [
+    "Aether +229",
+    "Kitten +164",
+    "Telas +153",
+    "Vampire +121",
+    "huhi +120",
+    "Guigs +119",
+    "Zoelys +112",
+    "Cryogen +102"
+   ],
+   "champions top": [
+    "Lux +295",
+    "Camille +246",
+    "Mel +217",
+    "Elise +200",
+    "Skarner +187",
+    "Anivia +174",
+    "Pyke +137",
+    "Seraphine +124"
+   ],
+   "comfort per log-game": 4.1,
+   "per unit of team strength": 65.3
+  }
+ }
+}
