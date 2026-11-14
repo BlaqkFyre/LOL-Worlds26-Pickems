@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 EXT = (".py", ".js", ".css", ".html", ".md", ".json", ".csv", ".sh", ".txt", ".xlsx", ".parquet")
 def git(*a): return subprocess.run(["git", "-C", str(ROOT), *a], capture_output=True, text=True).stdout
-files = [Path(f) for f in sys.argv[1:]] or [ROOT / f for f in git("ls-files", "*.md").splitlines()]
+files = [Path(f) for f in sys.argv[1:]] or [ROOT / f for f in git("ls-files", "*.md").splitlines() if f != "SESSION_NOTES_ARCHIVE.md"]  # the archive is verbatim history
 cache_v = re.search(r"\?v=(\d+)", (ROOT / "index.html").read_text(encoding="utf-8")).group(1)
 known_commits = {}
 TEMPORARY = {".claude/launch.json", "launch.json", "draft-clash-save.json", "lanes3_resid_cov10/15.csv"}  # temporary or autosave files  # made and deleted on purpose during sessions (CLAUDE.md, notes sessions)

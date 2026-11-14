@@ -1,0 +1,59 @@
+{
+ "kills compared": 498,
+ "1 kill gold: rule v real": {
+  "mean abs difference": 38.3,
+  "median rule / real": [
+   330,
+   330
+  ],
+  "correlation": 0.711,
+  "share within 30 gold": 0.622
+ },
+ "2 lane test with rule gold (Worlds)": {
+  "top": {
+   "lanes": 91,
+   "gold not from CS: real sd": 683,
+   "... rule events sd": 822,
+   "... correlation": 0.858,
+   "gold edge at 15: real sd": 992,
+   "gold edge at 15: actions-only sd": 927,
+   "real inside the actions-only 80% range": 0.703
+  },
+  "jng": {
+   "lanes": 91,
+   "gold not from CS: real sd": 636,
+   "... rule events sd": 520,
+   "... correlation": 0.898,
+   "gold edge at 15: real sd": 797,
+   "gold edge at 15: actions-only sd": 630,
+   "real inside the actions-only 80% range": 0.725
+  },
+  "mid": {
+   "lanes": 91,
+   "gold not from CS: real sd": 529,
+   "... rule events sd": 543,
+   "... correlation": 0.873,
+   "gold edge at 15: real sd": 663,
+   "gold edge at 15: actions-only sd": 667,
+   "real inside the actions-only 80% range": 0.758
+  },
+  "bot": {
+   "lanes": 91,
+   "gold not from CS: real sd": 803,
+   "... rule events sd": 763,
+   "... correlation": 0.834,
+   "gold edge at 15: real sd": 1058,
+   "gold edge at 15: actions-only sd": 865,
+   "real inside the actions-only 80% range": 0.549
+  },
+  "sup": {
+   "lanes": 91,
+   "gold not from CS: real sd": 406,
+   "... rule events sd": 413,
+   "... correlation": 0.834,
+   "gold edge at 15: real sd": 386,
+   "gold edge at 15: actions-only sd": 436,
+   "real inside the actions-only 80% range": 0.505
+  }
+ }
+}

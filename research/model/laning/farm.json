@@ -1,0 +1,165 @@
+{
+ "player-minutes": 12710,
+ "games": 91,
+ "A gold per minute: per CS, kill, assist, own-lane plate, whole minute dead": {
+  "dcs": 20.2,
+  "dk": 337.5,
+  "da": 92.5,
+  "plates": 48.5,
+  "dead": -28.1,
+  "towers": 52.8,
+  "first_tower": 56.0
+ },
+ "A share of gold variance explained": 0.809,
+ "B CS contest per minute (blue minus red), mean / sd by role": {
+  "bot": [
+   0.08,
+   4.85,
+   1161
+  ],
+  "jng": [
+   0.31,
+   4.43,
+   1155
+  ],
+  "mid": [
+   0.17,
+   4.69,
+   1148
+  ],
+  "sup": [
+   0.0,
+   1.76,
+   1118
+  ],
+  "top": [
+   0.16,
+   4.72,
+   1102
+  ]
+ },
+ "B share of minute-to-minute CS contest variance that is the same lane-game all game (persistent on the day)": {
+  "bot": 0.0,
+  "jng": 0.0,
+  "mid": 0.0,
+  "sup": 0.0,
+  "top": 0.018
+ },
+ "C settings chosen on training games": {
+  "player": 10,
+  "champ": 5,
+  "pair": 80,
+  "pc": 320
+ },
+ "C per-minute CS contest, Worlds day by day, mean squared error": {
+  "role mean only": 18.29,
+  "+ pre-game players and champions": 18.795,
+  "n": 5289
+ },
+ "C2 lane level, Worlds day by day: pre-game expected CS edge at 10 v real": {
+  "top": {
+   "lanes": 94,
+   "corr(pre-game expected, real CS edge at 10)": 0.545,
+   "error: zero / pre-game": [
+    206.5,
+    144.6
+   ]
+  },
+  "jng": {
+   "lanes": 94,
+   "corr(pre-game expected, real CS edge at 10)": 0.253,
+   "error: zero / pre-game": [
+    76.1,
+    69.5
+   ]
+  },
+  "mid": {
+   "lanes": 94,
+   "corr(pre-game expected, real CS edge at 10)": 0.617,
+   "error: zero / pre-game": [
+    182.0,
+    112.2
+   ]
+  },
+  "bot": {
+   "lanes": 94,
+   "corr(pre-game expected, real CS edge at 10)": 0.468,
+   "error: zero / pre-game": [
+    168.7,
+    132.5
+   ]
+  },
+  "sup": {
+   "lanes": 94,
+   "corr(pre-game expected, real CS edge at 10)": 0.431,
+   "error: zero / pre-game": [
+    20.7,
+    16.9
+   ]
+  }
+ },
+ "C slope per role (1 = the model's expected CS edge arrives in full)": {
+  "bot": 1.098,
+  "jng": 1.144,
+  "mid": 0.746,
+  "sup": 0.907,
+  "top": 1.094
+ },
+ "D actions-only lanes v real (Worlds; real events, simulated farm contest, no lead noise)": {
+  "top": {
+   "lanes": 90,
+   "CS edge: real sd": 20.4,
+   "CS edge: actions-only sd": 21.3,
+   "gold edge at 15: real sd": 994,
+   "gold edge at 15: actions-only sd": 790,
+   "gold not from CS (real gold edge - CS edge x gold per CS): real sd": 686,
+   "... from the game's kills, assists, plates and dead time at A's values: sd": 529,
+   "... correlation of the two": 0.872,
+   "gold: real edge inside the actions-only 80% range": 0.633
+  },
+  "jng": {
+   "lanes": 90,
+   "CS edge: real sd": 15.2,
+   "CS edge: actions-only sd": 17.6,
+   "gold edge at 15: real sd": 801,
+   "gold edge at 15: actions-only sd": 658,
+   "gold not from CS (real gold edge - CS edge x gold per CS): real sd": 639,
+   "... from the game's kills, assists, plates and dead time at A's values: sd": 516,
+   "... correlation of the two": 0.89,
+   "gold: real edge inside the actions-only 80% range": 0.689
+  },
+  "mid": {
+   "lanes": 90,
+   "CS edge: real sd": 15.4,
+   "CS edge: actions-only sd": 19.3,
+   "gold edge at 15: real sd": 666,
+   "gold edge at 15: actions-only sd": 638,
+   "gold not from CS (real gold edge - CS edge x gold per CS): real sd": 532,
+   "... from the game's kills, assists, plates and dead time at A's values: sd": 482,
+   "... correlation of the two": 0.877,
+   "gold: real edge inside the actions-only 80% range": 0.711
+  },
+  "bot": {
+   "lanes": 90,
+   "CS edge: real sd": 19.4,
+   "CS edge: actions-only sd": 20.2,
+   "gold edge at 15: real sd": 1063,
+   "gold edge at 15: actions-only sd": 771,
+   "gold not from CS (real gold edge - CS edge x gold per CS): real sd": 806,
+   "... from the game's kills, assists, plates and dead time at A's values: sd": 587,
+   "... correlation of the two": 0.812,
+   "gold: real edge inside the actions-only 80% range": 0.467
+  },
+  "sup": {
+   "lanes": 90,
+   "CS edge: real sd": 5.8,
+   "CS edge: actions-only sd": 7.0,
+   "gold edge at 15: real sd": 388,
+   "gold edge at 15: actions-only sd": 381,
+   "gold not from CS (real gold edge - CS edge x gold per CS): real sd": 408,
+   "... from the game's kills, assists, plates and dead time at A's values: sd": 366,
+   "... correlation of the two": 0.858,
+   "gold: real edge inside the actions-only 80% range": 0.5
+  }
+ }
+}

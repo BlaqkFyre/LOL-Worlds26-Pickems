@@ -1,6 +1,6 @@
 """The step 1 lane-edge model (moved here from research/laning/s5_lane_edges.py on 14 Nov 2026 so every script shares one copy).
   lane_rows(minor=False)  one row per game x role, blue player's side: players (pb, pr), champions (cb, cr), earlier games on the champion
-                          (nb, nr), gold edges y10 / y15, the current sim's inputs (z_v1, skill_gap, cg15), day, ts (days), league, major
+                          (nb, nr), gold edges y10 / y15, CS edges c10 / c15, the current sim's inputs (z_v1, skill_gap, cg15), day, ts (days), league, major
   Model(blocks, k, hl)    per role: intercept + player + champion + matchup + comfort + player x champion (+ team strength), shrunk
   Current()               the current sim's lane inputs, fitted linearly per role
   pregame_preds(target)   the model's pre-game expected edge for every game x role, never fitted on that game (cross-fitted before
@@ -12,7 +12,7 @@ from .runlog import sha256
 ROLES = config.ROLES
 
 def lane_rows(minor=False):
-    o = data.oe(["gameid", "league", "date", "patch", "side", "position", "playerid", "playername", "champion", "golddiffat10", "golddiffat15"])
+    o = data.oe(["gameid", "league", "date", "patch", "side", "position", "playerid", "playername", "champion", "golddiffat10", "golddiffat15", "csdiffat10", "csdiffat15"])
     o = o[o.position.isin(ROLES)].copy()
     o["pid"] = o.playerid.fillna("name:" + o.playername.astype(str)); o["day"] = o.date.str[:10]
     o["major"] = o.league.isin(config.MAJOR); o = o[o.major | (minor & (o.patch == config.WORLDS_PATCH))]
@@ -26,6 +26,7 @@ def lane_rows(minor=False):
     J = b.join(r[["pid", "champion", "before", "golddiffat15"]], rsuffix="_r", how="inner").reset_index()
     J = J.dropna(subset=["golddiffat15"]).rename(columns={"pid": "pb", "pid_r": "pr", "champion": "cb", "champion_r": "cr", "before": "nb", "before_r": "nr"})
     J["y15"], J["y10"] = J.golddiffat15, J.golddiffat10
+    J["c15"], J["c10"] = J.csdiffat15, J.csdiffat10  # CS edges (added 14 Nov for the farm contest)
     J["ts"] = pd.to_datetime(J.day).astype("int64") // 86_400_000_000_000
     data.fingerprint(config.LANE_FEATURES)
     feat = pd.read_csv(config.LANE_FEATURES); J = J.merge(feat[["gameid", "position", "z_v1", "skill_gap", "cg15"]], on=["gameid", "position"], how="left")

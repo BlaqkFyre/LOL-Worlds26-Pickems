@@ -1,0 +1,45 @@
+{
+ "name": "laning_replay_check",
+ "started_utc": "2026-11-14T10:45:43",
+ "script": {
+  "path": "research/laning/s5_replay_check.py",
+  "sha256": "8fa6ca04cc2c877e4e6db3bf0bdd8e7b7df2b930f9c638cafffd61e39b41a0ee",
+  "git_commit": "7e7e0cb",
+  "uncommitted_edits": true
+ },
+ "params": {},
+ "inputs": [
+  {
+   "path": "research/sim3/s3_sim.py",
+   "bytes": 61378,
+   "modified": "2026-11-14T21:45:16",
+   "sha256": "0c3f59b5a02ddfe7a9903ee585997ab8f7dbc604d01cce0019134c3fd4584a96"
+  },
+  {
+   "path": "research/local/sim4/s3_sim_before_laning.py",
+   "bytes": 52908,
+   "modified": "2026-11-14T21:43:46",
+   "sha256": "de50355475dd7c38f669aa8f9e3a5ab2f3051b9a1e0d01856db84e4d54fed097"
+  },
+  {
+   "path": "research/local/sim4/spread/w_dt/test3_results.json",
+   "bytes": 16875,
+   "modified": "2026-11-14T00:56:57",
+   "sha256": "03cfae574c90e1369dd2bbb8312a24d4ed952279e4e4d94bf2ef4852504dfbdc"
+  }
+ ],
+ "record": "20261114T104607Z_laning_replay_check.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 24.2,
+ "results": {
+  "identical": "642 of 642"
+ },
+ "outputs": [
+  {
+   "path": "research/model/laning/replay_check.json",
+   "sha256": "3b5b9b02c7df42e798ed71f6a3c9ec45f8237d613c27c9d24137ef768d7dfdaf"
+  }
+ ],
+ "not_written_because_failed": []
+}

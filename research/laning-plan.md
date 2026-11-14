@@ -183,3 +183,4 @@ The same tables (player lane skill, comfort, champion matchups, early power) rep
    and matched on 12 Nov (see the data section), so all 94 Worlds games have timelines.
 2. Draft AI lane tables: **in this slice** (step 5 also replaces the lane parts of `scoreFor` with the measured tables).
 3. Death timers: **yes, for the whole game**, ported with this slice.
+4. Step 2 (14 Nov): grubs taker = the full model; first dragon keeps "kills in the 60 s before" for now. Step 1 results: `research/laning/step1-report.md`.

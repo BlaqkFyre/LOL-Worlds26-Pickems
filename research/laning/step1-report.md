@@ -146,7 +146,7 @@ each plate already off −0.23, each own grub +0.07.
 <!-- /table -->
 
 Kept: strength and lane edges (bot edge strongest: +1.52 per 1k), and the Worlds term (red side's 2026 dragon edge didn't happen at
-Worlds). Kills just before: helps 2026, hurts Worlds: leans.
+Worlds). Kills just before: helps 2026, hurts Worlds: **Luke, 14 Nov: keep for now.**
 
 **C. Grub taker** (1,920 grubs; blue took 62%):
 
@@ -162,7 +162,7 @@ Worlds). Kills just before: helps 2026, hurts Worlds: leans.
 <sub>Source: research/model/laning/lane_actions.json (run record research/runs/20261114T042655Z_lane_actions.json, script research\laning\s5_lane_actions.py at commit 529caf2 with uncommitted edits).</sub>
 <!-- /table -->
 
-Mixed: each input helps at Worlds, but on 2026 games from 1 Sep side alone is best. Leans (Luke to decide); Worlds term not kept.
+Mixed: each input helps at Worlds, but on 2026 games from 1 Sep side alone is best. **Luke, 14 Nov: use the full model** (strength, lane edges, kills in the 60 s before, team grubs priority); Worlds term not kept.
 
 **D. Lane kills** (61,440 side-lane-minutes, 2:00–13:59) and solo kills: barely move from minute-and-lane rates (Worlds 0.3580 → 0.3571 with
 pre-game players and champions; solo kills no gain). How often kills happen in a lane is close to a steady rate; who wins them is

@@ -172,6 +172,19 @@ class Sim:
         # death timers (opt-in, 14 Nov; research/sim4/s4_deathtimer.py, League wiki + Riot patch notes): a dead player is out of every fight
         # (can't kill, assist or die) until respawning; the wait follows the role's level (real XP curve) and the game time
         DT = P.get("death_timer") if cal.get("death_timers", "off") == "on" else None
+        # laning as actions (opt-in, 14 Nov; research/laning/step3-design.md, tables from research/laning/s5_fit_laning.py): 0:00-14:59 lane gold
+        # comes from a CS contest each minute (players and champions via the lane model's expected CS edge, the measured minute-to-minute
+        # spread, nothing while dead) and from events paid by the official gold rules (bounties, first blood, assists, plates, turrets, ADC
+        # quest, grubs); early fight winners from the players and champions in the fight, team strength and those roles' gold now; plates,
+        # the first dragon and each grub contested with their fitted models. Death timers on. Off by default: earlier runs replay exactly.
+        LA = P.get("laning") if (cal.get("laning", "off") == "actions" and P.get("laning") and "la" in x) else None
+        dead_ivr = [[[] for _ in range(5)], [[] for _ in range(5)]]  # each role's dead time (used by the module's farm)
+        if LA is not None:
+            if DT is None: DT = P["death_timer"]
+            XL = x["la"]; LR_ = LA["rules"]; pre_g = np.array(XL["pre_gold"], float); pre_c = np.array(XL["pre_cs"], float)
+            cs_abs = np.zeros((2, 5)); bka = np.zeros((2, 5)); bpaid = np.zeros((2, 5)); la_fb = [True]
+            quest_t = [float(rng.choice(LA["quest_times"])), float(rng.choice(LA["quest_times"]))]; quest_done = [False, False]
+            la_first_tower = [True]; la_prev = np.zeros(5)  # last minute's CS swing per role (waves alternate; fitted lag-1 correlation)
         respawn = [[-1.0] * 5, [-1.0] * 5]
         # pushes follow dead players (opt-in, 14 Nov, needs death timers): the most enemy / own players dead at once this minute feed the tower and
         # base push chances (refitted with those inputs) and how far a push runs; structures fall after the fight that killed the defenders,
@@ -194,6 +207,10 @@ class Sim:
                 if t > prev: f += per * (min(t, end) - prev) // tf_["step_s"]
                 prev = end
             return DT["base_wait"][min(17, lv - 1)] * (1 + min(tf_["cap"], f))
+        def level_at(role_i, t):
+            c = DT["role_xp"][ROLES[role_i]]
+            xp = float(np.interp(t, [0, 600, 900, 1200, 1500], [0, *c])) if t <= 1500 else min(DT["xp_levels"][-1], c[3] + (c[3] - c[2]) / 300 * (t - 1500))
+            return int(np.searchsorted(DT["xp_levels"], xp, side="right"))
         FDT = (P["taker_first_dragon"]["timing" if TIM else "side"]) if (cal.get("first_dragon_taker", "off") == "on" and P.get("taker_first_dragon")) else None
         def at(d_):
             if not EO: return d_
@@ -215,9 +232,23 @@ class Sim:
         def add_gold(side, amount, roles=None):
             # every event's gold lands on the roles the way real team gold swings do (fitted shares, laning v after 15:00);
             # `roles` is kept for the play-by-play only
+            if LA is not None and m < 15: return  # laning module: paid by the official rules where each event happens
             if LL is not None and m < 15: return  # the lane leads to 15:00 already hold this gold (they were fitted to real leads)
             sgn = 1 if side == 0 else -1
             gold[:] += sgn * amount * (self.sw_lane if m < 15 else self.sw_late)
+        def team_gold(side, amount):  # objective gold the module leaves to the fitted team shares (dragons, Herald)
+            gold[:] += (1 if side == 0 else -1) * amount * (self.sw_lane if m < 15 else self.sw_late)
+        def la_kill(s, k, v, ast, t):  # official bounty rules (League wiki, Champion gold bounties): kill and assist gold, first blood, ADC quest
+            o = 1 - s; sg_ = 1 if s == 0 else -1
+            lv = level_at(v, t); b0 = LR_["bounty_base"] + LR_["bounty_per_level_from_7"] * max(0, min(18, lv) - 6)
+            acc = bka[o, v] / LR_["accrue_ka"] + cs_abs[o, v] * LA["gold_per_cs"] / LR_["accrue_farm"] - bpaid[o, v] / LR_["depreciate"]
+            bounty = min(max(LR_["min_bounty"], b0 + max(0.0, acc - LR_["buffer"])), b0 + LR_["cap_above_base"])
+            kg = bounty + (LR_["first_blood"] if la_fb[0] else 0.0); la_fb[0] = False
+            ag = min(LR_["assist_share"] * bounty, LR_["assist_share"] * b0) / len(ast) if ast else 0.0
+            gold[k] += sg_ * kg; bka[s, k] += kg
+            for i in ast: gold[i] += sg_ * ag; bka[s, i] += ag
+            if quest_done[s]: gold[3] += sg_ * LR_["quest_per_takedown"] * ((k == 3) + (3 in ast))
+            bpaid[o, v] += kg + ag * len(ast)
         def note(t, side, kind, text):
             if log: steps.append({"t": int(t), "side": ["blue", "red"][side] if side is not None else "", "kind": kind, "text": text})
 
@@ -230,7 +261,8 @@ class Sim:
             if m == 15: gd_at["kd15"] = (K[0] - D[0]) - (K[1] - D[1])  # each role's kills minus deaths by 15:00, blue minus red (for the lane checks)
             role_lead = farm + gold
             # --- laning / gold drift ---
-            if m < 15:
+            if m < 15 and LA is not None: pass  # laning module: the CS contest after this minute's fights
+            elif m < 15:
                 f0, f1 = (m / 15) ** self.A, ((m + 1) / 15) ** self.A
                 farm += lane_end * (f1 - f0)
             else:
@@ -287,6 +319,10 @@ class Sim:
                                 pp_ = pp_ / pp_.sum()
                             ci = int(rng.choice(len(pp_), p=pp_))
                             part = {s: FPd["subs"][ci // 31], o: FPd["subs"][ci % 31]}
+                            if LA is not None and m < 14:  # who wins: the roles in this fight (s5_fight_winner.py)
+                                rl_ = sorted(set(part[0]) | set(part[1])); fw_ = LA["fight"]
+                                p = sig(fw_["const"] + fw_["pre"] * pre_g[rl_].sum() / 1000 + fw_["team"] * x["z"] + fw_["state"] * (farm[rl_].sum() + gold[rl_].sum()) / 1000)
+                                s = 0 if rng.random() < p else 1; o = 1 - s
                         if part is None: continue
                         ck = [i for i in part[s] if i not in dead[s]]; cv = [i for i in part[o] if i not in dead[o]]
                         if not ck or not cv: continue
@@ -305,12 +341,13 @@ class Sim:
                         for i in ast: A[s, i] += 1
                         if not ast: SOLO[s, k] += 1
                         add_gold(s, val["kill"], [k] * 2 + ast)
-                        if LL is not None and LL["ev"] is not None and m < 15:
+                        if LA is not None and m < 15: la_kill(s, k, v, ast, tf + 3 * j)
+                        if LL is not None and LL["ev"] is not None and m < 15 and LA is None:
                             E_ = LL["ev"]; gold[k] += sgs * E_["own_kill"][k]; gold[v] -= sgs * E_["own_death"][v]
                             for i in ast: gold[i] += sgs * E_["own_assist"][i]
                         net += 1 if s == 0 else -1; kc[s] += 1; first.setdefault("blood", s)
                         tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
-                        if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v]))
+                        if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v])); dead_ivr[o][v].append((tk, respawn[o][v]))
                         note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)")); continue
                     alive_v = [i for i in range(5) if i not in dead[o]]
                     if not alive_v: continue
@@ -339,7 +376,8 @@ class Sim:
                         for i in ast: A[s, i] += 1
                         if not ast: SOLO[s, k] += 1
                         add_gold(s, val["kill"], [k] * 2 + ast)
-                        if LL is not None and LL["ev"] is not None:
+                        if LA is not None and m < 15: la_kill(s, k, v, ast, tf + 3 * j)
+                        if LL is not None and LL["ev"] is not None and LA is None:
                             E_ = LL["ev"]; gold[k] += sgs * E_["own_kill"][k]; gold[v] -= sgs * E_["own_death"][v]
                             for i in ast: gold[i] += sgs * E_["own_assist"][i]
                         inv[s].update([k] + ast); inv[o].add(v)
@@ -347,7 +385,7 @@ class Sim:
                             if LANEID[i] >= 0: lanes_in.add(LANEID[i])
                         net += 1 if s == 0 else -1; kc[s] += 1; first.setdefault("blood", s)
                         tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
-                        if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v]))
+                        if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v])); dead_ivr[o][v].append((tk, respawn[o][v]))
                         note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)")); continue
                     early_ll = LL is not None and m < 15
                     if early_ll:  # victim: roles behind in their own lane die more (fitted lean)
@@ -364,15 +402,30 @@ class Sim:
                     for i in ast: A[s, i] += 1
                     if not ast: SOLO[s, k] += 1
                     add_gold(s, val["kill"], [k] * 2 + ast)
-                    if early_ll and LL["ev"] is not None:
+                    if LA is not None and m < 15: la_kill(s, k, v, ast, tf + 3 * j)
+                    if early_ll and LL["ev"] is not None and LA is None:
                         sg_ = 1 if s == 0 else -1; E_ = LL["ev"]
                         gold[k] += sg_ * E_["own_kill"][k]; gold[v] -= sg_ * E_["own_death"][v]
                         for i in ast: gold[i] += sg_ * E_["own_assist"][i]
                     net += 1 if s == 0 else -1; kc[s] += 1
                     first.setdefault("blood", s)
                     tk = at(tf + 3 * j); kill_log.append((tk, s, k, v))
-                    if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v]))
+                    if DT is not None: respawn[o][v] = tk + death_wait(v, tk); dead_iv[o].append((tk, respawn[o][v])); dead_ivr[o][v].append((tk, respawn[o][v]))
                     note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)"))
+            if LA is not None and 1 <= m < 15:  # the CS contest (s5_farm.py): both alive = contest; one dead = the other farms alone
+                for i, r in enumerate(ROLES):
+                    fr = LA["farm"][r]; rate = fr["cs_rate"].get(str(m), 0.0)
+                    dfrac = [min(1.0, sum(max(0.0, min(e_, t0 + 60) - max(s_, t0)) for s_, e_ in dead_ivr[sd_][i]) / 60) for sd_ in (0, 1)]
+                    rho_ = fr.get("rho", 0.0); sw_ = rho_ * la_prev[i] + math.sqrt(max(0.0, 1 - rho_ ** 2)) * rng.normal(0, fr["sd"]); la_prev[i] = sw_
+                    contest = (1 - dfrac[0]) * (1 - dfrac[1]) * (fr["a"] + fr["b"] * pre_c[i] / 10 + sw_)
+                    gb = rate * (1 - dfrac[0]) + contest / 2; gr = rate * (1 - dfrac[1]) - contest / 2
+                    cs_abs[0, i] += gb; cs_abs[1, i] += gr; gold[i] += (gb - gr) * LA["gold_per_cs"]
+                    if i == 3:
+                        for sd_, gx_ in ((0, gb), (1, gr)):
+                            if quest_done[sd_]: gold[3] += (1 if sd_ == 0 else -1) * LR_["quest_per_minion"] * gx_
+                for sd_ in (0, 1):
+                    if not quest_done[sd_] and t0 + 60 >= quest_t[sd_]:
+                        quest_done[sd_] = True; gold[3] += (1 if sd_ == 0 else -1) * LR_["quest_lump"]
             # --- monsters ---
             def taker(kind, feats):
                 c = TAKC.get(kind) or TAKC["dragon"]  # fallback only when a fit had too few training takes
@@ -391,7 +444,11 @@ class Sim:
                 kind = "elder" if elder_mode else "dragon"
                 if rng.random() < take_chance(kind if kind in P["monsters"] else "dragon"):
                     feats = {k: lanef[k] for k in (["gd", "jng", "bot2", "mid", "net60k", "objk", "first1k"] if kind == "dragon" else ["gd", "net60k", "objk"])}
-                    if FDT is not None and kind == "dragon" and first_drag:
+                    if LA is not None and kind == "dragon" and first_drag:  # the module's first dragon taker (s5_lane_actions.py B)
+                        dc_ = LA["dragon"]
+                        s = 0 if rng.random() < sig(dc_["const"] + dc_["z"] * x["z"] + dc_["bot"] * lanef["bot2"] / 1000 + dc_["mid"] * lanef["mid"] / 1000
+                                                    + dc_["jng"] * lanef["jng"] / 1000 + dc_["net60"] * net + dc_["w"] * XL["w"]) else 1
+                    elif FDT is not None and kind == "dragon" and first_drag:
                         xb_ = FDT["blue_side"] + FDT["per_v1_logit"] * z + sum(FDT.get(f_ + "_per_1k", 0.0) * lanef[f_] / 1000 for f_ in ["gd", "jng", "bot2", "mid", "top", "net60k", "objk"])
                         s = 0 if rng.random() < sig(xb_) else 1
                     else: s = taker(kind if kind in P["taker"] else "dragon", feats)
@@ -408,6 +465,7 @@ class Sim:
                                 opts = list(range(len(self.dtypes))); ty = self.dtypes[int(rng.choice(opts, p=self.dprob))]; soul_type = ty
                             ty = soul_type
                         drag_seq.append(ty); drag[s].append(ty); add_gold(s, val["dragon_n"])
+                        if LA is not None and m < 15: team_gold(s, val["dragon_n"])
                         first.setdefault("dragon", s); ftime.setdefault("dragon", tt); note(tt, s, "dragon", f"{ty} dragon")
                         if len(drag[s]) >= 4 and not elder_mode:
                             soul[s] = ty; elder_mode = True; note(tt, s, "soul", f"{ty} soul")
@@ -417,12 +475,21 @@ class Sim:
                     if rng.random() < take_chance(kind):
                         s = taker(kind, {k: lanef[k] for k in ["gd", "jng", "top", "mid", "net60k", "objk"]})
                         tt = at(max(t0, nxt[kind]) + rng.uniform(0, 50)); taken_once[kind] = True
-                        if kind == "grub":
+                        if kind == "grub" and LA is not None:  # each grub contested (s5_lane_actions.py C, Luke: the full model); 30 gold to the jungler
+                            gc_ = LA["grubs"]; got = [0, 0]
+                            for gi_ in range(3):
+                                sg_ = 0 if rng.random() < sig(gc_["const"] + gc_["z"] * x["z"] + gc_["top"] * lanef["top"] / 1000 + gc_["mid"] * lanef["mid"] / 1000
+                                                             + gc_["jng"] * lanef["jng"] / 1000 + gc_["net60"] * net + gc_["team"] * XL["tgrub"]) else 1
+                                got[sg_] += 1; grubs[sg_] += 1; first.setdefault("grub", sg_); gold[1] += (1 if sg_ == 0 else -1) * LR_["grub"]
+                            for sg_ in (0, 1):
+                                if got[sg_]: note(tt, sg_, "grubs", f"{got[sg_]} void grub" + ("s" if got[sg_] > 1 else ""))
+                        elif kind == "grub":
                             n_own = 3 if rng.random() < P["grubs_split"]["one_team_all"] else 2
                             grubs[s] += n_own; grubs[1 - s] += 3 - n_own; first.setdefault("grub", s); add_gold(s, val["grub"] * n_own); add_gold(1 - s, val["grub"] * (3 - n_own))
                             note(tt, s, "grubs", f"{n_own} void grubs")
                         else:
                             heralds[s] += 1; herald_t[s] = tt; first.setdefault("herald", s); add_gold(s, val["herald"]); note(tt, s, "herald", "Rift Herald")
+                            if LA is not None and m < 15: team_gold(s, val["herald"])
             if nxt["baron"] is not None and nxt["baron"] < t0 + 60:
                 if rng.random() < take_chance("baron"):
                     s = taker("baron", {k: lanef[k] for k in ["gd", "net60k", "objk"]})
@@ -464,7 +531,14 @@ class Sim:
                           + sc.get("lane_segments_last_minute", 0.0) * min(5, prevseg[s][li]) + sc.get("T3_x_baron", 0.0) * (tier == 2) * (baron_until[s] > t0)
                           + sc.get("net_kills_last_minute", 0.0) * max(-5, min(5, sg * prev_net)) + sc.get("clear_fight_win", 0.0) * (sg * net >= cutS or sg * prev_net >= cutS)
                           + sc.get("enemies_dead_max", 0.0) * en_ + sc.get("own_dead_max", 0.0) * ow_)
-                    if SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
+                    if LA is not None and m < 14 and tier == 0:  # the module's plates: this lane's state now (s5_lane_actions.py A)
+                        pc_ = LA["plates"]; lr_ = LANE_ROLES[L]; oo = 1 - s
+                        en_d = sum(1 for e_ in kill_log if e_[1] == s and e_[3] in lr_ and t0 - 60 <= e_[0] < t0 + 30)
+                        ow_d = sum(1 for e_ in kill_log if e_[1] == oo and e_[3] in lr_ and t0 - 60 <= e_[0] < t0 + 30)
+                        mu_ = 0.0 if m < 3 else math.exp(pc_["const"] + pc_.get(f"m{m}", 0.0) + pc_["lane_mid"] * (L == "MID") + pc_["lane_bot"] * (L == "BOT")
+                                                         + pc_["edge"] * lane_lead(s, L) / 1000 + pc_["en_dead"] * en_d + pc_["own_dead"] * ow_d + pc_["taken"] * seg[s][li] + pc_["grubs"] * grubs[s])
+                        n = min(int(rng.poisson(mu_)) if mu_ > 0 else 0, 5 - seg[s][li])  # an outer tower has five plates
+                    elif SPC is not None:  # tower pushes: a push starts with the fitted chance, its size drawn from real pushes
                         n = 0
                         if rng.random() < sig(xb):
                             key_ = "0_early" if tier == 0 and m < 14 else str(tier)
@@ -475,6 +549,13 @@ class Sim:
                     for _ in range(n):
                         seg[s][li] += 1
                         add_gold(s, val["plate_early"] if m < 14 else val["plate"], LANE_ROLES[L])
+                        if LA is not None and m < 14 and seg[s][li] <= 5:  # plate: 120 split among the side's laners there (League wiki, Turret)
+                            for i in LANE_ROLES[L]: gold[i] += sg * LA["rules"]["plate"] / len(LANE_ROLES[L])
+                        if LA is not None and m < 15 and seg[s][li] % 5 == 0:  # turret: 50 to each player; the first turret +300 to the lane's players
+                            gold[:] += sg * LA["rules"]["turret_each"]
+                            if la_first_tower[0]:
+                                la_first_tower[0] = False
+                                for i in LANE_ROLES[L]: gold[i] += sg * LA["rules"]["first_turret"] / len(LANE_ROLES[L])
                         if LL is not None and LL["ev"] is not None:
                             if "own_lane_plate" in LL["ev"]:
                                 if m < 15:

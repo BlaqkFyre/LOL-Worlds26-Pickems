@@ -1,0 +1,71 @@
+{
+ "kills measured (clean: no other kill or plate within 3 s)": [
+  432,
+  586
+ ],
+ "kill gold to the killer": {
+  "first blood": [
+   418,
+   73
+  ],
+  "other kills, median": 321,
+  "other kills, 10th / 90th percentile": [
+   273,
+   390
+  ],
+  "official": "base 300-420 by the victim's level, first blood +100, more for a victim with kills and assists (shutdown)"
+ },
+ "kill gold by the victim's earlier kills + assists (median, n)": {
+  "(-1, 0]": [
+   320,
+   141
+  ],
+  "(0, 1]": [
+   320,
+   122
+  ],
+  "(1, 2]": [
+   335,
+   62
+  ],
+  "(2, 4]": [
+   330,
+   25
+  ],
+  "(4, 99]": [
+   543,
+   9
+  ]
+ },
+ "kill gold, solo v with assisters (median)": {
+  "solo": 330,
+  "with assisters": 320
+ },
+ "assist gold to each assister (median by number of assisters)": {
+  "1": [
+   170,
+   179
+  ],
+  "2": [
+   83,
+   250
+  ],
+  "3": [
+   57,
+   192
+  ],
+  "4": [
+   40,
+   44
+  ]
+ },
+ "bot-lane quest lump (first 250+ jump with no kill, assist or plate)": {
+  "ADCs seen": 148,
+  "median gold": 318,
+  "median time": "12:18",
+  "10th / 90th percentile time": [
+   "5:09",
+   "13:49"
+  ]
+ }
+}
