@@ -1,0 +1,240 @@
+{
+ "games": {
+  "real": 231,
+  "sim": 1386
+ },
+ "opts": [
+  "ekc",
+  "fdt",
+  "fpl",
+  "ll",
+  "pko",
+  "typed"
+ ],
+ "real": {
+  "structures": {
+   "T1": {
+    "n": 1196,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.207,
+     0.07,
+     0.028
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.342,
+     0.139,
+     0.073
+    ],
+    "kills edge 60s, mean": 0.31
+   },
+   "T2": {
+    "n": 695,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.304,
+     0.158,
+     0.105
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.406,
+     0.249,
+     0.188
+    ],
+    "kills edge 60s, mean": 0.79
+   },
+   "T3": {
+    "n": 388,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.564,
+     0.369,
+     0.245
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.678,
+     0.495,
+     0.41
+    ],
+    "kills edge 60s, mean": 1.76
+   },
+   "INHIB": {
+    "n": 369,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.615,
+     0.374,
+     0.252
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.767,
+     0.58,
+     0.48
+    ],
+    "kills edge 60s, mean": 2.04
+   },
+   "NEXUSTOWER": {
+    "n": 470,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.736,
+     0.466,
+     0.315
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.938,
+     0.866,
+     0.762
+    ],
+    "kills edge 60s, mean": 3.17
+   },
+   "NEXUS": {
+    "n": 231,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.745,
+     0.498,
+     0.294
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.996,
+     0.961,
+     0.913
+    ],
+    "kills edge 60s, mean": 3.64
+   }
+  },
+  "games": {
+   "winner kills in last 2 min, mean": 4.61,
+   "share with winner 2+ kills ahead in last 2 min": 0.957,
+   "share with no kill in last 2 min": 0.0
+  },
+  "won_fights_from_20": {
+   "edge 2": {
+    "n": 245,
+    "structure within 60s": 0.404,
+    "structure within 120s": 0.624,
+    "fight winner ends within 120s": 0.282
+   },
+   "edge 3": {
+    "n": 161,
+    "structure within 60s": 0.621,
+    "structure within 120s": 0.814,
+    "fight winner ends within 120s": 0.366
+   },
+   "edge 4+": {
+    "n": 196,
+    "structure within 60s": 0.816,
+    "structure within 120s": 0.883,
+    "fight winner ends within 120s": 0.643
+   }
+  }
+ },
+ "sim": {
+  "structures": {
+   "T1": {
+    "n": 7050,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.264,
+     0.129,
+     0.076
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.368,
+     0.193,
+     0.113
+    ],
+    "kills edge 60s, mean": 0.21
+   },
+   "T2": {
+    "n": 4230,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.316,
+     0.186,
+     0.122
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.428,
+     0.271,
+     0.179
+    ],
+    "kills edge 60s, mean": 0.51
+   },
+   "T3": {
+    "n": 2368,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.336,
+     0.23,
+     0.162
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.456,
+     0.321,
+     0.227
+    ],
+    "kills edge 60s, mean": 0.75
+   },
+   "INHIB": {
+    "n": 2140,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.44,
+     0.333,
+     0.244
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.566,
+     0.436,
+     0.323
+    ],
+    "kills edge 60s, mean": 1.07
+   },
+   "NEXUSTOWER": {
+    "n": 2844,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.516,
+     0.416,
+     0.323
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.647,
+     0.532,
+     0.429
+    ],
+    "kills edge 60s, mean": 1.39
+   },
+   "NEXUS": {
+    "n": 1386,
+    "own kills 30s: 1+ / 2+ / 3+": [
+     0.541,
+     0.439,
+     0.356
+    ],
+    "own kills 60s: 1+ / 2+ / 3+": [
+     0.679,
+     0.565,
+     0.475
+    ],
+    "kills edge 60s, mean": 1.55
+   }
+  },
+  "games": {
+   "winner kills in last 2 min, mean": 3.19,
+   "share with winner 2+ kills ahead in last 2 min": 0.52,
+   "share with no kill in last 2 min": 0.161
+  },
+  "won_fights_from_20": {
+   "edge 2": {
+    "n": 1392,
+    "structure within 60s": 0.3,
+    "structure within 120s": 0.477,
+    "fight winner ends within 120s": 0.16
+   },
+   "edge 3": {
+    "n": 918,
+    "structure within 60s": 0.338,
+    "structure within 120s": 0.528,
+    "fight winner ends within 120s": 0.245
+   },
+   "edge 4+": {
+    "n": 954,
+    "structure within 60s": 0.374,
+    "structure within 120s": 0.543,
+    "fight winner ends within 120s": 0.367
+   }
+  }
+ }
+}

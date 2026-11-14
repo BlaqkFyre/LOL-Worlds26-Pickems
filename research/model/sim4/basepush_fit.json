@@ -1,0 +1,267 @@
+{
+ "cutoff": "2026-09-01",
+ "rows": {
+  "train": 1636,
+  "test": 578,
+  "worlds": 325
+ },
+ "starts": {
+  "A current inputs": {
+   "coef": {
+    "intercept": -3.5861,
+    "from 25": 0.4275,
+    "from 35": 0.2539,
+    "per_1k_lead": 0.0048,
+    "per_v1_logit": 0.0125,
+    "baron": 0.6006,
+    "elder": 0.6549,
+    "enemy_inhibs_down": -0.0301,
+    "open_lanes": 0.8629,
+    "siege_style_sum": -0.0666,
+    "lane_just_opened": 1.4856,
+    "base_take_last_minute": -3.3203,
+    "net_kills_this_minute": 0.5131,
+    "net_kills_last_minute": 0.3823
+   },
+   "train": 0.41561,
+   "test": 0.42155,
+   "worlds": 0.39306
+  },
+  "B own and enemy kills": {
+   "coef": {
+    "intercept": -3.8517,
+    "from 25": 0.4416,
+    "from 35": 0.2353,
+    "per_1k_lead": 0.0074,
+    "per_v1_logit": 0.0301,
+    "baron": 0.5845,
+    "elder": 0.6845,
+    "enemy_inhibs_down": 0.0055,
+    "open_lanes": 0.8521,
+    "siege_style_sum": -0.2494,
+    "lane_just_opened": 1.4844,
+    "base_take_last_minute": -3.435,
+    "own_kills_this_minute": 0.5702,
+    "enemy_kills_this_minute": -0.0961,
+    "own_kills_last_minute": 0.4122,
+    "enemy_kills_last_minute": -0.4799
+   },
+   "train": 0.40461,
+   "test": 0.42336,
+   "worlds": 0.38152
+  },
+  "C B + own kills x inhib down": {
+   "coef": {
+    "intercept": -3.8616,
+    "from 25": 0.4428,
+    "from 35": 0.2324,
+    "per_1k_lead": 0.0074,
+    "per_v1_logit": 0.0272,
+    "baron": 0.5904,
+    "elder": 0.6901,
+    "enemy_inhibs_down": 0.0276,
+    "open_lanes": 0.8502,
+    "siege_style_sum": -0.2603,
+    "lane_just_opened": 1.4774,
+    "base_take_last_minute": -3.4164,
+    "own_kills_this_minute": 0.5841,
+    "enemy_kills_this_minute": -0.0949,
+    "own_kills_last_minute": 0.412,
+    "enemy_kills_last_minute": -0.4799,
+    "own_kills_this_minute_x_inhib_down": -0.0329
+   },
+   "train": 0.40457,
+   "test": 0.42376,
+   "worlds": 0.38293
+  }
+ },
+ "real start rate by own kills this minute": {
+  "no inhib down": {
+   "0": [
+    0.316,
+    354
+   ],
+   "1": [
+    0.599,
+    152
+   ],
+   "2": [
+    0.679,
+    78
+   ],
+   "3+": [
+    0.769,
+    234
+   ]
+  },
+  "inhib down": {
+   "0": [
+    0.116,
+    484
+   ],
+   "1": [
+    0.203,
+    118
+   ],
+   "2": [
+    0.274,
+    62
+   ],
+   "3+": [
+    0.558,
+    154
+   ]
+  }
+ },
+ "share of push starts with no kill either side this or last minute (train / test)": [
+  0.086,
+  0.109
+ ],
+ "push size": {
+  "train": {
+   "no inhib down|0": {
+    "n": 120,
+    "size": {
+     "1": 0.508,
+     "2": 0.133,
+     "3": 0.05,
+     "4": 0.208,
+     "5": 0.092,
+     "6": 0.008
+    },
+    "mean": 2.27,
+    "ends": 0.308
+   },
+   "no inhib down|1-2": {
+    "n": 146,
+    "size": {
+     "1": 0.329,
+     "2": 0.164,
+     "3": 0.055,
+     "4": 0.315,
+     "5": 0.137
+    },
+    "mean": 2.77,
+    "ends": 0.445
+   },
+   "no inhib down|3+": {
+    "n": 185,
+    "size": {
+     "1": 0.086,
+     "2": 0.054,
+     "3": 0.005,
+     "4": 0.708,
+     "5": 0.124,
+     "6": 0.022
+    },
+    "mean": 3.79,
+    "ends": 0.849
+   },
+   "inhib down|0": {
+    "n": 48,
+    "size": {
+     "1": 0.521,
+     "2": 0.125,
+     "3": 0.25,
+     "4": 0.104
+    },
+    "mean": 1.94,
+    "ends": 0.375
+   },
+   "inhib down|1-2": {
+    "n": 41,
+    "size": {
+     "1": 0.366,
+     "2": 0.073,
+     "3": 0.293,
+     "4": 0.268
+    },
+    "mean": 2.46,
+    "ends": 0.561
+   },
+   "inhib down|3+": {
+    "n": 85,
+    "size": {
+     "1": 0.059,
+     "2": 0.129,
+     "3": 0.388,
+     "4": 0.376,
+     "5": 0.047
+    },
+    "mean": 3.22,
+    "ends": 0.941
+   }
+  },
+  "test": {
+   "no inhib down|0": {
+    "n": 50,
+    "size": {
+     "1": 0.5,
+     "2": 0.16,
+     "3": 0.04,
+     "4": 0.24,
+     "5": 0.06
+    },
+    "mean": 2.2,
+    "ends": 0.28
+   },
+   "no inhib down|1-2": {
+    "n": 59,
+    "size": {
+     "1": 0.305,
+     "2": 0.186,
+     "3": 0.034,
+     "4": 0.356,
+     "5": 0.119
+    },
+    "mean": 2.8,
+    "ends": 0.458
+   },
+   "no inhib down|3+": {
+    "n": 66,
+    "size": {
+     "1": 0.136,
+     "2": 0.076,
+     "4": 0.667,
+     "5": 0.106,
+     "6": 0.015
+    },
+    "mean": 3.58,
+    "ends": 0.788
+   },
+   "inhib down|0": {
+    "n": 15,
+    "size": {
+     "1": 0.4,
+     "3": 0.4,
+     "4": 0.2
+    },
+    "mean": 2.4,
+    "ends": 0.733
+   },
+   "inhib down|1-2": {
+    "n": 18,
+    "size": {
+     "1": 0.278,
+     "2": 0.056,
+     "3": 0.167,
+     "4": 0.5
+    },
+    "mean": 2.89,
+    "ends": 0.722
+   },
+   "inhib down|3+": {
+    "n": 35,
+    "size": {
+     "1": 0.114,
+     "2": 0.143,
+     "3": 0.314,
+     "4": 0.314,
+     "5": 0.114
+    },
+    "mean": 3.17,
+    "ends": 0.914
+   }
+  }
+ }
+}

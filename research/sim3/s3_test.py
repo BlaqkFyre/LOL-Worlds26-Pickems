@@ -42,6 +42,8 @@ if "ll" in OPTS: P["lane_level"] = json.load(open(os.path.join(LLD, "lanelevel_f
 if "fdt" in OPTS:  # "fdt": the first dragon's own taker (13 Nov)
     _fd = json.load(open(os.path.join(os.path.dirname(PJ), "firstdragon.json"))); P["taker_first_dragon"] = {"side": _fd["taker"], "timing": _fd["taker_timing"]}
 if "fpl" in OPTS: P["fight_players"] = json.load(open(os.path.join(os.path.dirname(PJ), "participants.json")))  # "fpl": who is in each fight (13 Nov)
+if "dt" in OPTS: P["death_timer"] = json.load(open(os.path.join(os.path.dirname(PJ), "deathtimer.json")))  # "dt": death timers (14 Nov)
+if "dp" in OPTS: P["dead_push"] = json.load(open(os.path.join(os.path.dirname(PJ), "deadpush_sim.json")))  # "dp": pushes follow dead players (14 Nov)
 if OPTS & {"ek", "ekp", "ekpf", "ekf"}: P["early_kills"] = json.load(open(os.path.join(os.path.dirname(PJ), "earlykills.json")))  # "ekp" / "ekc": one part only
 XKEYS = ("z", "skill_gap", "cg15", "siege_d", "obj_d", "skirm_d", "pace_s", "siege_s", "obj_s") + (("ll_m0", "ll_e0") if "ll" in OPTS else ())
 sig = lambda x: 1 / (1 + np.exp(-x))
@@ -108,6 +110,8 @@ def prep():  # runs in the main process only (workers on Windows re-import this 
     if "ekpf" in OPTS: cal["early_kills"] = "pairs_flat"  # only the kill pairs, with the usual flat assist rates
     if "fdt" in OPTS: cal["first_dragon_taker"] = "on"  # the first dragon's own fitted taker
     if "fpl" in OPTS: cal["fight_players"] = "on"  # fight players: kills and assists only among the players in the fight
+    if "dt" in OPTS: cal["death_timers"] = "on"  # dead players sit out until they respawn
+    if "dp" in OPTS: cal["dead_push"] = "on"  # pushes follow dead players, with real timing
     if "ekf" in OPTS: cal["early_kills"] = "on_flat"  # kill pairs with flat assists + early fight counts, types and sizes
     if "eo" in OPTS: cal["event_order"] = "on"  # events keep their order inside a minute (13 Nov)
     if "pfs" in OPTS: cal["push_fight"] = "simple"  # the simplest version: last minute's kills edge only (11 Nov)

@@ -1,0 +1,84 @@
+{
+ "cutoff": "2026-09-01",
+ "start": {
+  "intercept": -3.8517,
+  "from 25": 0.4416,
+  "from 35": 0.2353,
+  "per_1k_lead": 0.0074,
+  "per_v1_logit": 0.0301,
+  "baron": 0.5845,
+  "elder": 0.6845,
+  "enemy_inhibs_down": 0.0055,
+  "open_lanes": 0.8521,
+  "siege_style_sum": -0.2494,
+  "lane_just_opened": 1.4844,
+  "base_take_last_minute": -3.435,
+  "own_kills_this_minute": 0.5702,
+  "enemy_kills_this_minute": -0.0961,
+  "own_kills_last_minute": 0.4122,
+  "enemy_kills_last_minute": -0.4799
+ },
+ "size": {
+  "no inhib down|0": {
+   "n": 120,
+   "size": {
+    "1": 0.508,
+    "2": 0.133,
+    "3": 0.05,
+    "4": 0.208,
+    "5": 0.092,
+    "6": 0.008
+   }
+  },
+  "no inhib down|1-2": {
+   "n": 146,
+   "size": {
+    "1": 0.329,
+    "2": 0.164,
+    "3": 0.055,
+    "4": 0.315,
+    "5": 0.137
+   }
+  },
+  "no inhib down|3+": {
+   "n": 185,
+   "size": {
+    "1": 0.086,
+    "2": 0.054,
+    "3": 0.005,
+    "4": 0.708,
+    "5": 0.124,
+    "6": 0.022
+   }
+  },
+  "inhib down|0": {
+   "n": 48,
+   "size": {
+    "1": 0.521,
+    "2": 0.125,
+    "3": 0.25,
+    "4": 0.104
+   }
+  },
+  "inhib down|1-2": {
+   "n": 41,
+   "size": {
+    "1": 0.366,
+    "2": 0.073,
+    "3": 0.293,
+    "4": 0.268
+   }
+  },
+  "inhib down|3+": {
+   "n": 85,
+   "size": {
+    "1": 0.059,
+    "2": 0.129,
+    "3": 0.388,
+    "4": 0.376,
+    "5": 0.047
+   }
+  }
+ },
+ "source": "research/sim4/s4_basepush.py (training timeline games before 1 Sep)"
+}

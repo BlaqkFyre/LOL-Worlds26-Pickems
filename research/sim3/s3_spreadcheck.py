@@ -5,7 +5,7 @@ Printed and saved, real v sim:
   kills by stage       kills per minute played in 5-minute windows, and total kills before the first inhibitor
   state at 20 and 25   gold lead (absolute), towers taken by the leader, kills so far
   by game length       share of games, kills, kills per minute, gold lead at 20:00, towers at 20:00 for games under 24, 24-28, ... 45+
-usage: python -I s3_spreadcheck.py params3.json test3_results.json(cal) lanes3_features.csv comp3_games.csv tl_events.csv tl_gold.csv tl_match.csv <out_json> [n=4] [opts: ll,typed,pf,ends] [ll_dir]"""
+usage: python -I s3_spreadcheck.py params3.json test3_results.json(cal) lanes3_features.csv comp3_games.csv tl_events.csv tl_gold.csv tl_match.csv <out_json> [n=4] [opts: ll,typed,pf,ends,fpl,ekc,fdt] [ll_dir]"""
 import os, sys, json, zlib, importlib.util
 import numpy as np
 import pandas as pd
@@ -19,6 +19,14 @@ if "typed" in OPTS: P["fight_typed"] = json.load(open(os.path.join(os.path.dirna
 if "ll" in OPTS: P["lane_level"] = json.load(open(os.path.join(LLD, "lanelevel_fit.json"))); m0 = pd.read_csv(os.path.join(LLD, "lanelevel_features.csv")).set_index("gameid")
 if "sp" in OPTS: cal["seg_phase"] = "own"
 if "ends" in OPTS: cal["endings"] = "on"
+# session 4 options (13 Nov): the app's default sim; their switches come with the calibration file's cal
+PD_ = os.path.dirname(PJ)
+if "fpl" in OPTS: P["fight_players"] = json.load(open(os.path.join(PD_, "participants.json")))
+if OPTS & {"ekc", "ek"}: P["early_kills"] = json.load(open(os.path.join(PD_, "earlykills.json")))
+if "fdt" in OPTS: _fd = json.load(open(os.path.join(PD_, "firstdragon.json"))); P["taker_first_dragon"] = {"side": _fd["taker"], "timing": _fd["taker_timing"]}
+if OPTS & {"pks", "pko"}: P["base_push_kills"] = json.load(open(os.path.join(os.path.dirname(PJ), "basepush_kills.json"))); cal["push_kills"] = "on" if "pko" in OPTS else "size"
+if "dt" in OPTS: P["death_timer"] = json.load(open(os.path.join(os.path.dirname(PJ), "deathtimer.json"))); cal["death_timers"] = "on"
+if "dp" in OPTS: P["dead_push"] = json.load(open(os.path.join(os.path.dirname(PJ), "deadpush_sim.json"))); cal["dead_push"] = "on"
 sim = sm.Sim(P, cal)
 fe = pd.read_csv(FE); comp = pd.read_csv(CO).set_index("gameid")
 tm = pd.read_csv(TM, dtype={"gid": str}).dropna(subset=["gameid"]); tm = tm[(tm.date >= "2026-09-01") & tm.gameid.isin(fe.gameid)]
@@ -55,7 +63,9 @@ for g in tm.itertuples():
     c = comp.loc[g.gameid] if g.gameid in comp.index else None
     x = {"z": float(d.z_v1.iloc[0]), "skill_gap": d.skill_gap.fillna(0).tolist(), "cg15": d.cg15.fillna(0).tolist(),
          "pace_s": float(c.pace_blue + c.pace_red) if c is not None else 0.0, "siege_s": float(c.siege_blue + c.siege_red) if c is not None else 0.0,
-         "obj_s": float(c.objectives_blue + c.objectives_red) if c is not None else 0.0}
+         "obj_s": float(c.objectives_blue + c.objectives_red) if c is not None else 0.0,
+         "siege_d": float(c.siege_blue - c.siege_red) if c is not None else 0.0, "obj_d": float(c.objectives_blue - c.objectives_red) if c is not None else 0.0,
+         "skirm_d": float(c.skirmish_blue - c.skirmish_red) if c is not None else 0.0}
     if "ll" in OPTS: x["ll_m0"] = m0.loc[g.gameid, [f"m0_{r}" for r in ROLES]].tolist(); x["ll_e0"] = m0.loc[g.gameid, [f"e0_{r}" for r in ROLES]].tolist()
     for j in range(N):
         o = sim.run(x, seed=zlib.crc32(g.gameid.encode()) * 10_000 + 777 + j, log=True); st = []; kt = []

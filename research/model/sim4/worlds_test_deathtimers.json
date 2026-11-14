@@ -1,0 +1,890 @@
+{
+ "fight_eps": {
+  "value": 1.0,
+  "real_two_sided": {
+   "2": 0.401,
+   "3": 0.537,
+   "4": 0.678,
+   "5": 0.705,
+   "6": 0.993
+  },
+  "sim_two_sided": {
+   "2": 0.398,
+   "3": 0.584,
+   "4": 0.694,
+   "5": 0.754,
+   "6": 0.816
+  },
+  "fights": 2510,
+  "by_phase": {
+   "0-13": {
+    "value": 0.0,
+    "real_two_sided": {
+     "2": 0.517,
+     "3": 0.734,
+     "4": 0.859,
+     "5": 0.95,
+     "6": 1.0
+    },
+    "sim_two_sided": {
+     "2": 0.493,
+     "3": 0.738,
+     "4": 0.865,
+     "5": 0.928,
+     "6": 0.969
+    },
+    "fights": 600
+   },
+   "14-24": {
+    "value": 0.95,
+    "real_two_sided": {
+     "2": 0.365,
+     "3": 0.514,
+     "4": 0.758,
+     "5": 0.815,
+     "6": 1.0
+    },
+    "sim_two_sided": {
+     "2": 0.405,
+     "3": 0.598,
+     "4": 0.715,
+     "5": 0.777,
+     "6": 0.833
+    },
+    "fights": 919
+   },
+   "25+": {
+    "value": 1.45,
+    "real_two_sided": {
+     "2": 0.304,
+     "3": 0.415,
+     "4": 0.56,
+     "5": 0.582,
+     "6": 0.988
+    },
+    "sim_two_sided": {
+     "2": 0.337,
+     "3": 0.496,
+     "4": 0.602,
+     "5": 0.665,
+     "6": 0.735
+    },
+    "fights": 991
+   }
+  }
+ },
+ "calibration": [
+  {
+   "iter": 0,
+   "gain": 1.0,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.701,
+   "win_intercept": 0.124,
+   "gd15_sd_sim": [
+    946,
+    782,
+    813,
+    1005,
+    443
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 625,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2551,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 1,
+   "gain": 1.329,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.851,
+   "win_intercept": 0.167,
+   "gd15_sd_sim": [
+    938,
+    775,
+    825,
+    1000,
+    452
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 797,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2558,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 2,
+   "gain": 1.512,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.987,
+   "win_intercept": 0.146,
+   "gd15_sd_sim": [
+    944,
+    789,
+    818,
+    1004,
+    460
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 886,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2575,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 3,
+   "gain": 1.527,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.916,
+   "win_intercept": 0.147,
+   "gd15_sd_sim": [
+    946,
+    780,
+    831,
+    987,
+    443
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 876,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2547,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 4,
+   "gain": 1.638,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 1.089,
+   "win_intercept": 0.108,
+   "gd15_sd_sim": [
+    955,
+    793,
+    836,
+    994,
+    447
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 871,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2591,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 5,
+   "gain": 1.53,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.953,
+   "win_intercept": 0.098,
+   "gd15_sd_sim": [
+    957,
+    780,
+    835,
+    1001,
+    452
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 851,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2583,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 6,
+   "gain": 1.59,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.989,
+   "win_intercept": 0.119,
+   "gd15_sd_sim": [
+    949,
+    797,
+    835,
+    998,
+    459
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 946,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2617,
+   "team_gd15_sd_real": 2389
+  },
+  {
+   "iter": 7,
+   "gain": 1.604,
+   "lane_mu": 1.0,
+   "lane_k": 1.0,
+   "fight_eps": 1.0,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "death_timers": "on",
+   "event_order": "on",
+   "win_slope_on_v1": 0.957,
+   "win_intercept": 0.177,
+   "gd15_sd_sim": [
+    946,
+    783,
+    845,
+    998,
+    446
+   ],
+   "gd15_sd_real": [
+    916,
+    743,
+    808,
+    1089,
+    467
+   ],
+   "gd15_per_v1_sim": 965,
+   "gd15_per_v1_real": 748,
+   "team_gd15_sd_sim": 2581,
+   "team_gd15_sd_real": 2389
+  }
+ ],
+ "cal": {
+  "gain": 1.604,
+  "lane_mu": 1.0,
+  "lane_k": 1.0,
+  "fight_eps": 1.0,
+  "style_mode": "timing",
+  "form": "off",
+  "fight_model": "typed",
+  "push_fight": "on",
+  "lane_level": "on",
+  "early_kills": "counts",
+  "first_dragon_taker": "on",
+  "fight_players": "on",
+  "death_timers": "on",
+  "event_order": "on"
+ },
+ "who_wins": {
+  "from 1 Sep": {
+   "n": 94,
+   "sim": {
+    "logloss": 0.6069,
+    "brier": 0.211,
+    "fav": 0.681
+   },
+   "v1": {
+    "logloss": 0.6173,
+    "brier": 0.2159,
+    "fav": 0.649
+   },
+   "coin": {
+    "logloss": 0.6931,
+    "brier": 0.25,
+    "fav": 0.426
+   },
+   "mean_abs_gap_to_v1": 0.0551,
+   "corr_with_v1": 0.949,
+   "bands": {
+    "(0.1, 0.2]": {
+     "n": 2,
+     "said": 0.167,
+     "won": 0.5
+    },
+    "(0.2, 0.3]": {
+     "n": 5,
+     "said": 0.258,
+     "won": 0.2
+    },
+    "(0.3, 0.4]": {
+     "n": 14,
+     "said": 0.365,
+     "won": 0.357
+    },
+    "(0.4, 0.5]": {
+     "n": 11,
+     "said": 0.45,
+     "won": 0.364
+    },
+    "(0.5, 0.6]": {
+     "n": 19,
+     "said": 0.546,
+     "won": 0.684
+    },
+    "(0.6, 0.7]": {
+     "n": 17,
+     "said": 0.656,
+     "won": 0.471
+    },
+    "(0.7, 0.8]": {
+     "n": 10,
+     "said": 0.744,
+     "won": 0.7
+    },
+    "(0.8, 0.9]": {
+     "n": 15,
+     "said": 0.845,
+     "won": 0.933
+    },
+    "(0.9, 1.0]": {
+     "n": 1,
+     "said": 0.903,
+     "won": 1.0
+    }
+   }
+  },
+  "Worlds": {
+   "n": 94,
+   "sim": {
+    "logloss": 0.6069,
+    "brier": 0.211,
+    "fav": 0.681
+   },
+   "v1": {
+    "logloss": 0.6173,
+    "brier": 0.2159,
+    "fav": 0.649
+   },
+   "coin": {
+    "logloss": 0.6931,
+    "brier": 0.25,
+    "fav": 0.426
+   },
+   "mean_abs_gap_to_v1": 0.0551,
+   "corr_with_v1": 0.949,
+   "bands": {
+    "(0.1, 0.2]": {
+     "n": 2,
+     "said": 0.167,
+     "won": 0.5
+    },
+    "(0.2, 0.3]": {
+     "n": 5,
+     "said": 0.258,
+     "won": 0.2
+    },
+    "(0.3, 0.4]": {
+     "n": 14,
+     "said": 0.365,
+     "won": 0.357
+    },
+    "(0.4, 0.5]": {
+     "n": 11,
+     "said": 0.45,
+     "won": 0.364
+    },
+    "(0.5, 0.6]": {
+     "n": 19,
+     "said": 0.546,
+     "won": 0.684
+    },
+    "(0.6, 0.7]": {
+     "n": 17,
+     "said": 0.656,
+     "won": 0.471
+    },
+    "(0.7, 0.8]": {
+     "n": 10,
+     "said": 0.744,
+     "won": 0.7
+    },
+    "(0.8, 0.9]": {
+     "n": 15,
+     "said": 0.845,
+     "won": 0.933
+    },
+    "(0.9, 1.0]": {
+     "n": 1,
+     "said": 0.903,
+     "won": 1.0
+    }
+   }
+  }
+ },
+ "shape": {
+  "from 1 Sep": {
+   "sim": {
+    "length_min": {
+     "mean": 33.88,
+     "sd": 7.72
+    },
+    "kills_total": {
+     "mean": 26.93,
+     "sd": 11.1
+    },
+    "towers_total": {
+     "mean": 11.58,
+     "sd": 2.39
+    },
+    "dragons_total": {
+     "mean": 4.45,
+     "sd": 1.09
+    },
+    "barons_total": {
+     "mean": 1.45,
+     "sd": 0.83
+    },
+    "grubs_total": {
+     "mean": 3.0,
+     "sd": 0.03
+    },
+    "heralds_total": {
+     "mean": 1.0,
+     "sd": 0.05
+    },
+    "elders_total": {
+     "mean": 0.24,
+     "sd": 0.55
+    },
+    "blue_win": 0.577,
+    "first_baron_team_wins": 0.779,
+    "first_dragon_team_wins": 0.561,
+    "first_tower_team_wins": 0.66,
+    "elder_team_wins": 0.695,
+    "role_kill_share": {
+     "top": 0.1963,
+     "jng": 0.2206,
+     "mid": 0.2404,
+     "bot": 0.2769,
+     "sup": 0.0658
+    },
+    "gold_lead_15_abs": {
+     "median": 1673,
+     "sd": 1636
+    },
+    "lead_15_team_wins": 0.725,
+    "capped_share": 0.0,
+    "soul_games": 0.487,
+    "timing": {
+     "first_dragon_wait_s": {
+      "within 30": 0.104,
+      "30-90": 0.236,
+      "90-180": 0.258,
+      "180+": 0.402,
+      "median": 135
+     },
+     "first_dragon_blue_share": 0.369,
+     "first_tower_s": {
+      "median": 889,
+      "p10": 540,
+      "p90": 1066
+     },
+     "first_dragon_to_bot_jungle_leader_at_5": 0.645,
+     "grubs_and_first_dragon_split": 0.504,
+     "herald_taken": 0.998,
+     "herald_to_grubs_team": 0.555,
+     "first_baron_s": {
+      "median": 1455,
+      "p10": 1245,
+      "p90": 1787,
+      "games_with_baron": 0.898
+     }
+    }
+   },
+   "real": {
+    "length_min": {
+     "mean": 32.27,
+     "sd": 5.56,
+     "p10": 25.6,
+     "median": 31.57,
+     "p90": 39.91
+    },
+    "kills_total": {
+     "mean": 26.9,
+     "sd": 7.27,
+     "p10": 18.0,
+     "median": 26.0,
+     "p90": 37.0
+    },
+    "towers_total": {
+     "mean": 11.74,
+     "sd": 2.21,
+     "p10": 9.0,
+     "median": 12.0,
+     "p90": 15.0
+    },
+    "dragons_total": {
+     "mean": 4.45,
+     "sd": 1.37,
+     "p10": 3.0,
+     "median": 4.0,
+     "p90": 6.0
+    },
+    "barons_total": {
+     "mean": 1.42,
+     "sd": 0.7,
+     "p10": 1.0,
+     "median": 1.0,
+     "p90": 2.0
+    },
+    "grubs_total": {
+     "mean": 2.91,
+     "sd": 0.52,
+     "p10": 3.0,
+     "median": 3.0,
+     "p90": 3.0
+    },
+    "heralds_total": {
+     "mean": 0.96,
+     "sd": 0.21,
+     "p10": 1.0,
+     "median": 1.0,
+     "p90": 1.0
+    },
+    "elders_total": {
+     "mean": 0.11,
+     "sd": 0.33,
+     "p10": 0.0,
+     "median": 0.0,
+     "p90": 0.3
+    },
+    "blue_win": 0.566,
+    "first_baron_team_wins": 0.844,
+    "first_dragon_team_wins": 0.588,
+    "first_tower_team_wins": 0.697,
+    "role_kill_share": {
+     "top": 0.1868,
+     "jng": 0.2138,
+     "mid": 0.2628,
+     "bot": 0.2929,
+     "sup": 0.0436
+    },
+    "gold_lead_15_abs": {
+     "median": 1604.0,
+     "sd": 1618.99
+    },
+    "lead_15_team_wins": 0.717,
+    "soul_games": 0.406,
+    "timing": {
+     "first_tower_s": {
+      "median": 922,
+      "p10": 729,
+      "p90": 1102
+     },
+     "first_dragon_wait_s": {
+      "within 30": 0.046,
+      "30-90": 0.305,
+      "90-180": 0.232,
+      "180+": 0.411,
+      "median": 127
+     },
+     "first_dragon_blue_share": 0.338,
+     "first_dragon_to_bot_jungle_leader_at_5": 0.606,
+     "grubs_and_first_dragon_split": 0.613,
+     "herald_taken": 1.0,
+     "herald_to_grubs_team": 0.543,
+     "first_baron_s": {
+      "median": 1481,
+      "p10": 1275,
+      "p90": 1776,
+      "games_with_baron": 0.974
+     }
+    }
+   }
+  },
+  "Worlds": {
+   "sim": {
+    "length_min": {
+     "mean": 33.88,
+     "sd": 7.72
+    },
+    "kills_total": {
+     "mean": 26.93,
+     "sd": 11.1
+    },
+    "towers_total": {
+     "mean": 11.58,
+     "sd": 2.39
+    },
+    "dragons_total": {
+     "mean": 4.45,
+     "sd": 1.09
+    },
+    "barons_total": {
+     "mean": 1.45,
+     "sd": 0.83
+    },
+    "grubs_total": {
+     "mean": 3.0,
+     "sd": 0.03
+    },
+    "heralds_total": {
+     "mean": 1.0,
+     "sd": 0.05
+    },
+    "elders_total": {
+     "mean": 0.24,
+     "sd": 0.55
+    },
+    "blue_win": 0.577,
+    "first_baron_team_wins": 0.779,
+    "first_dragon_team_wins": 0.561,
+    "first_tower_team_wins": 0.66,
+    "elder_team_wins": 0.695,
+    "role_kill_share": {
+     "top": 0.1963,
+     "jng": 0.2206,
+     "mid": 0.2404,
+     "bot": 0.2769,
+     "sup": 0.0658
+    },
+    "gold_lead_15_abs": {
+     "median": 1673,
+     "sd": 1636
+    },
+    "lead_15_team_wins": 0.725,
+    "capped_share": 0.0,
+    "soul_games": 0.487,
+    "timing": {
+     "first_dragon_wait_s": {
+      "within 30": 0.104,
+      "30-90": 0.236,
+      "90-180": 0.258,
+      "180+": 0.402,
+      "median": 135
+     },
+     "first_dragon_blue_share": 0.369,
+     "first_tower_s": {
+      "median": 889,
+      "p10": 540,
+      "p90": 1066
+     },
+     "first_dragon_to_bot_jungle_leader_at_5": 0.645,
+     "grubs_and_first_dragon_split": 0.504,
+     "herald_taken": 0.998,
+     "herald_to_grubs_team": 0.555,
+     "first_baron_s": {
+      "median": 1455,
+      "p10": 1245,
+      "p90": 1787,
+      "games_with_baron": 0.898
+     }
+    }
+   },
+   "real": {
+    "length_min": {
+     "mean": 33.14,
+     "sd": 5.78,
+     "p10": 26.5,
+     "median": 32.89,
+     "p90": 40.0
+    },
+    "kills_total": {
+     "mean": 25.55,
+     "sd": 6.22,
+     "p10": 18.0,
+     "median": 25.0,
+     "p90": 33.2
+    },
+    "towers_total": {
+     "mean": 11.78,
+     "sd": 2.07,
+     "p10": 9.0,
+     "median": 11.5,
+     "p90": 15.0
+    },
+    "dragons_total": {
+     "mean": 4.79,
+     "sd": 1.14,
+     "p10": 3.0,
+     "median": 5.0,
+     "p90": 6.0
+    },
+    "barons_total": {
+     "mean": 1.36,
+     "sd": 0.68,
+     "p10": 1.0,
+     "median": 1.0,
+     "p90": 2.0
+    },
+    "grubs_total": {
+     "mean": 3.0,
+     "sd": 0.0,
+     "p10": 3.0,
+     "median": 3.0,
+     "p90": 3.0
+    },
+    "heralds_total": {
+     "mean": 1.0,
+     "sd": 0.0,
+     "p10": 1.0,
+     "median": 1.0,
+     "p90": 1.0
+    },
+    "elders_total": {
+     "mean": 0.16,
+     "sd": 0.4,
+     "p10": 0.0,
+     "median": 0.0,
+     "p90": 1.0
+    },
+    "blue_win": 0.575,
+    "first_baron_team_wins": 0.813,
+    "first_dragon_team_wins": 0.613,
+    "first_tower_team_wins": 0.65,
+    "role_kill_share": {
+     "top": 0.1835,
+     "jng": 0.2172,
+     "mid": 0.2622,
+     "bot": 0.2886,
+     "sup": 0.0484
+    },
+    "gold_lead_15_abs": {
+     "median": 1398.5,
+     "sd": 1376.73
+    },
+    "lead_15_team_wins": 0.675,
+    "soul_games": 0.438,
+    "timing": {
+     "first_tower_s": {
+      "median": 912,
+      "p10": 742,
+      "p90": 1066
+     },
+     "first_dragon_wait_s": {
+      "within 30": 0.062,
+      "30-90": 0.362,
+      "90-180": 0.175,
+      "180+": 0.4,
+      "median": 106
+     },
+     "first_dragon_blue_share": 0.512,
+     "first_dragon_to_bot_jungle_leader_at_5": 0.719,
+     "grubs_and_first_dragon_split": 0.438,
+     "herald_taken": 1.0,
+     "herald_to_grubs_team": 0.512,
+     "first_baron_s": {
+      "median": 1509,
+      "p10": 1326,
+      "p90": 1800,
+      "games_with_baron": 0.938
+     }
+    }
+   }
+  }
+ },
+ "n_sims_per_game": 1000,
+ "test_league": "WLDs"
+}

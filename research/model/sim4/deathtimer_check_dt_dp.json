@@ -1,0 +1,73 @@
+{
+ "source": "League wiki Respawn and Experience pages (read 14 Nov 2026); Oracle's Elixir XP at 10/15/20/25",
+ "real deaths matched to the file": [
+  5839,
+  6005
+ ],
+ "real": {
+  "deaths followed by another death": 3849,
+  "next death inside the timer": 0.0,
+  "next death inside timer + 15 s": 0.0107,
+  "median gap / timer": 9.07,
+  "base structures with an enemy base structure within 60 s": 0.036,
+  "gaps between a team's structures under 60 s: share 0 s / 1-9 s / 10-29 s / 30-60 s": [
+   0.009,
+   0.513,
+   0.345,
+   0.133
+  ],
+  "median gap (s)": 9.0,
+  "monsters": {
+   "baron": {
+    "n": 332,
+    "fight in the 60 s before": 0.711,
+    "taker won a fight in the 60 s before": 0.681
+   },
+   "dragon": {
+    "n": 1056,
+    "fight in the 60 s before": 0.35,
+    "taker won a fight in the 60 s before": 0.253
+   },
+   "elder": {
+    "n": 29,
+    "fight in the 60 s before": 0.655,
+    "taker won a fight in the 60 s before": 0.655
+   }
+  }
+ },
+ "sim": {
+  "deaths followed by another death": 17735,
+  "next death inside the timer": 0.0063,
+  "next death inside timer + 15 s": 0.0316,
+  "median gap / timer": 9.2,
+  "base structures with an enemy base structure within 60 s": 0.036,
+  "gaps between a team's structures under 60 s: share 0 s / 1-9 s / 10-29 s / 30-60 s": [
+   0.081,
+   0.377,
+   0.32,
+   0.222
+  ],
+  "median gap (s)": 11.0,
+  "monsters": {
+   "baron": {
+    "n": 1439,
+    "fight in the 60 s before": 0.555,
+    "taker won a fight in the 60 s before": 0.416
+   },
+   "dragon": {
+    "n": 4209,
+    "fight in the 60 s before": 0.46,
+    "taker won a fight in the 60 s before": 0.304
+   },
+   "elder": {
+    "n": 306,
+    "fight in the 60 s before": 0.549,
+    "taker won a fight in the 60 s before": 0.373
+   }
+  }
+ },
+ "games": {
+  "real": 231,
+  "sim": 924
+ }
+}

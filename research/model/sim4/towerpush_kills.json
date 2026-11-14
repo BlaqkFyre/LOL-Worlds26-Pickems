@@ -1,0 +1,96 @@
+{
+ "train": {
+  "T1|0": {
+   "n": 2846,
+   "mean segments": 1.69,
+   "runs past its tower": 0.058
+  },
+  "T1|1-2": {
+   "n": 1146,
+   "mean segments": 2.06,
+   "runs past its tower": 0.118
+  },
+  "T1|3+": {
+   "n": 207,
+   "mean segments": 2.53,
+   "runs past its tower": 0.242
+  },
+  "T2|0": {
+   "n": 1609,
+   "mean segments": 2.75,
+   "runs past its tower": 0.155
+  },
+  "T2|1-2": {
+   "n": 705,
+   "mean segments": 2.87,
+   "runs past its tower": 0.17
+  },
+  "T2|3+": {
+   "n": 370,
+   "mean segments": 3.56,
+   "runs past its tower": 0.297
+  },
+  "T3|0": {
+   "n": 299,
+   "mean segments": 2.44,
+   "runs past its tower": 0.0
+  },
+  "T3|1-2": {
+   "n": 233,
+   "mean segments": 3.06,
+   "runs past its tower": 0.0
+  },
+  "T3|3+": {
+   "n": 243,
+   "mean segments": 3.21,
+   "runs past its tower": 0.0
+  }
+ },
+ "test": {
+  "T1|0": {
+   "n": 1738,
+   "mean segments": 1.74,
+   "runs past its tower": 0.081
+  },
+  "T1|1-2": {
+   "n": 637,
+   "mean segments": 1.86,
+   "runs past its tower": 0.086
+  },
+  "T1|3+": {
+   "n": 125,
+   "mean segments": 2.22,
+   "runs past its tower": 0.184
+  },
+  "T2|0": {
+   "n": 993,
+   "mean segments": 2.72,
+   "runs past its tower": 0.141
+  },
+  "T2|1-2": {
+   "n": 380,
+   "mean segments": 3.0,
+   "runs past its tower": 0.174
+  },
+  "T2|3+": {
+   "n": 216,
+   "mean segments": 3.8,
+   "runs past its tower": 0.352
+  },
+  "T3|0": {
+   "n": 175,
+   "mean segments": 2.58,
+   "runs past its tower": 0.0
+  },
+  "T3|1-2": {
+   "n": 121,
+   "mean segments": 3.02,
+   "runs past its tower": 0.0
+  },
+  "T3|3+": {
+   "n": 145,
+   "mean segments": 3.12,
+   "runs past its tower": 0.0
+  }
+ }
+}

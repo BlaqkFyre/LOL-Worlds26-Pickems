@@ -1,0 +1,77 @@
+{
+ "real": {
+  "players": 95,
+  "top 16 by role": {
+   "bot": 13,
+   "mid": 3
+  },
+  "top 16": [
+   "Yeon (bot) 0.353",
+   "Tactical (bot) 0.318",
+   "Doggo (bot) 0.316",
+   "Eddie (bot) 0.316",
+   "Berserker (bot) 0.311",
+   "Supa (bot) 0.305",
+   "Peyz (bot) 0.300",
+   "ShowMaker (mid) 0.297",
+   "Viper (bot) 0.294",
+   "Shanks (mid) 0.292",
+   "Hans Sama (bot) 0.292",
+   "Ayu (bot) 0.291",
+   "JackeyLove (bot) 0.284",
+   "JiaQi (bot) 0.283",
+   "Knight (mid) 0.278",
+   "Harky (bot) 0.276"
+  ],
+  "sd of player averages by role": {
+   "bot": 0.0254,
+   "jng": 0.0227,
+   "mid": 0.0237,
+   "sup": 0.0124,
+   "top": 0.0229
+  },
+  "mean by role": {
+   "bot": 0.2908,
+   "jng": 0.1721,
+   "mid": 0.2508,
+   "sup": 0.0723,
+   "top": 0.2145
+  },
+  "sd of single games by role": {
+   "bot": 0.0689,
+   "jng": 0.0585,
+   "mid": 0.0614,
+   "sup": 0.0281,
+   "top": 0.065
+  }
+ },
+ "sim": {
+  "players": 95,
+  "top 16 by role": {
+   "bot": 12,
+   "top": 3,
+   "mid": 1
+  },
+  "sd of player averages by role": {
+   "bot": 0.029,
+   "jng": 0.0153,
+   "mid": 0.015,
+   "sup": 0.0127,
+   "top": 0.0254
+  },
+  "mean by role": {
+   "bot": 0.277,
+   "jng": 0.1675,
+   "mid": 0.2446,
+   "sup": 0.0789,
+   "top": 0.232
+  },
+  "sd of single games by role": {
+   "bot": 0.0624,
+   "jng": 0.0503,
+   "mid": 0.0521,
+   "sup": 0.0299,
+   "top": 0.0634
+  }
+ }
+}

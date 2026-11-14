@@ -1,0 +1,73 @@
+{
+ "games": {
+  "real": 231,
+  "sim": 924
+ },
+ "opts": [
+  "dp",
+  "dt",
+  "ekc",
+  "fdt",
+  "fpl",
+  "ll",
+  "typed"
+ ],
+ "real": {
+  "games with a 4+ kill fight before 10:00": 0.126,
+  "games with a 6+ kill fight before 10:00": 0.013,
+  "share of fights with 4+ kills by window": {
+   "0-9:59": [
+    0.056,
+    554
+   ],
+   "10-19:59": [
+    0.123,
+    877
+   ],
+   "20+": [
+    0.327,
+    1296
+   ]
+  },
+  "mean fight size by window": {
+   "0-9:59": 1.58,
+   "10-19:59": 1.84,
+   "20+": 2.71
+  },
+  "after a side kills 4+ in one fight from 20:00 (within 60 s): structure / objective / another kill": [
+   0.752,
+   0.322,
+   0.182,
+   314
+  ]
+ },
+ "sim": {
+  "games with a 4+ kill fight before 10:00": 0.182,
+  "games with a 6+ kill fight before 10:00": 0.0238,
+  "share of fights with 4+ kills by window": {
+   "0-9:59": [
+    0.083,
+    2155
+   ],
+   "10-19:59": [
+    0.185,
+    3265
+   ],
+   "20+": [
+    0.364,
+    5396
+   ]
+  },
+  "mean fight size by window": {
+   "0-9:59": 1.72,
+   "10-19:59": 2.15,
+   "20+": 2.9
+  },
+  "after a side kills 4+ in one fight from 20:00 (within 60 s): structure / objective / another kill": [
+   0.605,
+   0.153,
+   0.141,
+   1252
+  ]
+ }
+}
