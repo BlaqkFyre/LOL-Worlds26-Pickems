@@ -11,7 +11,11 @@ import pandas as pd
 from . import config
 from .runlog import sha256, fingerprint  # noqa: F401 (fingerprint re-exported)
 
-def key(s): return "".join(ch for ch in str(s).lower() if ch.isalnum())
+# Data Dragon / lolesports feed names that differ from the Oracle's Elixir names (checked on the Worlds feed, 14 Nov 2026)
+FEED_ALIAS = {"monkeyking": "wukong", "renata": "renataglasc", "nunu": "nunuwillump"}
+def key(s):
+    k = "".join(ch for ch in str(s).lower() if ch.isalnum())
+    return FEED_ALIAS.get(k, k)
 
 def oe(columns=None, raw=False):
     """raw=True keeps the Worlds qualifier rows (only for counting a player's games, as the comfort input always did)"""

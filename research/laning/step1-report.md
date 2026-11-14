@@ -168,6 +168,33 @@ Mixed: each input helps at Worlds, but on 2026 games from 1 Sep side alone is be
 pre-game players and champions; solo kills no gain). How often kills happen in a lane is close to a steady rate; who wins them is
 step 1d (fights).
 
+## 2e. What the lolesports feed adds (`s5_feed_analysis.py`, `research/model/laning/feed_analysis.json`)
+
+Second-by-second health, gold, CS, level and K/D/A for every player, first 15 minutes of all 94 Worlds games (no map positions). Each
+game's clock is set from the gol.gg timeline (the feed's own start time isn't reliable; 7 games were re-pulled with a fixed start rule,
+one still has a 105 s gap in the feed itself). Trades: both sides' laners lose 10%+ of max health within 5 s and nobody in the lane dies in
+the next 15 s; Worlds day by day.
+
+<!-- table: feed -->
+| Check or test | Result |
+|---|---|
+| Feed games matched to the file / clock set from the timeline | 94 / 91 of 94 (kills on the timeline's second: median game 100.0%) |
+| At 10:00 v the file (mean gap) | gold 9.01, CS 0.24, kills / deaths / assists 0 |
+| Respawn wait v the wiki timer (608 deaths) | median ratio 1.0, 89.6% within 2 s |
+| Lane trades with no kill before 14:00 | 1,601; per game top 5.9, mid 5.02, bot 6.67; a jungler hit in 10.5% |
+| Who wins a trade (1,500, log loss) | side 0.6952; + players and champions 0.6951; + level and gold at the time 0.6904 |
+| Lane gold edge at 15 (255 lanes, error) | pre-game 0.9243; + trades before 10:00 0.9296 |
+
+<sub>Source: research/model/laning/feed_analysis.json (run record research/runs/20261114T091254Z_feed_analysis.json, script research/laning/s5_feed_analysis.py at commit 8e5773c with uncommitted edits).</sub>
+<!-- /table -->
+
+- **The data is sound,** and the wiki death timers are right at Worlds (the research sim's timers can be used as they are).
+- **Trades are frequent** (about 18 a game before 14:00) **and a jungler takes damage in about 1 in 10** (bot and mid more than top):
+  jungle pressure the timelines never showed.
+- **Who wins a single trade is close to a coin flip:** players and champions don't predict it; being ahead in level does a little
+  (+0.44 log-odds per level). Trades before 10:00 add nothing to the lane's gold at 15 beyond the pre-game expectation. So the lane
+  model works at the level of the lane's outcome and the fights (sections 1 and 2c), not trade by trade.
+
 ## 3. What this means for the laning slice
 
 - **Lane contests** (1v1 top and mid, 2v2 bot, jungle): driven by player lane skill, champion lane strength, the matchup and team strength.

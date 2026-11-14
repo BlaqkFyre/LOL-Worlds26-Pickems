@@ -19,6 +19,7 @@ Built after Luke asked for a research system that is secure, accurate, maintaina
 | `lane_model.py` | The step 1 lane-edge model (`lane_rows`, `Model`, `Current`) and `pregame_preds` (cached) |
 | `runlog.py` | `Run`: a record per script run in `research/runs/` (script SHA-256 and git state, inputs' sizes, dates and SHA-256, parameters, key results, outputs, time, status) plus `research/runs/index.csv`; `latest(name)` |
 | `compare.py` | Compares two result files value by value (proves a rebuilt script gives the same numbers) |
+| `doccheck.py` | Checks every tracked Markdown doc: file paths and commit hashes in backticks exist (zipped local folders and temporary files allowed). Run it before committing doc changes: `python -I research/lib/doccheck.py` |
 | `report.py` | Fills `<!-- table: name -->` blocks in a Markdown report from a tables module (e.g. `research/laning/report_tables.py`) |
 
 **Writing a new script**

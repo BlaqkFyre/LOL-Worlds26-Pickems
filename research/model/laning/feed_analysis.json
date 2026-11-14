@@ -1,0 +1,2045 @@
+{
+ "feed files": 94,
+ "matching": {
+  "files": 94,
+  "matched to the file": 94,
+  "aligned to the timeline": 91,
+  "kills within 2 s of the timeline (median game)": 1.0,
+  "games with a gap over 20 s": 1,
+  "mean abs diff at 10:00 v the file (average over games)": {
+   "gold": 9.01,
+   "cs": 0.24,
+   "kills": 0.0,
+   "deaths": 0.0,
+   "assists": 0.0
+  }
+ },
+ "per game checks": [
+  {
+   "gameid": "LOLTMNT02_482269",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 25.0,
+   "feed_kills": 12,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    25.0,
+    931.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.8,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482313",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482292",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    905.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 9.0,
+    "cs": 0.4,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482304",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    904.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 8.9,
+    "cs": 0.5,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483314",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482325",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 7.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482335",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 4.6,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483342",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    903.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 9.2,
+    "cs": 0.3,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482559",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    900.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483571",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 1,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 6.5,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482599",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    904.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 11.4,
+    "cs": 0.5,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482606",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    905.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 4.8,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482539",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482570",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 5.0,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482587",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 35.0,
+   "feed_kills": 12,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    35.0,
+    939.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.1,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482620",
+   "matched": true,
+   "aligned": false
+  },
+  {
+   "gameid": "LOLTMNT02_483708",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483716",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    902.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 2.4,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482793",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    900.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483730",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 9.1,
+    "cs": 0.4,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482805",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483687",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 12,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482761",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    904.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483824",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483840",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    904.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483861",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 7.8,
+    "cs": 0.4,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482893",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_482911",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_483885",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 2.5,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486159",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486172",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 12,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    904.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486183",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    908.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486186",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486192",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    906.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486325",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 2,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    906.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485267",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 2.4,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486341",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    900.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 5.4,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486299",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 8.5,
+    "cs": 0.3,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486309",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    903.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485366",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485368",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    904.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.2,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485371",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486479",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 13,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    906.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486481",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486541",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 1,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485476",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 7.3,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485482",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485488",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 2,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    899.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 5.1,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486555",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486564",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 900,
+   "largest gap_s": 2.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_486571",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    907.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 5.2,
+    "cs": 0.3,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_487095",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488087",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    908.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488090",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    900.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.3,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488135",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 2,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    906.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_487158",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 8.6,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_487168",
+   "matched": true,
+   "aligned": false
+  },
+  {
+   "gameid": "LOLTMNT02_487172",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 2,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485703",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 0.7142857142857143,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 805,
+   "largest gap_s": 105.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 548.9,
+    "cs": 14.4,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485705",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    899.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_485710",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 2.5,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT05_234191",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    900.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 6.6,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488030",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    906.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488033",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    907.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 6.6,
+    "cs": 0.3,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488039",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.2,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488293",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 896,
+   "largest gap_s": 2.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.2,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488295",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    899.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488296",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.2,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488304",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.2,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_487213",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 12,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    904.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_488209",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 8,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_487214",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    900.0
+   ],
+   "frames": 899,
+   "largest gap_s": 2.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 7.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_478715",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    907.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_478718",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    900.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_478726",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479621",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    899.0
+   ],
+   "frames": 901,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.1,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479631",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 42.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    42.0,
+    942.0
+   ],
+   "frames": 896,
+   "largest gap_s": 2.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 4.5,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479637",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479982",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480014",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 15,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    906.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480033",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 5,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    909.0
+   ],
+   "frames": 910,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480078",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 9,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480094",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    908.0
+   ],
+   "frames": 909,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480113",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    903.0
+   ],
+   "frames": 904,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 4.5,
+    "cs": 0.2,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_481268",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_481282",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    904.0
+   ],
+   "frames": 905,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 3.1,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_481295",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 10,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480507",
+   "matched": true,
+   "aligned": false
+  },
+  {
+   "gameid": "LOLTMNT02_480508",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 7,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    901.0
+   ],
+   "frames": 902,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 9.4,
+    "cs": 0.3,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480511",
+   "matched": true,
+   "aligned": true,
+   "offset_s": -1.0,
+   "feed_kills": 13,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    -1.0,
+    905.0
+   ],
+   "frames": 907,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479642",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 4,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    907.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 5.0,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_479649",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 3,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    902.0
+   ],
+   "frames": 903,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_480123",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 6,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    907.0
+   ],
+   "frames": 908,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.0,
+    "cs": 0.0,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  },
+  {
+   "gameid": "LOLTMNT02_481308",
+   "matched": true,
+   "aligned": true,
+   "offset_s": 0.0,
+   "feed_kills": 11,
+   "kills within 2 s": 1.0,
+   "covered_s": [
+    0.0,
+    905.0
+   ],
+   "frames": 906,
+   "largest gap_s": 1.0,
+   "mean abs diff at 10:00 v the file": {
+    "gold": 1.1,
+    "cs": 0.1,
+    "kills": 0.0,
+    "deaths": 0.0,
+    "assists": 0.0
+   }
+  }
+ ],
+ "dead time v wiki timer": {
+  "deaths": 608,
+  "median measured / wiki": 1.0,
+  "share within 2 s of the wiki": 0.896,
+  "by level (median measured, wiki)": {
+   "1": [
+    10.0,
+    10.0,
+    3
+   ],
+   "2": [
+    11.0,
+    10.0,
+    16
+   ],
+   "3": [
+    13.0,
+    12.0,
+    52
+   ],
+   "4": [
+    13.0,
+    12.0,
+    69
+   ],
+   "5": [
+    14.0,
+    14.0,
+    87
+   ],
+   "6": [
+    16.0,
+    16.0,
+    96
+   ],
+   "7": [
+    20.0,
+    20.0,
+    95
+   ],
+   "8": [
+    25.0,
+    25.0,
+    73
+   ],
+   "9": [
+    28.0,
+    28.0,
+    63
+   ],
+   "10": [
+    33.0,
+    32.5,
+    34
+   ],
+   "11": [
+    35.0,
+    35.0,
+    19
+   ],
+   "12": [
+    38.0,
+    37.5,
+    1
+   ]
+  }
+ },
+ "trades": {
+  "lane trades with no kill before 14:00": 1601,
+  "per game by lane": {
+   "bot": 6.67,
+   "mid": 5.02,
+   "top": 5.9
+  },
+  "blue won": 0.503,
+  "with a jungler hit": 0.105,
+  "with a jungler hit, by lane": {
+   "bot": 0.124,
+   "mid": 0.116,
+   "top": 0.074
+  }
+ },
+ "4a trade winner, Worlds day by day (log loss)": {
+  "side only": 0.6952,
+  "+ pre-game players and champions": 0.6951,
+  "+ level and gold at the time": 0.6904,
+  "level and gold only": 0.6897,
+  "n": 1500
+ },
+ "4a coefficients (all): side, pre-game per 1k, level diff, gold diff per 1k": [
+  -0.02,
+  0.684,
+  0.437,
+  0.055
+ ],
+ "4b lane gold edge at 15 (thousands), Worlds day by day, mean squared error": {
+  "pre-game only": 0.9243,
+  "+ trade balance before 10:00": 0.9296
+ },
+ "4b n lanes": 255
+}

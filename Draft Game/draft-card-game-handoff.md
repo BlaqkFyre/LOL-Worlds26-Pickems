@@ -321,4 +321,4 @@ The Pick'Em sim gives each player and pick a few strength ratings. For the card 
 - Draft order: LoL Wiki "Team drafting". First Selection: esports.gg and GosuGamers. Fearless: lolesports.com.
 - Riot policy: riotgames.com/legal-jibber-jabber. Data Dragon: hextechdocs.dev/data-dragon.
 - Assets: kenney.nl, freesound.org, opengameart.org, sfbgames.itch.io/chiptone.
-- Sim research: `LOL-Worlds26-Pickems/README.md`, `research/backtest-2026.md`, `research/pro-meta-findings-2026-10-20.md`, `js/core.js` (simGame).
+- Sim research: `README.md` (repo root), `research/backtest-2026.md`, `research/pro-meta-findings-2026-10-20.md`, `js/core.js` (simGame).

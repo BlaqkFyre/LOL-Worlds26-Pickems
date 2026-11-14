@@ -76,6 +76,8 @@ js/sim-tables.js    the data sim's fitted tables (built by research/sim4/s4_tabl
 js/sim-engine.js    the data-built game sim, its inputs from the tables, Player of the Game and ratings
 js/tournament.js    tournament engine, stats pool, POG and awards, tournament UI
 js/core.js          views, tier lists, meta, champ select, draft AI, game simulation (data sim wiring and the classic sim)
+research/           data notes, the simulator's research (plans, reports, scripts, small result tables); research/lib is the shared
+                    research library (paths, data checks, run records); raw data stays local (git-ignored)
 ```
 
 To update data (e.g. real results or new stats), edit `js/data.js`.

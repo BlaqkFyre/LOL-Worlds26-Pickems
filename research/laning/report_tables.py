@@ -47,7 +47,18 @@ def gank_state():
     rows.append(f"| Jungler early kills per minute ({B['side-minutes']:,} side-minutes) | {W['minute only']:.4f} / {S['minute only']:.4f} | {W['+ game state']:.4f} / {S['+ game state']:.4f} |")
     return "\n".join(rows) + src("gank_state")
 
-TABLES = {"lane_edges": lane_edges, "fight_winner": fight_winner, "gank_state": gank_state,
+def feed():
+    R = J("feed_analysis"); M = R["matching"]; D = R["dead time v wiki timer"]; T = R["trades"]; A = R["4a trade winner, Worlds day by day (log loss)"]; B = R["4b lane gold edge at 15 (thousands), Worlds day by day, mean squared error"]
+    rows = ["| Check or test | Result |", "|---|---|",
+            f"| Feed games matched to the file / clock set from the timeline | {M['matched to the file']} / {M['aligned to the timeline']} of {M['files']} (kills on the timeline's second: median game {pct(M['kills within 2 s of the timeline (median game)'])}) |",
+            f"| At 10:00 v the file (mean gap) | gold {M['mean abs diff at 10:00 v the file (average over games)']['gold']}, CS {M['mean abs diff at 10:00 v the file (average over games)']['cs']}, kills / deaths / assists 0 |",
+            f"| Respawn wait v the wiki timer ({D['deaths']} deaths) | median ratio {D['median measured / wiki']}, {pct(D['share within 2 s of the wiki'])} within 2 s |",
+            f"| Lane trades with no kill before 14:00 | {T['lane trades with no kill before 14:00']:,}; per game top {T['per game by lane']['top']}, mid {T['per game by lane']['mid']}, bot {T['per game by lane']['bot']}; a jungler hit in {pct(T['with a jungler hit'])} |",
+            f"| Who wins a trade ({A['n']:,}, log loss) | side {A['side only']:.4f}; + players and champions {A['+ pre-game players and champions']:.4f}; + level and gold at the time {A['+ level and gold at the time']:.4f} |",
+            f"| Lane gold edge at 15 ({R['4b n lanes']} lanes, error) | pre-game {B['pre-game only']:.4f}; + trades before 10:00 {B['+ trade balance before 10:00']:.4f} |"]
+    return "\n".join(rows) + src("feed_analysis")
+
+TABLES = {"feed": feed, "lane_edges": lane_edges, "fight_winner": fight_winner, "gank_state": gank_state,
           "plates": lambda: actions("A. plates (Poisson deviance)", "plates"),
           "first_dragon": lambda: actions("B. first dragon taker (log loss)", "first dragon"),
           "grubs": lambda: actions("C. grub taker (log loss)", "grubs")}

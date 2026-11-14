@@ -5,3 +5,10 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261114T042444Z_gank_state.json,gank_state,ok,216.1,research\laning\s5_gank_state.py,529caf2,True,research\model\laning\gank_state.json
 20261114T042455Z_fight_winner.json,fight_winner,ok,10.4,research\laning\s5_fight_winner.py,529caf2,True,research\model\laning\fight_winner.json
 20261114T042655Z_lane_actions.json,lane_actions,ok,119.1,research\laning\s5_lane_actions.py,529caf2,True,research\model\laning\lane_actions.json
+20261114T044005Z_feed_analysis.json,feed_analysis,ok,5.0,research/laning/s5_feed_analysis.py,d26b50f,True,research/model/laning/feed_analysis.json
+20261114T044045Z_feed_analysis.json,feed_analysis,ok,8.6,research/laning/s5_feed_analysis.py,d26b50f,True,research/model/laning/feed_analysis.json
+20261114T090416Z_feed_analysis.json,feed_analysis,ok,9.6,research/laning/s5_feed_analysis.py,d26b50f,True,research/model/laning/feed_analysis.json
+20261114T090525Z_champion_db.json,champion_db,failed,0.4,research/champions/build_champion_db.py,d26b50f,True,
+20261114T090536Z_champion_db.json,champion_db,ok,1.9,research/champions/build_champion_db.py,d26b50f,True,research/champions/champions.json
+20261114T090608Z_champion_db.json,champion_db,ok,2.8,research/champions/build_champion_db.py,d26b50f,True,research/champions/champions.json
+20261114T091254Z_feed_analysis.json,feed_analysis,ok,10.5,research/laning/s5_feed_analysis.py,8e5773c,True,research/model/laning/feed_analysis.json

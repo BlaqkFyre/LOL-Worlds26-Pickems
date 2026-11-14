@@ -35,6 +35,10 @@ def one(item):
             if s in seen: continue
             seen.add(s); pp = P(f); t = dt.datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
             if start is None and any(p["totalGold"] > 0 for p in pp): start = t
+            # 14 Nov fix: in a few games a stray early frame set the start, then the feed went quiet for minutes. A gap over 20 s in
+            # the first 400 s means the real game starts after it: restart from that frame.
+            if start is not None and frames and (t - start).total_seconds() < 400 and (t - start).total_seconds() - frames[-1][0] > 20:
+                start, frames = t, []
             if start is not None:
                 sec = int((t - start).total_seconds())
                 frames.append([sec, [[p["totalGold"], p["level"], p["kills"], p["deaths"], p["assists"], p["creepScore"], p["currentHealth"], p["maxHealth"]] for p in pp]])

@@ -14,7 +14,7 @@ Scripts run from a scratch folder (Python + pandas). Each script's docstring has
 
 | Step | Script | Makes |
 |---|---|---|
-| 1 | `gol_pull.py` | `raw/tl/<id>.html` timeline pages, `raw/series.csv` (read-only, 3 requests at a time; game ids run in order within a series, checked against each page's "game N" title; Bo1 rows link to the game page) |
+| 1 | `gol_pull.py` | `raw/tl/<id>.html` timeline pages, `raw/series.csv` (kept in `research/local/sim3/raw.zip` since 14 Nov; read-only, 3 requests at a time; game ids run in order within a series, checked against each page's "game N" title; Bo1 rows link to the game page) |
 | 2 | `gol_parse.py` | `tl_games.csv`, `tl_events.csv`, `tl_gold.csv` |
 | 3 | `s3_match.py` | `tl_match.csv`, `tl_check.csv`, `tl_check.json` (timeline v file: kills, towers, dragons, Barons, grubs, Heralds, inhibitors, winner, length) |
 | 4 | `s3_lanes.py` | `lanes3_coef.csv`, `lanes3_resid_cov10/15.csv`, `lanes3_results.json`, `lanes3_features.csv` (laning at 10 and 15, role by role, from the file) |

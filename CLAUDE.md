@@ -14,8 +14,9 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 ## Start of session (before anything else)
 
 1. Read `SESSION_NOTES.md` (live state + what's next).
-2. Read `README.md` and `research/worlds-live-2026.md`. Read others only when the task needs them:
-   - Sim engine work → `research/sim-plan.md` (the master copy of the plan; the Claude doc of the same name is only a snapshot), plus `research/backtest-2026.md`.
+2. Read `README.md` and `research/worlds-live-2026.md` down to its "Match-day log" (the log below is history; read it only when a past match day matters). Read others only when the task needs them:
+   - Sim engine work → `research/sim-plan.md` (the master copy of the plan; the Claude doc of the same name is only a snapshot), plus `research/backtest-2026.md`. The redesign (from 14 Nov): `research/laning-plan.md` and `research/laning/step1-report.md`.
+   - Any research script → `research/lib/README.md` (new scripts use the shared library: config paths, data checks, run records).
    - Code work → the Code map below, then the actual lines you'll change.
    - Draft Game work → `Draft Game/draft-card-game-handoff.md` (the folder copy is the master; follow its master copy rules).
 3. Run `git status` and `git log --oneline -8`, and check file mtimes. Another session may have edited files: trust disk, not old notes.
@@ -49,13 +50,14 @@ I'm continuing work on my Worlds 2026 Pick'Em Lab. Follow CLAUDE.md in this repo
 
 ## Repo rules
 
-- **Cache version:** every change to `js/` or `css/` bumps `?v=N` on ALL 10 tags in `index.html` (9 scripts + `styles.css`). The version also goes in the commit title.
+- **Cache version:** every change to `js/` or `css/` bumps `?v=N` on ALL 12 tags in `index.html` (11 scripts + `styles.css`). The version also goes in the commit title.
 - **Gitignored, never commit:** `research/*OraclesElixir*.csv` (78 MB raw data), `research/local/` (gol.gg timelines, held-out sim games, matched award rows; see its README) and `Draft Game/draft-clash-save.json` (autosave). Save new large working data to `research/local/`, not only to a session's scratch folder (scratch folders change each session and Windows can clear them).
 - **Odds ceiling:** almost no matchup should sim above about 80% (see `research/backtest-2026.md`).
 - **Riot limits:** no Riot logos or artwork, free and non-commercial, keep the `ASSETS.icons` on/off switch in `js/assets.js` working.
 - **Imported run files are untrusted:** keep the field-by-field checks described in the README.
 - **App data is correct as it stands.** Don't change data or code without a reason Luke has agreed to.
 - **`research/build/build_from_oe.py` overwrites app files** (`js/h2h.js`, `js/worlds-live.js`) on every run, even without `--fix`. Run it only on a scratch copy of the repo, with Luke's OK, and compare its output with the current files before anything is copied back. Needs Python 3.9+ and pandas.
+- **Research scripts go through `research/lib`** (Luke, 14 Nov): paths and dates from `config.py`, data through `data.py` (it stops on stale or wrong-sized files), outputs through a `Run` record, report tables built from results, never typed. Prove a rebuilt script with `research/lib/compare.py` (old v new results).
 - **Work stays in Claude Code sessions.** The earlier claude.ai chats that built the app don't write to this repo any more.
 
 ## Notes sessions (display review)
@@ -69,16 +71,17 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 
 ## Sim engine rules (master plan: `research/sim-plan.md`)
 
+- **The redesign (Luke, 14 Nov; `research/laning-plan.md`, memory `sim-actions-from-data`):** the sim plays out actions between players, champions and teams, driven by pre-draft, draft and in-game factors, not per-minute fitted rates. Every behaviour must be proven by data; Claude sets no behaviour numbers (thin data → find more; data that only leans → ask Luke). Success = actions that reflect real data, with who-wins accuracy kept inside the noise band. **Worlds games and patch 16.20 first** in every test, **day by day at Worlds** (fit on every game before each Worlds day), then 2026 non-Worlds games from 1 Sep as a second check. Built one slice at a time, end to end (laning first). Where this differs from the rules below, this wins.
 - **Plan each foundation with Luke before building it** (ratings, draft AI, draft review, the simulator): agree what it shows, what it's built from and how it feeds the rest, with a worked example, then build.
 - **No numbers hand-set from the data** (Luke, 6 Nov). The sim is a model fitted to match the data as well as possible, then simulated so games play out like real matches. A fix's parameters are fitted (on training games, so simulated games match real patterns), never read off a real-v-sim ratio and typed in; outcome rates such as "blue takes grubs 63%" should come out of the simulation, not be set.
-- **The app only changes in sim session 4.** Sessions 1–3 produce research reports and fitted tables, not app edits.
+- **Research before app changes:** research produces reports and fitted tables; the app changes only in an agreed build step (sessions 1–3 then session 4; for the redesign, each slice's port step).
 - **Count each real game once,** matched by game ID. Once the Oracle's Elixir file covers a day, it is the source of record over `js/worlds-live.js`. Same rule for the NerfPlz patch tables (they already include play-in games).
 - **Judge only on held-out games, with two tests** (Luke, 10 Nov). The fixed test keeps its split for the whole of testing (train before 1 Sep, test after, plus Worlds games as they're played). A walk-forward test runs alongside it (for each week from 1 Sep, fit on every earlier game, recent games weighted by a half-life chosen on July–August only, predict that week). Both run at 1,000 sims per game with seeds by game ID (Luke, 12 Nov: at 200 sims the score moved by chance more than the gaps being judged). Every version reports both scores. The new sim ships only if it beats the current one on those games.
 - **Few parameters, shrink toward averages.** About 2,800 major-league games supports a simple model, not hundreds of free parameters.
 - **Keep every input** (Luke, 12 Nov). A lane or input stays in the model even when its measured effect is small. A version that is marginally better or worse on the tests is acceptable if it adds depth to the sim's results.
 - **Ship small tables only.** The raw file stays local; the app gets small JS tables built from it.
 - **Seeded randomness:** the same seed must replay the same game.
-- **Minor leagues stay out of fitting** (player history and champion pools only, e.g. 369) unless Luke decides otherwise.
+- **Minor leagues stay out of fitting** (player history and champion pools only, e.g. 369) unless Luke decides otherwise. Tested 14 Nov for champion and matchup data on 16.20: no gain at Worlds, kept out.
 - **Scorecard as an artifact:** once the new model exists, each session or match-day update shows Luke the scorecard as an artifact in the chat (not in the app for now).
 - **Exclude the file's "WLDs" rows dated before 1 Oct** (17–19 Sep): they are a regional qualifier, not Worlds. Worlds play-ins are 15–18 Oct, Swiss from 23 Oct (the file's dates are UTC, a few hours ahead).
 - **The sim is one replaceable part of the app.** Draft, series, tournament, awards and stats screens only read the game record `pack()` stores (see Code map). Keep that shape, or change those readers on purpose.
@@ -111,7 +114,9 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 | `research/sim1/`, `research/sim1-report.md` | Sim session 1 scripts and notes (start with its README; scripts run from a scratch copy, Python + pandas), and the session 1 report with the scorecard |
 | `Draft Game/` | Separate pick/ban card game (`index.html`) and its handoff file |
 | `tools/qol-notes-overlay.js` | Note-taking overlay for notes sessions (pasted into a browser tab; not loaded by the app) |
-| `SESSION_NOTES.md` | Live state, recent updates, what's next, open decisions |
+| `research/laning-plan.md`, `research/laning/` | The sim redesign's first slice (laning phase as data-proven actions): plan, step 1 scripts (`s5_*.py`), the lolesports feed puller, report with generated tables. Results in `research/model/laning/` |
+| `research/lib/` | Shared research library (start with its README): one config for paths, dates and expected sizes; data loaders with checks; leak-checked splits; run records (`research/runs/`); report tables built from results |
+| `SESSION_NOTES.md` | Live state, recent updates, what's next, open decisions. Older blocks: `SESSION_NOTES_ARCHIVE.md` |
 
 ## Code map
 
