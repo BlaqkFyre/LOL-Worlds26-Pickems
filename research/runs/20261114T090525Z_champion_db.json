@@ -1,0 +1,36 @@
+{
+ "name": "champion_db",
+ "started_utc": "2026-11-14T09:05:25",
+ "script": {
+  "path": "research/champions/build_champion_db.py",
+  "sha256": "8ad846db36466c0537ddd8fcd10c81ad91aeadba30fc64c37f7a72263a2d6c9b",
+  "git_commit": "d26b50f",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "min_games": 5,
+  "off_share": 0.1,
+  "off_games": 2
+ },
+ "inputs": [
+  {
+   "path": "research/local/champions/wiki_championdata_2026-11-14.txt",
+   "bytes": 27782,
+   "modified": "2026-11-14T15:56:26",
+   "sha256": "8acb8e7c5752fbb775e31afa073200d20990cf61b98241e250333f482dc13c7b"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  }
+ ],
+ "record": "20261114T090525Z_champion_db.json",
+ "status": "failed",
+ "error": "AttributeError: 'Pandas' object has no attribute 'class'",
+ "seconds": 0.4,
+ "results": {},
+ "outputs": [],
+ "not_written_because_failed": []
+}

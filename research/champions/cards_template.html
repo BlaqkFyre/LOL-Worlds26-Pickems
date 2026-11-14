@@ -1,0 +1,190 @@
+<title>Champion Scouting Cards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: a filter rail on top, then a responsive grid of scouting cards (or a sortable database table); one champion per card. */
+:root {
+  --bg: #f3f4f7; --surface: #ffffff; --surface-2: #eceef3; --fg: #171a22; --muted: #5b6273; --line: #d9dce5;
+  --accent: #2f5bd8; --phys: #c4621b; --magic: #6a43c9; --mixed: #a3406f; --good: #2d8a55;
+  --top: #b5483a; --jng: #3f8a4e; --mid: #3a6cc4; --bot: #c18a1d; --sup: #8b5bb5;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif; --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11141b; --surface: #1a1e28; --surface-2: #232837; --fg: #e8eaf0; --muted: #9aa1b2; --line: #2e3445;
+  --accent: #7c9cff; --phys: #f0904a; --magic: #a88bff; --mixed: #e57aa8; --good: #5cc488;
+  --top: #e07a6a; --jng: #6cc07b; --mid: #73a0f0; --bot: #e8b54c; --sup: #b88be0; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11141b; --surface: #1a1e28; --surface-2: #232837; --fg: #e8eaf0; --muted: #9aa1b2; --line: #2e3445;
+  --accent: #7c9cff; --phys: #f0904a; --magic: #a88bff; --mixed: #e57aa8; --good: #5cc488;
+  --top: #e07a6a; --jng: #6cc07b; --mid: #73a0f0; --bot: #e8b54c; --sup: #b88be0; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 16px; }
+header h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); letter-spacing: .01em; margin: 0; text-wrap: balance; }
+header p { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
+.controls { display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row > label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); min-width: 64px; }
+input[type=search], select { font: inherit; color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+input[type=search] { flex: 1 1 220px; min-width: 0; }
+.chip { font: inherit; font-size: 13px; color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.chip:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; color: var(--muted); font-size: 13px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.head { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; }
+.mono { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--surface); }
+.name { font-family: var(--display); font-weight: 700; font-size: 22px; line-height: 1.05; }
+.sub { color: var(--muted); font-size: 12px; }
+.role { font-family: var(--display); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 6px; color: var(--surface); white-space: nowrap; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.dmg { font-weight: 600; color: var(--surface); border: 0; }
+.stats { display: grid; gap: 5px; }
+.stat { display: grid; grid-template-columns: 74px 1fr; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.pips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.pip { height: 8px; border-radius: 2px; background: var(--surface-2); border: 1px solid var(--line); }
+.pip.on { background: var(--accent); border-color: var(--accent); }
+.style { position: relative; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--phys), var(--magic)); opacity: .85; }
+.style i { position: absolute; top: -3px; width: 4px; height: 14px; border-radius: 2px; background: var(--fg); transform: translateX(-2px); }
+.lanes { display: grid; gap: 4px; }
+.lanebar { display: flex; height: 10px; border-radius: 3px; overflow: hidden; background: var(--surface-2); }
+.lanebar span { display: block; height: 100%; }
+.lanelabel { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+.pro { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-top: 1px solid var(--line); padding-top: 8px; }
+.pro div { display: grid; }
+.pro b { font-family: var(--display); font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pro small { color: var(--muted); font-size: 11px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 9px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--surface-2); cursor: pointer; font-weight: 600; }
+th[aria-sort="ascending"]::after { content: " ▲"; } th[aria-sort="descending"]::after { content: " ▼"; }
+.foot { color: var(--muted); font-size: 12px; max-width: 90ch; }
+.btn { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.empty { color: var(--muted); padding: 30px; text-align: center; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } .card:hover { border-color: var(--accent); } }
+</style>
+<div class="wrap">
+  <header>
+    <h1>Champion Scouting Cards</h1>
+    <p>Every League champion with Riot's own class, subclass, damage type and 1–3 style ratings, plus where pros play it at Worlds 2026 (patch 16.20) and across the 2026 season. Built from the champion database in the Pick'Em Lab repo.</p>
+  </header>
+  <section class="controls" aria-label="Filters">
+    <div class="row"><label for="q">Search</label><input id="q" type="search" placeholder="Champion, subclass or tag (e.g. Enchanter, Hypercarry)"></div>
+    <div class="row" id="f-class"><label>Class</label></div>
+    <div class="row" id="f-role"><label>Meta role</label></div>
+    <div class="row" id="f-dmg"><label>Damage</label></div>
+    <div class="row"><label for="sort">Sort</label>
+      <select id="sort">
+        <option value="worlds_presence">Worlds presence</option><option value="pro_games_2026">Pro games 2026</option><option value="name">Name</option>
+        <option value="riot_damage">Riot damage</option><option value="riot_cc">Riot crowd control</option><option value="riot_utility">Riot utility</option><option value="riot_toughness">Riot toughness</option>
+        <option value="pro_dmg_index_meta_role">Pro damage index</option>
+      </select>
+    </div>
+  </section>
+  <div class="bar">
+    <span id="count"></span>
+    <div class="row">
+      <div class="legend" id="legend"></div>
+      <div class="seg" role="group" aria-label="View"><button id="v-cards" aria-pressed="true">Cards</button><button id="v-table" aria-pressed="false">Database</button></div>
+    </div>
+  </div>
+  <main id="out"></main>
+  <p class="foot">Sources: Riot client data from the League wiki's champion data module (read 14 Nov 2026); pro play from the Oracle's Elixir 2026 file (major leagues; Worlds = 94 games). Meta role = most-played pro role at Worlds with 5+ games, else across 2026 majors with 5+, else Riot's first lane. Off-roles = other roles with 10%+ and 2+ games. Ratings are Riot's 1–3 client ratings (damage, toughness, crowd control, mobility, utility). Damage index = the champion's average share of team damage in its meta role over that role's average. No Riot artwork is used.</p>
+</div>
+<script>
+const DATA = __DATA__;
+const C = DATA.champions;
+const ROLES = ["top", "jng", "mid", "bot", "sup"], RN = {top: "Top", jng: "Jungle", mid: "Mid", bot: "Bot", sup: "Support"};
+const CLASSES = ["Fighter", "Mage", "Tank", "Marksman", "Assassin", "Support"];
+const CLASS_COLOR = {Fighter: "var(--top)", Mage: "var(--magic)", Tank: "var(--jng)", Marksman: "var(--bot)", Assassin: "var(--mixed)", Support: "var(--sup)"};
+const DMG = {Physical: "var(--phys)", Magic: "var(--magic)", "Physical+Magic": "var(--mixed)"};
+const state = {q: "", cls: new Set(), role: new Set(), dmg: new Set(), sort: "worlds_presence", view: "cards", tsort: {k: "worlds_presence", dir: -1}};
+try { const s = JSON.parse(localStorage.getItem("champ-cards-view") || "{}"); if (s.view) state.view = s.view; if (s.sort) state.sort = s.sort; } catch (e) {}
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+function chips(id, vals, set, label = v => v) {
+  const row = $(id); vals.forEach(v => { const b = document.createElement("button"); b.className = "chip"; b.textContent = label(v); b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.setAttribute("aria-pressed", set.has(v)); render(); }; row.appendChild(b); });
+}
+chips("f-class", CLASSES, state.cls); chips("f-role", ROLES, state.role, v => RN[v]); chips("f-dmg", ["Physical", "Magic", "Physical+Magic"], state.dmg, v => v === "Physical+Magic" ? "Mixed" : v);
+$("legend").innerHTML = ROLES.map(r => `<span style="--c:var(--${r})">${RN[r]}</span>`).join("");
+$("q").oninput = e => { state.q = e.target.value.trim().toLowerCase(); render(); };
+$("sort").value = state.sort; $("sort").onchange = e => { state.sort = e.target.value; save(); render(); };
+$("v-cards").onclick = () => { state.view = "cards"; save(); render(); }; $("v-table").onclick = () => { state.view = "table"; save(); render(); };
+function save() { try { localStorage.setItem("champ-cards-view", JSON.stringify({view: state.view, sort: state.sort})); } catch (e) {} }
+function filtered() {
+  return C.filter(c => (!state.q || [c.name, c.title, c.class, c.class_secondary, c.subclasses, c.playstyle_tags].join(" ").toLowerCase().includes(state.q))
+    && (!state.cls.size || state.cls.has(c.class)) && (!state.role.size || state.role.has(c.meta_role)) && (!state.dmg.size || state.dmg.has(c.damage_types)));
+}
+const num = v => (v == null || v === "" ? -1 : +v);
+function pips(n) { return `<div class="pips">${[1, 2, 3].map(i => `<span class="pip${n >= i ? " on" : ""}"></span>`).join("")}</div>`; }
+function laneBar(c, kind) {
+  const total = ROLES.reduce((a, r) => a + (c[`share_${kind}_${r}`] || 0), 0);
+  if (!total) return `<div class="lanebar" title="No ${kind === "worlds" ? "Worlds" : "2026"} pro games"></div>`;
+  return `<div class="lanebar">${ROLES.map(r => { const s = c[`share_${kind}_${r}`] || 0; return s ? `<span style="width:${s * 100}%;background:var(--${r})" title="${RN[r]} ${Math.round(s * 100)}%"></span>` : ""; }).join("")}</div>`;
+}
+function initials(n) { const w = n.replace(/[^A-Za-z ]/g, " ").split(/\s+/).filter(Boolean); return (w.length > 1 ? w[0][0] + w[1][0] : n.slice(0, 2)).toUpperCase(); }
+function card(c) {
+  const off = (c.off_roles || "").split("/").filter(Boolean).map(r => RN[r]).join(", ");
+  const tags = (c.playstyle_tags || "").split("/").filter(Boolean);
+  return `<article class="card">
+    <div class="head"><div class="mono" style="background:${CLASS_COLOR[c.class] || "var(--muted)"}" aria-hidden="true">${esc(initials(c.name))}</div>
+      <div><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.title)}</div></div>
+      <span class="role" style="background:var(--${c.meta_role})" title="Meta role (${esc(c.meta_role_source)})">${esc(RN[c.meta_role] || "")}</span></div>
+    <div class="tags">
+      <span class="tag"><b>${esc(c.class)}</b>${c.class_secondary ? " / " + esc(c.class_secondary) : ""}</span>
+      ${(c.subclasses || "").split("/").filter(Boolean).map(s => `<span class="tag">${esc(s)}</span>`).join("")}
+      <span class="tag dmg" style="background:${DMG[c.damage_types] || "var(--muted)"}">${esc(c.damage_types === "Physical+Magic" ? "Mixed damage" : c.damage_types)}</span>
+      <span class="tag">${esc(c.range_type)} ${esc(c.attack_range)}</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Damage</span>${pips(c.riot_damage)}</div>
+      <div class="stat"><span>Toughness</span>${pips(c.riot_toughness)}</div>
+      <div class="stat"><span>Crowd control</span>${pips(c.riot_cc)}</div>
+      <div class="stat"><span>Mobility</span>${pips(c.riot_mobility)}</div>
+      <div class="stat"><span>Utility</span>${pips(c.riot_utility)}</div>
+      <div class="stat" title="0 = all basic attacks, 100 = all abilities"><span>Attacks ↔ spells</span><div class="style"><i style="left:${c.style}%"></i></div></div>
+    </div>
+    <div class="lanes">
+      <div class="lanelabel"><span>Worlds roles</span><span>${c.worlds_games} games</span></div>${laneBar(c, "worlds")}
+      <div class="lanelabel"><span>2026 roles</span><span>${c.pro_games_2026} games</span></div>${laneBar(c, "2026")}
+      <div class="lanelabel"><span>Off-roles: ${off || "none"}</span><span>Riot lanes: ${esc((c.riot_lane_roles || "").split("/").map(r => RN[r]).join(", "))}</span></div>
+    </div>
+    ${tags.length ? `<div class="tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+    <div class="pro">
+      <div><b>${Math.round((c.worlds_presence || 0) * 100)}%</b><small>Worlds presence</small></div>
+      <div><b>${c.pro_winrate_2026 == null ? "–" : Math.round(c.pro_winrate_2026 * 100) + "%"}</b><small>2026 win rate</small></div>
+      <div><b>${c.pro_dmg_index_meta_role == null ? "–" : c.pro_dmg_index_meta_role.toFixed(2)}</b><small>Damage index</small></div>
+    </div>
+  </article>`;
+}
+const COLS = ["name", "class", "class_secondary", "subclasses", "damage_types", "range_type", "riot_damage", "riot_toughness", "riot_cc", "riot_mobility", "riot_utility", "style", "meta_role", "off_roles", "meta_role_source", "riot_lane_roles", "worlds_games", "worlds_bans", "worlds_presence", "pro_games_2026", "pro_winrate_2026", "pro_dmg_index_meta_role", "playstyle_tags"];
+function table(rows) {
+  const {k, dir} = state.tsort; rows = [...rows].sort((a, b) => typeof a[k] === "string" || typeof b[k] === "string" ? dir * String(a[k] ?? "").localeCompare(String(b[k] ?? "")) : dir * (num(a[k]) - num(b[k])));
+  return `<div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn" id="copy">Copy as CSV</button></div><div class="tablewrap"><table><thead><tr>${COLS.map(c => `<th data-k="${c}" ${c === k ? `aria-sort="${dir > 0 ? "ascending" : "descending"}"` : ""}>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${COLS.map(c => `<td>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+function render() {
+  const rows = filtered(); $("count").textContent = `${rows.length} of ${C.length} champions`;
+  $("v-cards").setAttribute("aria-pressed", state.view === "cards"); $("v-table").setAttribute("aria-pressed", state.view === "table");
+  if (!rows.length) { $("out").innerHTML = `<p class="empty">No champion matches these filters. Clear a filter or the search box.</p>`; return; }
+  if (state.view === "cards") {
+    const k = state.sort; const s = [...rows].sort((a, b) => k === "name" ? a.name.localeCompare(b.name) : (num(b[k]) - num(a[k])) || a.name.localeCompare(b.name));
+    $("out").innerHTML = `<div class="grid">${s.map(card).join("")}</div>`;
+  } else {
+    $("out").innerHTML = table(rows);
+    $("out").querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; state.tsort = {k, dir: state.tsort.k === k ? -state.tsort.dir : (k === "name" ? 1 : -1)}; render(); });
+    $("copy").onclick = async e => { const csv = [COLS.join(","), ...rows.map(r => COLS.map(c => { const v = String(r[c] ?? ""); return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; }).join(","))].join("\n");
+      try { await navigator.clipboard.writeText(csv); e.target.textContent = "Copied"; } catch (err) { const ta = document.createElement("textarea"); ta.value = csv; ta.style.width = "100%"; ta.rows = 6; e.target.after(ta); ta.select(); e.target.textContent = "Select and copy below"; } };
+  }
+}
+render();
+</script>

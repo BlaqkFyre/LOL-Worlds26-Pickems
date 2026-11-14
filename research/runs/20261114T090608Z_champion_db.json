@@ -1,0 +1,46 @@
+{
+ "name": "champion_db",
+ "started_utc": "2026-11-14T09:06:05",
+ "script": {
+  "path": "research/champions/build_champion_db.py",
+  "sha256": "235b753fbc7b33c9be1a03b92ff70e9ca98ea7efc7ae2f7788fa184d23bac9f0",
+  "git_commit": "d26b50f",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "min_games": 5,
+  "off_share": 0.1,
+  "off_games": 2
+ },
+ "inputs": [
+  {
+   "path": "research/local/champions/wiki_championdata_2026-11-14.txt",
+   "bytes": 27782,
+   "modified": "2026-11-14T15:56:26",
+   "sha256": "8acb8e7c5752fbb775e31afa073200d20990cf61b98241e250333f482dc13c7b"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  }
+ ],
+ "record": "20261114T090608Z_champion_db.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 2.8,
+ "results": {
+  "champions": 173,
+  "with a Worlds meta role": 62,
+  "with a 2026 meta role": 66,
+  "from Riot lanes": 45
+ },
+ "outputs": [
+  {
+   "path": "research/champions/champions.json",
+   "sha256": "9445b666c4ec2f124686fedaaf918c8cbe65220bb46cc51649c14e57ab480daa"
+  }
+ ],
+ "not_written_because_failed": []
+}
