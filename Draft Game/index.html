@@ -85,8 +85,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card.dead{opacity:.3;filter:grayscale(1)}
 
 /* draft overlay: semi-transparent window, opaque tiles */
-#draft{position:absolute;left:40px;top:136px;width:920px;height:488px;background:rgba(14,19,30,.80);border:2px solid #3d4a68;border-radius:14px;padding:12px 14px;z-index:20;display:flex;flex-direction:column;gap:8px;transition:opacity .15s}
-#draft.peek{opacity:.12}
+#draft{position:absolute;left:150px;top:62px;width:754px;height:636px;background:rgba(14,19,30,.80);border:2px solid #3d4a68;border-radius:14px;padding:12px 14px;z-index:20;display:flex;flex-direction:column;gap:8px;transition:opacity .15s}
+#draft.peek{opacity:.12;pointer-events:none}
 .dhead{display:flex;align-items:center;gap:12px;height:34px}
 .phase{font-weight:800;font-size:20px;letter-spacing:.08em;width:230px}
 .turn{margin:0 auto;padding:5px 16px;border-radius:16px;font-weight:800;font-size:13px;letter-spacing:.08em;color:#fff;background:var(--panel2)}
@@ -97,7 +97,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tbar i{display:block;height:100%;width:100%;background:var(--gold)}
 .tracker{display:flex;gap:12px;height:34px;align-items:center}
 .tgrp{display:flex;gap:4px}
-.pill{width:36px;height:24px;border-radius:5px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid;transition:opacity .2s}
+.pill{width:30px;height:24px;border-radius:5px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid;transition:opacity .2s}
 .pill.blue{border-color:var(--blue)} .pill.red{border-color:var(--red)}
 .pill.ban.blue{color:var(--blue)} .pill.ban.red{color:var(--red)}
 .pill.pick.blue{background:var(--blue);color:#fff} .pill.pick.red{background:var(--red);color:#fff}
@@ -105,11 +105,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pill.cur{box-shadow:0 0 0 3px var(--gold);animation:pulse 1s ease-in-out infinite alternate}
 @keyframes pulse{from{box-shadow:0 0 0 2px var(--gold)}to{box-shadow:0 0 0 4px var(--gold),0 0 12px var(--gold)}}
 .dbody{display:flex;gap:14px;flex:1;min-height:0}
-.grid{display:grid;grid-template-columns:repeat(10,58px);grid-auto-rows:58px;gap:6px;align-content:start;overflow-y:auto;min-height:0;padding:3px 8px 3px 3px;scrollbar-width:thin}
+.grid{display:grid;grid-template-columns:repeat(7,58px);grid-auto-rows:58px;gap:6px;align-content:start;overflow-y:auto;min-height:0;padding:3px 8px 3px 3px;scrollbar-width:thin}
 .tile{width:58px;height:58px;border-radius:7px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;box-shadow:0 2px 5px rgba(0,0,0,.5);transition:transform .12s,box-shadow .12s,opacity .2s,filter .2s;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .tile small{font-size:8.5px;font-weight:600;opacity:.92}
 .tile .rr{position:absolute;top:2px;left:3px;font-size:7.5px;font-weight:800;opacity:.9}
 .tile.ok{cursor:pointer}
+.tile.gone{display:none}   /* champions you can't pick are hidden (Luke, 17 Nov) */
 .tile.ok:hover{transform:translateY(-3px) scale(1.07);box-shadow:0 0 0 3px var(--gold),0 6px 14px rgba(0,0,0,.6);z-index:2}
 .tile.no{opacity:.32}
 .tile.wait{opacity:.85}
@@ -191,6 +192,23 @@ button.bigb:disabled{opacity:.5;cursor:default}
 
 /* ready / hud / result */
 #ready{position:absolute;left:525px;top:380px;transform:translate(-50%,-50%);z-index:25}
+#call{position:absolute;left:525px;top:380px;transform:translate(-50%,-50%);z-index:26;width:470px;background:rgba(14,19,30,.94);border:2px solid var(--gold);border-radius:14px;padding:14px 18px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.ctitle{font-weight:900;font-size:24px;letter-spacing:.08em;margin:4px 0 2px}
+.csub{font-size:12px;color:var(--muted);margin-top:6px}
+.cbtns{display:flex;gap:12px;justify-content:center;margin-top:10px}
+.cbtns .bigb{min-width:0;flex:1;font-size:16px}
+.cgive{background:#2b3550;border:2px solid var(--line)!important}
+.fmt{display:flex;gap:6px;justify-content:center;align-items:center;margin:8px 0 2px}
+.fmt button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:700}
+.fmt button.on{border-color:var(--gold);color:var(--gold)}
+#r-series{font-weight:800;margin:6px 0 2px}
+#r-lanes table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;font-variant-numeric:tabular-nums}
+#r-lanes th{color:var(--muted);font-size:10px;letter-spacing:.1em;text-align:left;padding:3px 5px;border-bottom:1px solid var(--line)}
+#r-lanes td{padding:3px 5px;border-bottom:1px solid #222b40;text-align:left;white-space:nowrap}
+#r-lanes small{color:var(--muted)} #r-lanes .b{color:#8fb4ff} #r-lanes .r{color:#ff8d93}
+.pill.has{cursor:help}
+#tip{position:absolute;z-index:45;width:240px;background:rgba(14,19,30,.97);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+#tip .ih{margin:0 0 3px} #tip .ih .mini{width:28px;height:28px;border-radius:6px;filter:none;flex:none}
 #clashbtn{border:3px solid #fff;border-radius:14px;background:linear-gradient(180deg,#f7b84a,#d9860b);color:#2a1a00;font-weight:900;font-size:30px;letter-spacing:.12em;padding:10px 30px;display:flex;flex-direction:column;align-items:center;box-shadow:0 0 30px rgba(242,165,49,.6)}
 #clashbtn small{font-size:12px;letter-spacing:.02em;font-weight:700}
 #hud{position:absolute;left:150px;top:64px;width:750px;height:36px;display:flex;align-items:center;justify-content:center;z-index:25;pointer-events:none}
@@ -227,6 +245,9 @@ button.bigb:disabled{opacity:.5;cursor:default}
   <button id="t-sound" class="on">Sound: On</button>
   <button id="t-speed">Speed: 1×</button>
   <button id="t-auto">Auto-draft: Off</button>
+  <button id="t-timer" title="Off = practice: no 30-second pick timer">Timer: On</button>
+  <button id="t-calls" title="On = you choose to fight for or give up each Dragon, Baron and Elder">Objective calls: On</button>
+  <button id="t-art" title="Shows Riot's loading-screen art faintly behind 10 random cards each game (concept)">Portraits: On</button>
   <button id="t-skip" disabled>Skip</button>
   <button id="t-new">New game</button>
   <button id="t-folder" title="Autosave: the game saves to draft-clash-save.json in the folder you choose (pick the Draft Game folder) and loads from it when you open the game.">Save folder: choose…</button>
@@ -253,14 +274,20 @@ button.bigb:disabled{opacity:.5;cursor:default}
   </div>
 
   <div id="ready" class="hidden"><button id="clashbtn">CLASH!</button></div>
+  <div id="call" class="hidden"><div class="lbl">YOUR CALL</div><div class="ctitle" id="c-title"></div><div class="csub" id="c-sub"></div>
+   <div class="cbtns"><button id="c-fight" class="bigb bgold">FIGHT FOR IT<small id="c-fs"></small></button><button id="c-give" class="bigb cgive">GIVE IT UP<small id="c-gs"></small></button></div>
+   <div class="csub">Concept: you make the call for your team; the enemy and AI calls come later.</div></div>
   <div id="hud" class="hidden"><div class="in"><span id="clock">0:00</span><span id="cap"></span></div></div>
   <div id="fx"></div>
+  <div id="tip" class="hidden"></div>
 
   <div id="side">
    <div class="spanel">
     <h1>Red or Blue?</h1>
     <div class="lbl">COIN TOSS</div>
     <div class="coinwrap"><div class="coin" id="coin"><div class="face f">YOU</div><div class="face b">AI</div></div></div>
+    <div class="fmt" id="s-fmt"><span class="lbl">FORMAT</span><button data-f="1">Bo1</button><button data-f="3">Bo3 · Fearless</button><button data-f="5">Bo5 · Fearless</button><button data-f="8">Arena · 8 wins / 3 losses</button></div>
+    <div id="s-arena" class="snote"></div>
     <div id="s-msg">Flip the coin. The winner chooses a side.</div>
     <div class="sbtns" id="s-btns"></div>
     <div class="snote">Blue side bans and picks first. Red side gets the last pick.<br>Top half of the board is Red, bottom half is Blue.</div>
@@ -270,7 +297,7 @@ button.bigb:disabled{opacity:.5;cursor:default}
 
   <div id="result" class="hidden">
    <div class="rpanel"><div class="rhead" id="r-head"></div>
-    <div class="rbody"><div id="r-you"></div><div class="rstats" id="r-stats"></div><div id="r-pre"></div><div id="r-sim"></div><div id="r-record"></div>
+    <div class="rbody"><div id="r-you"></div><div id="r-series"></div><div class="rstats" id="r-stats"></div><div id="r-lanes"></div><div id="r-pre"></div><div id="r-sim"></div><div id="r-record"></div>
      <div class="rbtns"><button id="r-rematch">Rematch (same draft)</button><button id="r-sim100">Sim 100 games</button><button id="r-new" class="bgold">New draft</button></div>
     </div></div>
   </div>
@@ -308,7 +335,7 @@ function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 const R0=mulberry32(2026);
 const CH=[],SYN={},BOND=new Set(),STYLE=CC?CC.style:{},MU=CC?CC.mu:{};
 if(CC){
-  CC.cards.forEach((c,i)=>CH.push({id:i,name:String(c.sub||c.cls).split('/')[0],ini:c.code,role:c.role,flex:c.flex,s:c.s,g:c.g,cls:c.cls,sub:c.sub,dmg:c.dmg,
+  CC.cards.forEach((c,i)=>CH.push({id:i,name:String(c.sub||c.cls).split('/')[0],ini:c.code,dd:c.dd,role:c.role,flex:c.flex,s:c.s,g:c.g,cls:c.cls,sub:c.sub,dmg:c.dmg,
     tags:c.tags,region:c.region,range:c.range,tg:new Set([...String(c.sub||'').split('/').filter(Boolean).map(t=>'sub:'+t),...c.tags.map(t=>'tag:'+t)]),
     hue:(CLASS_HUE[c.code[0]]+(i%5)*7)%360}));
   CC.pairs.forEach(([a,b,v])=>SYN[Math.min(a,b)+'|'+Math.max(a,b)]=v);
@@ -334,7 +361,12 @@ const mBase=(a,b)=>50+Math.round((hash2(a,b)-.5)*16);
 const matchup=(a,b)=>{if(CC){const v=MU[Math.min(a,b)+'|'+Math.max(a,b)];return v==null?50:(a<b?v:100-v)}return a<b?mBase(a,b):100-mBase(b,a)};   /* a's lane win % vs b */
 const NO_REGION=new Set(['','Unaffiliated','Runeterra']);
 const regionSets=ids=>{if(!CC)return [];const n={};ids.forEach(i=>{const r=CH[i].region;if(r&&!NO_REGION.has(r))n[r]=(n[r]||0)+1});return Object.keys(n).filter(r=>n[r]>=CC.region_set.size)};
-const tileBg=c=>`linear-gradient(145deg,hsl(${c.hue},60%,52%),hsl(${(c.hue+30)%360},55%,30%))`;
+/* portraits (concept, Luke 17 Nov): Riot's loading-screen art, faint behind 10 random cards per game, under the card colour.
+   Riot art only with the Portraits switch on (toolbar), as the Pick'Em app's icon switch; no logos. */
+const ART_URL=c=>`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${encodeURIComponent(c.dd)}_0.jpg`;
+const tileBg=c=>{const base=`linear-gradient(145deg,hsl(${c.hue},60%,52%),hsl(${(c.hue+30)%360},55%,30%))`;
+  if(!(ART&&CC&&c.dd&&G&&G.art&&G.art.includes(c.id)))return base;
+  return `linear-gradient(145deg,hsla(${c.hue},60%,52%,.74),hsla(${(c.hue+30)%360},55%,30%,.82)),url("${ART_URL(c)}") center 18%/cover`};
 
 function statOf(cid,role,k){const c=CH[cid],v=c.s[k];if(role===c.role)return v;if(role===c.flex)return v-(k==='lane'?4:2);return v-10}
 const power=(cid,role)=>(statOf(cid,role,'lane')+statOf(cid,role,'tf')+statOf(cid,role,'late')+statOf(cid,role,'obj'))/4;
@@ -351,14 +383,19 @@ const LATE={elderGold:0.3,elderSecure:0.85,baronFight:3,elderFight:5.5,soulFight
 const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
 const sig=x=>1/(1+Math.exp(-x));
 const TN=s=>s==='blue'?'Blue':'Red';
+/* a team's synergy counts at most about ±SYN_CAP (Luke, 17 Nov: the best synergy shouldn't always be a mega advantage over card strength; was 6) */
+const SYN_CAP=4;
 function teamStr(p){
   const a=(r,k)=>(p[r]==null?72:statOf(p[r],r,k))*K, sy=teamSyn(p);
   return {p,syn:sy,lane:{TOP:a('TOP','lane'),MID:a('MID','lane'),BOT:(a('BOT','lane')+a('SUP','lane'))/2},jgl:a('JGL','lane'),
     obj:(a('JGL','obj')+a('SUP','obj')+a('MID','obj'))/3,
-    tf:ROLES.reduce((x,r)=>x+a(r,'tf'),0)/5+(CC?6*Math.tanh(sy/6):sy)*0.25,   /* real pair synergies overlap, so a team's total has diminishing returns (counts at most about ±6) */
+    tf:ROLES.reduce((x,r)=>x+a(r,'tf'),0)/5+(CC?SYN_CAP*Math.tanh(sy/SYN_CAP):sy)*0.25,   /* real pair synergies overlap, so a team's total has diminishing returns */
     late:(a('TOP','late')+a('BOT','late')+a('SUP','late')+a('MID','late'))/4};
 }
-function simGame(bp,rp,quiet){
+/* opts (17 Nov, objective calls): {rnd: seeded random, side: the player's side, choose(obj, n, t) -> 'fight' | 'give' | 'ask'}.
+   With a seed the same calls replay the same game, so the clash can stop at an objective, ask, and re-run with the answer. */
+function simGame(bp,rp,quiet,opts){
+  const R=(opts&&opts.rnd)||Math.random,gs=()=>{let u=0,v=0;while(!u)u=R();while(!v)v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
   const B=teamStr(bp),Rd=teamStr(rp),S={blue:B,red:Rd};
   const g={gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},inh:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},el:{blue:0,red:0},gr:{blue:0,red:0},soul:null,ev:[],firstBaron:null,firstElder:null};
   const snap=()=>({gold:g.gold,k:{...g.k},tw:{...g.tw},dr:{...g.dr},ba:{...g.ba},el:{...g.el}});
@@ -368,67 +405,85 @@ function simGame(bp,rp,quiet){
   const nameIn=(T,r)=>T.p[r]!=null?CH[T.p[r]].name:LN[r];
   /* laning 0-14: three lane duels, a jungle duel that can gank one lane, early objectives */
   const acts=[];
-  const jd=B.jgl-Rd.jgl+gauss()*7;
-  const gankLane=['TOP','MID','BOT'][Math.floor(Math.random()*3)];
+  const jd=B.jgl-Rd.jgl+gs()*7;
+  const gankLane=['TOP','MID','BOT'][Math.floor(R()*3)];
   ['TOP','MID','BOT'].forEach(L=>{
-    let d=B.lane[L]-Rd.lane[L]+gauss()*7; if(L===gankLane)d+=jd*0.4;
+    let d=B.lane[L]-Rd.lane[L]+gs()*7; if(L===gankLane)d+=jd*0.4;
     const mu=r=>(bp[r]==null||rp[r]==null)?0:(matchup(bp[r],rp[r])-50)*0.5;
     d+=L==='BOT'?(mu('BOT')+mu('SUP'))/2:mu(L);
     const w=d>0?'blue':'red';
-    if(Math.abs(d)>6){const t=3+Math.floor(Math.random()*8);acts.push([t,()=>{swing('blue',d*35);g.k[w]++;ev(t,w,'lane',`${L==='BOT'?'Bot lane 2v2':LN[L]+' lane'}: ${nameIn(S[w],L)} wins the duel — kill`,{lane:L,kind:'solo'})}])}
-    else if(Math.abs(d)>2){const t=8+Math.floor(Math.random()*5);acts.push([t,()=>{swing('blue',d*35);ev(t,w,'lane',`${LN[L]} lane: ${nameIn(S[w],L)} builds a CS lead`,{lane:L,kind:'cs'})}])}
+    if(Math.abs(d)>6){const t=3+Math.floor(R()*8);acts.push([t,()=>{swing('blue',d*35);g.k[w]++;ev(t,w,'lane',`${L==='BOT'?'Bot lane 2v2':LN[L]+' lane'}: ${nameIn(S[w],L)} wins the duel — kill`,{lane:L,kind:'solo'})}])}
+    else if(Math.abs(d)>2){const t=8+Math.floor(R()*5);acts.push([t,()=>{swing('blue',d*35);ev(t,w,'lane',`${LN[L]} lane: ${nameIn(S[w],L)} builds a CS lead`,{lane:L,kind:'cs'})}])}
     else acts.push([12,()=>swing('blue',d*35)]);
   });
-  if(Math.abs(jd)>4){const w=jd>0?'blue':'red',t=4+Math.floor(Math.random()*4);acts.push([t,()=>{g.k[w]++;swing(w,250);ev(t,w,'gank',`${nameIn(S[w],'JGL')} ganks ${LN[gankLane].toLowerCase()} lane for a kill`,{lane:gankLane})}])}
+  if(Math.abs(jd)>4){const w=jd>0?'blue':'red',t=4+Math.floor(R()*4);acts.push([t,()=>{g.k[w]++;swing(w,250);ev(t,w,'gank',`${nameIn(S[w],'JGL')} ganks ${LN[gankLane].toLowerCase()} lane for a kill`,{lane:gankLane})}])}
   const objP=s=>sig(((S[s].obj-S[other(s)].obj)+gl2(s)/1200)/8);
   [[5,'Dragon'],[6,'Void Grubs'],[10,'Dragon'],[14,'Rift Herald']].forEach(([t,o])=>acts.push([t+0.5,()=>{
-    const w=Math.random()<objP('blue')?'blue':'red';if(o==='Dragon')g.dr[w]++;else g.gr[w]++;swing(w,o==='Dragon'?250:350);ev(t,w,'obj',`${o} to ${TN(w)}`,{obj:o})}]));
+    const w=R()<objP('blue')?'blue':'red';if(o==='Dragon')g.dr[w]++;else g.gr[w]++;swing(w,o==='Dragon'?250:350);ev(t,w,'obj',`${o} to ${TN(w)}`,{obj:o})}]));
   acts.sort((a,b)=>a[0]-b[0]).forEach(a=>a[1]());
   /* mid and late game: fights over objectives, towers, inhibitors, Nexus */
-  const T=LATE,buff={baron:{blue:0,red:0},elder:{blue:0,red:0}};
-  let soul=null,dT=15,bT=24+Math.floor(Math.random()*3),eT=99;
+  const T=LATE,buff={baron:{blue:0,red:0},elder:{blue:0,red:0},regroup:{blue:null,red:null}};
+  let soul=null,dT=15,bT=24+Math.floor(R()*3),eT=99;
   const fight=(t,label,wt,gf,obj)=>{
     const goldW=(gf==null?1:gf)*g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade));
-    const bf=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0);
-    const d=wt*(B.tf-Rd.tf)+(1-wt)*(B.late-Rd.late)+goldW+bf('blue')-bf('red')+gauss()*SIM_SD;
+    const bf=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0)+(buff.regroup[s]&&buff.regroup[s].until>=t?buff.regroup[s].v:0);
+    const d=wt*(B.tf-Rd.tf)+(1-wt)*(B.late-Rd.late)+goldW+bf('blue')-bf('red')+gs()*SIM_SD;buff.regroup.blue=buff.regroup.red=null;   /* a regroup bonus is used up by the next fight */
     const w=d>0?'blue':'red',l=other(w);
-    const kw=2+Math.floor(Math.random()*(t>=35?4:3)),kl=Math.floor(Math.random()*2);g.k[w]+=kw;g.k[l]+=kl;
+    const kw=2+Math.floor(R()*(t>=35?4:3)),kl=Math.floor(R()*2);g.k[w]+=kw;g.k[l]+=kl;
     const behind=gl2(w)<0?Math.min(1,-gl2(w)/8000):0;swing(w,(600+kw*300)*(1+behind*T.bounty));
     ev(t,w,'fight',`${label}: ${TN(w)} win the fight ${kw} for ${kl}${behind>0.15?' — comeback gold!':''}`,{kw,kl});
     return {w,kw,kl}};
   const push=(t,w,kw,kl)=>{
     const pw=1+(buff.baron[w]>t?T.baronPush:0)+(buff.elder[w]>t?T.elderPush:0)+Math.max(0,gl2(w))/T.goldPush+(kw-kl)*0.2+Math.max(0,t-30)/T.latePush;
-    const take=Math.min(11-g.tw[w],Math.max(1,Math.round(pw*(0.5+Math.random()*0.8))));
+    const take=Math.min(11-g.tw[w],Math.max(1,Math.round(pw*(0.5+R()*0.8))));
     if(take>0){g.tw[w]+=take;swing(w,take*300);ev(t,w,'towers',`${TN(w)} take ${take} tower${take>1?'s':''} (${g.tw[w]} down)`,{n:take})}
-    if(g.tw[w]>=7&&g.inh[w]<3&&Math.random()<sig(pw-1.6)){g.inh[w]++;swing(w,500);ev(t,w,'inhib',`${TN(w)} break an inhibitor`)}
-    if(g.inh[w]>=1&&g.tw[w]>=9&&Math.random()<sig((pw-T.endBar)*1.4)){g.tw[w]=Math.min(11,g.tw[w]+2);return true}
+    if(g.tw[w]>=7&&g.inh[w]<3&&R()<sig(pw-1.6)){g.inh[w]++;swing(w,500);ev(t,w,'inhib',`${TN(w)} break an inhibitor`)}
+    if(g.inh[w]>=1&&g.tw[w]>=9&&R()<sig((pw-T.endBar)*1.4)){g.tw[w]=Math.min(11,g.tw[w]+2);return true}
     return false};
+  /* objective calls: the regroup bonus for giving an objective up grows when your comp out-scales theirs late and when you are behind on gold */
+  const regroupGain=me=>{const en=other(me);return Math.max(0.5,Math.min(4,1+(S[me].late-S[en].late)*1.5+Math.max(0,-gl2(me))/3000))};
+  const oddsFor=(name,me)=>{const wt=name==='baron'?0.7:name==='elder'?0.5:(t<30?1:0.6),gf=name==='elder'?T.elderGold:1,goldW=gf*g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade));
+    const bx=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0)+(buff.regroup[s]&&buff.regroup[s].until>=t?buff.regroup[s].v:0);
+    const m=wt*(B.tf-Rd.tf)+(1-wt)*(B.late-Rd.late)+goldW+bx('blue')-bx('red');return sig(1.702*(me==='blue'?m:-m)/SIM_SD)};
+  const ONAME={dragon:'the Dragon',baron:'Baron Nashor',elder:'the Elder Dragon'};
+  let objN=0;
   let t=14,winner=null,step=0;
   while(!winner&&t<62){
-    step++;t+=step===1?2+Math.floor(Math.random()*3):3+Math.floor(Math.random()*2);
+    step++;t+=step===1?2+Math.floor(R()*3):3+Math.floor(R()*2);
     let res,obj=null;
     const due=[['baron',bT],['elder',eT],['dragon',soul?99:dT]].filter(x=>t>=x[1]).sort((x,y)=>x[1]-y[1])[0];
+    if(due&&opts&&opts.choose){
+      const me=opts.side,call=opts.choose(due[0],objN,t);
+      if(call==='ask'){g.pending={obj:due[0],idx:objN,t,p:oddsFor(due[0],me),rg:regroupGain(me),gold:gl2(me)};break}
+      objN++;
+      if(call==='give'){const v=regroupGain(me);buff.regroup[me]={until:t+6,v};
+        ev(t,me,'give',`${TN(me)} give up ${ONAME[due[0]]} and regroup (+${v.toFixed(1)} to their next fight)`,{obj:due[0]});
+        takeObj(due[0],other(me),t,false);continue}
+    }
     if(due&&due[0]==='baron'){obj='baron';res=fight(t,'Fight around Baron',0.7,null)}
     else if(due&&due[0]==='elder'){obj='elder';res=fight(t,'Elder Dragon fight',0.5,T.elderGold)}
     else if(due){obj='dragon';res=fight(t,'Teamfight at Dragon',t<30?1:0.6,null)}
     else res=fight(t,t<25?'Skirmish over mid tower':t<38?'Late-game teamfight':'Teamfight at the base',t<25?1:0.5,null);
     const w=res.w;
     if(obj){
-      const take=Math.random()<(obj==='dragon'?0.95:obj==='elder'?T.elderSecure:0.88)?w:other(w),st=take!==w;
-      if(obj==='baron'){g.ba[take]++;if(!g.firstBaron)g.firstBaron=take;buff.baron[take]=t+3;bT=t+6+Math.floor(Math.random()*3);swing(take,1500);ev(t,take,'take',`Baron Nashor to ${TN(take)}${st?' — STOLEN!':''}`,{obj:'Baron',stolen:st})}
-      else if(obj==='elder'){g.el[take]++;if(!g.firstElder)g.firstElder=take;buff.elder[take]=t+2.5;eT=t+6;swing(take,800);ev(t,take,'take',`Elder Dragon to ${TN(take)}${st?' — STOLEN!':''}`,{obj:'Elder',stolen:st})}
-      else{g.dr[take]++;dT=t+5;swing(take,300);ev(t,take,'take',`Dragon to ${TN(take)} (${g.dr[take]})${st?' — STOLEN!':''}`,{obj:'Dragon',stolen:st});
-        if(g.dr[take]>=4){soul=take;g.soul=take;eT=t+6;ev(t,take,'soul',`${TN(take)} claim Dragon Soul — Elder spawns in 6 minutes`)}}
+      const take=R()<(obj==='dragon'?0.95:obj==='elder'?T.elderSecure:0.88)?w:other(w),st=take!==w;takeObj(obj,take,t,st);
     }
     if(push(t,w,res.kw,res.kl)){winner=w;t+=1;ev(t,w,'nexus',`${TN(w)} push through and destroy the Nexus`)}
   }
+  function takeObj(obj,take,t,st){
+      if(obj==='baron'){g.ba[take]++;if(!g.firstBaron)g.firstBaron=take;buff.baron[take]=t+3;bT=t+6+Math.floor(R()*3);swing(take,1500);ev(t,take,'take',`Baron Nashor to ${TN(take)}${st?' — STOLEN!':''}`,{obj:'Baron',stolen:st})}
+      else if(obj==='elder'){g.el[take]++;if(!g.firstElder)g.firstElder=take;buff.elder[take]=t+2.5;eT=t+6;swing(take,800);ev(t,take,'take',`Elder Dragon to ${TN(take)}${st?' — STOLEN!':''}`,{obj:'Elder',stolen:st})}
+      else{g.dr[take]++;dT=t+5;swing(take,300);ev(t,take,'take',`Dragon to ${TN(take)} (${g.dr[take]})${st?' — STOLEN!':''}`,{obj:'Dragon',stolen:st});
+        if(g.dr[take]>=4){soul=take;g.soul=take;eT=t+6;ev(t,take,'soul',`${TN(take)} claim Dragon Soul — Elder spawns in 6 minutes`)}}
+  }
+  if(g.pending){g.winner=null;g.time=t;return g}
   if(!winner){winner=g.gold>=0?'blue':'red';ev(t,winner,'nexus',`${TN(winner)} close it out and destroy the Nexus`)}
   g.winner=winner;g.time=t;return g;
 }
 function winChance(bp,rp,n){let w=0;for(let i=0;i<n;i++)if(simGame(bp,rp,true).winner==='blue')w++;return w/n}
 
 /* ================= sound (Web Audio, generated — no files) ================= */
-let SOUND=true,SPEED=1,AUTO=false,SKIP=false;
+let SOUND=true,SPEED=1,AUTO=false,SKIP=false,TIMED=true,CALLS=true,ART=true,FMT=1;
 let AC=null,master=null,NB=null;
 function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();master=AC.createGain();master.gain.value=0.5;master.connect(AC.destination)}if(AC.state==='suspended')AC.resume();return AC}
 function tone(f,dur,o={}){if(!SOUND||SKIP)return;const c=ac();if(!c)return;const{type='sine',vol=.3,to=null,delay=0}=o;const t0=c.currentTime+delay;
@@ -488,7 +543,7 @@ function buildBoard(){
 }
 function placeCard(cid,side,role){const c=CH[cid];const tag=role===c.role?'':role===c.flex?' · FLEX':' · OFF';
   const e=mk('div','card '+side,`<div class="pt" style="background:${tileBg(c)}">${c.ini}</div><div class="nm">${c.name}</div><div class="rl ${side}">${LN[role].toUpperCase()}${tag}</div>`,cardsL);
-  e.id=`card-${side}-${role}`;e.dataset.side=side;e.dataset.role=role;e.style.left=(COLX(role)-56)+'px';e.style.top=HOME[side]+'px';return e}
+  e.id=`card-${side}-${role}`;e.dataset.side=side;e.dataset.role=role;e.onmouseenter=()=>showTip(cid,e);e.onmouseleave=hideTip;e.style.left=(COLX(role)-56)+'px';e.style.top=HOME[side]+'px';return e}
 function setWin(p,title,labels){$('#wb-title').textContent=title;$('#wb-red').style.height=((1-p)*100)+'%';
   $('#wb-rv').textContent=labels?labels[0]:Math.round((1-p)*100)+'%';$('#wb-bv').textContent=labels?labels[1]:Math.round(p*100)+'%'}
 function setSyn(){['blue','red'].forEach(s=>{const v=teamSyn(G.picks[s]),t=(v>0?'+':'')+v;$('#d-syn-'+s).textContent=t;$('#syn-'+s).textContent=t})}
@@ -502,26 +557,44 @@ function curTeam(){return ORDER[G.step]==='B'?'blue':'red'}
 function roleFor(team,cid){const c=CH[cid],p=G.picks[team];if(p[c.role]==null)return c.role;if(c.flex&&p[c.flex]==null)return c.flex;return null}
 const firstOpen=team=>ROLES.find(r=>G.picks[team][r]==null);
 /* the champions on offer this draft: 100 of the 173 (at least 12 per main role), all of them without clash-cards.js */
-function makePool(){
-  const all=CH.map(c=>c.id);if(!CC||CH.length<=CC.pool)return all;
+function makePool(n,per){
+  const all=CH.map(c=>c.id);n=n||(CC?CC.pool:all.length);per=per||12;if(!CC||CH.length<=n)return all;
   for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}
-  const out=[];ROLES.forEach(r=>all.filter(i=>CH[i].role===r).slice(0,12).forEach(i=>out.push(i)));
-  for(const i of all){if(out.length>=CC.pool)break;if(!out.includes(i))out.push(i)}return out;
+  const out=[];ROLES.forEach(r=>all.filter(i=>CH[i].role===r).slice(0,per).forEach(i=>out.push(i)));
+  for(const i of all){if(out.length>=n)break;if(!out.includes(i))out.push(i)}return out;
 }
+/* series (Luke, 17 Nov): Bo1, Bo3 or Bo5, always Fearless. Every champion picked in an earlier game of the series is locked
+   (hidden) for both teams. The pool is drawn once per series: 100 + 10 per extra game, at least 12 + 2 per extra game per role.
+   The loser of a game takes Blue in the next. */
+let SERIES=null,PREVIEW=false;
+/* Arena (fmt 8, Luke 17 Nov): one Fearless run against the AI until you win 8 games or lose 3. 150 of the 173 champions, drawn
+   fresh every run (at least 24 per main role), so up to 10 games x 10 picks fit. */
+const ARENA={wins:8,losses:3,pool:150,per:24};
+const fmtName=f=>f===8?'Arena run':'Bo'+f;
+const newSeries=f=>{f=CC?f:1;const ar=f===8;return {fmt:f,you:0,ai:0,n:1,fearless:[],pool:ar?makePool(Math.min(CH.length,ARENA.pool),ARENA.per):makePool(Math.min(CH.length,(CC?CC.pool:CH.length)+10*(f-1)),12+2*(f-1)),done:false,lastLoser:null}};
+const seriesDone=S=>S.fmt===8?(S.you>=ARENA.wins||S.ai>=ARENA.losses):S.fmt===1?true:(S.you>=Math.ceil(S.fmt/2)||S.ai>=Math.ceil(S.fmt/2));
+const pickArt=pool=>{const a=pool.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,10)};
 const inPool=()=>G.pool.map(i=>CH[i]);
 const noneFit=team=>!inPool().some(c=>!G.taken.has(c.id)&&roleFor(team,c.id)!=null);
 function eligible(team,kind,cid,nf){if(G.taken.has(cid))return false;if(kind==='ban')return true;return nf||roleFor(team,cid)!=null}
 
-function newGame(){
-  gameId++;if(G)stopTimer();document.getAnimations().forEach(a=>a.cancel());
-  G={id:gameId,phase:'side',player:'blue',step:0,bans:{blue:[],red:[]},picks:{blue:{},red:{}},taken:new Set(),busy:false,timer:null,pre:.5,sim:null,drafting:false,pool:makePool()};
+function newGame(cont){
+  gameId++;if(G)stopTimer();document.getAnimations().forEach(a=>a.cancel());hideTip();
+  if(!cont||!SERIES||SERIES.done)SERIES=newSeries(FMT);
+  G={id:gameId,phase:'side',player:'blue',step:0,bans:{blue:[],red:[]},picks:{blue:{},red:{}},taken:new Set(SERIES.fearless),busy:false,timer:null,pre:.5,sim:null,drafting:false,pool:SERIES.pool.slice(),hist:[]};
+  G.art=pickArt(G.pool);
   SKIP=false;cardsL.innerHTML='';fx.innerHTML='';buildBoard();setWin(.5,'WIN %');applySnap(zeroSnap);setWin(.5,'WIN %');
-  ['#draft','#ready','#hud','#result'].forEach(hide);show('#side');$('#side').style.opacity='';
+  ['#draft','#ready','#call','#hud','#result'].forEach(hide);show('#side');$('#side').style.opacity='';
   $('#s-msg').textContent='Flip the coin. The winner chooses a side.';
   $('#s-btns').innerHTML='<button class="bigb bgold" id="flip">Flip coin</button>';$('#flip').onclick=flip;
+  document.querySelectorAll('#s-fmt button').forEach(b=>b.classList.toggle('on',+b.dataset.f===SERIES.fmt));
+  $('#s-fmt').classList.toggle('hidden',!CC||SERIES.n>1);
+  if(SERIES.n>1){const you=SERIES.lastLoser==='you'?'blue':'red';
+    $('#s-msg').innerHTML=`${SERIES.fmt===8?`Arena game ${SERIES.n} · ${SERIES.you} wins, ${SERIES.ai} losses (8 wins to win the run, 3 losses ends it)`:`Game ${SERIES.n} of a Bo${SERIES.fmt} · series ${SERIES.you}–${SERIES.ai} (you–AI)`} · Fearless: ${SERIES.fearless.length} champions locked.<br>${SERIES.lastLoser==='you'?'You lost the last game, so you take Blue.':'The AI lost the last game, so it takes Blue. You play Red.'}`;
+    $('#s-btns').innerHTML=`<button class="bigb bgold" id="go">Start game ${SERIES.n}</button>`;$('#go').onclick=()=>chooseSide(you)}
   $('#t-skip').disabled=true;renderRecord();persist();
 }
-function fillBanSlot(team,k,cid){const c=CH[cid],slot=$(`#ban-${team}-${k}`);slot.innerHTML=`<div class="mini" style="background:${tileBg(c)}">${c.ini}</div>`;slot.classList.add('filled');return slot}
+function fillBanSlot(team,k,cid){const c=CH[cid],slot=$(`#ban-${team}-${k}`);slot.innerHTML=`<div class="mini" style="background:${tileBg(c)}">${c.ini}</div>`;slot.classList.add('filled');slot.onmouseenter=()=>showTip(cid,slot);slot.onmouseleave=hideTip;return slot}
 
 /* ---------- side select ---------- */
 async function flip(){
@@ -551,7 +624,8 @@ function buildGrid(){
   inPool().slice().sort((a,b)=>ROLES.indexOf(a.role)-ROLES.indexOf(b.role)||a.ini.localeCompare(b.ini,undefined,{numeric:true})).forEach(c=>{const t=mk('div','tile',`<span class="rr">${AB[c.role]}${c.flex?'/'+AB[c.flex]:''}</span>${c.ini}<small>${c.name}</small>`,gr);
     t.id='tile-'+c.id;t.style.background=tileBg(c);t.onmouseenter=()=>info(c.id);t.onclick=()=>playerChoose(c.id)});
   const tr=$('#d-tracker');tr.innerHTML='';
-  [[0,6],[6,12],[12,16],[16,20]].forEach(([a,b])=>{const grp=mk('div','tgrp',null,tr);for(let i=a;i<b;i++){mk('div',`pill ${ORDER[i]==='B'?'blue':'red'} ${KIND(i)}`,ORDER[i]+(i+1),grp).id='pill-'+i}});
+  [[0,6],[6,12],[12,16],[16,20]].forEach(([a,b])=>{const grp=mk('div','tgrp',null,tr);for(let i=a;i<b;i++){const h=G.hist&&G.hist[i],pl=mk('div',`pill ${ORDER[i]==='B'?'blue':'red'} ${KIND(i)}${h!=null?' has':''}`,h!=null?CH[h].ini:ORDER[i]+(i+1),grp);pl.id='pill-'+i;
+    pl.onmouseenter=()=>{const x=G.hist&&G.hist[i];if(x!=null)info(x)}}});
 }
 function updateTracker(){for(let i=0;i<20;i++){const p=$('#pill-'+i);p.classList.toggle('cur',i===G.step);p.classList.toggle('fut',i>G.step)}}
 function refreshTiles(){
@@ -561,6 +635,7 @@ function refreshTiles(){
   inPool().forEach(c=>{const t=$('#tile-'+c.id);
     let cls='tile';if(G.bans.blue.includes(c.id)||G.bans.red.includes(c.id))cls+=' banned';if(pb.includes(c.id))cls+=' pk-blue';if(pr.includes(c.id))cls+=' pk-red';
     if(!G.taken.has(c.id)&&!done)cls+=you?(eligible(team,kind,c.id,nf)?' ok':' no'):' wait';
+    if(G.taken.has(c.id)||(you&&!done&&!eligible(team,kind,c.id,nf)))cls+=' gone';
     t.className=cls});
 }
 function startDraft(){
@@ -575,8 +650,8 @@ function nextTurn(){
   $('#d-phase').textContent=PHASE(G.step);
   const turn=$('#d-turn');turn.className='turn '+team;turn.textContent=`${you?'YOU':'AI'} (${team.toUpperCase()}) TO ${kind.toUpperCase()} · STEP ${G.step+1}`;
   if(you&&!AUTO){
-    $('#d-hint').textContent=kind==='ban'?'Click a champion to ban it.':'Click a champion to pick it. It goes to its main lane (or its flex lane if that one is taken).';
-    startTimer(30);
+    $('#d-hint').textContent=(kind==='ban'?'Click a champion to ban it.':'Click a champion to pick it. It goes to its main lane (or its flex lane if that one is taken).')+(TIMED?'':' Practice: no timer.');
+    if(TIMED)startTimer(30);else{stopTimer();$('#d-time').textContent='∞';$('#d-tbar').style.width='100%'}
   }else{
     stopTimer();$('#d-time').textContent='—';$('#d-tbar').style.width='0%';
     $('#d-hint').textContent=you?'Auto-draft is on: the AI is drafting for you.':'The AI is thinking…';
@@ -591,16 +666,24 @@ function startTimer(sec){
     if(left<=0){stopTimer();if(G.id===id&&G.step===step&&!G.busy)doAction(aiChoose(curTeam(),KIND(G.step)))}},100);
 }
 function stopTimer(){if(G&&G.timer){clearInterval(G.timer);G.timer=null}}
+/* Draft AI (17 Nov): a card's value = its power in the role it would play
+   + the change in the team's synergy as the sim counts it (pairs, style combos, region sets, with diminishing returns)
+   + its lane matchup against the enemy already in that lane (as the sim's lane duel weighs it).
+   One synergy point ≈ 2.1 power and one matchup point ≈ 0.8 power, from how teamStr and the lane duel use them.
+   Bans: the card's value to the enemy, plus how badly it would beat our laner in that role. */
+const effSyn=p=>CC?SYN_CAP*Math.tanh(teamSyn(p)/SYN_CAP):teamSyn(p);
+function synGain(team,cid,role){const p=G.picks[team];return effSyn({...p,[role]:cid})-effSyn(p)}
 function aiChoose(team,kind){
   const enemy=other(team),avail=inPool().filter(c=>!G.taken.has(c.id));let best=null,bs=-1e9;
   if(kind==='ban'){
-    avail.forEach(c=>{const r=roleFor(enemy,c.id);if(r==null)return;let s=power(c.id,r)+Math.random()*8;Object.values(G.picks[enemy]).forEach(o=>s+=syn(o,c.id)*2);if(s>bs){bs=s;best=c.id}});
+    avail.forEach(c=>{const r=roleFor(enemy,c.id);if(r==null)return;let s=power(c.id,r)+Math.random()*8+synGain(enemy,c.id,r)*2.1;
+      const mine=G.picks[team][r];if(mine!=null)s+=(matchup(c.id,mine)-50)*0.8;if(s>bs){bs=s;best=c.id}});
     return best!=null?best:avail[0].id;
   }
   const nf=noneFit(team);
   avail.forEach(c=>{let r=roleFor(team,c.id);if(r==null){if(!nf)return;r=firstOpen(team)}
-    let s=power(c.id,r)+Math.random()*6;Object.values(G.picks[team]).forEach(o=>s+=syn(o,c.id)*2);
-    const e=G.picks[enemy][r];if(e!=null)s+=(matchup(c.id,e)-50)*0.4;if(c.flex&&G.step<12)s+=1.5;if(s>bs){bs=s;best=c.id}});
+    let s=power(c.id,r)+Math.random()*6+synGain(team,c.id,r)*2.1;
+    const e=G.picks[enemy][r];if(e!=null)s+=(matchup(c.id,e)-50)*0.8;if(c.flex&&G.step<12)s+=1.5;if(s>bs){bs=s;best=c.id}});
   return best;
 }
 function playerChoose(cid){
@@ -612,32 +695,50 @@ function playerChoose(cid){
 async function doAction(cid){
   if(G.busy||cid==null)return;G.busy=true;stopTimer();
   const id=G.id,team=curTeam(),kind=KIND(G.step);G.taken.add(cid);
-  if(kind==='ban'){const k=G.bans[team].length;G.bans[team].push(cid);refreshTiles();await animBan(cid,team,k)}
-  else{let role=roleFor(team,cid);if(role==null)role=firstOpen(team);G.picks[team][role]=cid;refreshTiles();await animPick(cid,team,role);
+  G.hist[G.step]=cid;const pl=$('#pill-'+G.step);if(pl){pl.textContent=CH[cid].ini;pl.classList.add('has')}
+  if(kind==='ban'){const k=G.bans[team].length;G.bans[team].push(cid);await animBan(cid,team,k);refreshTiles()}
+  else{let role=roleFor(team,cid);if(role==null)role=firstOpen(team);G.picks[team][role]=cid;await animPick(cid,team,role);refreshTiles();
     if(G.id!==id)return;setSyn();const p=winChance(G.picks.blue,G.picks.red,300);G.pre=p;setDraftWin(p);setWin(p,'WIN %')}
   if(G.id!==id)return;G.step++;G.busy=false;persist();nextTurn();
 }
 function setDraftWin(p){$('#d-wb').style.width=(p*100)+'%';$('#d-wbb').textContent=`Blue ${Math.round(p*100)}%`;$('#d-wbr').textContent=`Red ${100-Math.round(p*100)}%`}
-function info(cid){
-  if(!G||!G.drafting)return;const c=CH[cid],me=G.player,enemy=other(me),r=roleFor(me,cid)||c.role;
-  const bar=k=>{const v=statOf(cid,r,k);return `<div class="sb"><span>${{lane:'Lane',tf:'Teamfight',late:'Late game',obj:'Objectives'}[k]}</span><i><b style="width:${Math.max(0,(v-45)/50*100)}%"></b></i><em>${gradeOf(v)}</em></div>`};
-  const sg=v=>(v>0?'+':'')+v, tone=v=>v>=3?'sp3':v>=1?'sp1':v<=-2?'sm2':v<=-1?'sm1':'s0';
-  const mine=ROLES.filter(x=>G.picks[me][x]!=null&&G.picks[me][x]!==cid).map(x=>[x,G.picks[me][x]]),ids=mine.map(m=>m[1]);
-  const dst=CC?styleTeam([...ids,cid])-styleTeam(ids):0;
-  const rs=CC?regionSets([...ids,cid]).filter(x=>!regionSets(ids).includes(x)):[];
-  const e=G.picks[enemy][r];
-  /* synergy panel: every pick of yours (grey when none), then the team style change and any region set this card completes */
-  /* only synergies that exist (Luke, 17 Nov); rivals = Riot's related champions on the enemy team (flavour, shown, no score) */
+/* the synergy pills for a card on one team ("own"), against the other team ("opp"): only synergies that exist, coloured by value
+   (crimson -2 or worse, purple -1, green +1/+2, yellow +3 or better); rivals = Riot's related champions on the other team (flavour) */
+function synBlock(cid,own,opp,label){
+  const sg=v=>(v>0?'+':'')+v,tone=v=>v>=3?'sp3':v>=1?'sp1':v<=-2?'sm2':v<=-1?'sm1':'s0';
+  const mine=ROLES.filter(x=>G.picks[own][x]!=null&&G.picks[own][x]!==cid).map(x=>[x,G.picks[own][x]]),ids=mine.map(m=>m[1]);
   const rows=mine.map(([rr,o])=>{const s=synParts(o,cid),d=[];if(s.p)d.push('pair '+sg(s.p));if(s.f)d.push('bond +1');return [s.t,`${AB[rr]} ${CH[o].ini}`,d.join(' · ')]}).filter(x=>x[0]);
-  const rivals=CC?ROLES.filter(x=>G.picks[enemy][x]!=null&&BOND.has(Math.min(cid,G.picks[enemy][x])+'|'+Math.max(cid,G.picks[enemy][x]))).map(x=>CH[G.picks[enemy][x]].ini):[];
-  if(CC&&dst)rows.push([dst,'Team style','combos']);
-  rs.forEach(x=>rows.push([CC.region_set.bonus,`${x} set`,'region']));
-  const pills=rows.map(([v,l,d])=>`<div class="sc ${tone(v)}"><span>${l} <small>${d}</small></span><b>${sg(v)}</b></div>`).concat(rivals.map(x=>`<div class="sc s0"><span>Rival ${x} <small>enemy · flavour</small></span><b>vs</b></div>`));
-  const panel=`<div class="synp"><div class="lbl">SYNERGY · RIVALS</div>${pills.length?pills.join(''):'<div class="sc s0"><span>No synergy or rivals</span><b>0</b></div>'}</div>`;
-  const meta=CC?`<div class="muted sm meta1" title="${c.tags.join(', ')}">${c.cls}${c.sub&&c.sub!==c.cls?' · '+c.sub.replace(/\//g,', '):''} · ${c.dmg==='Physical+Magic'?'Mixed':c.dmg} · ${c.range} · ${c.region||'No region'}</div>`:'';
-  $('#d-info').innerHTML=`<div class="ih"><div class="mini" style="background:${tileBg(c)}">${c.ini}</div><div><b>${CC?c.ini+' · '+c.name:c.name}</b><div class="muted">${LN[c.role]}${c.flex?' / '+LN[c.flex]+' (flex)':''}${r!==c.role?' · as '+LN[r]:''}${e!=null?` · vs ${CH[e].ini} ${matchup(cid,e)}%`:''}</div></div></div>`+
-    meta+(CC?`<div class="gstrip">${[['lane','LANE'],['tf','FIGHT'],['late','LATE'],['obj','OBJ']].map(([k,l])=>{const g=gradeOf(statOf(cid,r,k));return `<div><small>${l}</small><b class="g${g[0]}">${g}</b></div>`}).join('')}</div>`:['lane','tf','late','obj'].map(bar).join(''))+panel;
+  if(CC){const ds=styleTeam([...ids,cid])-styleTeam(ids);if(ds)rows.push([ds,'Team style','combos']);
+    regionSets([...ids,cid]).filter(x=>!regionSets(ids).includes(x)).forEach(x=>rows.push([CC.region_set.bonus,`${x} set`,'region']))}
+  const riv=CC?ROLES.map(x=>G.picks[opp][x]).filter(o=>o!=null&&o!==cid&&BOND.has(Math.min(cid,o)+'|'+Math.max(cid,o))).map(o=>CH[o].ini):[];
+  const pills=rows.map(([v,l,d])=>`<div class="sc ${tone(v)}"><span>${l} <small>${d}</small></span><b>${sg(v)}</b></div>`)
+    .concat(riv.map(x=>`<div class="sc s0"><span>Rival ${x} <small>${opp===G.player?'yours':'enemy'} · flavour</small></span><b>vs</b></div>`));
+  return `<div class="synp"><div class="lbl">${label}</div>${pills.length?pills.join(''):'<div class="sc s0"><span>No synergy or rivals</span><b>0</b></div>'}</div>`;
 }
+function cardHead(cid,r,e){const c=CH[cid];
+  const meta=CC?`<div class="muted sm meta1" title="${c.tags.join(', ')}">${c.cls}${c.sub&&c.sub!==c.cls?' · '+c.sub.replace(/\//g,', '):''} · ${c.dmg==='Physical+Magic'?'Mixed':c.dmg} · ${c.range} · ${c.region||'No region'}</div>`:'';
+  const bar=k=>{const v=statOf(cid,r,k);return `<div class="sb"><span>${{lane:'Lane',tf:'Teamfight',late:'Late game',obj:'Objectives'}[k]}</span><i><b style="width:${Math.max(0,(v-45)/50*100)}%"></b></i><em>${gradeOf(v)}</em></div>`};
+  return `<div class="ih"><div class="mini" style="background:${tileBg(c)}">${c.ini}</div><div><b>${CC?c.ini+' · '+c.name:c.name}</b><div class="muted">${LN[c.role]}${c.flex?' / '+LN[c.flex]+' (flex)':''}${r!==c.role?' · as '+LN[r]:''}${e!=null?` · vs ${CH[e].ini} ${matchup(cid,e)}%`:''}</div></div></div>`+
+    meta+(CC?`<div class="gstrip">${[['lane','LANE'],['tf','FIGHT'],['late','LATE'],['obj','OBJ']].map(([k,l])=>{const g=gradeOf(statOf(cid,r,k));return `<div><small>${l}</small><b class="g${g[0]}">${g}</b></div>`}).join('')}</div>`:['lane','tf','late','obj'].map(bar).join(''));
+}
+const roleOn=(side,cid)=>ROLES.find(x=>G.picks[side][x]===cid);
+function info(cid){
+  if(!G||!G.drafting)return;const c=CH[cid],me=G.player,enemy=other(me);
+  const owner=['blue','red'].find(s=>roleOn(s,cid)!=null);   /* a champion already picked (hovered on the tracker) shows its real team */
+  if(owner){const r=roleOn(owner,cid),e=G.picks[other(owner)][r];
+    $('#d-info').innerHTML=cardHead(cid,r,e)+synBlock(cid,owner,other(owner),`${owner===me?'YOUR':'ENEMY'} TEAM · PICKED`);return}
+  const r=roleFor(me,cid)||c.role,e=G.picks[enemy][r];
+  $('#d-info').innerHTML=cardHead(cid,r,e)+synBlock(cid,me,enemy,'YOUR TEAM · SYNERGY · RIVALS')+synBlock(cid,enemy,me,'ENEMY TEAM · IF THEY TAKE IT');
+}
+/* hover card for picks and bans on the board (Luke, 17 Nov: picked champions can be hovered when the grid hides them) */
+function showTip(cid,el){
+  if(!G)return;const side=['blue','red'].find(s=>roleOn(s,cid)!=null),bannedBy=['blue','red'].find(s=>G.bans[s].includes(cid));
+  const c=CH[cid],r=side?roleOn(side,cid):c.role,e=side?G.picks[other(side)][r]:null;
+  $('#tip').innerHTML=cardHead(cid,r,e)+(side?synBlock(cid,side,other(side),`${side===G.player?'YOUR':'ENEMY'} TEAM · SYNERGY · RIVALS`):`<div class="muted sm">Banned by ${bannedBy===G.player?'you':'the AI'} (${bannedBy})</div>`);
+  const a=rectIn(el),tw=240,x=a.x+a.w+8+tw>1000?a.x-tw-8:a.x+a.w+8,tip=$('#tip');show('#tip');
+  const h=tip.offsetHeight,y=Math.max(4,Math.min(760-h-4,a.y+a.h/2-h/2));tip.style.left=Math.max(4,x)+'px';tip.style.top=y+'px';
+}
+function hideTip(){const t=$('#tip');if(t)t.classList.add('hidden')}
 async function animBan(cid,team,k){
   const c=CH[cid],a=rectIn($('#tile-'+cid)),slot=$(`#ban-${team}-${k}`),b=rectIn(slot);
   const cl=mk('div','tile fly',`${c.ini}<small>${c.name}</small>`,fx);
@@ -680,18 +781,41 @@ function setCap(e){$('#clock').textContent=`${e.t}:${pad((e.t*37+11)%60)}`;const
 async function startClash(){
   hide('#ready');hide('#result');SKIP=false;$('#t-skip').disabled=false;const id=G.id;G.phase='clash';
   clean(allCards());allCards().forEach(c=>c.classList.remove('dead'));fx.innerHTML='';
-  applySnap(zeroSnap);G.sim=simGame(G.picks.blue,G.picks.red,false);
+  applySnap(zeroSnap);
+  /* seeded, so an objective call can re-run the same game from the start with the answer (earlier events are identical) */
+  G.seed=(Math.random()*4294967296)>>>0;G.calls={};
+  const run=()=>simGame(G.picks.blue,G.picks.red,false,{rnd:mulberry32(G.seed),side:G.player,choose:CALLS?(o,n)=>G.calls[n]||'ask':null});
+  G.sim=run();
   show('#hud');setCap({t:0,text:'Cards ready…',side:''});
   SFX.whoosh();
   await Promise.all(allCards().map((c,i)=>A(c,[{transform:'translateY(0)',filter:'brightness(1)'},{transform:`translateY(${-fwd(c.dataset.side)*16}px)`,filter:'brightness(1.6)'},{transform:'translateY(0)',filter:'brightness(1)'}],520,{delay:i*60})));
   if(G.id!==id)return;
   await bigText('FIGHT!');
-  for(const e of G.sim.ev){if(G.id!==id)return;setCap(e);await playEvent(e);applySnap(e.s);await sleep(240)}
+  let i=0;
+  for(;;){
+    while(i<G.sim.ev.length){const e=G.sim.ev[i++];if(G.id!==id)return;setCap(e);await playEvent(e);applySnap(e.s);await sleep(240)}
+    if(!G.sim.pending)break;
+    const pd=G.sim.pending,c=await askCall(pd);if(G.id!==id)return;
+    G.calls[pd.idx]=c;G.sim=run();
+  }
   if(G.id!==id)return;finish();
+}
+function askCall(p){
+  return new Promise(res=>{
+    if(SKIP||!CALLS){res('fight');return}
+    const NM={dragon:'DRAGON',baron:'BARON NASHOR',elder:'ELDER DRAGON'},gk=Math.abs(p.gold/1000).toFixed(1)+'k';
+    $('#c-title').textContent=`${NM[p.obj]} IS UP`;
+    $('#c-sub').textContent=`${p.t} min · your team is ${Math.abs(p.gold)<100?'even':p.gold>0?gk+' gold ahead':gk+' gold behind'}`;
+    $('#c-fs').textContent=`Your fight odds about ${Math.round(p.p*100)}%`;
+    $('#c-gs').textContent=`They take it free; you regroup (+${p.rg.toFixed(1)} next fight)`;
+    show('#call');A($('#call'),[{opacity:0,transform:'translate(-50%,-50%) scale(.8)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],250);SFX.nudge();
+    const done=c=>{hide('#call');SFX.click();res(c)};$('#c-fight').onclick=()=>done('fight');$('#c-give').onclick=()=>done('give');
+  });
 }
 async function playEvent(e){
   const w=e.side;
   switch(e.type){
+    case 'give':await sleep(500);break;
     case 'lane':{const roles=e.lane==='BOT'?['BOT','SUP']:[e.lane];if(e.kind==='solo')await clashAnim(roles,w,false);else await nudge(roles,w);break}
     case 'gank':await gank(w,e.lane);break;
     case 'obj':case 'take':await token(e.obj,w,e.stolen);break;
@@ -756,6 +880,22 @@ async function finish(){
   $('#r-you').innerHTML=you?'<b>You win!</b>':'<b>You lose.</b>';
   const row=(n,k)=>`<div>${n}</div><div class="b">${g[k].blue}</div><div class="r">${g[k].red}</div>`;
   $('#r-stats').innerHTML=`<div></div><div class="b">Blue</div><div class="r">Red</div>${row('Kills','k')}${row('Towers','tw')}${row('Dragons','dr')}${row('Barons','ba')}${row('Elders','el')}`;
+  /* lanes: each lane's two cards, how laning went in this game (the sim's lane events), the lane matchup */
+  const lane=L=>{const x=g.ev.find(e=>e.type==='lane'&&e.lane===L);return x?`<span class="${x.side==='blue'?'b':'r'}">${TN(x.side)} ${x.kind==='solo'?'kill':'CS lead'}</span>`:'<small>even</small>'};
+  const gk=g.ev.find(e=>e.type==='gank'),cell=x=>x==null?'—':`${CH[x].ini} <small>${CH[x].name} · ${gradeOf(statOf(x,ROLES.find(r=>G.picks.blue[r]===x||G.picks.red[r]===x),'lane'))}</small>`;
+  const lr=r=>{const b=G.picks.blue[r],rd=G.picks.red[r];const res=r==='JGL'?(gk?`<span class="${gk.side==='blue'?'b':'r'}">${TN(gk.side)} gank ${LN[gk.lane].toLowerCase()}</span>`:'<small>no gank</small>'):r==='SUP'?'<small>with bot</small>':lane(r);
+    return `<tr><td>${LN[r]}</td><td class="b">${cell(b)}</td><td class="r">${cell(rd)}</td><td>${res}</td><td>${b!=null&&rd!=null?matchup(b,rd)+'%':'—'}</td></tr>`};
+  $('#r-lanes').innerHTML=`<table><thead><tr><th>LANE</th><th>BLUE <small>(lane grade)</small></th><th>RED</th><th>LANING</th><th>BLUE MATCHUP</th></tr></thead><tbody>${ROLES.map(lr).join('')}</tbody></table>`;
+  if(SERIES){if(you)SERIES.you++;else SERIES.ai++;
+    Object.values(G.picks.blue).concat(Object.values(G.picks.red)).forEach(x=>{if(!SERIES.fearless.includes(x))SERIES.fearless.push(x)});
+    SERIES.lastLoser=you?'ai':'you';SERIES.n++;SERIES.done=seriesDone(SERIES);
+    if(SERIES.done&&SERIES.fmt===8&&!PREVIEW){SAVE.arena=(SAVE.arena||[]).concat({at:new Date().toISOString(),w:SERIES.you,l:SERIES.ai}).slice(-30)}}
+  const ser=SERIES&&SERIES.fmt>1;
+  $('#r-series').innerHTML=!ser?'':SERIES.fmt===8?(SERIES.done?(SERIES.you>=ARENA.wins?`ARENA VICTORY! ${SERIES.you} wins, ${SERIES.ai} losses`:`Arena run over: ${SERIES.you} wins, ${SERIES.ai} losses`)
+      :`Arena ${SERIES.you}–${SERIES.ai} · ${ARENA.wins-SERIES.you} more wins needed, ${ARENA.losses-SERIES.ai} loss${ARENA.losses-SERIES.ai>1?'es':''} left · ${SERIES.fearless.length} of ${SERIES.pool.length} champions locked`)
+    :SERIES.done?`${SERIES.you>SERIES.ai?'You win':'You lose'} the Bo${SERIES.fmt} ${SERIES.you}–${SERIES.ai}`:`Series ${SERIES.you}–${SERIES.ai} (you–AI) · Bo${SERIES.fmt} · Fearless: ${SERIES.fearless.length} champions locked`;
+  $('#r-rematch').classList.toggle('hidden',ser);
+  $('#r-new').textContent=ser&&!SERIES.done?`Next game (game ${SERIES.n})`:ser?(SERIES.fmt===8?'New Arena run':'New series'):'New draft';
   const pw=w==='blue'?G.pre:1-G.pre;
   $('#r-pre').innerHTML=`Game time ${g.time}:${pad((g.time*37+11)%60)} · ${w.toUpperCase()}'s pre-game win chance was <b>${Math.round(pw*100)}%</b>${pw<.5?' — <span class="upset">UPSET!</span>':''}`;
   SAVE.history.push({at:new Date().toISOString(),player:G.player,winner:w,pre:Math.round(pw*1000)/1000,time:g.time});
@@ -773,20 +913,27 @@ function sim100(){
 $('#clashbtn').onclick=()=>{SFX.click();startClash()};
 $('#r-rematch').onclick=()=>{SFX.click();startClash()};
 $('#r-sim100').onclick=sim100;
-$('#r-new').onclick=()=>{SFX.click();newGame()};
-$('#t-new').onclick=()=>{SFX.click();newGame()};
+$('#r-new').onclick=()=>{SFX.click();newGame(true)};
+$('#t-new').onclick=()=>{SFX.click();newGame(false)};
+document.querySelectorAll('#s-fmt button').forEach(b=>b.onclick=()=>{if(G&&G.phase!=='side')return;FMT=+b.dataset.f;SFX.click();settingsUI();newGame(false)});
 function settingsUI(){
   $('#t-sound').textContent='Sound: '+(SOUND?'On':'Off');$('#t-sound').classList.toggle('on',SOUND);
   $('#t-speed').textContent=`Speed: ${SPEED}×`;$('#t-speed').classList.toggle('on',SPEED>1);
   $('#t-auto').textContent='Auto-draft: '+(AUTO?'On':'Off');$('#t-auto').classList.toggle('on',AUTO);
+  $('#t-timer').textContent='Timer: '+(TIMED?'On':'Off (practice)');$('#t-timer').classList.toggle('on',!TIMED);
+  $('#t-calls').textContent='Objective calls: '+(CALLS?'On':'Off');$('#t-calls').classList.toggle('on',CALLS);
+  $('#t-art').textContent='Portraits: '+(ART?'On':'Off');$('#t-art').classList.toggle('on',ART);$('#t-art').classList.toggle('hidden',!CC);
 }
 $('#t-sound').onclick=()=>{SOUND=!SOUND;settingsUI();persist();if(SOUND){ac();SFX.click()}};
 $('#t-speed').onclick=()=>{SPEED=SPEED===1?2:SPEED===2?4:1;settingsUI();persist()};
 $('#t-auto').onclick=()=>{AUTO=!AUTO;settingsUI();persist();
   if(G&&G.drafting&&!G.busy&&G.step<20&&curTeam()===G.player)nextTurn()};
-$('#t-skip').onclick=()=>{SKIP=true;$('#t-skip').disabled=true;document.getAnimations().forEach(a=>{try{a.finish()}catch(_){}})};
+$('#t-timer').onclick=()=>{TIMED=!TIMED;settingsUI();persist();if(G&&G.drafting&&!G.busy&&G.step<20&&curTeam()===G.player&&!AUTO)nextTurn()};
+$('#t-calls').onclick=()=>{CALLS=!CALLS;settingsUI();persist()};
+$('#t-art').onclick=()=>{ART=!ART;settingsUI();persist();if(G&&G.drafting)buildGrid(),refreshTiles(),updateTracker();document.querySelectorAll('.card .pt').forEach(pt=>{const cd=pt.parentElement,cid=G.picks[cd.dataset.side][cd.dataset.role];if(cid!=null)pt.style.background=tileBg(CH[cid])})};
+$('#t-skip').onclick=()=>{if(!$('#call').classList.contains('hidden'))$('#c-fight').click();SKIP=true;$('#t-skip').disabled=true;document.getAnimations().forEach(a=>{try{a.finish()}catch(_){}})};
 const peek=$('#peek');
-['pointerdown'].forEach(ev=>peek.addEventListener(ev,()=>$('#draft').classList.add('peek')));
+['pointerdown'].forEach(ev=>peek.addEventListener(ev,e=>{try{peek.setPointerCapture(e.pointerId)}catch(_){}$('#draft').classList.add('peek')}));
 ['pointerup','pointerleave','pointercancel'].forEach(ev=>peek.addEventListener(ev,()=>$('#draft').classList.remove('peek')));
 
 /* ================= autosave =================
@@ -809,8 +956,8 @@ function snapshotGame(){
   return {phase:G.phase==='clash'?'ready':G.phase,player:G.player,step:G.step,bans:{blue:[...G.bans.blue],red:[...G.bans.red]},picks:{blue:{...G.picks.blue},red:{...G.picks.red}},pre:G.pre,pool:[...G.pool]};
 }
 function persist(){
-  if(!BOOTED)return;
-  SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO};SAVE.game=snapshotGame();SAVE.savedAt=new Date().toISOString();
+  if(!BOOTED||PREVIEW)return;
+  SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO,timed:TIMED,calls:CALLS,art:ART,fmt:FMT};SAVE.series=SERIES;SAVE.game=snapshotGame();SAVE.savedAt=new Date().toISOString();
   try{localStorage.setItem(LS_KEY,JSON.stringify(SAVE))}catch(e){}
   if(DIR){clearTimeout(saveTimer);saveTimer=setTimeout(writeFolder,150)}
 }
@@ -827,8 +974,10 @@ const newer=(a,b)=>!!a&&!isEmpty(a)&&(isEmpty(b)||String(a.savedAt||'')>String(b
 function sanitize(d){
   if(!d||typeof d!=='object'||![1,2].includes(d.v))return null;
   const st=d.settings||{};
-  const out={v:2,savedAt:typeof d.savedAt==='string'?d.savedAt.slice(0,40):null,settings:{sound:st.sound!==false,speed:[1,2,4].includes(st.speed)?st.speed:1,auto:st.auto===true},game:null,history:[]};
-  const okId=x=>Number.isInteger(x)&&x>=0&&x<CH.length,g=d.v===2?d.game:null;
+  const out={v:2,savedAt:typeof d.savedAt==='string'?d.savedAt.slice(0,40):null,settings:{sound:st.sound!==false,speed:[1,2,4].includes(st.speed)?st.speed:1,auto:st.auto===true,timed:st.timed!==false,calls:st.calls!==false,art:st.art!==false,fmt:[1,3,5,8].includes(st.fmt)?st.fmt:1},game:null,history:[],series:null,arena:[]};
+  const okId=x=>Number.isInteger(x)&&x>=0&&x<CH.length,g=d.v===2?d.game:null,se=d.v===2?d.series:null;
+  if(se&&typeof se==='object'&&[1,3,5,8].includes(se.fmt)&&Array.isArray(se.pool)&&se.pool.length>=20&&se.pool.every(okId)&&Array.isArray(se.fearless)&&se.fearless.every(okId))
+    out.series={fmt:se.fmt,you:Math.max(0,se.you|0),ai:Math.max(0,se.ai|0),n:Math.max(1,se.n|0),fearless:[...new Set(se.fearless)].filter(x=>se.pool.includes(x)),pool:[...new Set(se.pool)],done:!!se.done,lastLoser:['you','ai'].includes(se.lastLoser)?se.lastLoser:null};
   const pool=g&&Array.isArray(g.pool)&&g.pool.length>=20&&g.pool.length<=CH.length&&g.pool.every(okId)&&new Set(g.pool).size===g.pool.length?g.pool:null;
   if(g&&pool&&typeof g==='object'&&['draft','ready','result'].includes(g.phase)&&['blue','red'].includes(g.player)&&Number.isInteger(g.step)&&g.step>=0&&g.step<=20){
     const bans={blue:[],red:[]},picks={blue:{},red:{}},seen=new Set(),inP=new Set(pool);let ok=true;
@@ -844,17 +993,25 @@ function sanitize(d){
   }
   if(Array.isArray(d.history))out.history=d.history.slice(-50).filter(h=>h&&['blue','red'].includes(h.winner)&&['blue','red'].includes(h.player))
     .map(h=>({at:String(h.at||'').slice(0,40),player:h.player,winner:h.winner,pre:Math.max(0,Math.min(1,+h.pre||0)),time:Math.max(0,Math.min(99,Math.round(+h.time||0)))}));
+  if(Array.isArray(d.arena))out.arena=d.arena.slice(-30).filter(a=>a&&Number.isInteger(a.w)&&Number.isInteger(a.l)).map(a=>({at:String(a.at||'').slice(0,40),w:Math.max(0,Math.min(8,a.w)),l:Math.max(0,Math.min(3,a.l))}));
   return out;
 }
 function renderRecord(){
   const h=SAVE.history,w=h.filter(x=>x.winner===x.player).length,l=h.length-w,up=h.filter(x=>x.winner===x.player&&x.pre<.5).length;
   const txt=h.length?`Your record: ${w}W – ${l}L${up?` · ${up} upset win${up>1?'s':''}`:''}`:'';
   $('#s-record').textContent=txt;$('#r-record').textContent=txt;
+  /* Arena best runs (local leaderboard): most wins, then fewest losses */
+  const ar=(SAVE.arena||[]).slice().sort((a,b)=>b.w-a.w||a.l-b.l).slice(0,3);
+  $('#s-arena').innerHTML=ar.length?'Arena best runs: '+ar.map(a=>`<b>${a.w}–${a.l}</b>${a.w>=ARENA.wins?' ★':''} <small>${a.at.slice(0,10)}</small>`).join(' · '):'';
 }
 function restoreGame(gm){
-  newGame();
+  newGame(true);
   G.player=gm.player;G.step=gm.step;G.bans=gm.bans;G.picks=gm.picks;G.pre=gm.pre;G.pool=gm.pool;
   G.bans.blue.concat(G.bans.red,Object.values(G.picks.blue),Object.values(G.picks.red)).forEach(x=>G.taken.add(x));
+  if(SERIES.n===1&&!SERIES.fearless.length)SERIES.pool=G.pool.slice();
+  /* tracker history from the save: bans in order; picks in role order (the save doesn't keep pick order) */
+  {const nb={blue:0,red:0},pk={blue:ROLES.map(r=>G.picks.blue[r]).filter(x=>x!=null),red:ROLES.map(r=>G.picks.red[r]).filter(x=>x!=null)};
+   for(let i=0;i<G.step;i++){const t=ORDER[i]==='B'?'blue':'red';G.hist[i]=KIND(i)==='ban'?G.bans[t][nb[t]++]:pk[t].shift()}}
   $('#tname-'+G.player).textContent='YOU';$('#tname-'+other(G.player)).textContent='AI';
   ['blue','red'].forEach(s=>{G.bans[s].forEach((cid,k)=>fillBanSlot(s,k,cid));ROLES.forEach(r=>{if(G.picks[s][r]!=null)placeCard(G.picks[s][r],s,r)})});
   setSyn();hide('#side');setWin(G.pre,'WIN %');
@@ -864,8 +1021,8 @@ function restoreGame(gm){
 }
 function applySave(data){
   const d=sanitize(data);if(!d){newGame();return false}
-  SAVE=d;SOUND=d.settings.sound;SPEED=d.settings.speed;AUTO=d.settings.auto;settingsUI();
-  if(d.game)restoreGame(d.game);else newGame();
+  SAVE=d;SOUND=d.settings.sound;SPEED=d.settings.speed;AUTO=d.settings.auto;TIMED=d.settings.timed;CALLS=d.settings.calls;ART=d.settings.art;FMT=d.settings.fmt;SERIES=d.series;settingsUI();
+  if(d.game)restoreGame(d.game);else newGame(true);
   renderRecord();return true;
 }
 function folderStatus(s){
@@ -905,12 +1062,25 @@ async function boot(){
   }else folderStatus('nofs');
   BOOTED=true;
   if(data&&applySave(data)){if(SAVE.game)toast('Resumed your saved game')}
-  else{SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO};newGame()}
+  else{SAVE.settings={sound:SOUND,speed:SPEED,auto:AUTO,timed:TIMED,calls:CALLS,art:ART,fmt:FMT};newGame(false)}
 }
 
+/* Arena preview (Luke, 17 Nov): index.html?arena=W-L opens a run at W wins and L losses. The games already played are drafted by
+   the AI for both sides (so the strongest champions tend to be gone); nothing is saved while previewing. */
+function autoDraft(){
+  const keep=G;G={step:0,bans:{blue:[],red:[]},picks:{blue:{},red:{}},taken:new Set(SERIES.fearless),pool:SERIES.pool.slice(),hist:[]};
+  for(let i=0;i<20;i++){G.step=i;const team=ORDER[i]==='B'?'blue':'red',kind=KIND(i),cid=aiChoose(team,kind);G.taken.add(cid);
+    if(kind==='ban')G.bans[team].push(cid);else{let r=roleFor(team,cid);if(r==null)r=firstOpen(team);G.picks[team][r]=cid}}
+  const out={blue:{...G.picks.blue},red:{...G.picks.red}};G=keep;return out;
+}
+function arenaJump(w,l){
+  PREVIEW=true;FMT=8;SERIES=newSeries(8);SERIES.log=[];
+  for(let i=0;i<w+l;i++){const d=autoDraft();SERIES.log.push(d);Object.values(d.blue).concat(Object.values(d.red)).forEach(x=>SERIES.fearless.push(x))}
+  SERIES.you=w;SERIES.ai=l;SERIES.n=w+l+1;SERIES.lastLoser='ai';newGame(true);toast(`Arena preview: ${w} wins, ${l} losses (not saved)`);
+}
 /* debug hook for testing */
-window.__dc={CH,simGame,winChance,teamStr,matchup,syn,ROLES,get SAVE(){return SAVE},useFolder,boot};
-boot();
+window.__dc={CH,simGame,winChance,teamStr,matchup,syn,ROLES,get SAVE(){return SAVE},get SERIES(){return SERIES},power,statOf,gradeOf,useFolder,boot};
+boot().then(()=>{const m=/[?&]arena=(\d+)-(\d+)/.exec(location.search);if(m&&CC)arenaJump(Math.min(7,+m[1]),Math.min(2,+m[2]))});
 })();
 </script>
 </body>

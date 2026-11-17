@@ -22,6 +22,7 @@ Synergy (the game adds these up for a team; the game's design scale, not fitted)
           the sign is the same before and after 1 Sep (a quick held-out check); +/-1 per combo the team holds, the team total capped at
           +/-2 (measured per team, so applied per team, not per champion pair)
   flavour Riot's related champions (Universe site) +1 "bond"; 3+ champions from one region on a team +2 (the game applies the region set)
+Each card carries its Data Dragon id (dd), used only for the optional portrait art in the game.
 Matchups (3+ games, same role): only the part specific to the pair. Each champion's usual share of games ahead in gold at 15 is already
 in its lane grade, so the matchup is the pair's share pulled toward what the two usual shares predict (k 20), minus that prediction, as
 50 +/- points. (A plain ahead-share ran 22-78% and, with the game's lane duel adding (matchup - 50) x 0.5, counted lane strength twice.)
@@ -113,7 +114,7 @@ with Run("clash_cards", inputs=[DB, UNI, config.OE_CSV]) as run:
     for i, r in D.iterrows():
         offs = [x for x in str(r.off_roles).split("/") if x in GR]; riot = [x for x in str(r.riot_lane_roles).split("/") if x in GR and x != r.meta_role]
         flex = (offs + riot + [None])[0]
-        cards.append({"code": r.code, "cls": r["class"], "cls2": r.class_secondary if isinstance(r.class_secondary, str) else "", "sub": r.subclasses,
+        cards.append({"code": r.code, "dd": r.api_name, "cls": r["class"], "cls2": r.class_secondary if isinstance(r.class_secondary, str) else "", "sub": r.subclasses,
                       "dmg": r.damage_types, "range": r.range_type, "tags": sorted(t.split(":", 1)[1] for t in TG[i] if t.startswith("tag:")),
                       "role": GR[r.meta_role], "flex": GR[flex] if flex else None, "s": {k: int(stats[k][i]) for k in stats},
                       "g": {k: grades[k][i] for k in grades}, "region": pretty(UC[r["name"]]["faction"]), "games": int(games[i])})

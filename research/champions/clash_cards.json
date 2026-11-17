@@ -179,6 +179,7 @@
  "cards": [
   {
    "code": "F33",
+   "dd": "Aatrox",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -207,6 +208,7 @@
   },
   {
    "code": "M19",
+   "dd": "Ahri",
    "cls": "Mage",
    "cls2": "Assassin",
    "sub": "Burst",
@@ -235,6 +237,7 @@
   },
   {
    "code": "A6",
+   "dd": "Akali",
    "cls": "Assassin",
    "cls2": "",
    "sub": "Assassin",
@@ -263,6 +266,7 @@
   },
   {
    "code": "R26",
+   "dd": "Akshan",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman/Assassin",
@@ -291,6 +295,7 @@
   },
   {
    "code": "T1",
+   "dd": "Alistar",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -319,6 +324,7 @@
   },
   {
    "code": "F49",
+   "dd": "Ambessa",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver/Skirmisher",
@@ -347,6 +353,7 @@
   },
   {
    "code": "T5",
+   "dd": "Amumu",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -375,6 +382,7 @@
   },
   {
    "code": "M6",
+   "dd": "Anivia",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Battlemage",
@@ -403,6 +411,7 @@
   },
   {
    "code": "M1",
+   "dd": "Annie",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst",
@@ -431,6 +440,7 @@
   },
   {
    "code": "R24",
+   "dd": "Aphelios",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -459,6 +469,7 @@
   },
   {
    "code": "R1",
+   "dd": "Ashe",
    "cls": "Marksman",
    "cls2": "Support",
    "sub": "Marksman",
@@ -487,6 +498,7 @@
   },
   {
    "code": "M27",
+   "dd": "AurelionSol",
    "cls": "Mage",
    "cls2": "",
    "sub": "Battlemage",
@@ -515,6 +527,7 @@
   },
   {
    "code": "M34",
+   "dd": "Aurora",
    "cls": "Mage",
    "cls2": "Assassin",
    "sub": "Burst/Assassin",
@@ -543,6 +556,7 @@
   },
   {
    "code": "M26",
+   "dd": "Azir",
    "cls": "Mage",
    "cls2": "Marksman",
    "sub": "Specialist",
@@ -571,6 +585,7 @@
   },
   {
    "code": "S10",
+   "dd": "Bard",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Catcher",
@@ -599,6 +614,7 @@
   },
   {
    "code": "F46",
+   "dd": "Belveth",
    "cls": "Fighter",
    "cls2": "",
    "sub": "Skirmisher",
@@ -627,6 +643,7 @@
   },
   {
    "code": "T8",
+   "dd": "Blitzcrank",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Catcher",
@@ -655,6 +672,7 @@
   },
   {
    "code": "M16",
+   "dd": "Brand",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst",
@@ -683,6 +701,7 @@
   },
   {
    "code": "T20",
+   "dd": "Braum",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Warden",
@@ -711,6 +730,7 @@
   },
   {
    "code": "F48",
+   "dd": "Briar",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -739,6 +759,7 @@
   },
   {
    "code": "R11",
+   "dd": "Caitlyn",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -767,6 +788,7 @@
   },
   {
    "code": "F39",
+   "dd": "Camille",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -795,6 +817,7 @@
   },
   {
    "code": "M14",
+   "dd": "Cassiopeia",
    "cls": "Mage",
    "cls2": "",
    "sub": "Battlemage",
@@ -823,6 +846,7 @@
   },
   {
    "code": "T6",
+   "dd": "Chogath",
    "cls": "Tank",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -851,6 +875,7 @@
   },
   {
    "code": "R7",
+   "dd": "Corki",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -879,6 +904,7 @@
   },
   {
    "code": "F29",
+   "dd": "Darius",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -907,6 +933,7 @@
   },
   {
    "code": "F31",
+   "dd": "Diana",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Assassin/Diver",
@@ -935,6 +962,7 @@
   },
   {
    "code": "T9",
+   "dd": "DrMundo",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Juggernaut",
@@ -963,6 +991,7 @@
   },
   {
    "code": "R15",
+   "dd": "Draven",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -991,6 +1020,7 @@
   },
   {
    "code": "A14",
+   "dd": "Ekko",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Assassin",
@@ -1019,6 +1049,7 @@
   },
   {
    "code": "A12",
+   "dd": "Elise",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Diver",
@@ -1047,6 +1078,7 @@
   },
   {
    "code": "A1",
+   "dd": "Evelynn",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Assassin",
@@ -1072,6 +1104,7 @@
   },
   {
    "code": "R8",
+   "dd": "Ezreal",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -1100,6 +1133,7 @@
   },
   {
    "code": "M2",
+   "dd": "Fiddlesticks",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Specialist",
@@ -1128,6 +1162,7 @@
   },
   {
    "code": "F27",
+   "dd": "Fiora",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -1156,6 +1191,7 @@
   },
   {
    "code": "A9",
+   "dd": "Fizz",
    "cls": "Assassin",
    "cls2": "Fighter",
    "sub": "Assassin",
@@ -1184,6 +1220,7 @@
   },
   {
    "code": "T13",
+   "dd": "Galio",
    "cls": "Tank",
    "cls2": "Mage",
    "sub": "Warden",
@@ -1212,6 +1249,7 @@
   },
   {
    "code": "F5",
+   "dd": "Gangplank",
    "cls": "Fighter",
    "cls2": "",
    "sub": "Specialist",
@@ -1240,6 +1278,7 @@
   },
   {
    "code": "F11",
+   "dd": "Garen",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -1268,6 +1307,7 @@
   },
   {
    "code": "F35",
+   "dd": "Gnar",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Specialist",
@@ -1296,6 +1336,7 @@
   },
   {
    "code": "F8",
+   "dd": "Gragas",
    "cls": "Fighter",
    "cls2": "Mage",
    "sub": "Vanguard",
@@ -1324,6 +1365,7 @@
   },
   {
    "code": "R13",
+   "dd": "Graves",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Specialist",
@@ -1352,6 +1394,7 @@
   },
   {
    "code": "F45",
+   "dd": "Gwen",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -1380,6 +1423,7 @@
   },
   {
    "code": "F28",
+   "dd": "Hecarim",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -1408,6 +1452,7 @@
   },
   {
    "code": "M8",
+   "dd": "Heimerdinger",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Specialist",
@@ -1436,6 +1481,7 @@
   },
   {
    "code": "M33",
+   "dd": "Hwei",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Artillery",
@@ -1464,6 +1510,7 @@
   },
   {
    "code": "F37",
+   "dd": "Illaoi",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -1492,6 +1539,7 @@
   },
   {
    "code": "F15",
+   "dd": "Irelia",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -1520,6 +1568,7 @@
   },
   {
    "code": "S11",
+   "dd": "Ivern",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Catcher",
@@ -1548,6 +1597,7 @@
   },
   {
    "code": "S5",
+   "dd": "Janna",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -1576,6 +1626,7 @@
   },
   {
    "code": "F18",
+   "dd": "JarvanIV",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -1604,6 +1655,7 @@
   },
   {
    "code": "F1",
+   "dd": "Jax",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -1632,6 +1684,7 @@
   },
   {
    "code": "F30",
+   "dd": "Jayce",
    "cls": "Fighter",
    "cls2": "Marksman",
    "sub": "Artillery",
@@ -1660,6 +1713,7 @@
   },
   {
    "code": "R21",
+   "dd": "Jhin",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman/Catcher",
@@ -1688,6 +1742,7 @@
   },
   {
    "code": "R18",
+   "dd": "Jinx",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -1716,6 +1771,7 @@
   },
   {
    "code": "T24",
+   "dd": "KSante",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Warden/Skirmisher",
@@ -1744,6 +1800,7 @@
   },
   {
    "code": "R23",
+   "dd": "Kaisa",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -1772,6 +1829,7 @@
   },
   {
    "code": "R19",
+   "dd": "Kalista",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -1800,6 +1858,7 @@
   },
   {
    "code": "M15",
+   "dd": "Karma",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst/Enchanter",
@@ -1828,6 +1887,7 @@
   },
   {
    "code": "M5",
+   "dd": "Karthus",
    "cls": "Mage",
    "cls2": "",
    "sub": "Battlemage",
@@ -1856,6 +1916,7 @@
   },
   {
    "code": "A2",
+   "dd": "Kassadin",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Assassin",
@@ -1884,6 +1945,7 @@
   },
   {
    "code": "A3",
+   "dd": "Katarina",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Assassin",
@@ -1909,6 +1971,7 @@
   },
   {
    "code": "R2",
+   "dd": "Kayle",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -1937,6 +2000,7 @@
   },
   {
    "code": "F40",
+   "dd": "Kayn",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -1965,6 +2029,7 @@
   },
   {
    "code": "M9",
+   "dd": "Kennen",
    "cls": "Mage",
    "cls2": "Marksman",
    "sub": "Specialist",
@@ -1993,6 +2058,7 @@
   },
   {
    "code": "A11",
+   "dd": "Khazix",
    "cls": "Assassin",
    "cls2": "",
    "sub": "Assassin",
@@ -2021,6 +2087,7 @@
   },
   {
    "code": "R20",
+   "dd": "Kindred",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -2049,6 +2116,7 @@
   },
   {
    "code": "F38",
+   "dd": "Kled",
    "cls": "Fighter",
    "cls2": "",
    "sub": "Skirmisher",
@@ -2077,6 +2145,7 @@
   },
   {
    "code": "R9",
+   "dd": "KogMaw",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -2105,6 +2174,7 @@
   },
   {
    "code": "A7",
+   "dd": "Leblanc",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Burst/Assassin",
@@ -2133,6 +2203,7 @@
   },
   {
    "code": "F20",
+   "dd": "LeeSin",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -2161,6 +2232,7 @@
   },
   {
    "code": "T15",
+   "dd": "Leona",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -2189,6 +2261,7 @@
   },
   {
    "code": "F42",
+   "dd": "Lillia",
    "cls": "Fighter",
    "cls2": "Mage",
    "sub": "Skirmisher",
@@ -2217,6 +2290,7 @@
   },
   {
    "code": "M24",
+   "dd": "Lissandra",
    "cls": "Mage",
    "cls2": "",
    "sub": "Burst",
@@ -2245,6 +2319,7 @@
   },
   {
    "code": "A17",
+   "dd": "Locke",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Assassin",
@@ -2273,6 +2348,7 @@
   },
   {
    "code": "R17",
+   "dd": "Lucian",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman",
@@ -2301,6 +2377,7 @@
   },
   {
    "code": "S7",
+   "dd": "Lulu",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -2329,6 +2406,7 @@
   },
   {
    "code": "M13",
+   "dd": "Lux",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst/Artillery",
@@ -2357,6 +2435,7 @@
   },
   {
    "code": "T10",
+   "dd": "Malphite",
    "cls": "Tank",
    "cls2": "Mage",
    "sub": "Vanguard",
@@ -2385,6 +2464,7 @@
   },
   {
    "code": "M10",
+   "dd": "Malzahar",
    "cls": "Mage",
    "cls2": "Assassin",
    "sub": "Battlemage",
@@ -2413,6 +2493,7 @@
   },
   {
    "code": "T14",
+   "dd": "Maokai",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -2441,6 +2522,7 @@
   },
   {
    "code": "F2",
+   "dd": "MasterYi",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -2469,6 +2551,7 @@
   },
   {
    "code": "M35",
+   "dd": "Mel",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Artillery",
@@ -2497,6 +2580,7 @@
   },
   {
    "code": "S18",
+   "dd": "Milio",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -2525,6 +2609,7 @@
   },
   {
    "code": "R10",
+   "dd": "MissFortune",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -2553,6 +2638,7 @@
   },
   {
    "code": "F10",
+   "dd": "Mordekaiser",
    "cls": "Fighter",
    "cls2": "Mage",
    "sub": "Juggernaut",
@@ -2581,6 +2667,7 @@
   },
   {
    "code": "S1",
+   "dd": "Morgana",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Catcher",
@@ -2609,6 +2696,7 @@
   },
   {
    "code": "A16",
+   "dd": "Naafiri",
    "cls": "Assassin",
    "cls2": "Fighter",
    "sub": "Assassin",
@@ -2637,6 +2725,7 @@
   },
   {
    "code": "S8",
+   "dd": "Nami",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -2665,6 +2754,7 @@
   },
   {
    "code": "F6",
+   "dd": "Nasus",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -2693,6 +2783,7 @@
   },
   {
    "code": "T18",
+   "dd": "Nautilus",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -2721,6 +2812,7 @@
   },
   {
    "code": "M30",
+   "dd": "Neeko",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst/Catcher",
@@ -2749,6 +2841,7 @@
   },
   {
    "code": "A5",
+   "dd": "Nidalee",
    "cls": "Assassin",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -2777,6 +2870,7 @@
   },
   {
    "code": "F47",
+   "dd": "Nilah",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -2805,6 +2899,7 @@
   },
   {
    "code": "F19",
+   "dd": "Nocturne",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Assassin",
@@ -2833,6 +2928,7 @@
   },
   {
    "code": "T2",
+   "dd": "Nunu",
    "cls": "Tank",
    "cls2": "Mage",
    "sub": "Vanguard",
@@ -2861,6 +2957,7 @@
   },
   {
    "code": "F12",
+   "dd": "Olaf",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -2889,6 +2986,7 @@
   },
   {
    "code": "M17",
+   "dd": "Orianna",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst",
@@ -2917,6 +3015,7 @@
   },
   {
    "code": "T22",
+   "dd": "Ornn",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard",
@@ -2945,6 +3044,7 @@
   },
   {
    "code": "F9",
+   "dd": "Pantheon",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -2973,6 +3073,7 @@
   },
   {
    "code": "T11",
+   "dd": "Poppy",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Warden",
@@ -3001,6 +3102,7 @@
   },
   {
    "code": "S13",
+   "dd": "Pyke",
    "cls": "Support",
    "cls2": "Assassin",
    "sub": "Assassin/Catcher",
@@ -3029,6 +3131,7 @@
   },
   {
    "code": "A15",
+   "dd": "Qiyana",
    "cls": "Assassin",
    "cls2": "Fighter",
    "sub": "Assassin",
@@ -3057,6 +3160,7 @@
   },
   {
    "code": "R16",
+   "dd": "Quinn",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Specialist",
@@ -3085,6 +3189,7 @@
   },
   {
    "code": "S12",
+   "dd": "Rakan",
    "cls": "Support",
    "cls2": "",
    "sub": "Catcher",
@@ -3113,6 +3218,7 @@
   },
   {
    "code": "T7",
+   "dd": "Rammus",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard",
@@ -3141,6 +3247,7 @@
   },
   {
    "code": "F36",
+   "dd": "RekSai",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -3169,6 +3276,7 @@
   },
   {
    "code": "T23",
+   "dd": "Rell",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Vanguard",
@@ -3197,6 +3305,7 @@
   },
   {
    "code": "S17",
+   "dd": "Renata",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -3222,6 +3331,7 @@
   },
   {
    "code": "F17",
+   "dd": "Renekton",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -3250,6 +3360,7 @@
   },
   {
    "code": "A10",
+   "dd": "Rengar",
    "cls": "Assassin",
    "cls2": "Fighter",
    "sub": "Assassin/Diver",
@@ -3278,6 +3389,7 @@
   },
   {
    "code": "F24",
+   "dd": "Riven",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -3306,6 +3418,7 @@
   },
   {
    "code": "F21",
+   "dd": "Rumble",
    "cls": "Fighter",
    "cls2": "Mage",
    "sub": "Battlemage",
@@ -3334,6 +3447,7 @@
   },
   {
    "code": "M3",
+   "dd": "Ryze",
    "cls": "Mage",
    "cls2": "Fighter",
    "sub": "Battlemage",
@@ -3362,6 +3476,7 @@
   },
   {
    "code": "R25",
+   "dd": "Samira",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman",
@@ -3390,6 +3505,7 @@
   },
   {
    "code": "T17",
+   "dd": "Sejuani",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard",
@@ -3418,6 +3534,7 @@
   },
   {
    "code": "S15",
+   "dd": "Senna",
    "cls": "Support",
    "cls2": "Marksman",
    "sub": "Marksman/Enchanter",
@@ -3446,6 +3563,7 @@
   },
   {
    "code": "S16",
+   "dd": "Seraphine",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Burst/Enchanter",
@@ -3474,6 +3592,7 @@
   },
   {
    "code": "F41",
+   "dd": "Sett",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -3502,6 +3621,7 @@
   },
   {
    "code": "A4",
+   "dd": "Shaco",
    "cls": "Assassin",
    "cls2": "",
    "sub": "Assassin",
@@ -3530,6 +3650,7 @@
   },
   {
    "code": "T12",
+   "dd": "Shen",
    "cls": "Tank",
    "cls2": "",
    "sub": "Warden",
@@ -3558,6 +3679,7 @@
   },
   {
    "code": "F25",
+   "dd": "Shyvana",
    "cls": "Fighter",
    "cls2": "Mage",
    "sub": "Diver",
@@ -3583,6 +3705,7 @@
   },
   {
    "code": "T4",
+   "dd": "Singed",
    "cls": "Tank",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -3611,6 +3734,7 @@
   },
   {
    "code": "T3",
+   "dd": "Sion",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard",
@@ -3639,6 +3763,7 @@
   },
   {
    "code": "R3",
+   "dd": "Sivir",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -3667,6 +3792,7 @@
   },
   {
    "code": "T16",
+   "dd": "Skarner",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard/Juggernaut",
@@ -3695,6 +3821,7 @@
   },
   {
    "code": "R28",
+   "dd": "Smolder",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman",
@@ -3723,6 +3850,7 @@
   },
   {
    "code": "S6",
+   "dd": "Sona",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -3751,6 +3879,7 @@
   },
   {
    "code": "S2",
+   "dd": "Soraka",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -3779,6 +3908,7 @@
   },
   {
    "code": "M12",
+   "dd": "Swain",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Battlemage",
@@ -3807,6 +3937,7 @@
   },
   {
    "code": "M31",
+   "dd": "Sylas",
    "cls": "Mage",
    "cls2": "Assassin",
    "sub": "Burst/Skirmisher",
@@ -3835,6 +3966,7 @@
   },
   {
    "code": "M23",
+   "dd": "Syndra",
    "cls": "Mage",
    "cls2": "",
    "sub": "Burst",
@@ -3863,6 +3995,7 @@
   },
   {
    "code": "T21",
+   "dd": "TahmKench",
    "cls": "Tank",
    "cls2": "Support",
    "sub": "Warden",
@@ -3891,6 +4024,7 @@
   },
   {
    "code": "M28",
+   "dd": "Taliyah",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Battlemage",
@@ -3919,6 +4053,7 @@
   },
   {
    "code": "A8",
+   "dd": "Talon",
    "cls": "Assassin",
    "cls2": "",
    "sub": "Assassin",
@@ -3947,6 +4082,7 @@
   },
   {
    "code": "S4",
+   "dd": "Taric",
    "cls": "Support",
    "cls2": "Tank",
    "sub": "Enchanter/Warden",
@@ -3975,6 +4111,7 @@
   },
   {
    "code": "R4",
+   "dd": "Teemo",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -4003,6 +4140,7 @@
   },
   {
    "code": "S9",
+   "dd": "Thresh",
    "cls": "Support",
    "cls2": "Tank",
    "sub": "Catcher",
@@ -4031,6 +4169,7 @@
   },
   {
    "code": "R5",
+   "dd": "Tristana",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman",
@@ -4059,6 +4198,7 @@
   },
   {
    "code": "F16",
+   "dd": "Trundle",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -4087,6 +4227,7 @@
   },
   {
    "code": "F4",
+   "dd": "Tryndamere",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -4115,6 +4256,7 @@
   },
   {
    "code": "M4",
+   "dd": "TwistedFate",
    "cls": "Mage",
    "cls2": "Marksman",
    "sub": "Burst",
@@ -4143,6 +4285,7 @@
   },
   {
    "code": "R6",
+   "dd": "Twitch",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman",
@@ -4171,6 +4314,7 @@
   },
   {
    "code": "F7",
+   "dd": "Udyr",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -4199,6 +4343,7 @@
   },
   {
    "code": "F14",
+   "dd": "Urgot",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -4227,6 +4372,7 @@
   },
   {
    "code": "R14",
+   "dd": "Varus",
    "cls": "Marksman",
    "cls2": "Mage",
    "sub": "Marksman/Artillery",
@@ -4255,6 +4401,7 @@
   },
   {
    "code": "R12",
+   "dd": "Vayne",
    "cls": "Marksman",
    "cls2": "Assassin",
    "sub": "Marksman",
@@ -4283,6 +4430,7 @@
   },
   {
    "code": "M7",
+   "dd": "Veigar",
    "cls": "Mage",
    "cls2": "",
    "sub": "Burst",
@@ -4311,6 +4459,7 @@
   },
   {
    "code": "M25",
+   "dd": "Velkoz",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Artillery",
@@ -4339,6 +4488,7 @@
   },
   {
    "code": "M32",
+   "dd": "Vex",
    "cls": "Mage",
    "cls2": "",
    "sub": "Burst",
@@ -4367,6 +4517,7 @@
   },
   {
    "code": "F32",
+   "dd": "Vi",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Diver",
@@ -4395,6 +4546,7 @@
   },
   {
    "code": "F44",
+   "dd": "Viego",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -4423,6 +4575,7 @@
   },
   {
    "code": "M20",
+   "dd": "Viktor",
    "cls": "Mage",
    "cls2": "",
    "sub": "Battlemage",
@@ -4451,6 +4604,7 @@
   },
   {
    "code": "M11",
+   "dd": "Vladimir",
    "cls": "Mage",
    "cls2": "Fighter",
    "sub": "Battlemage",
@@ -4479,6 +4633,7 @@
   },
   {
    "code": "F26",
+   "dd": "Volibear",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -4507,6 +4662,7 @@
   },
   {
    "code": "F3",
+   "dd": "Warwick",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -4535,6 +4691,7 @@
   },
   {
    "code": "F23",
+   "dd": "MonkeyKing",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -4563,6 +4720,7 @@
   },
   {
    "code": "R22",
+   "dd": "Xayah",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -4591,6 +4749,7 @@
   },
   {
    "code": "M18",
+   "dd": "Xerath",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Artillery",
@@ -4619,6 +4778,7 @@
   },
   {
    "code": "F13",
+   "dd": "XinZhao",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Diver",
@@ -4644,6 +4804,7 @@
   },
   {
    "code": "F34",
+   "dd": "Yasuo",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -4672,6 +4833,7 @@
   },
   {
    "code": "F43",
+   "dd": "Yone",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Assassin/Skirmisher",
@@ -4700,6 +4862,7 @@
   },
   {
    "code": "F22",
+   "dd": "Yorick",
    "cls": "Fighter",
    "cls2": "Tank",
    "sub": "Juggernaut",
@@ -4728,6 +4891,7 @@
   },
   {
    "code": "R29",
+   "dd": "Yunara",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -4756,6 +4920,7 @@
   },
   {
    "code": "S14",
+   "dd": "Yuumi",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Enchanter",
@@ -4784,6 +4949,7 @@
   },
   {
    "code": "F50",
+   "dd": "Zaahen",
    "cls": "Fighter",
    "cls2": "Assassin",
    "sub": "Skirmisher",
@@ -4809,6 +4975,7 @@
   },
   {
    "code": "T19",
+   "dd": "Zac",
    "cls": "Tank",
    "cls2": "Fighter",
    "sub": "Vanguard",
@@ -4837,6 +5004,7 @@
   },
   {
    "code": "A13",
+   "dd": "Zed",
    "cls": "Assassin",
    "cls2": "",
    "sub": "Assassin",
@@ -4865,6 +5033,7 @@
   },
   {
    "code": "R27",
+   "dd": "Zeri",
    "cls": "Marksman",
    "cls2": "",
    "sub": "Marksman",
@@ -4893,6 +5062,7 @@
   },
   {
    "code": "M21",
+   "dd": "Ziggs",
    "cls": "Mage",
    "cls2": "",
    "sub": "Artillery",
@@ -4921,6 +5091,7 @@
   },
   {
    "code": "S3",
+   "dd": "Zilean",
    "cls": "Support",
    "cls2": "Mage",
    "sub": "Specialist",
@@ -4949,6 +5120,7 @@
   },
   {
    "code": "M29",
+   "dd": "Zoe",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Burst",
@@ -4977,6 +5149,7 @@
   },
   {
    "code": "M22",
+   "dd": "Zyra",
    "cls": "Mage",
    "cls2": "Support",
    "sub": "Catcher",

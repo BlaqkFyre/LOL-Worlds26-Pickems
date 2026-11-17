@@ -1,0 +1,49 @@
+{
+ "name": "clash_cards",
+ "started_utc": "2026-11-17T05:17:16",
+ "script": {
+  "path": "research/champions/build_clash_cards.py",
+  "sha256": "a3bac8080e2ba09b505eaebbfd59a17fd1176eabf613c8eccfac43cca2f01b06",
+  "git_commit": "742d171",
+  "uncommitted_edits": true
+ },
+ "params": {},
+ "inputs": [
+  {
+   "path": "research/champions/champions.csv",
+   "bytes": 49247,
+   "modified": "2026-11-14T20:06:08",
+   "sha256": "eca0f0953939983a65c0c2e2c10362e252610855f46d60963f085fd355fccb69"
+  },
+  {
+   "path": "research/local/champions/universe_2026-11-17.json",
+   "bytes": 37953,
+   "modified": "2026-11-17T15:32:57",
+   "sha256": "ef78aac0e836c3b32f71a4e20933b57d0fc47fe04fc7ba52aaa61822bc07347f"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  }
+ ],
+ "record": "20261117T051727Z_clash_cards.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 10.5,
+ "results": {
+  "cards": 173,
+  "pair synergies": 1273,
+  "style synergies": 66,
+  "bonds": 394,
+  "matchups": 745
+ },
+ "outputs": [
+  {
+   "path": "research/champions/clash_cards.json",
+   "sha256": "f20c24d13b23610952bcca229e33edf436ea399fc013e4837d041e37e509667f"
+  }
+ ],
+ "not_written_because_failed": []
+}
