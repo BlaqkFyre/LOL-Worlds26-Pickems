@@ -140,6 +140,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 .syntot{color:var(--muted);font-weight:600;margin-top:5px!important;padding-top:4px;border-top:1px solid var(--line)}
 .syntot b{font-size:14px;margin:0 3px}
 .dside{gap:6px!important}
+.lul{margin-top:6px;font-size:9.5px}
+.lineup{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:3px}
+.lineup button{background:#1b2232;border:1px solid var(--line);border-radius:5px;padding:2px 0 3px;font-size:11px;font-weight:800;color:var(--fg);line-height:1.15}
+.lineup button small{display:block;font-size:8.5px;color:var(--muted);font-weight:700;letter-spacing:.06em}
+.lineup button.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.lineup button .off{color:#ff8d93} .lineup button .fx{color:#ffd54a}
+.dfoot .rolepick button{background:var(--gold);color:#2a1a00;border:none;border-radius:5px;padding:3px 10px;font-weight:800;margin-left:6px;cursor:pointer}
+.dfoot .rolepick button.no{background:var(--panel2);color:var(--fg);border:1px solid var(--line)}
+.card.selswap{box-shadow:0 0 0 3px var(--gold),0 6px 16px rgba(0,0,0,.55)}
+.card.mine{cursor:pointer}
 /* four grades in one strip */
 .gstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:5px}
 .gstrip div{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:5px;text-align:center;padding:2px 0 3px}
@@ -266,7 +276,8 @@ button.bigb:disabled{opacity:.5;cursor:default}
     <div class="grid" id="d-grid"></div>
     <div class="dside">
      <div class="wbox slim"><div class="hl"><span class="b" id="d-wbb">Blue 50%</span><span class="muted">WIN CHANCE</span><span class="r" id="d-wbr">Red 50%</span></div><div class="hbar"><i id="d-wb"></i></div>
-      <div class="hl syntot"><span>Synergy <b class="b" id="d-syn-blue">0</b></span><span><b class="r" id="d-syn-red">0</b> Synergy</span></div></div>
+      <div class="hl syntot"><span>Synergy <b class="b" id="d-syn-blue">0</b></span><span><b class="r" id="d-syn-red">0</b> Synergy</span></div>
+      <div class="lbl lul">YOUR LINEUP · click two lanes to swap</div><div class="lineup" id="d-lineup"></div></div>
      <div class="wbox info" id="d-info"><div class="lbl">CHAMPION</div><div class="muted sm">Hover a champion to see its stats.</div></div>
     </div>
    </div>
@@ -543,7 +554,7 @@ function buildBoard(){
 }
 function placeCard(cid,side,role){const c=CH[cid];const tag=role===c.role?'':role===c.flex?' · FLEX':' · OFF';
   const e=mk('div','card '+side,`<div class="pt" style="background:${tileBg(c)}">${c.ini}</div><div class="nm">${c.name}</div><div class="rl ${side}">${LN[role].toUpperCase()}${tag}</div>`,cardsL);
-  e.id=`card-${side}-${role}`;e.dataset.side=side;e.dataset.role=role;e.onmouseenter=()=>showTip(cid,e);e.onmouseleave=hideTip;e.style.left=(COLX(role)-56)+'px';e.style.top=HOME[side]+'px';return e}
+  e.id=`card-${side}-${role}`;e.dataset.side=side;e.dataset.role=role;e.onmouseenter=()=>showTip(cid,e);e.onmouseleave=hideTip;if(G&&side===G.player){e.classList.add('mine');e.onclick=()=>swapClick(role)}e.style.left=(COLX(role)-56)+'px';e.style.top=HOME[side]+'px';return e}
 function setWin(p,title,labels){$('#wb-title').textContent=title;$('#wb-red').style.height=((1-p)*100)+'%';
   $('#wb-rv').textContent=labels?labels[0]:Math.round((1-p)*100)+'%';$('#wb-bv').textContent=labels?labels[1]:Math.round(p*100)+'%'}
 function setSyn(){['blue','red'].forEach(s=>{const v=teamSyn(G.picks[s]),t=(v>0?'+':'')+v;$('#d-syn-'+s).textContent=t;$('#syn-'+s).textContent=t})}
@@ -639,7 +650,7 @@ function refreshTiles(){
     t.className=cls});
 }
 function startDraft(){
-  buildGrid();G.step=0;G.drafting=true;setSyn();setDraftWin(.5);
+  buildGrid();G.step=0;G.drafting=true;setSyn();setDraftWin(.5);renderLineup();
   show('#draft');A($('#draft'),[{opacity:0,transform:'scale(.94)'},{opacity:1,transform:'scale(1)'}],350);SFX.whoosh();
   nextTurn();
 }
@@ -690,15 +701,23 @@ function playerChoose(cid){
   if(!G.drafting||G.busy||G.step>=20)return;const team=curTeam(),kind=KIND(G.step);
   if(team!==G.player||AUTO)return;
   if(!eligible(team,kind,cid,kind==='pick'&&noneFit(team))){const t=$('#tile-'+cid);A(t,[{transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],200);return}
+  if(kind==='pick'){const c=CH[cid],p=G.picks[team],opts=[c.role,c.flex].filter(r=>r&&p[r]==null);
+    if(opts.length>1){SFX.click();askRole(cid,opts);return}}
   SFX.click();doAction(cid);
 }
-async function doAction(cid){
+/* a flex champion with both its lanes open: choose the lane (buttons in the draft footer) */
+function askRole(cid,opts){
+  const h=$('#d-hint'),old=h.innerHTML,id=G.id,step=G.step;
+  h.innerHTML=`<span class="rolepick">Pick ${CH[cid].ini} as:${opts.map((r,i)=>`<button data-r="${r}">${LN[r]}${i?' (flex)':''}</button>`).join('')}<button class="no" data-r="">Cancel</button></span>`;
+  h.querySelectorAll('button').forEach(b=>b.onclick=()=>{h.innerHTML=old;if(G.id!==id||G.step!==step||G.busy)return;if(b.dataset.r){SFX.click();doAction(cid,b.dataset.r)}});
+}
+async function doAction(cid,want){
   if(G.busy||cid==null)return;G.busy=true;stopTimer();
   const id=G.id,team=curTeam(),kind=KIND(G.step);G.taken.add(cid);
   G.hist[G.step]=cid;const pl=$('#pill-'+G.step);if(pl){pl.textContent=CH[cid].ini;pl.classList.add('has')}
   if(kind==='ban'){const k=G.bans[team].length;G.bans[team].push(cid);await animBan(cid,team,k);refreshTiles()}
-  else{let role=roleFor(team,cid);if(role==null)role=firstOpen(team);G.picks[team][role]=cid;await animPick(cid,team,role);refreshTiles();
-    if(G.id!==id)return;setSyn();const p=winChance(G.picks.blue,G.picks.red,300);G.pre=p;setDraftWin(p);setWin(p,'WIN %')}
+  else{let role=want&&G.picks[team][want]==null?want:roleFor(team,cid);if(role==null)role=firstOpen(team);G.picks[team][role]=cid;await animPick(cid,team,role);refreshTiles();
+    if(G.id!==id)return;setSyn();renderLineup();const p=winChance(G.picks.blue,G.picks.red,300);G.pre=p;setDraftWin(p);setWin(p,'WIN %')}
   if(G.id!==id)return;G.step++;G.busy=false;persist();nextTurn();
 }
 function setDraftWin(p){$('#d-wb').style.width=(p*100)+'%';$('#d-wbb').textContent=`Blue ${Math.round(p*100)}%`;$('#d-wbr').textContent=`Red ${100-Math.round(p*100)}%`}
@@ -769,6 +788,25 @@ async function endDraft(){
   const id=G.id;await sleep(600);if(G.id!==id)return;
   await A($('#draft'),[{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.95)'}],400,{easing:'ease-in'});hide('#draft');
   G.pre=winChance(G.picks.blue,G.picks.red,600);setWin(G.pre,'WIN %');G.phase='ready';persist();showReady();
+}
+/* flexing during the draft and before the clash (Luke, 17 Nov): click two of your lanes (lineup strip or board cards) to swap them,
+   or a pick then an empty lane to move it. Off-lane spots take the off-role stat penalty, as for any pick. */
+function canSwap(){return G&&(G.phase==='draft'||G.phase==='ready')&&!G.busy}
+function swapClick(role){
+  if(!canSwap())return;
+  if(G.swapSel==null){if(G.picks[G.player][role]==null)return;G.swapSel=role;SFX.click()}
+  else if(G.swapSel===role)G.swapSel=null;
+  else{const a=G.swapSel,b=role,p=G.picks[G.player],x=p[a],y=p[b];G.swapSel=null;
+    if(y==null){p[b]=x;delete p[a]}else{p[a]=y;p[b]=x}
+    document.querySelectorAll('.card.'+G.player).forEach(e=>e.remove());ROLES.forEach(r=>{if(p[r]!=null)placeCard(p[r],G.player,r)});
+    SFX.nudge();setSyn();const pr=winChance(G.picks.blue,G.picks.red,300);G.pre=pr;setDraftWin(pr);setWin(pr,'WIN %');
+    if(G.phase==='ready')$('#clashbtn').innerHTML=`CLASH!<small>Win chance (estimate): Blue ${Math.round(pr*100)}% · Red ${100-Math.round(pr*100)}%</small>`;else refreshTiles();persist()}
+  renderLineup();document.querySelectorAll('.card.'+G.player).forEach(e=>e.classList.toggle('selswap',e.dataset.role===G.swapSel));
+}
+function renderLineup(){
+  const el=$('#d-lineup');if(!el||!G)return;const p=G.picks[G.player];el.innerHTML='';
+  ROLES.forEach(r=>{const cid=p[r],c=cid!=null?CH[cid]:null,tag=c?(r===c.role?'':r===c.flex?'<span class="fx"> flex</span>':'<span class="off"> off</span>'):'';
+    const b=mk('button',G.swapSel===r?'sel':'',`<small>${AB[r]}</small>${c?c.ini:'—'}${tag}`,el);b.onclick=()=>swapClick(r);if(cid!=null)b.onmouseenter=()=>info(cid)});
 }
 function showReady(){
   const p=G.pre;$('#clashbtn').innerHTML=`CLASH!<small>Win chance (estimate): Blue ${Math.round(p*100)}% · Red ${100-Math.round(p*100)}%</small>`;
@@ -1015,7 +1053,7 @@ function restoreGame(gm){
   $('#tname-'+G.player).textContent='YOU';$('#tname-'+other(G.player)).textContent='AI';
   ['blue','red'].forEach(s=>{G.bans[s].forEach((cid,k)=>fillBanSlot(s,k,cid));ROLES.forEach(r=>{if(G.picks[s][r]!=null)placeCard(G.picks[s][r],s,r)})});
   setSyn();hide('#side');setWin(G.pre,'WIN %');
-  if(gm.phase==='draft'){G.phase='draft';buildGrid();setDraftWin(G.pre);show('#draft');G.drafting=true;nextTurn()}
+  if(gm.phase==='draft'){G.phase='draft';buildGrid();setDraftWin(G.pre);show('#draft');G.drafting=true;renderLineup();nextTurn()}
   else{G.phase='ready';showReady()}
   persist();
 }
