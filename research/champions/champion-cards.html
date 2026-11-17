@@ -23,17 +23,26 @@ body { background: var(--bg); color: var(--fg); font-family: var(--body); font-s
 .wrap { max-width: 1280px; margin: 0 auto; padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 16px; }
 header h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); letter-spacing: .01em; margin: 0; text-wrap: balance; }
 header p { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
-.controls { display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+.topbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.controls { display: grid; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.row > label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); min-width: 64px; }
-input[type=search], select { font: inherit; color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
-input[type=search] { flex: 1 1 220px; min-width: 0; }
-.chip { font: inherit; font-size: 13px; color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.frow { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: start; padding: 10px 14px; border-top: 1px solid var(--line); }
+.frow:first-child { border-top: 0; }
+.frow > label, .frow > .lab { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); line-height: 26px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+input[type=search], select { font: inherit; font-size: 13px; color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; padding: 0 10px; height: 30px; }
+input[type=search] { width: 100%; min-width: 0; }
+.chip { font: inherit; font-size: 12.5px; line-height: 1; height: 26px; display: inline-flex; align-items: center; gap: 6px; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 0 9px; cursor: pointer; }
+.chip .n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chip:hover { border-color: var(--muted); }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.chip[aria-pressed="true"] .n { color: var(--surface); opacity: .8; }
+@media (max-width: 560px) { .frow { grid-template-columns: 1fr; gap: 6px; } .frow > label, .frow > .lab { line-height: 1.4; } }
 .chip:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; color: var(--muted); font-size: 13px; }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.seg button { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 0; padding: 6px 12px; cursor: pointer; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 0; border-left: 1px solid var(--line); height: 30px; padding: 0 12px; cursor: pointer; }
+.seg button:first-child { border-left: 0; }
 .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
@@ -43,7 +52,7 @@ input[type=search] { flex: 1 1 220px; min-width: 0; }
 .sub { color: var(--muted); font-size: 12px; }
 .role { font-family: var(--display); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 6px; color: var(--surface); white-space: nowrap; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.tag { font-size: 12px; padding: 2px 7px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); }
 .dmg { font-weight: 600; color: var(--surface); border: 0; }
 .stats { display: grid; gap: 5px; }
 .stat { display: grid; grid-template-columns: 74px 1fr; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
@@ -68,27 +77,32 @@ th, td { padding: 6px 9px; border-bottom: 1px solid var(--line); text-align: lef
 th { position: sticky; top: 0; background: var(--surface-2); cursor: pointer; font-weight: 600; }
 th[aria-sort="ascending"]::after { content: " ▲"; } th[aria-sort="descending"]::after { content: " ▼"; }
 .foot { color: var(--muted); font-size: 12px; max-width: 90ch; }
-.btn { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.btn { font: inherit; font-size: 13px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 5px; height: 30px; padding: 0 12px; cursor: pointer; }
 .empty { color: var(--muted); padding: 30px; text-align: center; }
 @media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } .card:hover { border-color: var(--accent); } }
 </style>
 <div class="wrap">
-  <header>
-    <h1>Champion Scouting Cards</h1>
-    <p>Every League champion with Riot's own class, subclass, damage type and 1–3 style ratings, plus where pros play it at Worlds 2026 (patch 16.20) and across the 2026 season. Built from the champion database in the Pick'Em Lab repo.</p>
+  <header class="topbar">
+    <div>
+      <h1>Champion Scouting Cards</h1>
+      <p>Every League champion with Riot's own class, subclass, damage type and 1–3 style ratings, plus where pros play it at Worlds 2026 (patch 16.20) and across the 2026 season. Built from the champion database in the Pick'Em Lab repo.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Theme"><button id="t-system" aria-pressed="true">Auto</button><button id="t-light" aria-pressed="false">Light</button><button id="t-dark" aria-pressed="false">Dark</button></div>
   </header>
   <section class="controls" aria-label="Filters">
-    <div class="row"><label for="q">Search</label><input id="q" type="search" placeholder="Champion, subclass or tag (e.g. Enchanter, Hypercarry)"></div>
-    <div class="row" id="f-class"><label>Class</label></div>
-    <div class="row" id="f-role"><label>Meta role</label></div>
-    <div class="row" id="f-dmg"><label>Damage</label></div>
-    <div class="row"><label for="sort">Sort</label>
+    <div class="frow"><label for="q">Search</label><input id="q" type="search" placeholder="Champion, subclass or tag (e.g. Enchanter, Hypercarry)"></div>
+    <div class="frow" id="f-class"><span class="lab">Class</span><div class="chips"></div></div>
+    <div class="frow" id="f-sub"><span class="lab">Subclass</span><div class="chips"></div></div>
+    <div class="frow" id="f-tag"><span class="lab">Style</span><div class="chips"></div></div>
+    <div class="frow" id="f-role"><span class="lab">Meta role</span><div class="chips"></div></div>
+    <div class="frow" id="f-dmg"><span class="lab">Damage</span><div class="chips"></div></div>
+    <div class="frow"><label for="sort">Sort</label><div class="chips">
       <select id="sort">
         <option value="worlds_presence">Worlds presence</option><option value="pro_games_2026">Pro games 2026</option><option value="name">Name</option>
         <option value="riot_damage">Riot damage</option><option value="riot_cc">Riot crowd control</option><option value="riot_utility">Riot utility</option><option value="riot_toughness">Riot toughness</option>
         <option value="pro_dmg_index_meta_role">Pro damage index</option>
       </select>
-    </div>
+    </div></div>
   </section>
   <div class="bar">
     <span id="count"></span>
@@ -107,15 +121,28 @@ const ROLES = ["top", "jng", "mid", "bot", "sup"], RN = {top: "Top", jng: "Jungl
 const CLASSES = ["Fighter", "Mage", "Tank", "Marksman", "Assassin", "Support"];
 const CLASS_COLOR = {Fighter: "var(--top)", Mage: "var(--magic)", Tank: "var(--jng)", Marksman: "var(--bot)", Assassin: "var(--mixed)", Support: "var(--sup)"};
 const DMG = {Physical: "var(--phys)", Magic: "var(--magic)", "Physical+Magic": "var(--mixed)"};
-const state = {q: "", cls: new Set(), role: new Set(), dmg: new Set(), sort: "worlds_presence", view: "cards", tsort: {k: "worlds_presence", dir: -1}};
+const fixTag = t => t.trim().toLowerCase() === "aoe" ? "AoE" : t.trim();  /* Riot's data spells Sivir's tag "Aoe" */
+const subsOf = c => (c.subclasses || "").split("/").map(s => s.trim()).filter(Boolean);
+const tagsOf = c => (c.playstyle_tags || "").split("/").map(fixTag).filter(Boolean);
+const byCount = f => { const n = {}; C.forEach(c => f(c).forEach(v => n[v] = (n[v] || 0) + 1)); return Object.keys(n).sort((a, b) => n[b] - n[a] || a.localeCompare(b)).map(v => [v, n[v]]); };
+const SUBS = byCount(subsOf), TAGS = byCount(tagsOf);
+const state = {q: "", cls: new Set(), sub: new Set(), tag: new Set(), role: new Set(), dmg: new Set(), sort: "worlds_presence", view: "cards", tsort: {k: "worlds_presence", dir: -1}};
 try { const s = JSON.parse(localStorage.getItem("champ-cards-view") || "{}"); if (s.view) state.view = s.view; if (s.sort) state.sort = s.sort; } catch (e) {}
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
-function chips(id, vals, set, label = v => v) {
-  const row = $(id); vals.forEach(v => { const b = document.createElement("button"); b.className = "chip"; b.textContent = label(v); b.setAttribute("aria-pressed", "false");
+function chips(id, vals, set, label = v => v, count = null) {
+  const row = $(id).querySelector(".chips"); vals.forEach(v => { const b = document.createElement("button"); b.className = "chip"; b.setAttribute("aria-pressed", "false");
+    b.textContent = label(v); if (count != null) { const n = document.createElement("span"); n.className = "n"; n.textContent = count(v); b.appendChild(n); }
     b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.setAttribute("aria-pressed", set.has(v)); render(); }; row.appendChild(b); });
 }
-chips("f-class", CLASSES, state.cls); chips("f-role", ROLES, state.role, v => RN[v]); chips("f-dmg", ["Physical", "Magic", "Physical+Magic"], state.dmg, v => v === "Physical+Magic" ? "Mixed" : v);
+chips("f-class", CLASSES, state.cls);
+chips("f-sub", SUBS.map(s => s[0]), state.sub, v => v, v => SUBS.find(s => s[0] === v)[1]);
+chips("f-tag", TAGS.map(t => t[0]), state.tag, v => v, v => TAGS.find(t => t[0] === v)[1]);
+function setTheme(t) { if (t === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t);
+  ["system", "light", "dark"].forEach(k => $("t-" + k).setAttribute("aria-pressed", k === t)); try { localStorage.setItem("champ-cards-theme", t); } catch (e) {} }
+["system", "light", "dark"].forEach(k => $("t-" + k).onclick = () => setTheme(k));
+try { setTheme(localStorage.getItem("champ-cards-theme") || "system"); } catch (e) { setTheme("system"); }
+chips("f-role", ROLES, state.role, v => RN[v]); chips("f-dmg", ["Physical", "Magic", "Physical+Magic"], state.dmg, v => v === "Physical+Magic" ? "Mixed" : v);
 $("legend").innerHTML = ROLES.map(r => `<span style="--c:var(--${r})">${RN[r]}</span>`).join("");
 $("q").oninput = e => { state.q = e.target.value.trim().toLowerCase(); render(); };
 $("sort").value = state.sort; $("sort").onchange = e => { state.sort = e.target.value; save(); render(); };
@@ -123,7 +150,8 @@ $("v-cards").onclick = () => { state.view = "cards"; save(); render(); }; $("v-t
 function save() { try { localStorage.setItem("champ-cards-view", JSON.stringify({view: state.view, sort: state.sort})); } catch (e) {} }
 function filtered() {
   return C.filter(c => (!state.q || [c.name, c.title, c.class, c.class_secondary, c.subclasses, c.playstyle_tags].join(" ").toLowerCase().includes(state.q))
-    && (!state.cls.size || state.cls.has(c.class)) && (!state.role.size || state.role.has(c.meta_role)) && (!state.dmg.size || state.dmg.has(c.damage_types)));
+    && (!state.cls.size || state.cls.has(c.class)) && (!state.sub.size || subsOf(c).some(s => state.sub.has(s)))
+    && (!state.tag.size || tagsOf(c).some(t => state.tag.has(t))) &&(!state.role.size || state.role.has(c.meta_role)) && (!state.dmg.size || state.dmg.has(c.damage_types)));
 }
 const num = v => (v == null || v === "" ? -1 : +v);
 function pips(n) { return `<div class="pips">${[1, 2, 3].map(i => `<span class="pip${n >= i ? " on" : ""}"></span>`).join("")}</div>`; }
@@ -135,7 +163,7 @@ function laneBar(c, kind) {
 function initials(n) { const w = n.replace(/[^A-Za-z ]/g, " ").split(/\s+/).filter(Boolean); return (w.length > 1 ? w[0][0] + w[1][0] : n.slice(0, 2)).toUpperCase(); }
 function card(c) {
   const off = (c.off_roles || "").split("/").filter(Boolean).map(r => RN[r]).join(", ");
-  const tags = (c.playstyle_tags || "").split("/").filter(Boolean);
+  const tags = tagsOf(c);
   return `<article class="card">
     <div class="head"><div class="mono" style="background:${CLASS_COLOR[c.class] || "var(--muted)"}" aria-hidden="true">${esc(initials(c.name))}</div>
       <div><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.title)}</div></div>
