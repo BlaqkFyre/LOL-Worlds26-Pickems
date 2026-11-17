@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[2]
 R = ROOT / "research"
 
 # data sources (the current copy of each; see STALE for copies that must not be read)
-OE_CSV = R / "2026_LoL_esports_match_data_from_OraclesElixir.csv"   # Oracle's Elixir, full file to 10 Nov UTC
+OE_CSV = R / "2026_LoL_esports_match_data_from_OraclesElixir.csv"   # Oracle's Elixir, full file to 15 Nov UTC (replaced 17 Nov AEST: + the Worlds final, + 15 LCP games 10-13 Nov)
 TL_MATCH = R / "model" / "sim3" / "tl_match.csv"                     # gol.gg timelines matched to the file (640 games, 12 Nov)
 TL_EVENTS = R / "local" / "sim3" / "tl_events.csv"                   # parsed gol.gg timeline events
 TL_GOLD = R / "local" / "sim3" / "tl_gold.csv"                       # gold and CS per role per minute
@@ -28,4 +28,4 @@ TUNE_FROM, SPLIT = "2026-08-01", "2026-09-01"   # settings are chosen fitting be
 WORLDS_PATCH = "16.20"
 
 # sizes the data must have; data.check() stops a script when one is off
-EXPECT = {"worlds_games": 94, "major_games": 2869, "timeline_matched": 640, "worlds_timelines": 94}
+EXPECT = {"worlds_games": 98, "major_games": 2888, "timeline_matched": 640, "worlds_timelines": 94}

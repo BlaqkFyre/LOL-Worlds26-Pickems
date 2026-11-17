@@ -5,11 +5,17 @@ kept. Per player per second: total gold, level, kills, deaths, assists, CS, curr
 Game list (esports game ids) from the lolesports schedule API: research/local/feed/worlds_games.csv.
 Output, one file per game: research/local/feed/<esports game id>.json = {"meta": participant metadata, "start": first frame time,
 "frames": [[second, [10 x [gold, level, k, d, a, cs, hp, maxhp]]], ...]}. Finished games are skipped, so a re-run resumes.
+17 Nov (Luke: full games for game memory): minutes "full" pulls to the end (stops at the feed's gameState "finished", safety cap 90 min)
+and every file also keeps "team": [[second, [blue, red] x [gold, towers, inhibitors, barons, kills, dragons]], ...] and "dragons": each
+side's dragon types at the end, plus "end_s" and "finished". The 15-minute files written before keep their old shape.
+Seen on the 98-game pull (17 Nov): 46 games (all of them from game id ...095062 on) never send "finished", so those run on to the 90-minute cap after the
+feed goes quiet (slow, but the data is whole); seconds are wall-clock from first gold, so pauses are inside them. Check a pull with
+research/laning/feed_check.py.
 Three games at a time.
-usage (repo root): python -I research/laning/feed_pull.py <games csv> <out dir> [minutes=15] [pause_s=0.4]"""
+usage (repo root): python -I research/laning/feed_pull.py <games csv> <out dir> [minutes=15 | full] [pause_s=0.4]"""
 import sys, os, csv, json, time, urllib.request, datetime as dt
 from concurrent.futures import ThreadPoolExecutor
-GAMES, OUT = sys.argv[1:3]; MIN = int(sys.argv[3]) if len(sys.argv) > 3 else 15; PAUSE = float(sys.argv[4]) if len(sys.argv) > 4 else 0.4
+GAMES, OUT = sys.argv[1:3]; FULL = len(sys.argv) > 3 and sys.argv[3] == "full"; MIN = 90 if FULL else (int(sys.argv[3]) if len(sys.argv) > 3 else 15); PAUSE = float(sys.argv[4]) if len(sys.argv) > 4 else 0.4
 UA = {"User-Agent": "Mozilla/5.0"}; BASE = "https://feed.lolesports.com/livestats/v1/window/"
 def get(url):
     for k in range(4):
@@ -27,7 +33,8 @@ def one(item):
     t_first = dt.datetime.strptime(w["frames"][0]["rfc460Timestamp"][:19], "%Y-%m-%dT%H:%M:%S")
     # game start: first frame where any player has gold (frames before are the pre-game)
     start, frames, seen, probe = None, [], set(), t_first.replace(second=t_first.second - t_first.second % 10)
-    end = None
+    end, team, dragons, finished = None, [], [[], []], False
+    TM = lambda x: [x["totalGold"], x["towers"], x["inhibitors"], x["barons"], x["totalKills"], len(x["dragons"])]
     while True:
         ts = probe.strftime("%Y-%m-%dT%H:%M:%SZ"); d = get(BASE + g + "?startingTime=" + ts); F = d.get("frames", [])
         for f in F:
@@ -38,14 +45,20 @@ def one(item):
             # 14 Nov fix: in a few games a stray early frame set the start, then the feed went quiet for minutes. A gap over 20 s in
             # the first 400 s means the real game starts after it: restart from that frame.
             if start is not None and frames and (t - start).total_seconds() < 400 and (t - start).total_seconds() - frames[-1][0] > 20:
-                start, frames = t, []
+                start, frames, team = t, [], []
             if start is not None:
                 sec = int((t - start).total_seconds())
                 frames.append([sec, [[p["totalGold"], p["level"], p["kills"], p["deaths"], p["assists"], p["creepScore"], p["currentHealth"], p["maxHealth"]] for p in pp]])
+                if FULL:
+                    team.append([sec, [TM(f["blueTeam"]), TM(f["redTeam"])]]); dragons = [list(f["blueTeam"]["dragons"]), list(f["redTeam"]["dragons"])]
+                    if f.get("gameState") == "finished": finished = True; end = sec
         probe += dt.timedelta(seconds=10); time.sleep(PAUSE)
+        if finished: break
         if start is not None and (probe - start).total_seconds() > 60 * MIN: break
         if (probe - t_first).total_seconds() > 60 * (MIN + 20): break  # safety: game never started in the window
-    json.dump({"meta": w["gameMetadata"], "start": start.isoformat() if start else None, "frames": frames}, open(path, "w"))
+    out = {"meta": w["gameMetadata"], "start": start.isoformat() if start else None, "frames": frames}
+    if FULL: out.update(team=team, dragons=dragons, end_s=end, finished=finished)
+    json.dump(out, open(path, "w"))
     print(n, g, r["team1"], r["team2"], r["game"], "frames", len(frames), flush=True)
 with ThreadPoolExecutor(3) as ex: list(ex.map(one, enumerate(rows)))  # 3 games at a time
 print("done")

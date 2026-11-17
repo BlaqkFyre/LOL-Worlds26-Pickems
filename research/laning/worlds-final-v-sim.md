@@ -56,3 +56,47 @@ tool got a 403 on 17 Nov; open it in the browser pane), and like every outside l
 Per Luke's excerpt (patch 26.22): it is **solo queue** data, each champion scored against its own role on win rate in games past 32 minutes
 and the gain over games under 22. Pro play, meta, players and pro champion data lead this sim; solo queue fills holes in champion data and
 matchups.
+
+## NerfPlz pro pick/ban tables (pasted by Luke, 17 Nov; source Leaguepedia pick/ban data)
+
+Two views of the same page: **26.16–26.20, 541 games** (Worlds, MSI, EWC and the major leagues; our Oracle's Elixir file has 564 major
+games on those patches: LCS 98, Worlds 98, CBLOL 91, LPL 91, LEC 84, LCK 80, LCP 22, so nearly the same games) and **26.20 only, 101
+games** (essentially Worlds: the file has 98 Worlds games on 16.20; the other 3 not checked).
+
+- **Win rates on 26.20 alone are mostly chance** (14–30 picks per champion, about ±10 points). Big moves from 26.16–26.20 to 26.20:
+  Akali 46% (65 picks) → 19% (16), Rumble 52% (136) → 26% (27), Ezreal 51% → 41%, Orianna 54% → 67%, Seraphine 62% → 72%, Nautilus
+  53% → 69%. Most are within chance; Rumble's is the largest (about 2.5x the expected spread): maybe a real 26.20 shift, can't tell.
+- **Pick and ban presence is the solid signal** (it counts every game). 26.20 bans: Nocturne 68%, Vi 56%, Renata Glasc 53%,
+  Cassiopeia 45%, Qiyana 36%; on 26.16–26.20 Cassiopeia was banned in 78%. Teams rate heavily banned champions highly, but the sim only
+  values a champion from games it was picked in.
+- **For the redesign (rule: Worlds and 16.20 first):** champion strength from 16.20 games, pulled toward 16.16–16.20, then toward 2026,
+  weighted by games behind each; presence and bans from 16.20 directly, for the draft AI's meta. Ban rate is a candidate input, tested
+  on held-out games like any other.
+- **Check to make:** Akali at 19% at Worlds
+  points the same way as the sim's low rating for her (−28) and Chovy's game 4 loss; both small samples.
+
+## Twisted Fate's lane value, checked (17 Nov)
+
+The sim's champion lane value (`research/sim4/s4_tables.py`) is each champion's gold lead at 15 in that role over major-league games before
+10 Nov, weighted by date (half-life 120 days) and pulled toward 0 by 20 games' worth. It does not adjust for who played the champion.
+Rebuilt on the new file (so slightly different from the app's +303):
+
+| Mid | Games | Weighted | Lane value | After team strength* |
+|---|---|---|---|---|
+| Twisted Fate | 136 | 56 | +308 | +283 |
+| Cassiopeia | 313 | 142 | +171 | +151 |
+| Syndra | 290 | 157 | +144 | +142 |
+| Locke | 89 | 60 | +43 | +41 |
+| Orianna | 485 | 215 | +25 | +10 |
+| Viktor | 319 | 154 | −24 | −23 |
+| Akali | 284 | 126 | −40 | −19 |
+| Annie | 312 | 130 | −165 | −168 |
+
+\* Each game's gold lead minus the part team strength (v1) explains: 279 gold at 15 per unit, fitted on all major mid games.
+
+- **Real, not a small sample or strong teams:** 136 games, raw mean +382, many players lead on him (HongQ, ShowMaker, Tutsz, Xiaohu...).
+- **But old:** about 85 of his games are on 16.03–16.10, 20 on 16.16–16.17, 2 on 16.20 (last game 17 Oct). The date weighting is not by
+  patch, so spring games still count heavily. Game 4's +11-point draft swing rested on a real but mostly early-season edge.
+- **For the redesign:** champion values by patch window (16.20 first, then 16.16–16.20, then 2026, weighted by games behind each), and
+  adjusted for who played them, tested on held-out games. Gold at 15 includes kill gold, so TF's roams are in his value; what's missing is
+  *where* it comes from (other lanes), which the full-game feed and timelines can show.
