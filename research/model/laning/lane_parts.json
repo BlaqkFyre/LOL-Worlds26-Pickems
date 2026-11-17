@@ -1,0 +1,264 @@
+{
+ "games": 94,
+ "sims per game": 60,
+ "bot": {
+  "farm part: spread real / module": [
+   387,
+   575
+  ],
+  "other part: spread real / module": [
+   798,
+   711
+  ],
+  "farm part: correlation of the module's game average with real": 0.234,
+  "other part: correlation of the module's game average with real": -0.011,
+  "other part per 1k of pre-game expected gold edge: real / module": [
+   300.0,
+   370.0
+  ],
+  "other part per unit of team strength: real / module": [
+   -34.9,
+   189.47
+  ],
+  "farm part per unit of team strength: real / module": [
+   15.31,
+   48.07
+  ],
+  "kills minus deaths by 15, per 1k of pre-game expected gold edge: real / module": [
+   0.4,
+   1.06
+  ],
+  "kills minus deaths by 15, per unit of team strength: real / module": [
+   0.1,
+   0.61
+  ],
+  "kills minus deaths by 15, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    0.31,
+    0.09
+   ],
+   [
+    0.47,
+    0.59
+   ]
+  ],
+  "other gold, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    344.23,
+    -45.27
+   ],
+   [
+    188.81,
+    183.77
+   ]
+  ]
+ },
+ "jng": {
+  "farm part: spread real / module": [
+   306,
+   444
+  ],
+  "other part: spread real / module": [
+   630,
+   661
+  ],
+  "farm part: correlation of the module's game average with real": 0.332,
+  "other part: correlation of the module's game average with real": 0.231,
+  "other part per 1k of pre-game expected gold edge: real / module": [
+   1300.0,
+   440.0
+  ],
+  "other part per unit of team strength: real / module": [
+   82.71,
+   185.76
+  ],
+  "farm part per unit of team strength: real / module": [
+   65.15,
+   76.65
+  ],
+  "kills minus deaths by 15, per 1k of pre-game expected gold edge: real / module": [
+   -0.48,
+   1.81
+  ],
+  "kills minus deaths by 15, per unit of team strength: real / module": [
+   0.26,
+   0.73
+  ],
+  "kills minus deaths by 15, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    -0.73,
+    0.29
+   ],
+   [
+    1.22,
+    0.68
+   ]
+  ],
+  "other gold, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    1274.21,
+    32.46
+   ],
+   [
+    290.32,
+    174.31
+   ]
+  ]
+ },
+ "mid": {
+  "farm part: spread real / module": [
+   324,
+   404
+  ],
+  "other part: spread real / module": [
+   532,
+   731
+  ],
+  "farm part: correlation of the module's game average with real": 0.376,
+  "other part: correlation of the module's game average with real": 0.217,
+  "other part per 1k of pre-game expected gold edge: real / module": [
+   720.0,
+   590.0
+  ],
+  "other part per unit of team strength: real / module": [
+   111.01,
+   182.5
+  ],
+  "farm part per unit of team strength: real / module": [
+   120.14,
+   90.31
+  ],
+  "kills minus deaths by 15, per 1k of pre-game expected gold edge: real / module": [
+   0.69,
+   1.88
+  ],
+  "kills minus deaths by 15, per unit of team strength: real / module": [
+   0.1,
+   0.64
+  ],
+  "kills minus deaths by 15, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    0.6,
+    0.06
+   ],
+   [
+    0.98,
+    0.57
+   ]
+  ],
+  "other gold, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    614.22,
+    67.35
+   ],
+   [
+    342.44,
+    158.15
+   ]
+  ]
+ },
+ "sup": {
+  "farm part: spread real / module": [
+   127,
+   210
+  ],
+  "other part: spread real / module": [
+   413,
+   556
+  ],
+  "farm part: correlation of the module's game average with real": 0.157,
+  "other part: correlation of the module's game average with real": 0.092,
+  "other part per 1k of pre-game expected gold edge: real / module": [
+   1340.0,
+   440.0
+  ],
+  "other part per unit of team strength: real / module": [
+   56.02,
+   139.94
+  ],
+  "farm part per unit of team strength: real / module": [
+   3.28,
+   17.19
+  ],
+  "kills minus deaths by 15, per 1k of pre-game expected gold edge: real / module": [
+   1.41,
+   1.35
+  ],
+  "kills minus deaths by 15, per unit of team strength: real / module": [
+   0.0,
+   0.43
+  ],
+  "kills minus deaths by 15, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    1.44,
+    -0.02
+   ],
+   [
+    0.78,
+    0.41
+   ]
+  ],
+  "other gold, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    1296.11,
+    34.62
+   ],
+   [
+    252.86,
+    135.76
+   ]
+  ]
+ },
+ "top": {
+  "farm part: spread real / module": [
+   414,
+   516
+  ],
+  "other part: spread real / module": [
+   690,
+   703
+  ],
+  "farm part: correlation of the module's game average with real": 0.462,
+  "other part: correlation of the module's game average with real": 0.333,
+  "other part per 1k of pre-game expected gold edge: real / module": [
+   1230.0,
+   500.0
+  ],
+  "other part per unit of team strength: real / module": [
+   127.03,
+   138.12
+  ],
+  "farm part per unit of team strength: real / module": [
+   96.72,
+   68.52
+  ],
+  "kills minus deaths by 15, per 1k of pre-game expected gold edge: real / module": [
+   0.77,
+   0.98
+  ],
+  "kills minus deaths by 15, per unit of team strength: real / module": [
+   0.21,
+   0.48
+  ],
+  "kills minus deaths by 15, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    0.69,
+    0.19
+   ],
+   [
+    0.78,
+    0.46
+   ]
+  ],
+  "other gold, together [per 1k pre-game, per unit strength]: real / module": [
+   [
+    1187.68,
+    92.3
+   ],
+   [
+    446.46,
+    125.07
+   ]
+  ]
+ }
+}

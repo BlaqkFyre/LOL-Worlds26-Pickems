@@ -1,0 +1,65 @@
+{
+ "cal": {
+  "gain": 1.429,
+  "lane_mu": 1.0,
+  "lane_k": 1.0,
+  "fight_eps": 1.0,
+  "style_mode": "timing",
+  "form": "off",
+  "fight_model": "typed",
+  "push_fight": "on",
+  "lane_level": "on",
+  "early_kills": "counts",
+  "first_dragon_taker": "on",
+  "fight_players": "on",
+  "death_timers": "on",
+  "event_order": "on",
+  "laning": "actions"
+ },
+ "history": [
+  {
+   "iter": 0,
+   "gain": 1.604,
+   "win_slope_on_v1": 1.068,
+   "win_intercept": 0.072,
+   "team_gd15_sd sim / real": [
+    2803,
+    2385
+   ],
+   "team_gd15 per v1 sim / real": [
+    1113,
+    748
+   ]
+  },
+  {
+   "iter": 1,
+   "gain": 1.521,
+   "win_slope_on_v1": 1.081,
+   "win_intercept": 0.187,
+   "team_gd15_sd sim / real": [
+    2851,
+    2385
+   ],
+   "team_gd15 per v1 sim / real": [
+    1208,
+    748
+   ]
+  },
+  {
+   "iter": 2,
+   "gain": 1.429,
+   "win_slope_on_v1": 0.991,
+   "win_intercept": 0.178,
+   "team_gd15_sd sim / real": [
+    2768,
+    2385
+   ],
+   "team_gd15 per v1 sim / real": [
+    1114,
+    748
+   ]
+  }
+ ],
+ "training games": 300,
+ "sims each": 24
+}

@@ -89,6 +89,7 @@ with Run("rule_gold", inputs=[config.OE_CSV, config.TL_MATCH, config.TL_EVENTS, 
             b = [p for p in range(5) if role[p] == r]; rr = [p for p in range(5, 10) if role[p] == r]
             if b and rr: lane_rule.append({"gameid": gid, "role": r, "rule_events": gold[b[0]] - gold[rr[0]]})
     KC = pd.DataFrame(kills_cmp); R = {"kills compared": len(KC)}
+    pd.DataFrame(lane_rule).to_csv(config.R / "local" / "laning" / "rule_events_by_role.csv", index=False)
     R["1 kill gold: rule v real"] = {"mean abs difference": round(float((KC.rule - KC.real).abs().mean()), 1), "median rule / real": [round(float(KC.rule.median())), round(float(KC.real.median()))],
                                      "correlation": round(float(KC.rule.corr(KC.real)), 3), "share within 30 gold": round(float(((KC.rule - KC.real).abs() <= 30).mean()), 3)}
     # 2 the lane test with rule gold (CS contest as in s5_farm.py D)

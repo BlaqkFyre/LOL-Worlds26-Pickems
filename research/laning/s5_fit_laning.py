@@ -7,8 +7,8 @@ s5_rule_gold.py).
   plates    plates per side-lane-minute 3:00-13:59: Poisson: minute, lane, lane edge, enemy / own laners just killed, plates off, own grubs
   dragon    first dragon taker: side, strength, bot / mid / jungle edges, kills in the 60 s before, Worlds term (Luke: keep kills-before)
   grubs     each grub's taker: side, strength, top / mid / jungle edges, kills in the 60 s before, team grubs priority (Luke: full model)
-  farm      the CS contest per role (feed): blue-minus-red CS per minute when both laners are alive = a + b x (pre-game expected CS edge at
-            10 / 10) + spread, each minute's swing carrying over to the next by the measured lag-1 correlation (waves alternate); CS a minute for a lane-mate whose opponent is dead; gold per CS. From the feed's Worlds games on other
+  farm      the farm contest per role in gold (feed; 15 Nov, was CS): blue-minus-red farm gold per minute when both are alive = a + b x
+            (pre-game expected gold edge at 10 / 10) + spread, each minute's swing carrying over to the next by the measured lag-1 correlation (waves alternate); CS a minute for a lane-mate whose opponent is dead; gold per CS. From the feed's Worlds games on other
             days (leave-day-out: these are rates of the game, the players' and champions' part comes from the lane model fitted only on
             earlier games); "all" uses every feed game
   quest     ADC quest completion times (feed, other days)
@@ -45,47 +45,64 @@ with Run("fit_laning", inputs=[config.OE_CSV, config.LANE_FEATURES, config.TL_MA
         num = pd.concat([pd.Series(res, index=tr.tb.values), pd.Series(-res, index=tr.tr.values)]).groupby(level=0).sum()
         den = pd.concat([pd.Series(w, index=tr.tb.values), pd.Series(w, index=tr.tr.values)]).groupby(level=0).sum()
         return (num / (den + k)).to_dict()
-    def farm(Mx):
-        piv = Mx.pivot_table(index=["gameid", "m", "role"], columns="side", values=["dcs", "dead"]).dropna()
-        Cc = piv[(piv[("dead", "blue")] == 0) & (piv[("dead", "red")] == 0)].copy(); Cc["y"] = Cc[("dcs", "blue")] - Cc[("dcs", "red")]
-        Cc = Cc[["y"]].reset_index(); Cc.columns = ["gameid", "m", "role", "y"]; Cc["pre"] = [PC.get((g, r), np.nan) / 10 for g, r in zip(Cc.gameid, Cc.role)]; Cc = Cc.dropna()
+    def farm(Mx, Qx):
+        """The farm contest in gold (15 Nov, Luke: fix jungle and support): each player-minute's farm gold = gold earned minus what kills,
+        assists, plates, turrets and the ADC quest paid (values fitted here on the feed) minus passive gold (20.4 per 10 s from 1:05, wiki).
+        That holds minions (cannons included), jungle camps and scuttles, and support item gold. Contest: blue minus red farm gold per
+        minute when both are alive = a + b x (pre-game expected gold edge at 10 / 10) + a swing carrying over by the measured lag-1
+        correlation. Also each role's farm gold a minute when alive (for a minute the opponent is dead) and gold per CS (bounty accrual)."""
+        Mx = Mx.copy(); qk = {(g, s_, int(t // 60)) for g, s_, t in zip(Qx.gameid, Qx.side, Qx.t)}
+        Mx["quest"] = [float(r_ == "bot" and (g, s_, m) in qk) for g, s_, m, r_ in zip(Mx.gameid, Mx.side, Mx.m, Mx.role)]
+        X = pd.get_dummies(Mx.role + "_" + Mx.m.astype(str), dtype=float); ev_cols = ["dk", "da", "plates", "towers", "first_tower", "quest"]
+        bb = np.linalg.lstsq(np.c_[X.values, Mx[["dcs"] + ev_cols].values], Mx.dgold.values, rcond=None)[0]; gpc = float(bb[-len(ev_cols) - 1])
+        evw = dict(zip(ev_cols, bb[-len(ev_cols):]))
+        passive = np.where(Mx.m.values >= 2, 2.04 * 60, 2.04 * 55)
+        Mx["fg"] = Mx.dgold.values - sum(evw[c] * Mx[c].values for c in ev_cols) - passive
+        piv = Mx.pivot_table(index=["gameid", "m", "role"], columns="side", values=["fg", "dead"]).dropna()
+        Cc = piv[(piv[("dead", "blue")] == 0) & (piv[("dead", "red")] == 0)].copy(); Cc["y"] = Cc[("fg", "blue")] - Cc[("fg", "red")]
+        Cc = Cc[["y"]].reset_index(); Cc.columns = ["gameid", "m", "role", "y"]; Cc["pre"] = [PE.get((g, r), np.nan) / 10 for g, r in zip(Cc.gameid, Cc.role)]; Cc = Cc.dropna()
         out = {}
         for r, g in Cc.groupby("role"):
             b = np.linalg.lstsq(np.c_[np.ones(len(g)), g.pre], g.y.values, rcond=None)[0]; resid = g.y.values - np.c_[np.ones(len(g)), g.pre] @ b
             alive = Mx[(Mx.role == r) & (Mx.dead == 0)]
             gg = g.assign(e=resid).sort_values(["gameid", "m"]); gg["prev"] = gg.groupby("gameid").e.shift(); gg["mp"] = gg.groupby("gameid").m.shift()
-            cc = gg[gg.mp == gg.m - 1]; rho = float(cc.e.corr(cc.prev)) if len(cc) > 30 else 0.0  # waves alternate: a big CS minute tends to follow a small one
-            out[r] = {"a": float(b[0]), "b": float(b[1]), "sd": float(resid.std()), "rho": rho, "cs_rate": {str(m): float(v) for m, v in alive.groupby("m").dcs.mean().items()}}
-        X = pd.get_dummies(Mx.role + "_" + Mx.m.astype(str), dtype=float); cols = ["dcs", "dk", "da", "plates", "dead", "towers", "first_tower"]
-        bb = np.linalg.lstsq(np.c_[X.values, Mx[cols].values], Mx.dgold.values, rcond=None)[0]
-        return out, float(bb[-len(cols)])
+            cc = gg[gg.mp == gg.m - 1]; rho = float(cc.e.corr(cc.prev)) if len(cc) > 30 else 0.0  # waves alternate: a big minute tends to follow a small one
+            out[r] = {"a": float(b[0]), "b": float(b[1]), "sd": float(resid.std()), "rho": rho, "gold_rate": {str(m): float(v) for m, v in alive.groupby("m").fg.mean().items()}}
+        return out, gpc, {k: round(float(v), 1) for k, v in evw.items()}
     XA = lambda d: np.column_stack([np.ones(len(d))] + [(d.m.values == m).astype(float) for m in range(4, 14)] + [(d.lane.values == "mid").astype(float), (d.lane.values == "bot").astype(float)]
                                    + [d[k].values.astype(float) for k in ("edge", "en_dead", "own_dead", "taken", "grubs")])
     PNAMES = ["const"] + [f"m{m}" for m in range(4, 14)] + ["lane_mid", "lane_bot", "edge", "en_dead", "own_dead", "taken", "grubs"]
     inputs, summary = {}, {}
-    for cut in days + ["all"]:
+    train_inputs = {}
+    for cut in [config.SPLIT] + days + ["all"]:  # 16 Nov: + the 1 Sep cut-off, for calibrating the module on training games
         before = (lambda d: d.day < cut) if cut != "all" else (lambda d: d.day == d.day)
         F_, P_, DR, GR = (T[k][before(T[k])] for k in ("fights", "plates", "dragon", "grubs"))
         if cut != "all": assert F_.day.max() < cut and DR.day.max() < cut
         te = team_eff(GR)
         GRx = GR.assign(team=GR.tb.map(te).fillna(0) - GR.tr.map(te).fillna(0))
         Mx = M[M.day != cut] if cut != "all" else M; Qx = Q[Q.day != cut] if cut != "all" else Q
-        fm, gpc = farm(Mx)
+        fm, gpc, evw = farm(Mx, Qx)
         L = {"fight": dict(zip(["const", "pre", "team", "state"], fit.logistic(np.c_[np.ones(len(F_)), F_[["pre", "team", "state"]].values], F_.y.values).tolist())),
              "plates": dict(zip(PNAMES, fit.poisson(XA(P_), P_.y.values).tolist())),
              "dragon": dict(zip(["const", "z", "bot", "mid", "jng", "net60", "w"], fit.logistic(np.c_[np.ones(len(DR)), DR[["z", "bot", "mid", "jng", "net60", "w"]].values], DR.y.values).tolist())),
              "grubs": dict(zip(["const", "z", "top", "mid", "jng", "net60", "team"], fit.logistic(np.c_[np.ones(len(GRx)), GRx[["z", "top", "mid", "jng", "net60", "team"]].values], GRx.y.values).tolist())),
-             "farm": fm, "gold_per_cs": gpc, "quest_times": sorted(Qx.t.round().astype(int).tolist()), "rules": RULES, "cutoff": cut,
+             "farm": fm, "farm_unit": "gold", "event_gold_fitted": evw, "gold_per_cs": gpc, "quest_times": sorted(Qx.t.round().astype(int).tolist()), "rules": RULES, "cutoff": cut,
              "n": {"fights": len(F_), "plate rows": len(P_), "dragons": len(DR), "grubs": len(GR), "feed minutes": len(Mx), "quests": len(Qx)}}
         if cut == "all": L["team_grubs_priority"] = {k: round(float(v), 4) for k, v in te.items()}
-        name = "laning_all.json" if cut == "all" else f"laning_{cut}.json"
+        name = "laning_all.json" if cut == "all" else "laning_train.json" if cut == config.SPLIT else f"laning_{cut}.json"
         (PDIR / name).write_text(json.dumps(L, indent=1))
-        if cut != "all":
+        if cut == config.SPLIT:  # every major-league training game before 1 Sep (tables and grub priority fitted on those same games: calibration only)
+            for g in G10[(G10.day < cut) & G10.league.isin(config.MAJOR)].gameid.unique():
+                train_inputs[g] = {"day": "train", "pre_gold": [float(PE.get((g, r), 0.0)) for r in config.ROLES], "pre_cs": [float(PC.get((g, r), 0.0)) for r in config.ROLES],
+                                   "tgrub": float(te.get(team.get((g, "blue")), 0.0) - te.get(team.get((g, "red")), 0.0)), "w": 0.0}
+        elif cut != "all":
             for g in [g for g, d in wday.items() if d == cut]:
                 inputs[g] = {"day": cut, "pre_gold": [float(PE.get((g, r), 0.0)) for r in config.ROLES], "pre_cs": [float(PC.get((g, r), 0.0)) for r in config.ROLES],
                              "tgrub": float(te.get(team.get((g, "blue")), 0.0) - te.get(team.get((g, "red")), 0.0)), "w": 1.0}
         summary[cut] = {"fight": {k: round(v, 3) for k, v in L["fight"].items()}, "n": L["n"]}
         print(cut, summary[cut], flush=True)
     (config.R / "local" / "laning" / "inputs.json").write_text(json.dumps(inputs, indent=1))
+    (config.R / "local" / "laning" / "inputs_train.json").write_text(json.dumps(train_inputs))
+    run.result("training games with inputs", len(train_inputs))
     run.result("Worlds games with inputs", len(inputs))
     run.save_json(config.MODEL_DIR / "laning" / "laning_params_all.json", json.loads((PDIR / "laning_all.json").read_text()))

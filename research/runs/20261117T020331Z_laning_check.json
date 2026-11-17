@@ -1,0 +1,62 @@
+{
+ "name": "laning_check",
+ "started_utc": "2026-11-17T01:15:43",
+ "script": {
+  "path": "research/laning/s5_laning_check.py",
+  "sha256": "3c9759b6aa42561d8210ffe682bd10381209431f4826cfb42b0f9d91c836da57",
+  "git_commit": "5894cf3",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "sims_per_game": 1000
+ },
+ "inputs": [
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  },
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/sim3/s3_sim.py",
+   "bytes": 62574,
+   "modified": "2026-11-15T08:00:44",
+   "sha256": "1febd3de2ddcda0bbeaa3904f9555a54e89dee3e2c6e9be074f5be3a3b86085f"
+  },
+  {
+   "path": "research/local/laning/inputs.json",
+   "bytes": 35671,
+   "modified": "2026-11-17T12:09:27",
+   "sha256": "38e7fb1dddfb3cc9924ca7d089cab78177c0ddc719faadd191051b61d7d534f8"
+  }
+ ],
+ "record": "20261117T020331Z_laning_check.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 2868.0,
+ "results": {
+  "who wins: current / module": [
+   0.6063,
+   0.6228
+  ]
+ },
+ "outputs": [
+  {
+   "path": "research/model/laning/laning_check_1000.json",
+   "sha256": "dad4eb68e29ac8ef7ef005ea6a98d7b20bf2b6d28ada4d6eddb045f3a85e07b2"
+  }
+ ],
+ "not_written_because_failed": []
+}

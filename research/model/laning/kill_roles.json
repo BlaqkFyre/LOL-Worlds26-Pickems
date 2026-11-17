@@ -1,0 +1,29 @@
+{
+ "kills": 4263,
+ "killer": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "role and window": 0.9043,
+   "+ own pre-game edge": 0.9005,
+   "n": 810
+  },
+  "Worlds day by day": {
+   "role and window": 0.8983,
+   "+ own pre-game edge": 0.9008,
+   "n": 518
+  },
+  "own pre-game edge coefficient (all kills; per 1k)": 0.474
+ },
+ "victim": {
+  "2026 from 1 Sep (non-Worlds)": {
+   "role and window": 1.6107,
+   "+ own pre-game edge": 1.6115,
+   "n": 910
+  },
+  "Worlds day by day": {
+   "role and window": 1.6066,
+   "+ own pre-game edge": 1.6066,
+   "n": 587
+  },
+  "own pre-game edge coefficient (all kills; per 1k)": -0.043
+ }
+}

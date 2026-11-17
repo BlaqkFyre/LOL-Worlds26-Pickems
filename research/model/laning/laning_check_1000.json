@@ -1,0 +1,159 @@
+{
+ "games": 94,
+ "sims per game": 1000,
+ "real Worlds": {
+  "role edge at 15: sd": {
+   "top": 995,
+   "jng": 786,
+   "mid": 678,
+   "bot": 1043,
+   "sup": 383
+  },
+  "role edge at 10: sd": {
+   "top": 599,
+   "jng": 535,
+   "mid": 411,
+   "bot": 594,
+   "sup": 319
+  },
+  "team edge at 15: sd, and per unit of v1 strength": [
+   2231,
+   642
+  ],
+  "kills before 14:00 per game": 6.3,
+  "early kills by killer role": {
+   "top": 0.166,
+   "jng": 0.262,
+   "mid": 0.228,
+   "bot": 0.238,
+   "sup": 0.098
+  },
+  "first blood time (median s)": 225.0,
+  "first tower time (median s)": 905.5,
+  "first tower lane": {
+   "TOP": 0.436,
+   "MID": 0.106,
+   "BOT": 0.457
+  },
+  "first dragon: blue share, median time (s)": [
+   0.5,
+   394.0
+  ],
+  "grubs taken by blue (mean of 3)": 1.87,
+  "plates before 14:00 per game by lane": {
+   "TOP": 4.03,
+   "MID": 2.48,
+   "BOT": 4.14
+  }
+ },
+ "current sim (with death timers)": {
+  "role edge at 15: sd (sim)": {
+   "top": 933,
+   "jng": 847,
+   "mid": 831,
+   "bot": 989,
+   "sup": 449
+  },
+  "role edge at 10: sd (sim)": {
+   "top": 600,
+   "jng": 546,
+   "mid": 545,
+   "bot": 652,
+   "sup": 312
+  },
+  "role edge at 15: correlation of the sim's average with the real edge": {
+   "top": 0.488,
+   "jng": 0.528,
+   "mid": 0.366,
+   "bot": 0.168,
+   "sup": 0.296
+  },
+  "role edge at 10: correlation of the sim's average with the real edge": {
+   "top": 0.467,
+   "jng": 0.475,
+   "mid": 0.243,
+   "bot": 0.162,
+   "sup": 0.217
+  },
+  "team edge at 15: sd, and per unit of v1 strength": [
+   2591,
+   757
+  ],
+  "kills before 14:00 per game": 6.69,
+  "early kills by killer role": {
+   "top": 0.173,
+   "jng": 0.278,
+   "mid": 0.248,
+   "bot": 0.209,
+   "sup": 0.092
+  },
+  "first blood time (median s)": 219.0,
+  "first tower time (median s)": 889.0,
+  "first tower lane": {
+   "TOP": 0.395,
+   "MID": 0.251,
+   "BOT": 0.354
+  },
+  "first dragon: blue share, median time (s)": [
+   0.368,
+   435.0
+  ],
+  "grubs taken by blue (mean of 3)": 1.73,
+  "who wins: log loss": 0.6063
+ },
+ "laning module": {
+  "role edge at 15: sd (sim)": {
+   "top": 986,
+   "jng": 874,
+   "mid": 918,
+   "bot": 998,
+   "sup": 615
+  },
+  "role edge at 10: sd (sim)": {
+   "top": 585,
+   "jng": 556,
+   "mid": 559,
+   "bot": 632,
+   "sup": 390
+  },
+  "role edge at 15: correlation of the sim's average with the real edge": {
+   "top": 0.477,
+   "jng": 0.429,
+   "mid": 0.426,
+   "bot": 0.089,
+   "sup": 0.279
+  },
+  "role edge at 10: correlation of the sim's average with the real edge": {
+   "top": 0.474,
+   "jng": 0.393,
+   "mid": 0.377,
+   "bot": 0.231,
+   "sup": 0.241
+  },
+  "team edge at 15: sd, and per unit of v1 strength": [
+   2837,
+   1103
+  ],
+  "kills before 14:00 per game": 6.74,
+  "early kills by killer role": {
+   "top": 0.19,
+   "jng": 0.244,
+   "mid": 0.245,
+   "bot": 0.207,
+   "sup": 0.113
+  },
+  "first blood time (median s)": 217.0,
+  "first tower time (median s)": 921.0,
+  "first tower lane": {
+   "TOP": 0.416,
+   "MID": 0.185,
+   "BOT": 0.399
+  },
+  "first dragon: blue share, median time (s)": [
+   0.448,
+   435.0
+  ],
+  "grubs taken by blue (mean of 3)": 1.87,
+  "who wins: log loss": 0.6228
+ }
+}

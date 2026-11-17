@@ -20,6 +20,8 @@ with Run("laning_check", params={"sims_per_game": N}, inputs=[config.OE_CSV, con
     W = o[o.league == "WLDs"]; IN = json.load(open(config.R / "local" / "laning" / "inputs.json")); XS = simsetup.inputs()
     games = [g for g in IN if g in XS]
     sim = simsetup.sim_module(); P0 = simsetup.params({"typed", "ll", "fdt", "fpl", "dt"}); cal0 = simsetup.cal_default(); cal1 = dict(cal0, laning="actions")
+    CALF = config.MODEL_DIR / "laning" / "calibration.json"  # 16 Nov: the module's own gain, fitted on training games (s5_calibrate.py)
+    if CALF.exists(): cal1["gain"] = json.load(open(CALF))["cal"]["gain"]; print("module gain", cal1["gain"], flush=True)
     tm, ev, _ = data.timelines(); g2 = dict(zip(tm.gameid, tm.gid)); look = data.roles(data.oe(["gameid", "league", "date", "side", "position", "champion"]))
     # real
     real = {}

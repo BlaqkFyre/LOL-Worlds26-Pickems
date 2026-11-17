@@ -259,6 +259,7 @@ class Sim:
             gd = farm.sum() + gold.sum(); gd_at[m] = gd
             if m in (5, 10, 15): gd_at[f"roles{m}"] = (farm + gold).copy()
             if m == 15: gd_at["kd15"] = (K[0] - D[0]) - (K[1] - D[1])  # each role's kills minus deaths by 15:00, blue minus red (for the lane checks)
+            if m == 15 and LA is not None: gd_at["la_cs15"] = cs_abs[0] - cs_abs[1]  # the module's CS edge per role at 15:00 (lane checks)
             role_lead = farm + gold
             # --- laning / gold drift ---
             if m < 15 and LA is not None: pass  # laning module: the CS contest after this minute's fights
@@ -414,12 +415,17 @@ class Sim:
                     note(tk, s, "kill", f"{ROLES[k]} kills {ROLES[v]}" + ("" if ast else " (solo)"))
             if LA is not None and 1 <= m < 15:  # the CS contest (s5_farm.py): both alive = contest; one dead = the other farms alone
                 for i, r in enumerate(ROLES):
-                    fr = LA["farm"][r]; rate = fr["cs_rate"].get(str(m), 0.0)
-                    dfrac = [min(1.0, sum(max(0.0, min(e_, t0 + 60) - max(s_, t0)) for s_, e_ in dead_ivr[sd_][i]) / 60) for sd_ in (0, 1)]
+                    fr = LA["farm"][r]; dfrac = [min(1.0, sum(max(0.0, min(e_, t0 + 60) - max(s_, t0)) for s_, e_ in dead_ivr[sd_][i]) / 60) for sd_ in (0, 1)]
                     rho_ = fr.get("rho", 0.0); sw_ = rho_ * la_prev[i] + math.sqrt(max(0.0, 1 - rho_ ** 2)) * rng.normal(0, fr["sd"]); la_prev[i] = sw_
-                    contest = (1 - dfrac[0]) * (1 - dfrac[1]) * (fr["a"] + fr["b"] * pre_c[i] / 10 + sw_)
-                    gb = rate * (1 - dfrac[0]) + contest / 2; gr = rate * (1 - dfrac[1]) - contest / 2
-                    cs_abs[0, i] += gb; cs_abs[1, i] += gr; gold[i] += (gb - gr) * LA["gold_per_cs"]
+                    if LA.get("farm_unit") == "gold":  # 15 Nov: the contest in farm gold (minions, camps, scuttles, support items), led by the expected gold edge
+                        rate = fr["gold_rate"].get(str(m), 0.0); contest = (1 - dfrac[0]) * (1 - dfrac[1]) * (fr["a"] + fr["b"] * pre_g[i] / 10 + sw_)
+                        gb = rate * (1 - dfrac[0]) + contest / 2; gr = rate * (1 - dfrac[1]) - contest / 2
+                        cs_abs[0, i] += gb / LA["gold_per_cs"]; cs_abs[1, i] += gr / LA["gold_per_cs"]; gold[i] += gb - gr
+                        gb, gr = gb / LA["gold_per_cs"], gr / LA["gold_per_cs"]  # in CS for the quest's minion bonus below
+                    else:
+                        rate = fr["cs_rate"].get(str(m), 0.0); contest = (1 - dfrac[0]) * (1 - dfrac[1]) * (fr["a"] + fr["b"] * pre_c[i] / 10 + sw_)
+                        gb = rate * (1 - dfrac[0]) + contest / 2; gr = rate * (1 - dfrac[1]) - contest / 2
+                        cs_abs[0, i] += gb; cs_abs[1, i] += gr; gold[i] += (gb - gr) * LA["gold_per_cs"]
                     if i == 3:
                         for sd_, gx_ in ((0, gb), (1, gr)):
                             if quest_done[sd_]: gold[3] += (1 if sd_ == 0 else -1) * LR_["quest_per_minion"] * gx_
@@ -650,7 +656,8 @@ class Sim:
                 "g15": float(gd_at.get(15, np.nan)), "gd": {k: float(v) for k, v in gd_at.items() if isinstance(k, int)},
                 "roles15": [float(v) for v in gd_at.get("roles15", np.full(5, np.nan))], "roles10": [float(v) for v in gd_at.get("roles10", np.full(5, np.nan))],
                 "kd15": [int(v) for v in gd_at.get("kd15", (K[0] - D[0]) - (K[1] - D[1]))], "first_tower_lane": first_lane.get("tower", ""),
-                "capped": capped, "steps": sorted(steps, key=lambda e: e["t"]) if log else []}
+                "capped": capped, "steps": sorted(steps, key=lambda e: e["t"]) if log else [],
+                **({"la_cs15": [float(v) for v in gd_at.get("la_cs15", np.full(5, np.nan))]} if LA is not None else {})}
 
 
 if __name__ == "__main__":

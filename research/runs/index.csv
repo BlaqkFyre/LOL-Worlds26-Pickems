@@ -27,3 +27,17 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261114T110614Z_laning_check.json,laning_check,ok,539.5,research/laning/s5_laning_check.py,7e7e0cb,True,research/model/laning/laning_check.json
 20261114T110748Z_fit_laning.json,fit_laning,ok,61.4,research/laning/s5_fit_laning.py,7e7e0cb,True,research/model/laning/laning_params_all.json
 20261114T111241Z_laning_check.json,laning_check,ok,291.9,research/laning/s5_laning_check.py,7e7e0cb,True,research/model/laning/laning_check.json
+20261114T204510Z_laning_replay_check.json,laning_replay_check,ok,24.0,research/laning/s5_replay_check.py,5894cf3,False,research/model/laning/replay_check.json
+20261114T204756Z_lane_parts.json,lane_parts,ok,146.2,research/laning/s5_lane_parts.py,5894cf3,True,research/model/laning/lane_parts.json
+20261114T204958Z_lane_parts.json,lane_parts,ok,89.7,research/laning/s5_lane_parts.py,5894cf3,True,research/model/laning/lane_parts.json
+20261114T205139Z_lane_parts.json,lane_parts,ok,91.4,research/laning/s5_lane_parts.py,5894cf3,True,research/model/laning/lane_parts.json
+20261114T205322Z_lane_parts.json,lane_parts,ok,89.7,research/laning/s5_lane_parts.py,5894cf3,True,research/model/laning/lane_parts.json
+20261114T205911Z_kill_roles.json,kill_roles,ok,163.5,research/laning/s5_kill_roles.py,5894cf3,True,research/model/laning/kill_roles.json
+20261114T205935Z_rule_gold.json,rule_gold,ok,4.3,research/laning/s5_rule_gold.py,5894cf3,True,research/model/laning/rule_gold.json
+20261114T210144Z_fit_laning.json,fit_laning,ok,59.9,research/laning/s5_fit_laning.py,5894cf3,True,research/model/laning/laning_params_all.json
+20261114T210219Z_laning_replay_check.json,laning_replay_check,ok,23.2,research/laning/s5_replay_check.py,5894cf3,False,research/model/laning/replay_check.json
+20261114T210350Z_lane_parts.json,lane_parts,ok,89.8,research/laning/s5_lane_parts.py,5894cf3,True,research/model/laning/lane_parts.json
+20261114T210847Z_laning_check.json,laning_check,ok,296.1,research/laning/s5_laning_check.py,5894cf3,False,research/model/laning/laning_check.json
+20261117T010927Z_fit_laning.json,fit_laning,ok,77.7,research/laning/s5_fit_laning.py,5894cf3,True,research/model/laning/laning_params_all.json
+20261117T011530Z_laning_calibrate.json,laning_calibrate,ok,341.5,research/laning/s5_calibrate.py,5894cf3,True,research/model/laning/calibration.json
+20261117T020331Z_laning_check.json,laning_check,ok,2868.0,research/laning/s5_laning_check.py,5894cf3,True,research/model/laning/laning_check_1000.json

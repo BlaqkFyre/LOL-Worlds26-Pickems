@@ -59,9 +59,9 @@ def feed():
     return "\n".join(rows) + src("feed_analysis")
 
 def check():
-    A, B = J("laning_check_nowave"), J("laning_check_wave"); Re, C, M1, M2 = A["real Worlds"], A["current sim (with death timers)"], A["laning module"], B["laning module"]
+    A, B, G3 = J("laning_check_nowave"), J("laning_check_wave"), J("laning_check_goldfarm"); Re, C, M1, M2, M3 = A["real Worlds"], A["current sim (with death timers)"], A["laning module"], B["laning module"], G3["laning module"]
     f = lambda d: " / ".join(f"{v}" for v in d.values()) if isinstance(d, dict) else str(d)
-    rows = [f"| Measure (Worlds, {A['games']} games, {A['sims per game']} sims each) | Real | Current sim | Module | Module + waves |", "|---|---|---|---|---|"]
+    rows = [f"| Measure (Worlds, {A['games']} games, {A['sims per game']} sims each) | Real | Current sim | Module | Module + waves | + farm in gold |", "|---|---|---|---|---|---|"]
     for lab, kr, ks in [("Lane gold edge at 15, spread: top / jng / mid / ADC / sup", "role edge at 15: sd", "role edge at 15: sd (sim)"),
                         ("Lane gold edge at 10, spread", "role edge at 10: sd", "role edge at 10: sd (sim)"),
                         ("Team gold edge at 15: spread, gold per unit of strength", "team edge at 15: sd, and per unit of v1 strength", "team edge at 15: sd, and per unit of v1 strength"),
@@ -71,10 +71,10 @@ def check():
                         ("First tower lane: top / mid / bot", "first tower lane", "first tower lane"),
                         ("First dragon: blue share, median time (s)", "first dragon: blue share, median time (s)", "first dragon: blue share, median time (s)"),
                         ("Grubs to blue (of 3)", "grubs taken by blue (mean of 3)", "grubs taken by blue (mean of 3)")]:
-        rows.append(f"| {lab} | {f(Re[kr])} | {f(C[ks])} | {f(M1[ks])} | {f(M2[ks])} |")
+        rows.append(f"| {lab} | {f(Re[kr])} | {f(C[ks])} | {f(M1[ks])} | {f(M2[ks])} | {f(M3[ks])} |")
     k15 = "role edge at 15: correlation of the sim's average with the real edge"
-    rows.append(f"| Lane edge at 15: correlation of the sim's average with the real game | n/a | {f(C[k15])} | {f(M1[k15])} | {f(M2[k15])} |")
-    rows.append(f"| Who wins: log loss | n/a | {C['who wins: log loss']} | {M1['who wins: log loss']} | {M2['who wins: log loss']} |")
+    rows.append(f"| Lane edge at 15: correlation of the sim's average with the real game | n/a | {f(C[k15])} | {f(M1[k15])} | {f(M2[k15])} | {f(M3[k15])} |")
+    rows.append(f"| Who wins: log loss | n/a | {C['who wins: log loss']} | {M1['who wins: log loss']} | {M2['who wins: log loss']} | {M3['who wins: log loss']} |")
     return "\n".join(rows) + src("laning_check_wave", "laning_check")
 
 TABLES = {"check": check, "feed": feed, "lane_edges": lane_edges, "fight_winner": fight_winner, "gank_state": gank_state,

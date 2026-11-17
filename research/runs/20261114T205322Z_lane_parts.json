@@ -1,0 +1,45 @@
+{
+ "name": "lane_parts",
+ "started_utc": "2026-11-14T20:51:52",
+ "script": {
+  "path": "research/laning/s5_lane_parts.py",
+  "sha256": "0006ec94c54842fe4537260e98a639aeb5aed3a5184e8bfe16b2cbf10401c15e",
+  "git_commit": "5894cf3",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "sims_per_game": 60
+ },
+ "inputs": [
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79467277,
+   "modified": "2026-11-11T12:12:51",
+   "sha256": "fcd2e451d10fd56271f151a63cf001ed8727935ef4237a34956ab4a1836944de"
+  },
+  {
+   "path": "research/sim3/s3_sim.py",
+   "bytes": 61882,
+   "modified": "2026-11-15T07:44:44",
+   "sha256": "24c9a47ba1e706efb502536d2d4ccc08fdc612c3fd54deed5804b3431e8715a5"
+  },
+  {
+   "path": "research/local/laning/inputs.json",
+   "bytes": 35671,
+   "modified": "2026-11-14T22:07:48",
+   "sha256": "38e7fb1dddfb3cc9924ca7d089cab78177c0ddc719faadd191051b61d7d534f8"
+  }
+ ],
+ "record": "20261114T205322Z_lane_parts.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 89.7,
+ "results": {},
+ "outputs": [
+  {
+   "path": "research/model/laning/lane_parts.json",
+   "sha256": "5ac29a1324a40026d73d5e71758aeaca1f4a59e0a120d981d73ec2043abe862e"
+  }
+ ],
+ "not_written_because_failed": []
+}
