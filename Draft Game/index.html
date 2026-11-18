@@ -146,6 +146,23 @@ button{font:inherit;color:inherit;cursor:pointer}
 .lineup button small{display:block;font-size:8.5px;color:var(--muted);font-weight:700;letter-spacing:.06em}
 .lineup button.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 .lineup button .off{color:#ff8d93} .lineup button .fx{color:#ffd54a}
+.lineup.en button{cursor:default;border-color:rgba(232,64,87,.35)}
+/* team grades (Luke, 19 Nov) in each team's left panel under the game stats; a grade that changed with the last pick shows "B→A" */
+.tgrades{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;padding-top:4px;border-top:1px solid var(--line)}
+.tgrades div{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:5px;text-align:center;padding:0 0 1px;white-space:nowrap}
+.tgrades small{display:block;font-size:8px;color:var(--muted);letter-spacing:.06em;font-weight:700;line-height:9px}
+.tgrades b{font-size:13px;line-height:14px}
+.tbox .rows{gap:3px;margin-top:6px}
+.tbox .big{line-height:1}
+.tgrades .gS{color:#ffd54a} .tgrades .gA{color:#78e3a0} .tgrades .gB{color:#e3e7ef} .tgrades .gC{color:#b6bdcc} .tgrades .gD{color:#cbb0ff} .tgrades .gF{color:#ff6d84} .tgrades .gx{color:var(--muted)}
+.tgrades .ar{color:var(--muted);font-weight:600;font-size:11px}
+/* hover panel: your team and the enemy side by side, deny value below */
+.syn2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.syn2>*,.syn2 .synp>*{min-width:0}
+.syn2 .sc{font-size:10.5px;padding:0 5px}
+.syn2 .lbl{font-size:9px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deny{margin-top:5px}
+
 .dfoot .rolepick button{background:var(--gold);color:#2a1a00;border:none;border-radius:5px;padding:3px 10px;font-weight:800;margin-left:6px;cursor:pointer}
 .dfoot .rolepick button.no{background:var(--panel2);color:var(--fg);border:1px solid var(--line)}
 .card.selswap{box-shadow:0 0 0 3px var(--gold),0 6px 16px rgba(0,0,0,.55)}
@@ -277,7 +294,8 @@ button.bigb:disabled{opacity:.5;cursor:default}
     <div class="dside">
      <div class="wbox slim"><div class="hl"><span class="b" id="d-wbb">Blue 50%</span><span class="muted">WIN CHANCE</span><span class="r" id="d-wbr">Red 50%</span></div><div class="hbar"><i id="d-wb"></i></div>
       <div class="hl syntot"><span>Synergy <b class="b" id="d-syn-blue">0</b></span><span><b class="r" id="d-syn-red">0</b> Synergy</span></div>
-      <div class="lbl lul">YOUR LINEUP · click two lanes to swap</div><div class="lineup" id="d-lineup"></div></div>
+      <div class="lbl lul">YOUR LINEUP · click two lanes to swap</div><div class="lineup" id="d-lineup"></div>
+      <div class="lbl lul">ENEMY LINEUP</div><div class="lineup en" id="d-elineup"></div></div>
      <div class="wbox info" id="d-info"><div class="lbl">CHAMPION</div><div class="muted sm">Hover a champion to see its stats.</div></div>
     </div>
    </div>
@@ -375,9 +393,17 @@ const regionSets=ids=>{if(!CC)return [];const n={};ids.forEach(i=>{const r=CH[i]
 /* portraits (concept, Luke 17 Nov): Riot's loading-screen art, faint behind 10 random cards per game, under the card colour.
    Riot art only with the Portraits switch on (toolbar), as the Pick'Em app's icon switch; no logos. */
 const ART_URL=c=>`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${encodeURIComponent(c.dd)}_0.jpg`;
+/* square icons on every grid tile (Luke, 19 Nov): the icon address needs Data Dragon's version, fetched once; no icons if it fails.
+   They follow the portraits switch. Shown as each tile's background under the class tint (the 10 portrait cards keep their portrait). */
+let DD_VER=null;const ICON_URL=c=>`https://ddragon.leagueoflegends.com/cdn/${DD_VER}/img/champion/${encodeURIComponent(c.dd)}.png`;
+if(CC)fetch('https://ddragon.leagueoflegends.com/api/versions.json').then(r=>r.json()).then(v=>{if(Array.isArray(v)&&/^[\d.]+$/.test(v[0])){DD_VER=v[0];
+  if(typeof G!=='undefined'&&G&&ART){if(G.drafting){buildGrid();refreshTiles();updateTracker()}document.querySelectorAll('.card .pt').forEach(pt=>{const cd=pt.parentElement,cid=G.picks[cd.dataset.side][cd.dataset.role];if(cid!=null)pt.style.background=tileBg(CH[cid])})}}}).catch(()=>{});
 const tileBg=c=>{const base=`linear-gradient(145deg,hsl(${c.hue},60%,52%),hsl(${(c.hue+30)%360},55%,30%))`;
-  if(!(ART&&CC&&c.dd&&G&&G.art&&G.art.includes(c.id)))return base;
-  return `linear-gradient(145deg,hsla(${c.hue},60%,52%,.74),hsla(${(c.hue+30)%360},55%,30%,.82)),url("${ART_URL(c)}") center 18%/cover`};
+  if(!(ART&&CC&&c.dd))return base;
+  const tint=`linear-gradient(145deg,hsla(${c.hue},60%,52%,.74),hsla(${(c.hue+30)%360},55%,30%,.82))`;
+  if(G&&G.art&&G.art.includes(c.id))return `${tint},url('${ART_URL(c)}') center 18%/cover`;
+  /* every other card (Luke, 19 Nov): its square icon behind the same class-colour tint */
+  return DD_VER?`${tint},url('${ICON_URL(c)}') center/cover`:base};
 
 function statOf(cid,role,k){const c=CH[cid],v=c.s[k];if(role===c.role)return v;if(role===c.flex)return v-(k==='lane'?4:2);return v-10}
 const power=(cid,role)=>(statOf(cid,role,'lane')+statOf(cid,role,'tf')+statOf(cid,role,'late')+statOf(cid,role,'obj'))/4;
@@ -578,7 +604,7 @@ function buildBoard(){
       `<div class="lanepill" style="left:${COLX(r)}px">${LN[r].toUpperCase()}</div>`).join('')+
     ['red','blue'].map(s=>`<div class="strip ${s}"><span class="chip">${s.toUpperCase()} SIDE</span><span class="tname" id="tname-${s}"></span><span class="banlbl">BANS</span><div class="bans">${[0,1,2,3,4].map(k=>`<div class="banslot" id="ban-${s}-${k}"></div>`).join('')}</div></div>`).join('')+
     ['red','blue'].map(s=>`<div class="tbox ${s}" id="tbox-${s}"><div class="lbl">SYNERGY</div><div class="big" id="syn-${s}">0</div><div class="rows">`+
-      [['Kills','k'],['Towers','tw'],['Dragons','dr'],['Barons','ba'],['Elders','el']].map(([n,k])=>`<div>${n}<b id="${k}-${s}">0</b></div>`).join('')+`</div></div>`).join('')+
+      [['Kills','k'],['Towers','tw'],['Dragons','dr'],['Barons','ba'],['Elders','el']].map(([n,k])=>`<div>${n}<b id="${k}-${s}">0</b></div>`).join('')+`</div><div class="tgrades" id="tg-${s}"></div></div>`).join('')+
     `<div id="winbar"><div class="lbl" id="wb-title">WIN %</div><div class="wbv red" id="wb-rv">50%</div><div class="bar"><div id="wb-red"></div><div id="wb-blue"></div><div class="tick"></div></div><div class="wbv blue" id="wb-bv">50%</div></div>`;
 }
 function placeCard(cid,side,role){const c=CH[cid];const tag=role===c.role?'':role===c.flex?' · FLEX':' · OFF';
@@ -586,7 +612,25 @@ function placeCard(cid,side,role){const c=CH[cid];const tag=role===c.role?'':rol
   e.id=`card-${side}-${role}`;e.dataset.side=side;e.dataset.role=role;e.onmouseenter=()=>showTip(cid,e);e.onmouseleave=hideTip;if(G&&side===G.player){e.classList.add('mine');e.onclick=()=>swapClick(role)}e.style.left=(COLX(role)-56)+'px';e.style.top=HOME[side]+'px';return e}
 function setWin(p,title,labels){$('#wb-title').textContent=title;$('#wb-red').style.height=((1-p)*100)+'%';
   $('#wb-rv').textContent=labels?labels[0]:Math.round((1-p)*100)+'%';$('#wb-bv').textContent=labels?labels[1]:Math.round(p*100)+'%'}
-function setSyn(){['blue','red'].forEach(s=>{const v=teamSyn(G.picks[s]),t=(v>0?'+':'')+v;$('#d-syn-'+s).textContent=t;$('#syn-'+s).textContent=t})}
+function setSyn(){['blue','red'].forEach(s=>{const v=teamSyn(G.picks[s]),t=(v>0?'+':'')+v;$('#d-syn-'+s).textContent=t;$('#syn-'+s).textContent=t});renderGrades()}
+/* team grades (Luke, 19 Nov): a plain average of each team's picks so far, each card's stat in the lane it plays (flex and off-lane
+   penalties count), shown with the card grade cuts. Later idea: weight each grade by the lanes the sim uses (OBJ from JGL/SUP/MID, LATE
+   without JGL). */
+const GK=[['lane','LANE'],['tf','FIGHT'],['late','LATE'],['obj','OBJ']];
+function teamGrades(p){const rs=ROLES.filter(r=>p[r]!=null);if(!rs.length)return null;
+  const o={};GK.forEach(([k])=>o[k]=rs.reduce((x,r)=>x+statOf(p[r],r,k),0)/rs.length);return o}
+let GRADE_LAST=null;   /* grades as last shown, per side, so a pick shows what it changed */
+function renderGrades(){
+  if(!G||!$('#tg-blue'))return;const now={};
+  ['blue','red'].forEach(s=>{const a=teamGrades(G.picks[s]);now[s]={};GK.forEach(([k])=>now[s][k]=a?gradeOf(a[k]):'–')});
+  const was=GRADE_LAST&&GRADE_LAST.id===G.id?GRADE_LAST:null,cl=g=>g==='–'?'gx':'g'+g[0];
+  /* a refresh with nothing new keeps the arrows from the last change */
+  const same=was&&['blue','red'].every(s=>GK.every(([k])=>was.cur[s][k]===now[s][k])),before=same?was.g:(was?was.cur:null);
+  ['blue','red'].forEach(s=>{const old=before&&before[s];
+    $('#tg-'+s).innerHTML=GK.map(([k,l])=>{const g=now[s][k],o=old&&old[k]!==g&&old[k]!=='–'?old[k]:null;
+      return `<div><small>${l}</small>${o?`<b class="${cl(o)}">${o}</b><span class="ar">→</span>`:''}<b class="${cl(g)}">${g}</b></div>`}).join('')});
+  if(!same)GRADE_LAST={id:G.id,g:before,cur:now};
+}
 function applySnap(s){['blue','red'].forEach(side=>['k','tw','dr','ba','el'].forEach(k=>{$(`#${k}-${side}`).textContent=s[k][side]}));
   const gk=Math.abs(s.gold/1000).toFixed(1)+'k';setWin(Math.max(.03,Math.min(.97,.5+s.gold/16000)),'GOLD',[s.gold<-50?'+'+gk:'',s.gold>50?'+'+gk:''])}
 const zeroSnap={gold:0,k:{blue:0,red:0},tw:{blue:0,red:0},dr:{blue:0,red:0},ba:{blue:0,red:0},el:{blue:0,red:0}};
@@ -721,8 +765,13 @@ function aiChoose(team,kind){
     return best!=null?best:avail[0].id;
   }
   const nf=noneFit(team);
+  /* deny (Luke, 19 Nov): + 0.3 x how much better the card is for the enemy than their next-best option in that lane, only while that
+     lane is open for them. Measured against their next best, so a card everyone can use isn't favoured just for being usable. */
+  const ev=c=>{const r=roleFor(enemy,c.id);return r==null?null:[r,power(c.id,r)+synGain(enemy,c.id,r)*2.1]},EV=new Map(),top={};
+  avail.forEach(c=>{const v=ev(c);if(!v)return;EV.set(c.id,v);const t=top[v[0]]||(top[v[0]]=[-1e9,-1e9]);if(v[1]>t[0]){t[1]=t[0];t[0]=v[1]}else if(v[1]>t[1])t[1]=v[1]});
+  const deny=id=>{const v=EV.get(id);if(!v)return 0;const t=top[v[0]];return v[1]>=t[0]&&t[1]>-1e9?v[1]-t[1]:0};
   avail.forEach(c=>{let r=roleFor(team,c.id);if(r==null){if(!nf)return;r=firstOpen(team)}
-    let s=power(c.id,r)+Math.random()*6+synGain(team,c.id,r)*2.1;
+    let s=power(c.id,r)+Math.random()*6+synGain(team,c.id,r)*2.1+0.3*deny(c.id);
     const e=G.picks[enemy][r];if(e!=null)s+=(matchup(c.id,e)-50)*0.8;if(c.flex&&G.step<12)s+=1.5;if(s>bs){bs=s;best=c.id}});
   return best;
 }
@@ -776,7 +825,15 @@ function info(cid){
   if(owner){const r=roleOn(owner,cid),e=G.picks[other(owner)][r];
     $('#d-info').innerHTML=cardHead(cid,r,e)+synBlock(cid,owner,other(owner),`${owner===me?'YOUR':'ENEMY'} TEAM · PICKED`);return}
   const r=roleFor(me,cid)||c.role,e=G.picks[enemy][r];
-  $('#d-info').innerHTML=cardHead(cid,r,e)+synBlock(cid,me,enemy,'YOUR TEAM · SYNERGY · RIVALS')+synBlock(cid,enemy,me,'ENEMY TEAM · IF THEY TAKE IT');
+  $('#d-info').innerHTML=cardHead(cid,r,e)+`<div class="syn2">${synBlock(cid,me,enemy,'YOUR TEAM')}<div>${synBlock(cid,enemy,me,'ENEMY · IF TAKEN')}${denyLine(cid)}</div></div>`
+}
+/* deny value (Luke, 19 Nov): what the card would be worth to the enemy, in the lane it would take for them. A pick or ban only denies
+   while that lane is still open for them. */
+function denyLine(cid){
+  const me=G.player,en=other(me),er=roleFor(en,cid),c=CH[cid],act=G.step<20&&curTeam()===me?(KIND(G.step)==='ban'?'Ban':'Pick'):'Taking it';
+  if(er==null)return `<div class="deny"><div class="sc s0"><span title="their ${[c.role,c.flex].filter(Boolean).map(x=>LN[x].toLowerCase()).join(' and ')} ${c.flex?'are':'is'} filled">No deny</span><b>–</b></div></div>`;
+  const ds=teamSyn({...G.picks[en],[er]:cid})-teamSyn(G.picks[en]),g=gradeOf(power(cid,er));
+  return `<div class="deny"><div class="sc ${g[0]==='S'?'sp3':g[0]==='A'?'sp1':'s0'}"><span title="${act} denies their ${LN[er].toLowerCase()}${ds?` (${ds>0?'+':''}${ds} synergy for them)`:''}">Denies ${AB[er].toLowerCase()}</span><b>${g}</b></div></div>`;
 }
 /* hover card for picks and bans on the board (Luke, 17 Nov: picked champions can be hovered when the grid hides them) */
 function showTip(cid,el){
@@ -836,6 +893,10 @@ function renderLineup(){
   const el=$('#d-lineup');if(!el||!G)return;const p=G.picks[G.player];el.innerHTML='';
   ROLES.forEach(r=>{const cid=p[r],c=cid!=null?CH[cid]:null,tag=c?(r===c.role?'':r===c.flex?'<span class="fx"> flex</span>':'<span class="off"> off</span>'):'';
     const b=mk('button',G.swapSel===r?'sel':'',`<small>${AB[r]}</small>${c?c.ini:'—'}${tag}`,el);b.onclick=()=>swapClick(r);if(cid!=null)b.onmouseenter=()=>info(cid)});
+  /* the enemy's picks so far, read-only (Luke, 19 Nov) */
+  const ee=$('#d-elineup');if(!ee)return;const q=G.picks[other(G.player)];ee.innerHTML='';
+  ROLES.forEach(r=>{const cid=q[r],c=cid!=null?CH[cid]:null,tag=c?(r===c.role?'':r===c.flex?'<span class="fx"> flex</span>':'<span class="off"> off</span>'):'';
+    const b=mk('button','',`<small>${AB[r]}</small>${c?c.ini:'—'}${tag}`,ee);if(cid!=null)b.onmouseenter=()=>info(cid)});
 }
 function showReady(){
   const p=G.pre;$('#clashbtn').innerHTML=`CLASH!<small>Win chance (estimate): Blue ${Math.round(p*100)}% · Red ${100-Math.round(p*100)}%</small>`;
