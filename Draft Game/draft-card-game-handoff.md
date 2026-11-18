@@ -1,6 +1,6 @@
 # Draft Pick/Ban Card Game — Project Handoff
 
-*Last updated: 17 Nov 2026, after swapping the placeholders for all 173 League champions as coded cards (see "Real champion cards" in section 0). To pick up where we left off, attach this file in any new chat (main or a parallel window).*
+*Last updated: 18 Nov 2026, after lane structures (respawning inhibitors and nexus turrets) and pick-offs in the sim (see "The sim" below). Before that, 17 Nov: all 173 League champions as coded cards (see "Real champion cards" in section 0).*
 
 > **Resume prompt:** "Here's my handoff file for the draft pick/ban card game. The game is in `C:\Users\Ruth\Documents\GitHub\LOL-Worlds26-Pickems\Draft Game\index.html`, and I've linked that repo folder. Read this file and the game, then help me with: ___"
 
@@ -131,6 +131,17 @@
 - **No Riot names or art yet**, which keeps the fan-policy question (section 8) out of the way.
 
 ### The sim (ported from the Pick'Em `simGame`)
+- **Structures and picks (18 Nov 2026, Luke; research in the main repo, `research/memory/`):**
+  - Each lane's outer, inner and inhibitor towers fall in order; an inhibitor needs its lane's three towers down; nexus turrets can only
+    be hit while an inhibitor is down; the Nexus needs both nexus turrets and an inhibitor down, and still only falls in the push after a
+    won fight. Inhibitors respawn after 5 minutes and nexus turrets after 3 (League wiki), so a base can close again. Pushes take towers
+    in any standing lane.
+  - Picks: before each mid/late step's fight, a chance of one player caught alone (event type `pick`, one-card clash animation), set so
+    picks are 24% of fights before 25:00 and 13% after (98 Worlds games); top laners and mids are caught most. A pick pushes towers but
+    can't end the game.
+  - Checked on 40 random drafts × 50 games (old v new): blue's win share unchanged (44.9% v 46.4%), game time median 32 → 30 min,
+    45+ min 4.1% → 2.8%, kills 20.7 → 20.1, about 1.1 picks and 1.8 nexus turret events a game. The draft screen animations were not
+    play-tested (browser pane hidden).
 - **Card stats feed team strengths:**
   - Lane: Top, Mid, and Bot+Support.
   - Jungle.

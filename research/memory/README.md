@@ -15,5 +15,6 @@ Run from the repo root, in this order (each takes seconds, except m5):
 | `app_sim_check.js` | 7 | The app sim (v50) on the final game 4 draft, pasted into a locally served app tab; results copied to `app_sim_check.json` |
 | `m6_fight_kinds.py` | 9 | The game 3 positioning leads tested on the 98 games: fight kind by phase and gold gap, pick victims by role, vision, fights before objectives, late joiners, towers with no fight |
 | `final-g3-positions.md` | – | Worlds final game 3 read by hand from the broadcast minimap and the feed: who was in each fight and where, and leads for the sim |
+| `build_memory_tables.py` | – | Writes the `SIM_TABLES.memory` block at the end of `js/sim-tables.js` (role XP for death timers; real gaps from the last kill to the Nexus, between structures and between kills; timelines before 1 Sep) |
 | `common.py` | – | Shared code: deaths with measured respawns and the official timer, fights, the gold winner, the event-list reader |
 | `report_tables.py` | – | Report tables from the result files (`python -I research/lib/report.py research/memory/game-memory-report.md research/memory/report_tables.py`) |

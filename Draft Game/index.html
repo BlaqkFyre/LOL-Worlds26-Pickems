@@ -444,12 +444,29 @@ function simGame(bp,rp,quiet,opts){
     const behind=gl2(w)<0?Math.min(1,-gl2(w)/8000):0;swing(w,(600+kw*300)*(1+behind*T.bounty));
     ev(t,w,'fight',`${label}: ${TN(w)} win the fight ${kw} for ${kl}${behind>0.15?' — comeback gold!':''}`,{kw,kl});
     return {w,kw,kl}};
-  const push=(t,w,kw,kl)=>{
+  /* structures (18 Nov, Luke; League wiki Inhibitor and Turret pages): each lane's outer, inner and inhibitor towers fall in order; an
+     inhibitor needs its lane's three towers down; nexus turrets can only be hit while an inhibitor is down; the Nexus needs both nexus
+     turrets down and an inhibitor down, and still only falls in the push after a won fight. Inhibitors respawn after 5 minutes and nexus
+     turrets after 3, so a base can close again and stall the end. st[w] = what side w has taken from the other team's base. */
+  const LANE3=['TOP','MID','BOT'],TIERN=['outer','inner','inhibitor'];
+  const st={blue:{tw:{TOP:0,MID:0,BOT:0},inh:{TOP:-1,MID:-1,BOT:-1},nx:2,nxDown:[]},red:{tw:{TOP:0,MID:0,BOT:0},inh:{TOP:-1,MID:-1,BOT:-1},nx:2,nxDown:[]}};
+  const inhDown=(w,t)=>LANE3.filter(L=>st[w].inh[L]>t);
+  const respawnBase=(w,t)=>{const s=st[w];s.nxDown=s.nxDown.filter(x=>{if(x+3<=t){s.nx++;return false}return true})};
+  const push=(t,w,kw,kl,noEnd)=>{
+    respawnBase(w,t);const s=st[w];
     const pw=1+(buff.baron[w]>t?T.baronPush:0)+(buff.elder[w]>t?T.elderPush:0)+Math.max(0,gl2(w))/T.goldPush+(kw-kl)*0.2+Math.max(0,t-30)/T.latePush;
-    const take=Math.min(11-g.tw[w],Math.max(1,Math.round(pw*(0.5+R()*0.8))));
-    if(take>0){g.tw[w]+=take;swing(w,take*300);ev(t,w,'towers',`${TN(w)} take ${take} tower${take>1?'s':''} (${g.tw[w]} down)`,{n:take})}
-    if(g.tw[w]>=7&&g.inh[w]<3&&R()<sig(pw-1.6)){g.inh[w]++;swing(w,500);ev(t,w,'inhib',`${TN(w)} break an inhibitor`)}
-    if(g.inh[w]>=1&&g.tw[w]>=9&&R()<sig((pw-T.endBar)*1.4)){g.tw[w]=Math.min(11,g.tw[w]+2);return true}
+    const take=Math.max(1,Math.round(pw*(0.5+R()*0.8)));const got=[];
+    const flush=()=>{if(got.length){ev(t,w,'towers',`${TN(w)} take ${got.join(', ')} (${g.tw[w]} down)`,{n:got.length});got.length=0}};   /* towers before the inhibitor they open */
+    for(let q=0;q<take;q++){
+      const open=LANE3.filter(L=>s.tw[L]>=3&&s.inh[L]<=t),down=inhDown(w,t);
+      if(open.length&&R()<sig(pw-1.6)){flush();const L=open[Math.floor(R()*open.length)];s.inh[L]=t+5;g.inh[w]++;swing(w,500);ev(t,w,'inhib',`${TN(w)} break the ${LN[L].toLowerCase()} inhibitor`,{lane:L});continue}
+      if(down.length&&s.nx>0){s.nx--;s.nxDown.push(t);g.tw[w]++;swing(w,300);got.push('a nexus turret');continue}
+      const ln=LANE3.filter(L=>s.tw[L]<3);if(!ln.length)break;
+      const L=ln[Math.floor(R()*ln.length)];   /* any lane still standing: real teams spread their towers across lanes */
+      got.push(`the ${LN[L].toLowerCase()} ${TIERN[s.tw[L]]} tower`);s.tw[L]++;g.tw[w]++;swing(w,300);
+    }
+    flush();
+    if(!noEnd&&s.nx===0&&inhDown(w,t).length&&R()<sig((pw-T.endBar)*1.4))return true;
     return false};
   /* objective calls: the regroup bonus for giving an objective up grows when your comp out-scales theirs late and when you are behind on gold */
   const regroupGain=me=>{const en=other(me);return Math.max(0.5,Math.min(4,1+(S[me].late-S[en].late)*1.5+Math.max(0,-gl2(me))/3000))};
@@ -457,11 +474,23 @@ function simGame(bp,rp,quiet,opts){
     const bx=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0)+(buff.regroup[s]&&buff.regroup[s].until>=t?buff.regroup[s].v:0);
     const m=wt*(B.tf-Rd.tf)+(1-wt)*(B.late-Rd.late)+goldW+bx('blue')-bx('red');return sig(1.702*(me==='blue'?m:-m)/SIM_SD)};
   const ONAME={dragon:'the Dragon',baron:'Baron Nashor',elder:'the Elder Dragon'};
+  /* picks (18 Nov; research/memory/m6_fight_kinds.json, 98 Worlds games): a quarter of fights from 14:00 to 25:00 are one player caught
+     alone (24%), fewer later (13%); top laners and mids are caught most. Who wins it uses the same strength as a fight. */
+  const PICK={share:[0.24,0.13],rate:t=>{const s=t<25?0.24:0.13;return s/(1-s)},victim:[{TOP:0.32,JGL:0.12,MID:0.28,BOT:0.14,SUP:0.15},{TOP:0.33,JGL:0.20,MID:0.22,BOT:0.11,SUP:0.15}]};
+  const pick=t=>{
+    const goldW=g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade)),wt=t<25?1:0.5;
+    const d=wt*(B.tf-Rd.tf)+(1-wt)*(B.late-Rd.late)+goldW+gs()*SIM_SD,w=d>0?'blue':'red',l=other(w);
+    const vw=PICK.victim[t<25?0:1];let u=R()*ROLES.reduce((a,r)=>a+vw[r],0),v='TOP';for(const r of ROLES){u-=vw[r];if(u<=0){v=r;break}}
+    g.k[w]++;const behind=gl2(w)<0?Math.min(1,-gl2(w)/8000):0;swing(w,300*(1+behind*T.bounty));
+    ev(t,w,'pick',`${TN(w)} catch ${nameIn(S[l],v)} (${LN[v].toLowerCase()}) alone — pick-off`,{role:v});
+    return w};
   let objN=0;
   let t=14,winner=null,step=0;
   while(!winner&&t<62){
     step++;t+=step===1?2+Math.floor(R()*3):3+Math.floor(R()*2);
     let res,obj=null;
+    /* a pick a minute before this step's fight, at the rate that makes picks their real share of fights; it can't end the game */
+    if(R()<PICK.rate(t)){const w=pick(t-1);push(t-1,w,1,0,true)}
     const due=[['baron',bT],['elder',eT],['dragon',soul?99:dT]].filter(x=>t>=x[1]).sort((x,y)=>x[1]-y[1])[0];
     if(due&&opts&&opts.choose){
       const me=opts.side,call=opts.choose(due[0],objN,t);
@@ -858,6 +887,7 @@ async function playEvent(e){
     case 'gank':await gank(w,e.lane);break;
     case 'obj':case 'take':await token(e.obj,w,e.stolen);break;
     case 'fight':await clashAnim(ROLES,w,true);break;
+    case 'pick':await clashAnim([e.role],w,false);break;
     case 'towers':await pushAnim(w,false);break;
     case 'inhib':await pushAnim(w,true);break;
     case 'soul':SFX.chime();await bigText('DRAGON SOUL',w);break;

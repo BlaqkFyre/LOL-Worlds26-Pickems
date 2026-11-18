@@ -1,0 +1,56 @@
+{
+ "name": "memory_tables",
+ "started_utc": "2026-11-18T03:18:15",
+ "script": {
+  "path": "research/memory/build_memory_tables.py",
+  "sha256": "3f36c0f5626327185397e96871a04d312df030ca5f0e762b783851a8bc3c4b19",
+  "git_commit": "419c260",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "cutoff": "2026-09-01"
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  },
+  {
+   "path": "research/local/sim4/spread/params/deathtimer.json",
+   "bytes": 1079,
+   "modified": "2026-11-13T23:49:13",
+   "sha256": "c7c59c7b2aa809ee12a7f6f79531985d0c51fc4bd2f35441fa3c162f2de5eb2e"
+  }
+ ],
+ "record": "20261118T031820Z_memory_tables.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 4.5,
+ "results": {
+  "games": 395,
+  "nexus gaps": 380,
+  "structure gaps": 2797,
+  "kill gaps": 6112
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/memory_tables.json",
+   "sha256": "71edb08ff91e66917028a5c295340129e1dbbdb648867b57f70e5e630191450e"
+  }
+ ],
+ "not_written_because_failed": []
+}

@@ -63,3 +63,5 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261117T125949Z_memory_sim_compare.json,memory_sim_compare,ok,1495.0,research/memory/m5_sim_compare.py,46a92e7,True,research/model/memory/m5_sim_compare.json
 20261118T025416Z_memory_fight_kinds.json,memory_fight_kinds,failed,0.3,research/memory/m6_fight_kinds.py,46a92e7,True,
 20261118T025910Z_memory_fight_kinds.json,memory_fight_kinds,ok,16.0,research/memory/m6_fight_kinds.py,46a92e7,True,research/model/memory/m6_fight_kinds.json
+20261118T031820Z_memory_tables.json,memory_tables,ok,4.5,research/memory/build_memory_tables.py,419c260,True,research/model/memory/memory_tables.json
+20261118T032224Z_memory_tables.json,memory_tables,ok,5.4,research/memory/build_memory_tables.py,419c260,True,research/model/memory/memory_tables.json

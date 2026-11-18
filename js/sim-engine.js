@@ -14,6 +14,15 @@ const phOf = m => { let n = 0; for(const p of PH) if(m >= p) n++; return PHN[n -
 const FPH = m => m < 14 ? "0-13" : m < 25 ? "14-24" : m < 35 ? "25-34" : "35+";
 const SPAWN = {dragon: 300, grub: 480, herald: 900, baron: 1200};
 const BARON_BUFF = 180, ELDER_BUFF = 150, INHIB_BACK = 300;
+/* game memory (18 Nov 2026; research/memory/game-memory-report.md). Official rules, League wiki (read 14 and 18 Nov 2026):
+   Respawn page: base wait by level 1-18 and a time factor from 15:00 (+0.425% each 30 s to 30:00, +0.30% to 45:00, +1.45% to 55:00, cap +50%);
+   Turret page: "Nexus turrets respawn 3 minutes after being destroyed"; Inhibitor page: "Destroyed inhibitors respawn after 5 minutes".
+   The data parts (each role's XP by minute, the real gaps from the last kill to the Nexus, between structures and between kills) are in
+   SIM_TABLES.memory, built by research/memory/build_memory_tables.py. Off with cal.game_memory = "off" (the v50 behaviour). */
+const NEXUS_TURRET_BACK = 180;
+const BASE_WAIT = [10, 10, 12, 12, 14, 16, 20, 25, 28, 32.5, 35, 37.5, 40, 42.5, 45, 47.5, 50, 52.5];
+const timeFactor = t => { const h = t / 30; return Math.min(0.5, 0.00425 * clamp(h - 30, 0, 30) + 0.003 * clamp(h - 60, 0, 30) + 0.0145 * clamp(h - 90, 0, 20)); };
+const quant = (q, u) => { const x = u * (q.length - 1), i = Math.floor(x); return i >= q.length - 1 ? q[q.length - 1] : q[i] + (q[i + 1] - q[i]) * (x - i); };
 const sig = x => 1 / (1 + Math.exp(-x));
 const DEFAULT_CAL = {gain: 1, lane_mu: 1, lane_k: 1, fight_eps: 0, max_min: 70, style_mode: "side"};
 const g0 = (o, k, d) => (o && o[k] != null) ? o[k] : d;   // Python dict.get
@@ -132,7 +141,19 @@ class Sim {
     const EWN = ["0-4", "5-9", "10-14"], LANEID = [0, -1, 1, 2, 2], eLead = LL && LL.ev ? lean : null;
     /* events keep their order (opt-in, 13 Nov): each event happens no earlier than the one before it, so a minute's events keep the
        order the sim plays them and nothing comes after the Nexus. Same random draws; only the times (and what they feed) move. */
-    const EO = g0(cal, "event_order", "off") === "on"; let cur = 0; const at = d => EO ? (cur = Math.max(cur, d)) : d;
+    const MT = (g0(cal, "game_memory", "on") === "on" && typeof window !== "undefined" && window.SIM_TABLES && window.SIM_TABLES.memory) || null;
+    /* game memory: an event drawn no later than the one before comes the next second (the clock's step), not in the same second;
+       base structures in one push are spaced by the real base gaps (below) */
+    const EO = g0(cal, "event_order", "off") === "on"; let cur = 0;
+    const at = d => !EO ? d : (cur = (MT && cur > 0 && d <= cur) ? cur + 1 : Math.max(cur, d));
+    /* game memory: who is dead until when (official timer from each role's level at that time); the last fight's winner */
+    const respawn = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
+    const levelAt = (i, t) => { const c = MT.role_xp[ROLES[i]];
+      const xp = t <= 1500 ? (t <= 600 ? c[0] * t / 600 : t <= 900 ? c[0] + (c[1] - c[0]) * (t - 600) / 300 : t <= 1200 ? c[1] + (c[2] - c[1]) * (t - 900) / 300 : c[2] + (c[3] - c[2]) * (t - 1200) / 300)
+        : Math.min(MT.level_xp[17], c[3] + (c[3] - c[2]) / 300 * (t - 1500));
+      let lv = 0; for(const x of MT.level_xp) if(xp >= x) lv++; return Math.max(1, Math.min(18, lv)); };
+    const deathWait = (i, t) => BASE_WAIT[levelAt(i, t) - 1] * (1 + timeFactor(t));
+    let lastFight = null; const nxDown = [[], []];
     const FPon = g0(cal, "fight_players", "off") === "on" && !!this.FP;  /* who is in each fight (13 Nov): kills and assists only among them */
     /* the game's first dragon has its own fitted taker (opt-in, 13 Nov; research/sim4/s4_firstdragon.py) */
     const FDT = (g0(cal, "first_dragon_taker", "off") === "on" && P.taker_first_dragon) ? P.taker_first_dragon[TIM ? "timing" : "side"] : null;
@@ -196,6 +217,9 @@ class Sim {
         const p = sig(ks.intercept + ks.per_1k_gold_lead * gd / 1000 + ks.per_v1_logit * z + ks.baron * bdir + ks.elder * edir
           + g0(ks, "skirmish_style_early", 0) * skirm_d * (m < 15 ? 1 : 0) + rng.normal(0, cal.fight_eps));
         const tf = at(t0 + rng.uniform(0, 55)), dead = [new Set(), new Set()], inv = [new Set(), new Set()], lanesIn = new Set();
+        /* game memory: players still waiting to respawn can't be in this fight; kills in a fight come real kill gaps apart */
+        if(MT) for(const s_ of [0, 1]) for(let i = 0; i < 5; i++) if(respawn[s_][i] > tf) dead[s_].add(i);
+        let kT = tf, lastKT = tf; const killT = j => !MT ? tf + 3 * j : j === 0 ? tf : (kT += quant(MT.kill_gap, rng.random()));
         let part = null;
         for(let j = 0; j < n; j++){
           const s = rng.random() < p ? 0 : 1, o = 1 - s;
@@ -217,12 +241,13 @@ class Sim {
             addGold(s, val.kill);
             if(LL && LL.ev && m < 15){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
             net += sd(s); setd(first, "blood", s);
-            const tk = at(tf + 3 * j); killLog.push([tk, s, k, v, ast]);
+            const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
             fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
           const aliveV = [0, 1, 2, 3, 4].filter(i => !dead[o].has(i));
           if(!aliveV.length) continue;
+          if(MT && [0, 1, 2, 3, 4].every(i => dead[s].has(i))) continue;  /* game memory: a side with nobody alive can't kill */
           if(EK && m < 15){  /* lane-aware early kills (13 Nov): killer and victim drawn as a pair, then assists (research/sim4/s4_earlykills.py) */
             let aliveK = [0, 1, 2, 3, 4].filter(i => !dead[s].has(i)); if(!aliveK.length) aliveK = [0, 1, 2, 3, 4];
             const pairs = [], u = [];
@@ -240,7 +265,7 @@ class Sim {
             if(LL && LL.ev){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
             inv[s].add(k); ast.forEach(i => inv[s].add(i)); inv[o].add(v); [k, v, ...ast].forEach(i => { if(LANEID[i] >= 0) lanesIn.add(LANEID[i]); });
             net += sd(s); setd(first, "blood", s);
-            const tk = at(tf + 3 * j); killLog.push([tk, s, k, v, ast]);
+            const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
             fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
@@ -255,11 +280,12 @@ class Sim {
           addGold(s, val.kill);
           if(earlyLL && LL.ev){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
           net += sd(s); setd(first, "blood", s);
-          const tk = at(tf + 3 * j); killLog.push([tk, s, k, v]);
+          const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v]);
           fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
         }
         /* the fight's record for the play-by-play (13 Nov; no random draws): kills each side, the fight type drawn, gold lead going in */
         if(log && (fk[0] || fk[1])) fights.push({t: Math.floor(tf), f: fid, b: fk[0], r: fk[1], type: ftype, gd});
+        if(MT && fk[0] !== fk[1]) lastFight = {w: fk[0] > fk[1] ? 0 : 1, t: lastKT, t0: tf};
         fid++;
       }
       /* monsters */
@@ -311,6 +337,9 @@ class Sim {
       const sc = SEGC, segPh = g0(cal, "seg_phase", "own") === "own" ? (k => g0(sc, "phase " + k, 0)) : (k => this.segPh[k]);
       for(const s of [0, 1]){
         const sg = sd(s);
+        /* game memory: after a won fight (in the last minute) the winner's structures run from the fight, real gaps apart */
+        const fromFight = MT && lastFight && lastFight.w === s && lastFight.t >= t0 - 60;
+        let pt = MT ? (fromFight ? lastFight.t0 : null) : 0;
         for(let li = 0; li < 3; li++){
           const L = LANES[li]; if(seg[s][li] >= 15) continue;
           const tier = Math.floor(seg[s][li] / 5);
@@ -337,10 +366,11 @@ class Sim {
               if(LL.ev.own_lane_plate){ if(m < 15){ const own = [...LANE_ROLES[L], 1]; for(let i = 0; i < 5; i++) gold[i] += sg * (own.includes(i) ? LL.ev.own_lane_plate[i] : LL.ev.other_lane_plate[i]); } }
               else if(m < 14){ for(let i = 0; i < 5; i++) gold[i] += sg * LL.ev.team_plate[i]; }
             }
-            if(seg[s][li] % 5 === 0){ towers[s]++; addGold(s, val.tower); setd(first, "tower", s); const twt = at(t0 + rng.uniform(0, 59)); setd(ftime, "tower", EO ? twt : t0 + 30); setd(firstLane, "tower", L);
+            if(seg[s][li] % 5 === 0){ towers[s]++; addGold(s, val.tower); setd(first, "tower", s); const twt = (MT && pt != null) ? at(pt += quant(MT.struct_gap, rng.random())) : at(t0 + rng.uniform(0, 59)); setd(ftime, "tower", EO ? twt : t0 + 30); setd(firstLane, "tower", L);
               note(twt, s, "tower", `T${seg[s][li] / 5} ${L}`); }
           }
         }
+        if(MT) nxDown[s] = nxDown[s].filter(x => { if(x + NEXUS_TURRET_BACK <= t0){ nxTowers[s]++; return false; } return true; });  /* nexus turrets respawn */
         const opn = [0, 1, 2].filter(li => seg[s][li] >= 15);
         opn.forEach(li => { if(openT[s][li] == null) openT[s][li] = t0; });
         if(!opn.length) continue;
@@ -357,13 +387,24 @@ class Sim {
         const [sz, prz] = this.push[down.length ? "inhib_down" : "no_inhib_down"];
         const npush = rng.random() < sig(xb) ? rng.pick(sz, prz) : 0;
         if(npush) lastBase[s] = t0;
+        /* game memory: a base push starts with the won fight (real bases fall while it is still going), else at a random second; base
+           structures come real base gaps apart, and a step draws its time only when it takes something */
+        if(MT && pt == null) pt = t0 + rng.uniform(0, 59);
         for(let q = 0; q < npush; q++){
           down = [0, 1, 2].filter(li => inhibBack[s][li] > t0);
-          const upInh = opn.filter(li => inhibBack[s][li] <= t0), tt = at(t0 + rng.uniform(0, 59));
+          const upInh = opn.filter(li => inhibBack[s][li] <= t0), ttE = MT ? null : at(t0 + rng.uniform(0, 59));
+          const TT = () => MT ? at(pt += quant(MT.base_gap, rng.random())) : ttE;
           if(down.length && (!upInh.length || rng.random() < P.nexus_tier_share)){
-            if(nxTowers[s] > 0){ nxTowers[s]--; towers[s]++; addGold(s, val.tower); note(tt, s, "tower", "nexus tower"); }
-            else { winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); break; }
-          } else if(upInh.length){ const li = rng.pickUniform(upInh); inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
+            if(nxTowers[s] > 0){ const tt = TT(); nxTowers[s]--; towers[s]++; addGold(s, val.tower); if(MT) nxDown[s].push(tt); note(tt, s, "tower", "nexus tower"); }
+            else if(MT){  /* game memory: the Nexus falls only after a won fight, before the losers are all back (real: never 60 s+ after the last kill) */
+              const o_ = 1 - s, back = Math.max(...respawn[o_]);
+              if(!lastFight || lastFight.w !== s || back <= Math.max(t0, lastFight.t)) break;
+              const gapN = Math.max(lastFight.t + quant(MT.nexus_gap, rng.random()), EO && cur > 0 ? cur + 1 : 0);
+              if(gapN >= back) break;   /* the losers are back (counting from the events already placed) before the Nexus could fall */
+              const tn = at(gapN);
+              winner = s; tEnd = tn; note(tn, s, "nexus", "Nexus"); break; }
+            else { const tt = TT(); winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); break; }
+          } else if(upInh.length){ const tt = TT(), li = rng.pickUniform(upInh); inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
         }
         if(winner != null) break;
       }
