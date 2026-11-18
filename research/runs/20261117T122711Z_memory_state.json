@@ -1,0 +1,36 @@
+{
+ "name": "memory_state",
+ "started_utc": "2026-11-17T12:27:01",
+ "script": {
+  "path": "research/memory/m3_state.py",
+  "sha256": "b6c1be401a55e38587d736973d7855db8eafe1daf78d3a41af2ac7e29780d9ed",
+  "git_commit": "46a92e7",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "fights": "fights_G20.csv",
+  "bootstrap": 1000
+ },
+ "inputs": [
+  {
+   "path": "research/model/memory/fights_G20.csv",
+   "bytes": 171444,
+   "modified": "2026-11-17T23:26:11",
+   "sha256": "3b309f831201fbcfd9f897b9d7aad7b515813a6e33a20e704540fff9f9843d0c"
+  }
+ ],
+ "record": "20261117T122711Z_memory_state.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 10.2,
+ "results": {
+  "snowball, won last fight": 0.109
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m3_state.json",
+   "sha256": "8d168b6230119d4c7d8ccef8147dcdd4838cc912320d4fa0e7b70e8911f375ed"
+  }
+ ],
+ "not_written_because_failed": []
+}

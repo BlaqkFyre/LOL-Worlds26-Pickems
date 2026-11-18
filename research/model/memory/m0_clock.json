@@ -1,0 +1,58 @@
+{
+ "no cutting": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 8,
+  "largest s over": 2149.0,
+  "kills within 3 s of gol.gg": 0.879,
+  "kills after 25:00 within 3 s": 0.868,
+  "kills compared": 2449
+ },
+ "gap 2 s, frozen 30 s": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 2,
+  "largest s over": 0.0,
+  "kills within 3 s of gol.gg": 0.911,
+  "kills after 25:00 within 3 s": 0.904,
+  "kills compared": 2449
+ },
+ "gap 5 s, frozen 30 s (used)": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 2,
+  "largest s over": 0.0,
+  "kills within 3 s of gol.gg": 0.911,
+  "kills after 25:00 within 3 s": 0.904,
+  "kills compared": 2449
+ },
+ "gap 10 s, frozen 30 s": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 2,
+  "largest s over": 0.0,
+  "kills within 3 s of gol.gg": 0.911,
+  "kills after 25:00 within 3 s": 0.904,
+  "kills compared": 2449
+ },
+ "gap 5 s, frozen 60 s": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 2,
+  "largest s over": 1.0,
+  "kills within 3 s of gol.gg": 0.91,
+  "kills after 25:00 within 3 s": 0.903,
+  "kills compared": 2449
+ },
+ "gap 5 s, frozen never": {
+  "length v file: median s": -1.0,
+  "games more than 30 s off": 2,
+  "largest s over": 12.0,
+  "kills within 3 s of gol.gg": 0.902,
+  "kills after 25:00 within 3 s": 0.888,
+  "kills compared": 2449
+ },
+ "gap 5 s, frozen 1 s": {
+  "length v file: median s": -309.5,
+  "games more than 30 s off": 98,
+  "largest s over": -114.0,
+  "kills within 3 s of gol.gg": 0.004,
+  "kills after 25:00 within 3 s": 0.0,
+  "kills compared": 2449
+ }
+}

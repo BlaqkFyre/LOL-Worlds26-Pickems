@@ -1,0 +1,39 @@
+{
+ "name": "memory_fight_kinds",
+ "started_utc": "2026-11-18T02:58:54",
+ "script": {
+  "path": "research/memory/m6_fight_kinds.py",
+  "sha256": "324145c6903493e03fdc2f3e3071cd1712058302af28117ac53366c390bc7481",
+  "git_commit": "46a92e7",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "hp_in": 0.25,
+  "fight_gap": 20,
+  "obj_window_s": 90,
+  "tower_window_s": 60,
+  "bootstrap": 1000
+ },
+ "inputs": [
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  }
+ ],
+ "record": "20261118T025910Z_memory_fight_kinds.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 16.0,
+ "results": {
+  "fights": 1148
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m6_fight_kinds.json",
+   "sha256": "94b30604e1fcd496a00d2ef8e04b6e74a431047908b4070c604b21d02b5050f4"
+  }
+ ],
+ "not_written_because_failed": []
+}

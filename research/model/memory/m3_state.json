@@ -1,0 +1,129 @@
+{
+ "snowball: fit (blue wins next fight)": {
+  "fights": 1048,
+  "constant (blue side)": 0.073,
+  "per 1,000 gold lead": 0.153,
+  "won the last fight": 0.109,
+  "won the last fight, 90% range": [
+   0.004,
+   0.219
+  ],
+  "per 1,000 gold, 90% range": [
+   0.124,
+   0.186
+  ],
+  "won last, at even gold: win chance": 0.545,
+  "lost last, at even gold": 0.491
+ },
+ "snowball: last fight's winner wins the next, by its gold lead": {
+  "behind 3k+": {
+   "fights": 87,
+   "wins next": 0.414
+  },
+  "behind 1-3k": {
+   "fights": 89,
+   "wins next": 0.326
+  },
+  "within 1k": {
+   "fights": 285,
+   "wins next": 0.544
+  },
+  "ahead 1-3k": {
+   "fights": 259,
+   "wins next": 0.602
+  },
+  "ahead 3k+": {
+   "fights": 328,
+   "wins next": 0.735
+  }
+ },
+ "snowball: last fight's winner wins the next, by phase": {
+  "before 14:00": {
+   "fights": 274,
+   "wins next": 0.496
+  },
+  "14:00-25:00": {
+   "fights": 417,
+   "wins next": 0.607
+  },
+  "after 25:00": {
+   "fights": 357,
+   "wins next": 0.639
+  }
+ },
+ "seconds from one fight to the next: median, 25%, 75%": [
+  118,
+  61,
+  198
+ ],
+ "share of game time dead, by role and phase": {
+  "top": {
+   "before 14:00": 0.018,
+   "14:00-25:00": 0.069,
+   "after 25:00": 0.092
+  },
+  "jng": {
+   "before 14:00": 0.013,
+   "14:00-25:00": 0.059,
+   "after 25:00": 0.092
+  },
+  "mid": {
+   "before 14:00": 0.013,
+   "14:00-25:00": 0.054,
+   "after 25:00": 0.089
+  },
+  "bot": {
+   "before 14:00": 0.012,
+   "14:00-25:00": 0.046,
+   "after 25:00": 0.082
+  },
+  "sup": {
+   "before 14:00": 0.011,
+   "14:00-25:00": 0.043,
+   "after 25:00": 0.072
+  }
+ },
+ "closeness: fit (blue wins the fight)": {
+  "fights": 1147,
+  "constant": 0.082,
+  "per extra player in the fight": -0.182,
+  "per extra full health bar": 0.338,
+  "per 1,000 gold lead": 0.166
+ },
+ "closeness: by health gap going in (full bars)": {
+  "under 0.5": {
+   "fights": 469,
+   "side with more health wins": 0.488,
+   "median |swing|": 753
+  },
+  "0.5-1": {
+   "fights": 350,
+   "side with more health wins": 0.48,
+   "median |swing|": 600
+  },
+  "1-2": {
+   "fights": 278,
+   "side with more health wins": 0.604,
+   "median |swing|": 586
+  },
+  "2+": {
+   "fights": 50,
+   "side with more health wins": 0.64,
+   "median |swing|": 816
+  }
+ },
+ "numbers going in (alive): side with more alive wins": {
+  "1": {
+   "fights": 145,
+   "wins": 0.676
+  },
+  "2": {
+   "fights": 27,
+   "wins": 0.815
+  },
+  "3": {
+   "fights": 26,
+   "wins": 0.846
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "name": "memory_sim_compare",
+ "started_utc": "2026-11-17T12:34:54",
+ "script": {
+  "path": "research/memory/m5_sim_compare.py",
+  "sha256": "d27188b2931d34a6dd8d101a53af80004a9d6c731541bf13325d41ecd832ceda",
+  "git_commit": "46a92e7",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "sims_per_game": 1000,
+  "fight_gap": 20,
+  "sim": "s3_sim default with death timers"
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/sim3/s3_sim.py",
+   "bytes": 62574,
+   "modified": "2026-11-15T08:00:44",
+   "sha256": "1febd3de2ddcda0bbeaa3904f9555a54e89dee3e2c6e9be074f5be3a3b86085f"
+  },
+  {
+   "path": "research/local/sim3/out_11nov/lanes3_features.csv",
+   "bytes": 1071224,
+   "modified": "2026-11-11T13:55:26",
+   "sha256": "747c08c4d7ae274b0d4fcf7918c44bbe8ddad50aaa5266c56968e29dce821c1e"
+  }
+ ],
+ "record": "20261117T125949Z_memory_sim_compare.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 1495.0,
+ "results": {
+  "games": 94
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m5_sim_compare.json",
+   "sha256": "aeb712d7555b5071ef6d45f8a12af22395560060d341f55e1d772d9e18c12ddf"
+  }
+ ],
+ "not_written_because_failed": []
+}

@@ -13,6 +13,7 @@ TL_EVENTS = R / "local" / "sim3" / "tl_events.csv"                   # parsed go
 TL_GOLD = R / "local" / "sim3" / "tl_gold.csv"                       # gold and CS per role per minute
 LANE_FEATURES = R / "local" / "sim3" / "out_11nov" / "lanes3_features.csv"  # the current sim's lane inputs (skill gap, champion gold, v1)
 FEED_DIR = R / "local" / "feed"                                      # lolesports live stats frames (one JSON per esports game)
+FEED_FULL = R / "local" / "feed_full"                                 # the same feed, whole games with team totals (98 Worlds games, pulled 17 Nov)
 STALE = {R / "local" / "sim3" / "out" / "tl_match.csv": "older timeline match (626 games); use config.TL_MATCH"}
 
 # where results go

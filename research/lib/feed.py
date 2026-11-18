@@ -3,7 +3,14 @@ moved here for the step 3 fits). Clocks come from the gol.gg timelines (offsets 
   games()           yields (gameid, roles[10], sides[10], seconds, frames array [n, 10, 8: gold, level, k, d, a, cs, hp, maxhp])
   player_minutes()  one row per player per minute 1:00-14:59: dgold, dcs, dk, da, dd, dead share, own-lane plates, side's towers, first tower
   quest_times()     each ADC's bot-lane quest completion (first 250+ gold jump with no kill, assist or plate, from 10:00: the quest needs 1,350
-                    points, and passive points plus a full lane of minions can't reach that much before then): gameid, side, t"""
+                    points, and passive points plus a full lane of minions can't reach that much before then): gameid, side, t
+  full()            the whole-game pull (config.FEED_FULL, 17 Nov): one dict per game with the game clock (pauses cut, see clock()), players
+                    [n, 10, 8], team totals [n, 2, 6: gold, towers, inhibitors, barons, kills, dragons], roles, sides, champions, the file's
+                    game id, length and winner. Cached in research/local/cache (named by the folder's file sizes and times).
+  clock(s, gold)    game seconds from feed seconds: a gap over 5 s between frames counts as 1 s, a stretch of 30 s or more with no gold change
+                    for anyone (after 1:30) counts 0. Chosen 17 Nov on the 98 games: lengths then match the file (median -1 s, 2 games 36-43 s
+                    short, both with no gap) and 91% of kills fall within 3 s of gol.gg's times (88% with no cutting); gaps of 2-10 s and frozen
+                    stretches of 30-60 s give the same results."""
 import json, glob
 import numpy as np, pandas as pd
 from . import config, data
@@ -58,3 +65,42 @@ def quest_times():
                 if sec[i] >= 600 and dt <= 2 and g_ - PASSIVE * dt >= 250 and A[i, p, 2] == A[i - 1, p, 2] and A[i, p, 4] == A[i - 1, p, 4] and not any(abs(t - sec[i]) <= 3 for t in plt_):
                     out.append({"gameid": gid, "day": day[gid], "side": side[p], "t": float(sec[i])}); break
     return pd.DataFrame(out)
+
+GAP_S, FROZEN_S = 5, 30
+def clock(s, gold):
+    step = np.diff(s, prepend=s[0]).astype(float); step[step > GAP_S] = 1
+    G = gold.sum(1); same = np.r_[False, G[1:] == G[:-1]]; i = 0
+    while i < len(s):
+        if same[i]:
+            j = i
+            while j + 1 < len(s) and same[j + 1]: j += 1
+            if s[i] > 90 and s[j] - s[i - 1] >= FROZEN_S: step[i:j + 1] = 0
+            i = j + 1
+        else: i += 1
+    return np.cumsum(step)
+
+def full():
+    import pickle, os
+    files = sorted(glob.glob(str(config.FEED_FULL / "1*.json")))
+    import hashlib
+    tag = hashlib.sha256(repr([(os.path.basename(f), os.path.getsize(f), int(os.path.getmtime(f))) for f in files]).encode()).hexdigest()[:12]
+    cache = config.CACHE_DIR / f"feed_full_{len(files)}_{tag}.pkl"
+    if cache.exists(): return pickle.load(open(cache, "rb"))
+    o = data.oe(["gameid", "league", "date", "side", "position", "champion", "gamelength", "result"]); W = o[o.league == "WLDs"]
+    P_ = W[W.position.isin(config.ROLES)]
+    sig = {v: g for g, v in P_.groupby("gameid").champion.apply(lambda s: "|".join(sorted(data.key(c) for c in s))).items()}
+    tm = W[W.position == "team"]; LEN = tm.drop_duplicates("gameid").set_index("gameid").gamelength.to_dict()
+    WIN = tm[tm.result == 1].set_index("gameid").side.str.lower().to_dict(); DAY = tm.drop_duplicates("gameid").set_index("gameid").date.str[:10].to_dict()
+    out = []
+    for f in files:
+        d = json.load(open(f)); P = d["meta"]["blueTeamMetadata"]["participantMetadata"] + d["meta"]["redTeamMetadata"]["participantMetadata"]
+        gid = sig.get("|".join(sorted(data.key(p["championId"]) for p in P)))
+        if gid is None: raise RuntimeError(f"feed game {f} has no Worlds game in the file")
+        s = np.array([x[0] for x in d["frames"]], float); A = np.array([x[1] for x in d["frames"]], float)
+        T = np.array([x[1] for x in d["team"]], float)
+        if len(T) != len(s): raise RuntimeError(f"{f}: team rows and frames differ")
+        out.append({"esports": os.path.basename(f)[:-5], "gameid": gid, "day": DAY[gid], "t": clock(s, A[:, :, 0]), "feed_s": s, "P": A, "T": T,
+                    "roles": [ROLE_FEED[p["role"]] for p in P], "sides": ["blue"] * 5 + ["red"] * 5, "champs": [p["championId"] for p in P],
+                    "players": [p["summonerName"].strip() for p in P], "length": float(LEN[gid]), "winner": WIN[gid]})
+    config.CACHE_DIR.mkdir(parents=True, exist_ok=True); pickle.dump(out, open(cache, "wb"))
+    return out

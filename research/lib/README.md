@@ -20,6 +20,7 @@ Built after Luke asked for a research system that is secure, accurate, maintaina
 | `runlog.py` | `Run`: a record per script run in `research/runs/` (script SHA-256 and git state, inputs' sizes, dates and SHA-256, parameters, key results, outputs, time, status) plus `research/runs/index.csv`; `latest(name)` |
 | `compare.py` | Compares two result files value by value (proves a rebuilt script gives the same numbers) |
 | `doccheck.py` | Checks every tracked Markdown doc: file paths and commit hashes in backticks exist (zipped local folders and temporary files allowed). Run it before committing doc changes: `python -I research/lib/doccheck.py` |
+| `feed.py` | The lolesports feed as tables: the 15-minute files (`games`, `player_minutes`, `quest_times`) and the whole-game Worlds pull (`full()`, cached; `clock()` cuts pauses: a gap over 5 s counts 1 s, 30 s+ with no gold change counts 0, chosen by `research/memory/m0_clock.py`) |
 | `report.py` | Fills `<!-- table: name -->` blocks in a Markdown report from a tables module (e.g. `research/laning/report_tables.py`) |
 
 **Writing a new script**

@@ -1,0 +1,18 @@
+{
+ "note": "copied from the browser run of research/memory/app_sim_check.js (17 Nov 2026 AEST, app v50 at commit 46a92e7, served locally); no run record",
+ "trace": {"winner": "blue", "length": "28:44", "kills": [22, 13], "towers": [8, 3], "barons": [1, 0],
+  "fights": ["2:49-2:49 BLG 0 GEN 1", "8:14-8:20 BLG 2 GEN 1", "10:38-10:38 BLG 1 GEN 0", "12:07-12:07 BLG 0 GEN 1", "13:18-13:18 BLG 1 GEN 0",
+   "15:37-16:13 BLG 10 GEN 5", "19:52-19:52 BLG 0 GEN 2", "22:53-23:02 BLG 4 GEN 0", "24:22-24:28 BLG 1 GEN 2", "25:20-25:29 BLG 3 GEN 1"],
+  "objectives": ["5:10 GEN dragon", "8:45 GEN grubs", "10:38 GEN dragon", "13:44 BLG tower T1 BOT", "14:11 GEN tower T1 MID", "16:28 BLG herald",
+   "17:07 BLG dragon", "17:19 BLG tower T1 MID", "18:11 BLG tower T1 TOP", "18:11 GEN tower T1 BOT", "20:36 BLG tower T2 MID", "20:36 GEN tower T1 TOP",
+   "23:02 BLG dragon", "25:32 BLG tower T2 BOT", "26:45 BLG baron", "27:39 BLG tower T3 MID", "28:14 BLG dragon", "28:14 BLG inhib",
+   "28:44 BLG tower nexus tower", "28:44 BLG tower nexus tower", "28:44 BLG nexus"]},
+ "seeds": 1000,
+ "fights_per_game": 10.99,
+ "deaths_per_fight_counts": {"1": 4917, "2": 1866, "3": 1302, "4": 1167, "5": 819, "6": 419, "7": 196, "8": 115, "9": 83, "10": 32, "11": 27, "12": 51},
+ "fights_6plus_one_side": 0.0259,
+ "same_second_objective_pairs_per_game": 5.62,
+ "objectives_per_game": 20.4,
+ "nexus_s_after_last_kill_median": 51,
+ "nexus_over_60s_after_last_kill": 0.442
+}

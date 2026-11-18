@@ -115,6 +115,7 @@ When Luke wants to leave notes on the app ("notes session", "notes window"):
 | `Draft Game/` | Separate pick/ban card game (`index.html`) and its handoff file |
 | `tools/qol-notes-overlay.js` | Note-taking overlay for notes sessions (pasted into a browser tab; not loaded by the app) |
 | `research/laning-plan.md`, `research/laning/` | The sim redesign's first slice (laning phase as data-proven actions): plan, step 1 scripts (`s5_*.py`), the lolesports feed puller, report with generated tables. Results in `research/model/laning/` |
+| `research/memory/` | Game memory measurements (17 Nov): what real games do after a fight, from the whole-game Worlds feed (`research/local/feed_full/`) and gol.gg timelines, and the current sims against them (start with its README; report `game-memory-report.md`). Results in `research/model/memory/` |
 | `research/lib/` | Shared research library (start with its README): one config for paths, dates and expected sizes; data loaders with checks; leak-checked splits; run records (`research/runs/`); report tables built from results |
 | `SESSION_NOTES.md` | Live state, recent updates, what's next, open decisions. Older blocks: `SESSION_NOTES_ARCHIVE.md` |
 

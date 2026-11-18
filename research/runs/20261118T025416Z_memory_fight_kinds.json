@@ -1,0 +1,32 @@
+{
+ "name": "memory_fight_kinds",
+ "started_utc": "2026-11-18T02:54:16",
+ "script": {
+  "path": "research/memory/m6_fight_kinds.py",
+  "sha256": "038a6af483f5f3173037b4bf2600afa45013734431889c0bffa403eeab625043",
+  "git_commit": "46a92e7",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "hp_in": 0.25,
+  "fight_gap": 20,
+  "obj_window_s": 90,
+  "tower_window_s": 60,
+  "bootstrap": 1000
+ },
+ "inputs": [
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  }
+ ],
+ "record": "20261118T025416Z_memory_fight_kinds.json",
+ "status": "failed",
+ "error": "ValueError: min() arg is an empty sequence",
+ "seconds": 0.3,
+ "results": {},
+ "outputs": [],
+ "not_written_because_failed": []
+}

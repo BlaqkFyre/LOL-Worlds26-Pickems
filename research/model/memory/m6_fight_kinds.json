@@ -1,0 +1,244 @@
+{
+ "fights": 1148,
+ "1 kind share by phase": {
+  "before 14:00": {
+   "pick": 0.364,
+   "other": 0.445,
+   "big (8+)": 0.191,
+   "fights": 371
+  },
+  "14:00-25:00": {
+   "pick": 0.243,
+   "other": 0.305,
+   "big (8+)": 0.452,
+   "fights": 420
+  },
+  "after 25:00": {
+   "pick": 0.129,
+   "other": 0.269,
+   "big (8+)": 0.602,
+   "fights": 357
+  }
+ },
+ "1 kind share by gold gap going in": {
+  "under 1k": {
+   "pick": 0.305,
+   "big (8+)": 0.307,
+   "fights": 384
+  },
+  "1-3k": {
+   "pick": 0.289,
+   "big (8+)": 0.398,
+   "fights": 349
+  },
+  "3-6k": {
+   "pick": 0.177,
+   "big (8+)": 0.469,
+   "fights": 254
+  },
+  "6k+": {
+   "pick": 0.124,
+   "big (8+)": 0.621,
+   "fights": 161
+  }
+ },
+ "1 kind share by numbers alive gap going in": {
+  "0": {
+   "pick": 0.239,
+   "big (8+)": 0.435,
+   "fights": 950
+  },
+  "1": {
+   "pick": 0.31,
+   "big (8+)": 0.372,
+   "fights": 145
+  },
+  "2": {
+   "pick": 0.208,
+   "big (8+)": 0.17,
+   "fights": 53
+  }
+ },
+ "1 after 25:00, kind share by gold gap": {
+  "under 1k": {
+   "pick": 0.189,
+   "big (8+)": 0.568,
+   "fights": 37
+  },
+  "1-3k": {
+   "pick": 0.159,
+   "big (8+)": 0.659,
+   "fights": 82
+  },
+  "3-6k": {
+   "pick": 0.108,
+   "big (8+)": 0.542,
+   "fights": 120
+  },
+  "6k+": {
+   "pick": 0.11,
+   "big (8+)": 0.636,
+   "fights": 118
+  }
+ },
+ "2 deaths by role: share of pick victims v share of all deaths": {
+  "before 14:00": {
+   "top": [
+    0.474,
+    0.235
+   ],
+   "jng": [
+    0.044,
+    0.183
+   ],
+   "mid": [
+    0.222,
+    0.165
+   ],
+   "bot": [
+    0.133,
+    0.199
+   ],
+   "sup": [
+    0.126,
+    0.217
+   ],
+   "pick victims": 135,
+   "deaths": 617
+  },
+  "14:00-25:00": {
+   "top": [
+    0.324,
+    0.217
+   ],
+   "jng": [
+    0.118,
+    0.214
+   ],
+   "mid": [
+    0.275,
+    0.178
+   ],
+   "bot": [
+    0.137,
+    0.173
+   ],
+   "sup": [
+    0.147,
+    0.217
+   ],
+   "pick victims": 102,
+   "deaths": 980
+  },
+  "after 25:00": {
+   "top": [
+    0.326,
+    0.196
+   ],
+   "jng": [
+    0.196,
+    0.206
+   ],
+   "mid": [
+    0.217,
+    0.203
+   ],
+   "bot": [
+    0.109,
+    0.196
+   ],
+   "sup": [
+    0.152,
+    0.2
+   ],
+   "pick victims": 46,
+   "deaths": 981
+  }
+ },
+ "3 vision (estimate, 90% range, fights)": {
+  "pick: share won per +10 points of vision share": [
+   0.381,
+   0.227,
+   0.538,
+   283
+  ],
+  "big (8+): share won per +10 points of vision share": [
+   0.47,
+   0.346,
+   0.615,
+   476
+  ],
+  "pick: share won per +10 points of wards_killed share": [
+   0.112,
+   0.023,
+   0.199,
+   283
+  ],
+  "big (8+): share won per +10 points of wards_killed share": [
+   0.09,
+   0.005,
+   0.169,
+   476
+  ]
+ },
+ "4 objectives with a fight ending in the 90 s before": {
+  "baron (141)": {
+   "big (8+)": 0.546,
+   "pick": 0.092,
+   "any fight": 0.787
+  },
+  "dragon (484)": {
+   "big (8+)": 0.244,
+   "pick": 0.124,
+   "any fight": 0.49
+  }
+ },
+ "4 baseline: random seconds after 5:00": {
+  "big (8+)": 0.222,
+  "pick": 0.132,
+  "any": 0.476
+ },
+ "5 big fights: share each role is not in": {
+  "bot": 0.06,
+  "jng": 0.039,
+  "mid": 0.09,
+  "sup": 0.044,
+  "top": 0.113
+ },
+ "5 big fights: entry after the first player in, median s and share 10 s+": {
+  "bot": [
+   10.0,
+   0.518
+  ],
+  "jng": [
+   8.0,
+   0.422
+  ],
+  "mid": [
+   11.0,
+   0.554
+  ],
+  "sup": [
+   9.0,
+   0.453
+  ],
+  "top": [
+   10.0,
+   0.508
+  ]
+ },
+ "7 towers with no death in the 60 s before": {
+  "14:00-25:00": [
+   0.492,
+   492
+  ],
+  "after 25:00": [
+   0.343,
+   633
+  ],
+  "before 14:00": [
+   0.581,
+   43
+  ]
+ }
+}

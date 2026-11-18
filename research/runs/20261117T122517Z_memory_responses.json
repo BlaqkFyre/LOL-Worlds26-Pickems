@@ -1,0 +1,36 @@
+{
+ "name": "memory_responses",
+ "started_utc": "2026-11-17T12:25:16",
+ "script": {
+  "path": "research/memory/m2_responses.py",
+  "sha256": "ae9b5728a4fd0eb82d76116132f3cd3b0aefdbc5e4b0249f9db69a96d18789c5",
+  "git_commit": "46a92e7",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "fight_gap": 20,
+  "window": "fight's last death to the losers' last respawn"
+ },
+ "inputs": [
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  }
+ ],
+ "record": "20261117T122517Z_memory_responses.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 0.6,
+ "results": {
+  "fights": 1147
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m2_responses.json",
+   "sha256": "ede5b9361b9238c1a59cdc2e3be2b6395e21d9a24ab65256f8030d9476e29220"
+  }
+ ],
+ "not_written_because_failed": []
+}
