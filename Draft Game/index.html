@@ -225,6 +225,7 @@ button.bigb:disabled{opacity:.5;cursor:default}
 .cbtns{display:flex;gap:12px;justify-content:center;margin-top:10px}
 .cbtns .bigb{min-width:0;flex:1;font-size:16px}
 .cgive{background:#2b3550;border:2px solid var(--line)!important}
+.cgive:disabled{opacity:.45;cursor:not-allowed}
 .fmt{display:flex;gap:6px;justify-content:center;align-items:center;margin:8px 0 2px}
 .fmt button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:700}
 .fmt button.on{border-color:var(--gold);color:var(--gold)}
@@ -305,6 +306,7 @@ button.bigb:disabled{opacity:.5;cursor:default}
   <div id="ready" class="hidden"><button id="clashbtn">CLASH!</button></div>
   <div id="call" class="hidden"><div class="lbl">YOUR CALL</div><div class="ctitle" id="c-title"></div><div class="csub" id="c-sub"></div>
    <div class="cbtns"><button id="c-fight" class="bigb bgold">FIGHT FOR IT<small id="c-fs"></small></button><button id="c-give" class="bigb cgive">GIVE IT UP<small id="c-gs"></small></button></div>
+   <div class="csub" id="c-held"></div>
    <div class="csub">Concept: you make the call for your team; the enemy and AI calls come later.</div></div>
   <div id="hud" class="hidden"><div class="in"><span id="clock">0:00</span><span id="cap"></span></div></div>
   <div id="fx"></div>
@@ -495,6 +497,9 @@ function simGame(bp,rp,quiet,opts){
     if(!noEnd&&s.nx===0&&inhDown(w,t).length&&R()<sig((pw-T.endBar)*1.4))return true;
     return false};
   /* objective calls: the regroup bonus for giving an objective up grows when your comp out-scales theirs late and when you are behind on gold */
+  /* give-ups stack (Luke, 19 Nov): a second give before the next fight adds to the unused bonus (total max +4); at most 2 in a row,
+     then the team has to fight */
+  const held=me=>{const r=buff.regroup[me];return r&&r.until>=t?r:null};
   const regroupGain=me=>{const en=other(me);return Math.max(0.5,Math.min(4,1+(S[me].late-S[en].late)*1.5+Math.max(0,-gl2(me))/3000))};
   const oddsFor=(name,me)=>{const wt=name==='baron'?0.7:name==='elder'?0.5:(t<30?1:0.6),gf=name==='elder'?T.elderGold:1,goldW=gf*g.gold/(SIM_GOLD*(1+Math.max(0,t-28)/T.goldFade));
     const bx=s=>(buff.baron[s]>t?T.baronFight:0)+(buff.elder[s]>t?T.elderFight:0)+(soul===s?T.soulFight:0)+(buff.regroup[s]&&buff.regroup[s].until>=t?buff.regroup[s].v:0);
@@ -520,10 +525,11 @@ function simGame(bp,rp,quiet,opts){
     const due=[['baron',bT],['elder',eT],['dragon',soul?99:dT]].filter(x=>t>=x[1]).sort((x,y)=>x[1]-y[1])[0];
     if(due&&opts&&opts.choose){
       const me=opts.side,call=opts.choose(due[0],objN,t);
-      if(call==='ask'){g.pending={obj:due[0],idx:objN,t,p:oddsFor(due[0],me),rg:regroupGain(me),gold:gl2(me)};break}
+      const hd=held(me);
+      if(call==='ask'){g.pending={obj:due[0],idx:objN,t,p:oddsFor(due[0],me),rg:regroupGain(me),gold:gl2(me),held:hd?hd.v:0,gives:hd?hd.n:0};break}
       objN++;
-      if(call==='give'){const v=regroupGain(me);buff.regroup[me]={until:t+6,v};
-        ev(t,me,'give',`${TN(me)} give up ${ONAME[due[0]]} and regroup (+${v.toFixed(1)} to their next fight)`,{obj:due[0]});
+      if(call==='give'&&!(hd&&hd.n>=2)){const add=regroupGain(me),v=Math.min(4,(hd?hd.v:0)+add);buff.regroup[me]={until:t+6,v,n:(hd?hd.n:0)+1};
+        ev(t,me,'give',`${TN(me)} give up ${ONAME[due[0]]} and regroup (+${v.toFixed(1)} to their next fight${hd?', give-up 2 of 2':''})`,{obj:due[0]});
         takeObj(due[0],other(me),t,false);continue}
     }
     if(due&&due[0]==='baron'){obj='baron';res=fight(t,'Fight around Baron',0.7,null)}
@@ -935,7 +941,10 @@ function askCall(p){
     $('#c-title').textContent=`${NM[p.obj]} IS UP`;
     $('#c-sub').textContent=`${p.t} min · your team is ${Math.abs(p.gold)<100?'even':p.gold>0?gk+' gold ahead':gk+' gold behind'}`;
     $('#c-fs').textContent=`Your fight odds about ${Math.round(p.p*100)}%`;
-    $('#c-gs').textContent=`They take it free; you regroup (+${p.rg.toFixed(1)} next fight)`;
+    const tot=Math.min(4,p.held+p.rg),maxed=p.gives>=2;
+    $('#c-gs').textContent=maxed?`Not available: 2 give-ups in a row, you must fight`:p.held?`They take it free; regroup +${p.held.toFixed(1)} → +${tot.toFixed(1)} next fight (2 of 2)`:`They take it free; you regroup (+${p.rg.toFixed(1)} next fight) · 1 of 2`;
+    $('#c-give').disabled=maxed;
+    $('#c-held').textContent=`Give-ups stack: up to 2 in a row add up (max +4), used by your next fight.${p.held?` Held now: +${p.held.toFixed(1)}, counted in your fight odds.`:''}`;
     show('#call');A($('#call'),[{opacity:0,transform:'translate(-50%,-50%) scale(.8)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],250);SFX.nudge();
     const done=c=>{hide('#call');SFX.click();res(c)};$('#c-fight').onclick=()=>done('fight');$('#c-give').onclick=()=>done('give');
   });
