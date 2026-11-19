@@ -162,11 +162,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tgrades .gS{color:#ffd54a} .tgrades .gA{color:#78e3a0} .tgrades .gB{color:#e3e7ef} .tgrades .gC{color:#b6bdcc} .tgrades .gD{color:#cbb0ff} .tgrades .gF{color:#ff6d84} .tgrades .gx{color:var(--muted)}
 
 /* hover panel: your team and the enemy side by side, deny value below */
-.syn2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.syn2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:start}
+.syn2 .synp{align-content:start}   /* first pill at the top of each column, the rest below it */
 .syn2>*,.syn2 .synp>*{min-width:0}
-.syn2 .sc{font-size:10.5px;padding:0 5px}
+.syn2 .sc{font-size:10.5px;padding:1px 6px;border-radius:3px;line-height:14px}   /* slightly rounded rectangles (Luke, 19 Nov) */
 .syn2 .lbl{font-size:9px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deny{margin-top:5px}
+.deny{margin-top:2px}
 
 .dfoot .rolepick button{background:var(--gold);color:#2a1a00;border:none;border-radius:5px;padding:3px 10px;font-weight:800;margin-left:6px;cursor:pointer}
 .dfoot .rolepick button.no{background:var(--panel2);color:var(--fg);border:1px solid var(--line)}
@@ -835,7 +836,7 @@ function synBlock(cid,own,opp,label){
   const riv=CC?ROLES.map(x=>G.picks[opp][x]).filter(o=>o!=null&&o!==cid&&BOND.has(Math.min(cid,o)+'|'+Math.max(cid,o))).map(o=>CH[o].ini):[];
   const pills=rows.map(([v,l,d])=>`<div class="sc ${tone(v)}"><span>${l} <small>${d}</small></span><b>${sg(v)}</b></div>`)
     .concat(riv.map(x=>`<div class="sc s0"><span>Rival ${x} <small>${opp===G.player?'yours':'enemy'} · flavour</small></span><b>vs</b></div>`));
-  return `<div class="synp"><div class="lbl">${label}</div>${pills.length?pills.join(''):'<div class="sc s0"><span>No synergy or rivals</span><b>0</b></div>'}</div>`;
+  return `<div class="synp"><div class="lbl">${label}</div>${pills.length?pills.join(''):'<div class="sc s0" title="No synergy or rivals"><span>No synergy</span><b>0</b></div>'}</div>`;
 }
 function cardHead(cid,r,e){const c=CH[cid];
   const meta=CC?`<div class="muted sm meta1" title="${c.tags.join(', ')}">${c.cls}${c.sub&&c.sub!==c.cls?' · '+c.sub.replace(/\//g,', '):''} · ${c.dmg==='Physical+Magic'?'Mixed':c.dmg} · ${c.range} · ${c.region||'No region'}</div>`:'';
