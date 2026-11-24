@@ -1,0 +1,15 @@
+{
+ "what": "Step 1b-1 app check (24 Nov 2026 AEST): research/memory/m7_sim_check.js run in a locally served app tab (v52 files), the 72 Worlds main-event drafts x 100 seeds, default settings with kill_credit off (= v51) and v2. Values copied from the browser by hand (no lib.Run in the browser). Real figures for comparison: research/model/memory/m7_kill_credit.json (Worlds feed) and research/pog/README.md (award shares by role).",
+ "replay check (kill_credit off v the v51 files)": "identical: FNV-1a hash of 72 drafts x 20 seeds, logged and quiet runs, default 3712262634 (14,705,377 chars), alt 2970107339 (14,729,501 chars), before and after the edit",
+ "kills per game": {"v51": 30.293, "v2": 30.122, "real Worlds feed": 26.2},
+ "solo share by fight size 1 / 2 / 3-4 / 5-6 / 7+": {"v51": [0.124, 0.159, 0.084, 0.119, 0.244], "v2": [0.128, 0.099, 0.046, 0.029, 0.099], "real Worlds feed": [0.094, 0.079, 0.044, 0.027, 0.048]},
+ "assists per kill by fight size": {"v51": [1.815, 1.789, 2.144, 1.949, 1.467], "v2": [1.793, 1.945, 2.313, 2.525, 2.04], "real Worlds feed": [1.759, 2.167, 2.543, 2.79, 2.504]},
+ "side B kills solo share": {"v51": 0.274, "v2": 0.097, "real Worlds feed": 0.062},
+ "side A kills solo share": {"v51": 0.076, "v2": 0.057, "real Worlds feed": 0.059},
+ "side B players seen when B gets kills (2 / 3-4 / 5-6 / 7+)": {"v51": [2.832, 3.972, 4.489, 4.895], "v2": [2.872, 3.826, 4.773, 4.944], "real training timelines": [3.162, 4.171, 4.777, 4.99]},
+ "support with 3+ kills in a fight (count, support fights)": {"v51": [117, 81210], "v2": [81, 84700], "real Worlds feed": [0, 1122]},
+ "support with 4+ kills in a fight (count)": {"v51": 25, "v2": 12, "real": 0},
+ "support 4+ example (v2)": {"blue": "HLE", "red": "GEN", "d": "2026-10-24", "seed": 28, "fight_start": 2873, "kills": 5, "sup_side": "red", "sup_kills": 5},
+ "Player of the Game by role": {"v51": {"top": 0.188, "jng": 0.298, "mid": 0.279, "bot": 0.175, "sup": 0.059}, "v2": {"top": 0.187, "jng": 0.319, "mid": 0.274, "bot": 0.172, "sup": 0.049}, "real (all award games, research/pog/README.md)": {"top": 0.15, "jng": 0.32, "mid": 0.25, "bot": 0.18, "sup": 0.10}},
+ "blue win share per draft, v2 v v51 (100 seeds each)": {"mean absolute change": 0.043, "largest change": 0.14, "log loss on the 72 real results": {"v51": 0.5692, "v2": 0.5678}, "note": "100 seeds a draft: each share has a standard error of about 0.05, so these changes are mostly noise; the official who-wins test is step 4"}
+}

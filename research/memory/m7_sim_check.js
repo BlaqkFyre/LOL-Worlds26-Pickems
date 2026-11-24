@@ -5,8 +5,12 @@
    the app's default sim settings (SIM_TABLES.cal.default, game memory on). Kills are read from the play-by-play (kind "kill": killer k,
    victim v, assisters ast, side). The result was copied from the browser into research/model/memory/m7_sim_check.json (no run record:
    the browser has no lib.Run). */
+/* 24 Nov: window.M7_CAL (optional) is added to the default settings, e.g. {kill_credit: "v2"} for step 1b-1; the result also gives
+   Player of the Game by role (the app's rule: the winner with the highest fitted chance, as js/core.js dataGame) and each draft's
+   blue win share. */
 (() => {
-  const T = SIM_TABLES, E = SIM_ENGINE, S = new E.Sim(T.P, T.cal.default), SEEDS = 100;
+  const T = SIM_TABLES, E = SIM_ENGINE, S = new E.Sim(T.P, Object.assign({}, T.cal.default, window.M7_CAL || {})), SEEDS = 100;
+  const POG = {top: 0, jng: 0, mid: 0, bot: 0, sup: 0}, BW = [];
   const RL = ["top", "jng", "mid", "bot", "sup"], MAP = {TOP: "top", JGL: "jng", MID: "mid", ADC: "bot", SUP: "sup"};
   const SIZE = n => n === 1 ? "1" : n === 2 ? "2" : n <= 4 ? "3-4" : n <= 6 ? "5-6" : "7+", SIZES = ["1", "2", "3-4", "5-6", "7+"];
   const PH = t => t < 900 ? "0-14" : t < 1500 ? "15-24" : "25+";
@@ -14,9 +18,11 @@
   const K = [], PF = [], F = []; let games = 0, nami = null;
   for(const g of WORLDS_LIVE.games){
     const side = s => { const o = {}; g.pl[s].forEach(p => { o[MAP[p[0]]] = p[2]; }); return o; };
-    const I = E.inputs(T, g.blue, g.red, side("blue"), side("red"));
+    const I = E.inputs(T, g.blue, g.red, side("blue"), side("red")); let bw = 0;
     for(let seed = 1; seed <= SEEDS; seed++){
-      const o = S.run(I.x, seed, true); games++;
+      const o = S.run(I.x, seed, true); games++; if(o.winner === "blue") bw++;
+      { const mins = o.sec / 60, st = {}; RL.forEach(r => { const e = o.ps[o.winner][r]; st[r] = {k: e.k, d: e.d, a: e.a, kp: e.kp, dmgS: e.dmgS, csd: e.csd, vpm: e.vis / Math.max(1, mins)}; });
+        const ch = E.pogChances(T, st); POG[RL.reduce((a, r) => ch[r] > ch[a] ? r : a, RL[0])]++; }
       const ks = o.steps.filter(x => x.kind === "kill"), fs = []; let c = [];
       ks.forEach(k => { if(c.length && k.t - c[c.length - 1].t > 20){ fs.push(c); c = []; } c.push(k); }); if(c.length) fs.push(c);
       for(const f of fs){
@@ -36,6 +42,7 @@
         F.push({size: sz, kills_A: kb[A], kills_B: kb[B], seen_A: seen[A].size, seen_B: seen[B].size, max_one: Math.max(...Object.values(kc))});
       }
     }
+    BW.push([g.d, g.blue, g.red, g.w, bw / SEEDS]);
   }
   const by = (a, f) => { const o = {}; a.forEach(x => { const k = f(x); (o[k] = o[k] || []).push(x); }); return o; };
   const share = x => Object.assign(Object.fromEntries(RL.map(r => [r, r3(x.filter(k => k.killer === r).length / x.length)])), {kills: x.length});
@@ -59,5 +66,8 @@
   for(const [nm, b] of [["B", 1], ["A", 0]]){ const x = K.filter(k => k.sideB === b); R[`side ${nm}'s kills: killer role share and solo share`] = Object.assign(share(x), {"solo share": r3(mean(x.map(k => k.solo)))}); }
   const pk = PF.filter(p => p.side_kills > 0);
   R["kill participation in the fight, players credited on a side with kills, by role x size"] = Object.fromEntries(RL.map(r => [r, Object.fromEntries(SIZES.filter(s => pS[r + "|" + s]).map(s => [s, r3(mean(pk.filter(p => p.role === r && p.size === s).map(p => (p.kills + p.assists) / p.side_kills)))]))]));
+  R.settings = Object.assign({}, T.cal.default, window.M7_CAL || {});
+  R["Player of the Game by role (share of games)"] = Object.fromEntries(RL.map(r => [r, r3(POG[r] / games)]));
+  R["blue win share per draft [day, blue, red, real winner, sim]"] = BW;
   return JSON.stringify(R);
 })();

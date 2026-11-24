@@ -1,0 +1,433 @@
+{
+ "tables cutoff": "2026-11-10",
+ "train": {
+  "games": 395,
+  "fights": 5130,
+  "real": {
+   "by size": {
+    "1": {
+     "solo share": 0.097,
+     "assists per kill": 1.796,
+     "support kill share": 0.065,
+     "kills": 2628
+    },
+    "2": {
+     "solo share": 0.085,
+     "assists per kill": 2.129,
+     "support kill share": 0.064,
+     "kills": 1852
+    },
+    "3-4": {
+     "solo share": 0.041,
+     "assists per kill": 2.501,
+     "support kill share": 0.045,
+     "kills": 3357
+    },
+    "5-6": {
+     "solo share": 0.04,
+     "assists per kill": 2.643,
+     "support kill share": 0.041,
+     "kills": 2656
+    },
+    "7+": {
+     "solo share": 0.052,
+     "assists per kill": 2.482,
+     "support kill share": 0.037,
+     "kills": 730
+    }
+   },
+   "dropped kills (share)": 0.0,
+   "side B kills solo share": 0.06,
+   "side A kills solo share": 0.063,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.39,
+    0.0
+   ]
+  },
+  "real: dead assists and joiners": {
+   "assists by a player who died earlier in the same fight": [
+    2771,
+    25892,
+    0.107
+   ],
+   "seconds from that player's death to the assist (median, max)": [
+    4.0,
+    55.0
+   ],
+   "kills after the fight's first with a killer or assister not seen before in the fight: side A (share, kills)": [
+    0.371,
+    3617
+   ],
+   "same, side B (share, kills)": [
+    0.693,
+    2476
+   ]
+  },
+  "(i) real sets, killers, victims; sim assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.097,
+     "assists per kill": 1.795,
+     "support kill share": 0.065,
+     "kills": 52560
+    },
+    "2": {
+     "solo share": 0.106,
+     "assists per kill": 2.044,
+     "support kill share": 0.064,
+     "kills": 36220
+    },
+    "3-4": {
+     "solo share": 0.063,
+     "assists per kill": 2.182,
+     "support kill share": 0.044,
+     "kills": 66260
+    },
+    "5-6": {
+     "solo share": 0.057,
+     "assists per kill": 2.188,
+     "support kill share": 0.041,
+     "kills": 52220
+    },
+    "7+": {
+     "solo share": 0.124,
+     "assists per kill": 1.748,
+     "support kill share": 0.031,
+     "kills": 13980
+    }
+   },
+   "dropped kills (share)": 0.014,
+   "side B kills solo share": 0.161,
+   "side A kills solo share": 0.059,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.39,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.465,
+    "3-4": 3.84,
+    "5-6": 4.821,
+    "7+": 4.99
+   }
+  },
+  "(ii) real sets and kill sides; sim killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.097,
+     "assists per kill": 1.796,
+     "support kill share": 0.056,
+     "kills": 52560
+    },
+    "2": {
+     "solo share": 0.11,
+     "assists per kill": 2.031,
+     "support kill share": 0.061,
+     "kills": 36460
+    },
+    "3-4": {
+     "solo share": 0.064,
+     "assists per kill": 2.173,
+     "support kill share": 0.052,
+     "kills": 66880
+    },
+    "5-6": {
+     "solo share": 0.058,
+     "assists per kill": 2.172,
+     "support kill share": 0.044,
+     "kills": 52940
+    },
+    "7+": {
+     "solo share": 0.127,
+     "assists per kill": 1.728,
+     "support kill share": 0.049,
+     "kills": 14460
+    }
+   },
+   "dropped kills (share)": 0.005,
+   "side B kills solo share": 0.164,
+   "side A kills solo share": 0.059,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.156,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.465,
+    "3-4": 3.84,
+    "5-6": 4.821,
+    "7+": 4.99
+   }
+  },
+  "(iii) real kill sides and size; sim sets, killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.132,
+     "assists per kill": 1.779,
+     "support kill share": 0.062,
+     "kills": 52560
+    },
+    "2": {
+     "solo share": 0.138,
+     "assists per kill": 1.871,
+     "support kill share": 0.071,
+     "kills": 33490
+    },
+    "3-4": {
+     "solo share": 0.066,
+     "assists per kill": 2.15,
+     "support kill share": 0.052,
+     "kills": 65954
+    },
+    "5-6": {
+     "solo share": 0.1,
+     "assists per kill": 1.976,
+     "support kill share": 0.05,
+     "kills": 49097
+    },
+    "7+": {
+     "solo share": 0.193,
+     "assists per kill": 1.526,
+     "support kill share": 0.064,
+     "kills": 12962
+    }
+   },
+   "dropped kills (share)": 0.046,
+   "side B kills solo share": 0.238,
+   "side A kills solo share": 0.074,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.712,
+    0.136
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.004,
+    "2": 2.486,
+    "3-4": 4.181,
+    "5-6": 4.265,
+    "7+": 4.324
+   }
+  },
+  "real side B set size by fight size (mean)": {
+   "1": 1.0,
+   "2": 2.465,
+   "3-4": 3.84,
+   "5-6": 4.821,
+   "7+": 4.99
+  }
+ },
+ "worlds": {
+  "games": 94,
+  "fights": 1094,
+  "real": {
+   "by size": {
+    "1": {
+     "solo share": 0.089,
+     "assists per kill": 1.776,
+     "support kill share": 0.049,
+     "kills": 526
+    },
+    "2": {
+     "solo share": 0.08,
+     "assists per kill": 2.144,
+     "support kill share": 0.061,
+     "kills": 424
+    },
+    "3-4": {
+     "solo share": 0.048,
+     "assists per kill": 2.493,
+     "support kill share": 0.057,
+     "kills": 819
+    },
+    "5-6": {
+     "solo share": 0.025,
+     "assists per kill": 2.802,
+     "support kill share": 0.029,
+     "kills": 551
+    },
+    "7+": {
+     "solo share": 0.047,
+     "assists per kill": 2.504,
+     "support kill share": 0.0,
+     "kills": 129
+    }
+   },
+   "dropped kills (share)": 0.0,
+   "side B kills solo share": 0.06,
+   "side A kills solo share": 0.056,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ]
+  },
+  "real: dead assists and joiners": {
+   "assists by a player who died earlier in the same fight": [
+    604,
+    5752,
+    0.105
+   ],
+   "seconds from that player's death to the assist (median, max)": [
+    4.0,
+    31.0
+   ],
+   "kills after the fight's first with a killer or assister not seen before in the fight: side A (share, kills)": [
+    0.365,
+    786
+   ],
+   "same, side B (share, kills)": [
+    0.694,
+    569
+   ]
+  },
+  "(i) real sets, killers, victims; sim assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.09,
+     "assists per kill": 1.775,
+     "support kill share": 0.049,
+     "kills": 10520
+    },
+    "2": {
+     "solo share": 0.113,
+     "assists per kill": 2.021,
+     "support kill share": 0.06,
+     "kills": 8320
+    },
+    "3-4": {
+     "solo share": 0.068,
+     "assists per kill": 2.194,
+     "support kill share": 0.053,
+     "kills": 16220
+    },
+    "5-6": {
+     "solo share": 0.043,
+     "assists per kill": 2.257,
+     "support kill share": 0.03,
+     "kills": 10760
+    },
+    "7+": {
+     "solo share": 0.123,
+     "assists per kill": 1.749,
+     "support kill share": 0.0,
+     "kills": 2520
+    }
+   },
+   "dropped kills (share)": 0.013,
+   "side B kills solo share": 0.151,
+   "side A kills solo share": 0.056,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.552,
+    "3-4": 3.843,
+    "5-6": 4.835,
+    "7+": 5.0
+   }
+  },
+  "(ii) real sets and kill sides; sim killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.089,
+     "assists per kill": 1.775,
+     "support kill share": 0.05,
+     "kills": 10520
+    },
+    "2": {
+     "solo share": 0.115,
+     "assists per kill": 2.021,
+     "support kill share": 0.059,
+     "kills": 8340
+    },
+    "3-4": {
+     "solo share": 0.066,
+     "assists per kill": 2.2,
+     "support kill share": 0.055,
+     "kills": 16300
+    },
+    "5-6": {
+     "solo share": 0.052,
+     "assists per kill": 2.232,
+     "support kill share": 0.04,
+     "kills": 11020
+    },
+    "7+": {
+     "solo share": 0.115,
+     "assists per kill": 1.782,
+     "support kill share": 0.045,
+     "kills": 2520
+    }
+   },
+   "dropped kills (share)": 0.006,
+   "side B kills solo share": 0.158,
+   "side A kills solo share": 0.055,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.552,
+    "3-4": 3.843,
+    "5-6": 4.835,
+    "7+": 5.0
+   }
+  },
+  "(iii) real kill sides and size; sim sets, killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.127,
+     "assists per kill": 1.805,
+     "support kill share": 0.065,
+     "kills": 10520
+    },
+    "2": {
+     "solo share": 0.152,
+     "assists per kill": 1.851,
+     "support kill share": 0.075,
+     "kills": 7660
+    },
+    "3-4": {
+     "solo share": 0.071,
+     "assists per kill": 2.131,
+     "support kill share": 0.057,
+     "kills": 16044
+    },
+    "5-6": {
+     "solo share": 0.092,
+     "assists per kill": 1.983,
+     "support kill share": 0.047,
+     "kills": 10274
+    },
+    "7+": {
+     "solo share": 0.199,
+     "assists per kill": 1.569,
+     "support kill share": 0.057,
+     "kills": 2250
+    }
+   },
+   "dropped kills (share)": 0.046,
+   "side B kills solo share": 0.238,
+   "side A kills solo share": 0.069,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.594,
+    0.046
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.004,
+    "2": 2.478,
+    "3-4": 4.143,
+    "5-6": 4.304,
+    "7+": 4.292
+   }
+  },
+  "real side B set size by fight size (mean)": {
+   "1": 1.0,
+   "2": 2.552,
+   "3-4": 3.843,
+   "5-6": 4.835,
+   "7+": 5.0
+  }
+ }
+}

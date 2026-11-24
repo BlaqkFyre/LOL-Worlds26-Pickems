@@ -1,0 +1,745 @@
+{
+ "fights": 8011,
+ "research copy (fitted before 1 Sep)": {
+  "fights": {
+   "fit": 5130,
+   "after": 1787,
+   "worlds": 1094
+  },
+  "S who is in the fight: log loss (v51 kills groups, v2)": {
+   "fit": [
+    4.288,
+    4.201
+   ],
+   "after": [
+    4.2817,
+    4.2125
+   ],
+   "worlds": [
+    4.2715,
+    4.2029
+   ]
+  },
+  "A assists: real assists by players killed earlier in the fight (v51 can't give them)": {
+   "fit": 0.107,
+   "after": 0.108,
+   "worlds": 0.105
+  },
+  "A assists: log loss on alive candidates (v51, v2)": {
+   "fit": [
+    0.4506,
+    0.4493
+   ],
+   "after": [
+    0.4374,
+    0.4384
+   ],
+   "worlds": [
+    0.448,
+    0.4486
+   ]
+  },
+  "A assists: log loss on every candidate (v51 gives 0 to the dead, clipped at 1e-9; v2)": {
+   "fit": [
+    2.0615,
+    0.4858
+   ],
+   "after": [
+    2.1106,
+    0.4721
+   ],
+   "worlds": [
+    2.0415,
+    0.4827
+   ]
+  },
+  "K who wins each kill: log loss (v51, + alive linear, + alive steps)": {
+   "fit": [
+    0.6451,
+    0.6375,
+    0.6362
+   ],
+   "after": [
+    0.6356,
+    0.6235,
+    0.6221
+   ],
+   "worlds": [
+    0.6363,
+    0.6244,
+    0.6229
+   ]
+  },
+  "K kills with each alive difference (blue minus red): count, real blue share, v51, linear, steps (mean predicted)": {
+   "fit": {
+    "-4": [
+     93,
+     0.215,
+     0.33,
+     0.181,
+     0.194
+    ],
+    "-3": [
+     250,
+     0.212,
+     0.376,
+     0.25,
+     0.223
+    ],
+    "-2": [
+     565,
+     0.269,
+     0.428,
+     0.334,
+     0.27
+    ],
+    "-1": [
+     1638,
+     0.465,
+     0.487,
+     0.435,
+     0.465
+    ],
+    "0": [
+     5478,
+     0.528,
+     0.532,
+     0.528,
+     0.528
+    ],
+    "1": [
+     1931,
+     0.617,
+     0.577,
+     0.621,
+     0.617
+    ],
+    "2": [
+     811,
+     0.723,
+     0.629,
+     0.712,
+     0.722
+    ],
+    "3": [
+     341,
+     0.777,
+     0.666,
+     0.779,
+     0.762
+    ],
+    "4": [
+     116,
+     0.759,
+     0.716,
+     0.846,
+     0.797
+    ]
+   },
+   "after": {
+    "-4": [
+     39,
+     0.231,
+     0.319,
+     0.177,
+     0.189
+    ],
+    "-3": [
+     112,
+     0.089,
+     0.375,
+     0.25,
+     0.223
+    ],
+    "-2": [
+     239,
+     0.264,
+     0.437,
+     0.342,
+     0.277
+    ],
+    "-1": [
+     617,
+     0.441,
+     0.48,
+     0.428,
+     0.459
+    ],
+    "0": [
+     1906,
+     0.509,
+     0.53,
+     0.527,
+     0.527
+    ],
+    "1": [
+     615,
+     0.61,
+     0.584,
+     0.627,
+     0.623
+    ],
+    "2": [
+     255,
+     0.773,
+     0.64,
+     0.72,
+     0.73
+    ],
+    "3": [
+     121,
+     0.785,
+     0.672,
+     0.785,
+     0.768
+    ],
+    "4": [
+     49,
+     0.878,
+     0.679,
+     0.826,
+     0.773
+    ]
+   },
+   "worlds": {
+    "-4": [
+     10,
+     0.1,
+     0.303,
+     0.166,
+     0.177
+    ],
+    "-3": [
+     63,
+     0.222,
+     0.376,
+     0.249,
+     0.222
+    ],
+    "-2": [
+     137,
+     0.248,
+     0.442,
+     0.344,
+     0.28
+    ],
+    "-1": [
+     389,
+     0.463,
+     0.495,
+     0.441,
+     0.472
+    ],
+    "0": [
+     1193,
+     0.526,
+     0.532,
+     0.528,
+     0.529
+    ],
+    "1": [
+     384,
+     0.622,
+     0.582,
+     0.625,
+     0.62
+    ],
+    "2": [
+     167,
+     0.802,
+     0.634,
+     0.715,
+     0.725
+    ],
+    "3": [
+     79,
+     0.835,
+     0.677,
+     0.788,
+     0.771
+    ],
+    "4": [
+     27,
+     0.778,
+     0.707,
+     0.842,
+     0.791
+    ]
+   }
+  },
+  "K coefficients": {
+   "v51": {
+    "intercept": 0.0423,
+    "per_1k_gold_lead": 0.1256,
+    "per_v1_logit": 0.1455,
+    "baron": 0.189,
+    "elder": 0.2161
+   },
+   "linear": {
+    "intercept": 0.0365,
+    "per_1k_gold_lead": 0.1044,
+    "per_v1_logit": 0.1375,
+    "baron": 0.1483,
+    "elder": 0.144,
+    "per_alive_diff": 0.2373
+   },
+   "steps": {
+    "intercept": 0.039,
+    "per_1k_gold_lead": 0.1043,
+    "per_v1_logit": 0.1347,
+    "baron": 0.1482,
+    "elder": 0.1378,
+    "alive_diff -3": -0.8715,
+    "alive_diff -2": -0.7961,
+    "alive_diff -1": -0.1083,
+    "alive_diff +1": 0.2161,
+    "alive_diff +2": 0.5271,
+    "alive_diff +3": 0.6072
+   }
+  },
+  "A coefficients": {
+   "v51": {
+    "window 0-4": 0.0302,
+    "window 5-9": 0.5618,
+    "window 10-14": 0.3474,
+    "window 15-24": 0.3715,
+    "window 25+": 0.483,
+    "role jng": 0.5262,
+    "role mid": 0.3695,
+    "role bot": 0.2917,
+    "role sup": 1.0889,
+    "same_lane_as_killer": 0.2897,
+    "same_lane_as_victim": 0.0897,
+    "one_kill_fight": 6.3557,
+    "two_kill_fight": 0.4961,
+    "already_in_a_kill": 0.2252
+   },
+   "v2": {
+    "window 0-4": 4.6062,
+    "window 5-9": 5.0324,
+    "window 10-14": 4.8209,
+    "window 15-24": 4.8767,
+    "window 25+": 4.972,
+    "role jng": 0.5234,
+    "role mid": 0.3719,
+    "role bot": 0.275,
+    "role sup": 0.9472,
+    "same_lane_as_killer": 0.2042,
+    "same_lane_as_victim": 0.0829,
+    "size 2": -3.998,
+    "size 3-4": -4.4507,
+    "size 5-6": -4.58,
+    "size 7+": -4.7319,
+    "side_B": 0.2808,
+    "died_earlier_in_fight": -1.0596,
+    "already_in_a_kill": 0.2464
+   }
+  },
+  "replay fit: real": {
+   "by size": {
+    "1": {
+     "solo share": 0.097,
+     "assists per kill": 1.796,
+     "support kill share": 0.065
+    },
+    "2": {
+     "solo share": 0.085,
+     "assists per kill": 2.129,
+     "support kill share": 0.064
+    },
+    "3-4": {
+     "solo share": 0.041,
+     "assists per kill": 2.501,
+     "support kill share": 0.045
+    },
+    "5-6": {
+     "solo share": 0.04,
+     "assists per kill": 2.643,
+     "support kill share": 0.041
+    },
+    "7+": {
+     "solo share": 0.052,
+     "assists per kill": 2.482,
+     "support kill share": 0.037
+    }
+   },
+   "side B kills solo share": 0.06,
+   "side A kills solo share": 0.063,
+   "dropped kills (share)": 0.0,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.39,
+    0.0
+   ]
+  },
+  "replay fit: (i) real sets, killers, victims; v2 assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.098,
+     "assists per kill": 1.788,
+     "support kill share": 0.065
+    },
+    "2": {
+     "solo share": 0.076,
+     "assists per kill": 2.142,
+     "support kill share": 0.064
+    },
+    "3-4": {
+     "solo share": 0.029,
+     "assists per kill": 2.443,
+     "support kill share": 0.044
+    },
+    "5-6": {
+     "solo share": 0.017,
+     "assists per kill": 2.54,
+     "support kill share": 0.041
+    },
+    "7+": {
+     "solo share": 0.026,
+     "assists per kill": 2.361,
+     "support kill share": 0.031
+    }
+   },
+   "side B kills solo share": 0.038,
+   "side A kills solo share": 0.053,
+   "dropped kills (share)": 0.014,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.39,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.465,
+    "3-4": 3.84,
+    "5-6": 4.821,
+    "7+": 4.99
+   }
+  },
+  "replay fit: (iii) v2 sets, killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.126,
+     "assists per kill": 1.78,
+     "support kill share": 0.066
+    },
+    "2": {
+     "solo share": 0.083,
+     "assists per kill": 1.956,
+     "support kill share": 0.07
+    },
+    "3-4": {
+     "solo share": 0.039,
+     "assists per kill": 2.268,
+     "support kill share": 0.056
+    },
+    "5-6": {
+     "solo share": 0.018,
+     "assists per kill": 2.526,
+     "support kill share": 0.044
+    },
+    "7+": {
+     "solo share": 0.036,
+     "assists per kill": 2.277,
+     "support kill share": 0.053
+    }
+   },
+   "side B kills solo share": 0.059,
+   "side A kills solo share": 0.062,
+   "dropped kills (share)": 0.032,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.351,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.005,
+    "2": 2.464,
+    "3-4": 3.833,
+    "5-6": 4.834,
+    "7+": 4.864
+   }
+  },
+  "replay after: real": {
+   "by size": {
+    "1": {
+     "solo share": 0.108,
+     "assists per kill": 1.768,
+     "support kill share": 0.031
+    },
+    "2": {
+     "solo share": 0.084,
+     "assists per kill": 2.203,
+     "support kill share": 0.039
+    },
+    "3-4": {
+     "solo share": 0.028,
+     "assists per kill": 2.579,
+     "support kill share": 0.044
+    },
+    "5-6": {
+     "solo share": 0.024,
+     "assists per kill": 2.715,
+     "support kill share": 0.038
+    },
+    "7+": {
+     "solo share": 0.038,
+     "assists per kill": 2.557,
+     "support kill share": 0.027
+    }
+   },
+   "side B kills solo share": 0.038,
+   "side A kills solo share": 0.059,
+   "dropped kills (share)": 0.0,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ]
+  },
+  "replay after: (i) real sets, killers, victims; v2 assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.11,
+     "assists per kill": 1.759,
+     "support kill share": 0.031
+    },
+    "2": {
+     "solo share": 0.074,
+     "assists per kill": 2.145,
+     "support kill share": 0.039
+    },
+    "3-4": {
+     "solo share": 0.032,
+     "assists per kill": 2.437,
+     "support kill share": 0.043
+    },
+    "5-6": {
+     "solo share": 0.017,
+     "assists per kill": 2.546,
+     "support kill share": 0.037
+    },
+    "7+": {
+     "solo share": 0.032,
+     "assists per kill": 2.31,
+     "support kill share": 0.027
+    }
+   },
+   "side B kills solo share": 0.046,
+   "side A kills solo share": 0.055,
+   "dropped kills (share)": 0.013,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.533,
+    "3-4": 3.78,
+    "5-6": 4.811,
+    "7+": 5.0
+   }
+  },
+  "replay after: (iii) v2 sets, killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.125,
+     "assists per kill": 1.8,
+     "support kill share": 0.063
+    },
+    "2": {
+     "solo share": 0.086,
+     "assists per kill": 1.934,
+     "support kill share": 0.073
+    },
+    "3-4": {
+     "solo share": 0.037,
+     "assists per kill": 2.294,
+     "support kill share": 0.054
+    },
+    "5-6": {
+     "solo share": 0.017,
+     "assists per kill": 2.557,
+     "support kill share": 0.043
+    },
+    "7+": {
+     "solo share": 0.035,
+     "assists per kill": 2.236,
+     "support kill share": 0.055
+    }
+   },
+   "side B kills solo share": 0.058,
+   "side A kills solo share": 0.061,
+   "dropped kills (share)": 0.034,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.448,
+    0.028
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.007,
+    "2": 2.463,
+    "3-4": 3.824,
+    "5-6": 4.861,
+    "7+": 4.838
+   }
+  },
+  "replay worlds: real": {
+   "by size": {
+    "1": {
+     "solo share": 0.089,
+     "assists per kill": 1.776,
+     "support kill share": 0.049
+    },
+    "2": {
+     "solo share": 0.08,
+     "assists per kill": 2.144,
+     "support kill share": 0.061
+    },
+    "3-4": {
+     "solo share": 0.048,
+     "assists per kill": 2.493,
+     "support kill share": 0.057
+    },
+    "5-6": {
+     "solo share": 0.025,
+     "assists per kill": 2.802,
+     "support kill share": 0.029
+    },
+    "7+": {
+     "solo share": 0.047,
+     "assists per kill": 2.504,
+     "support kill share": 0.0
+    }
+   },
+   "side B kills solo share": 0.06,
+   "side A kills solo share": 0.056,
+   "dropped kills (share)": 0.0,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ]
+  },
+  "replay worlds: (i) real sets, killers, victims; v2 assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.091,
+     "assists per kill": 1.768,
+     "support kill share": 0.049
+    },
+    "2": {
+     "solo share": 0.082,
+     "assists per kill": 2.131,
+     "support kill share": 0.06
+    },
+    "3-4": {
+     "solo share": 0.031,
+     "assists per kill": 2.45,
+     "support kill share": 0.053
+    },
+    "5-6": {
+     "solo share": 0.016,
+     "assists per kill": 2.592,
+     "support kill share": 0.03
+    },
+    "7+": {
+     "solo share": 0.028,
+     "assists per kill": 2.353,
+     "support kill share": 0.0
+    }
+   },
+   "side B kills solo share": 0.041,
+   "side A kills solo share": 0.052,
+   "dropped kills (share)": 0.013,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.0,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.0,
+    "2": 2.552,
+    "3-4": 3.843,
+    "5-6": 4.835,
+    "7+": 5.0
+   }
+  },
+  "replay worlds: (iii) v2 sets, killer, victim, assists": {
+   "by size": {
+    "1": {
+     "solo share": 0.118,
+     "assists per kill": 1.813,
+     "support kill share": 0.067
+    },
+    "2": {
+     "solo share": 0.086,
+     "assists per kill": 1.948,
+     "support kill share": 0.076
+    },
+    "3-4": {
+     "solo share": 0.043,
+     "assists per kill": 2.271,
+     "support kill share": 0.061
+    },
+    "5-6": {
+     "solo share": 0.015,
+     "assists per kill": 2.553,
+     "support kill share": 0.041
+    },
+    "7+": {
+     "solo share": 0.032,
+     "assists per kill": 2.336,
+     "support kill share": 0.045
+    }
+   },
+   "side B kills solo share": 0.061,
+   "side A kills solo share": 0.059,
+   "dropped kills (share)": 0.035,
+   "fights with a support on 3+ / 4+ kills (per 1,000 fights)": [
+    0.503,
+    0.0
+   ],
+   "side B set size by fight size (mean)": {
+    "1": 1.006,
+    "2": 2.461,
+    "3-4": 3.804,
+    "5-6": 4.862,
+    "7+": 4.878
+   }
+  }
+ },
+ "app copy (fitted before 10 Nov)": {
+  "fights": {
+   "fit": 8011,
+   "after": 0,
+   "worlds": 0
+  },
+  "assist": {
+   "window 0-4": 4.9328,
+   "window 5-9": 5.2599,
+   "window 10-14": 5.1046,
+   "window 15-24": 5.2325,
+   "window 25+": 5.301,
+   "role jng": 0.5328,
+   "role mid": 0.3818,
+   "role bot": 0.3051,
+   "role sup": 1.025,
+   "same_lane_as_killer": 0.3533,
+   "same_lane_as_victim": 0.1186,
+   "size 2": -4.3348,
+   "size 3-4": -4.7997,
+   "size 5-6": -4.9196,
+   "size 7+": -5.0911,
+   "side_B": 0.2611,
+   "died_earlier_in_fight": -0.9974,
+   "already_in_a_kill": 0.2341
+  },
+  "kill_side": {
+   "intercept": 0.0139,
+   "per_1k_gold_lead": 0.1067,
+   "per_v1_logit": 0.1628,
+   "baron": 0.1693,
+   "elder": 0.4417,
+   "alive_diff -3": -0.9867,
+   "alive_diff -2": -0.8057,
+   "alive_diff -1": -0.1051,
+   "alive_diff +1": 0.2179,
+   "alive_diff +2": 0.6367,
+   "alive_diff +3": 0.7015
+  }
+ }
+}

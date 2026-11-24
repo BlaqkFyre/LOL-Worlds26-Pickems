@@ -1,0 +1,57 @@
+{
+ "name": "memory_credit_diag",
+ "started_utc": "2026-11-23T23:50:47",
+ "script": {
+  "path": "research/memory/m8_credit_diag.py",
+  "sha256": "8f1e734b472ec85af67aa4c6deb56a4c0b6542664b29268cbed689dd856f0923",
+  "git_commit": "7ca9c89",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "fight_gap": 20,
+  "reps": 20,
+  "tables": "research\\local\\sim4\\app_params\\participants.json",
+  "lean_before_15": 0
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  },
+  {
+   "path": "research/local/sim4/app_params/participants.json",
+   "bytes": 10115,
+   "modified": "2026-11-13T20:27:36",
+   "sha256": "08be59445ff743cbdcda94835cffc270a7f1efe73ccfed95d95926f797ddcae5"
+  }
+ ],
+ "record": "20261123T235152Z_memory_credit_diag.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 65.5,
+ "results": {
+  "train: fights": 5130,
+  "worlds: fights": 1094
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m8_credit_diag.json",
+   "sha256": "0f43e976ab38c12831c5cbb664d6712456bdaa7e4892d1d383b3e925cb521a53"
+  }
+ ],
+ "not_written_because_failed": []
+}

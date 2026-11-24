@@ -106,6 +106,24 @@ class Sim {
           const mx = Math.max(...u); probs.push(norm(u.map(x => Math.exp(x - mx)))); }); });
       this.FP = {subs, probs, idx: probs[0].map((_, q) => q), WN: WN_, k: P.fight_players.killer, v: P.fight_players.victim, a: P.fight_players.assist}; }
   }
+  /* kill credit v2 (24 Nov; research/memory/m9_fit_credit.py, SIM_TABLES.credit): who is in a fight by kills groups 1, 2, 3-4, 5+;
+     built once, the first time a run asks for it */
+  credit2(){
+    if(this.FP2 !== undefined) return this.FP2;
+    const C = typeof window !== "undefined" && window.SIM_TABLES && window.SIM_TABLES.credit;
+    if(!C || !this.FP){ this.FP2 = null; return null; }
+    const fp = C.players, G = fp.kills_groups, subs = this.FP.subs, sum = a => a.reduce((x, y) => x + y, 0), probs = [];
+    const pairs = []; for(let i = 0; i < 5; i++) for(let j = i + 1; j < 5; j++) pairs.push([i, j]);
+    const WN_ = ["0-4", "5-9", "10-14", "15-24", "25+"], LWN_ = ["0-4", "5-9", "10-14", "15+"], WITH = {}, CROSS = {};
+    LWN_.forEach(lw => { WITH[lw] = subs.map(s_ => sum(pairs.filter(([i, j]) => s_.includes(i) && s_.includes(j)).map(([i, j]) => fp.same_side_pair[lw][ROLES[i] + "+" + ROLES[j]])));
+      CROSS[lw] = subs.map(a_ => subs.map(b_ => sum(a_.flatMap(i => b_.map(j => fp.across[lw][ROLES[i] + "~" + ROLES[j]]))))); });
+    WN_.forEach((w_, wi_) => { const lw = LWN_[Math.min(wi_, 3)], within = WITH[lw], cross = CROSS[lw];
+      G.forEach(nb_ => { const ra = fp.role_A[w_ + "|" + nb_], rb = fp.role_B[w_ + "|" + nb_];
+        const ua = subs.map((s_, q) => sum(s_.map(i => ra[ROLES[i]])) + within[q]), ub = subs.map((s_, q) => sum(s_.map(i => rb[ROLES[i]])) + within[q]);
+        const u = []; ua.forEach((x, a_) => ub.forEach((y, b_) => u.push(x + y + cross[a_][b_])));
+        const mx = Math.max(...u); probs.push(norm(u.map(x => Math.exp(x - mx)))); }); });
+    this.FP2 = {probs, ng: G.length, a: C.assist, ks: C.kill_side}; return this.FP2;
+  }
   count(rng, mu, kind, m){
     const phi = g0(g0(this.P.dispersion || {}, kind, {}), phOf(m), 1);
     if(phi <= 1.01 || mu <= 0) return rng.poisson(mu);
@@ -155,6 +173,12 @@ class Sim {
     const deathWait = (i, t) => BASE_WAIT[levelAt(i, t) - 1] * (1 + timeFactor(t));
     let lastFight = null; const nxDown = [[], []];
     const FPon = g0(cal, "fight_players", "off") === "on" && !!this.FP;  /* who is in each fight (13 Nov): kills and assists only among them */
+    /* kill credit v2 (opt-in, 24 Nov; needs fight players and game memory): who is in a fight by kills groups 1, 2, 3-4, 5+; who wins
+       each kill also reads the players alive on each side (steps for -3..+3); assists can go to players killed earlier in the fight,
+       with terms for fight size, side B (the side without the fight's first kill) and having died. "off" plays v51 exactly. */
+    const KC2 = (FPon && MT && g0(cal, "kill_credit", "off") === "v2") ? this.credit2() : null;
+    const SZN = ["1", "2", "3-4", "5-6", "7+"], szOf = n_ => n_ === 1 ? 0 : n_ === 2 ? 1 : n_ <= 4 ? 2 : n_ <= 6 ? 3 : 4;
+    const aliveStep = d_ => { const c = Math.max(-3, Math.min(3, d_)); return c === 0 ? 0 : KC2.ks["alive_diff " + (c > 0 ? "+" : "") + c]; };
     /* the game's first dragon has its own fitted taker (opt-in, 13 Nov; research/sim4/s4_firstdragon.py) */
     const FDT = (g0(cal, "first_dragon_taker", "off") === "on" && P.taker_first_dragon) ? P.taker_first_dragon[TIM ? "timing" : "side"] : null;
     const farm = [0, 0, 0, 0, 0], gold = [0, 0, 0, 0, 0];
@@ -213,19 +237,26 @@ class Sim {
           ftype = rng.pick(["small", "skirmish", "teamfight"], pt);
           [sizes, pr] = table(EKC && m < 14 && FTc.size_table_early ? FTc.size_table_early[ftype][m < 5 ? "0-4" : m < 10 ? "5-9" : "10-13"] : FTc.size_table[ftype][FPH(m)]);
         } else [sizes, pr] = this.fsize[FPH(m)];
-        const n = rng.pick(sizes, pr), ks = KSC;
-        const p = sig(ks.intercept + ks.per_1k_gold_lead * gd / 1000 + ks.per_v1_logit * z + ks.baron * bdir + ks.elder * edir
-          + g0(ks, "skirmish_style_early", 0) * skirm_d * (m < 15 ? 1 : 0) + rng.normal(0, cal.fight_eps));
+        const n = rng.pick(sizes, pr), ks = KC2 ? KC2.ks : KSC;
+        /* v2: the same terms (refitted) plus players alive at each kill, so the fight-level part is kept as a log-odds and the alive step
+           is added kill by kill; the same single noise draw as v51 */
+        const lin = ks.intercept + ks.per_1k_gold_lead * gd / 1000 + ks.per_v1_logit * z + ks.baron * bdir + ks.elder * edir
+          + g0(ks, "skirmish_style_early", 0) * skirm_d * (m < 15 ? 1 : 0) + rng.normal(0, cal.fight_eps), p = sig(lin);
         const tf = at(t0 + rng.uniform(0, 55)), dead = [new Set(), new Set()], inv = [new Set(), new Set()], lanesIn = new Set();
+        const diedIn = [new Set(), new Set()]; let sideA = -1;  /* v2: players killed in this fight; the side of its first kill */
         /* game memory: players still waiting to respawn can't be in this fight; kills in a fight come real kill gaps apart */
         if(MT) for(const s_ of [0, 1]) for(let i = 0; i < 5; i++) if(respawn[s_][i] > tf) dead[s_].add(i);
         let kT = tf, lastKT = tf; const killT = j => !MT ? tf + 3 * j : j === 0 ? tf : (kT += quant(MT.kill_gap, rng.random()));
         let part = null;
         for(let j = 0; j < n; j++){
-          const s = rng.random() < p ? 0 : 1, o = 1 - s;
+          const pk = KC2 ? sig(lin + aliveStep((5 - dead[0].size) - (5 - dead[1].size))) : p;
+          const s = rng.random() < pk ? 0 : 1, o = 1 - s;
           if(FPon){  /* fight players: drawn with the first kill (side A = that kill's side), then every kill among them */
             const FPd = this.FP, fpw = m < 5 ? 0 : m < 10 ? 1 : m < 15 ? 2 : m < 25 ? 3 : 4, nbf = n === 1 ? 0 : n === 2 ? 1 : 2;
-            if(j === 0){ const ci = rng.pick(FPd.idx, FPd.probs[fpw * 3 + nbf]); part = {}; part[s] = FPd.subs[Math.floor(ci / 31)]; part[o] = FPd.subs[ci % 31]; }
+            if(j === 0){
+              if(KC2){ const nb2 = n === 1 ? 0 : n === 2 ? 1 : n <= 4 ? 2 : 3, ci = rng.pick(FPd.idx, KC2.probs[fpw * KC2.ng + nb2]);
+                part = {}; part[s] = FPd.subs[Math.floor(ci / 31)]; part[o] = FPd.subs[ci % 31]; sideA = s; }
+              else { const ci = rng.pick(FPd.idx, FPd.probs[fpw * 3 + nbf]); part = {}; part[s] = FPd.subs[Math.floor(ci / 31)]; part[o] = FPd.subs[ci % 31]; } }
             const ck = part[s].filter(i => !dead[s].has(i)), cv = part[o].filter(i => !dead[o].has(i));
             if(!ck.length || !cv.length) continue;
             const wn_ = FPd.WN[fpw];
@@ -233,7 +264,13 @@ class Sim {
               const mx = Math.max(...u_); return rng.pick(c_, norm(u_.map(x_ => Math.exp(x_ - mx)))); };
             const k = pickRole(ck, FPd.k, sd(s)), v = pickRole(cv, FPd.v, sd(o));
             dead[o].add(v); const fa = FPd.a;
-            const ast = ck.filter(i => i !== k && !dead[s].has(i) && rng.random() < sig(fa["window " + wn_] + (i ? fa["role " + ROLES[i]] : 0)
+            let ast;
+            if(KC2){  /* v2: every player of the side in this fight other than the killer, alive or killed earlier in this fight */
+              diedIn[o].add(v); const fb = KC2.a, sz = szOf(n);
+              ast = part[s].filter(i => i !== k && (!dead[s].has(i) || diedIn[s].has(i)) && rng.random() < sig(fb["window " + wn_] + (i ? fb["role " + ROLES[i]] : 0)
+                + fb.same_lane_as_killer * (LANEID[i] >= 0 && LANEID[i] === LANEID[k]) + fb.same_lane_as_victim * (LANEID[i] >= 0 && LANEID[i] === LANEID[v])
+                + (sz ? fb["size " + SZN[sz]] : 0) + fb.side_B * (s !== sideA) + fb.died_earlier_in_fight * diedIn[s].has(i) + fb.already_in_a_kill * inv[s].has(i)));
+            } else ast = ck.filter(i => i !== k && !dead[s].has(i) && rng.random() < sig(fa["window " + wn_] + (i ? fa["role " + ROLES[i]] : 0)
               + fa.same_lane_as_killer * (LANEID[i] >= 0 && LANEID[i] === LANEID[k]) + fa.same_lane_as_victim * (LANEID[i] >= 0 && LANEID[i] === LANEID[v])
               + fa.one_kill_fight * (nbf === 0) + fa.two_kill_fight * (nbf === 1) + fa.already_in_a_kill * inv[s].has(i)));
             inv[s].add(k); ast.forEach(i => inv[s].add(i));

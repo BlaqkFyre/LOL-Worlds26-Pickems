@@ -67,3 +67,6 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261118T032224Z_memory_tables.json,memory_tables,ok,5.4,research/memory/build_memory_tables.py,419c260,True,research/model/memory/memory_tables.json
 20261123T233044Z_memory_kill_credit.json,memory_kill_credit,ok,5.5,research/memory/m7_kill_credit.py,8c8e165,True,research/model/memory/m7_kill_credit.json
 20261123T233747Z_memory_kill_credit.json,memory_kill_credit,ok,4.8,research/memory/m7_kill_credit.py,8c8e165,True,research/model/memory/m7_kill_credit.json
+20261123T235152Z_memory_credit_diag.json,memory_credit_diag,ok,65.5,research/memory/m8_credit_diag.py,7ca9c89,True,research/model/memory/m8_credit_diag.json
+20261124T001632Z_memory_fit_credit.json,memory_fit_credit,ok,87.6,research/memory/m9_fit_credit.py,7ca9c89,True,research/model/memory/m9_fit_credit.json
+20261124T003151Z_memory_fit_credit.json,memory_fit_credit,ok,97.5,research/memory/m9_fit_credit.py,7ca9c89,True,research/local/sim4/app_params/participants_v2.json research/local/sim4/app_params/killside_alive.json research/model/memory/m9_fit_credit.json
