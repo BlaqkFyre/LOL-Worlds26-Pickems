@@ -173,10 +173,11 @@ class Sim {
     const deathWait = (i, t) => BASE_WAIT[levelAt(i, t) - 1] * (1 + timeFactor(t));
     let lastFight = null; const nxDown = [[], []];
     const FPon = g0(cal, "fight_players", "off") === "on" && !!this.FP;  /* who is in each fight (13 Nov): kills and assists only among them */
-    /* kill credit v2 (opt-in, 24 Nov; needs fight players and game memory): who is in a fight by kills groups 1, 2, 3-4, 5+; who wins
-       each kill also reads the players alive on each side (steps for -3..+3); assists can go to players killed earlier in the fight,
-       with terms for fight size, side B (the side without the fight's first kill) and having died. "off" plays v51 exactly. */
-    const KC2 = (FPon && MT && g0(cal, "kill_credit", "off") === "v2") ? this.credit2() : null;
+    /* kill credit v2 (24 Nov; on by default from v53, Luke: new versions go into the app switched on; needs fight players and game
+       memory): who is in a fight by kills groups 1, 2, 3-4, 5+; who wins each kill also reads the players alive on each side (steps for
+       -3..+3); assists can go to players killed earlier in the fight, with terms for fight size, side B (the side without the fight's
+       first kill) and having died. cal.kill_credit = "off" plays v51 exactly (for replay checks). */
+    const KC2 = (FPon && MT && g0(cal, "kill_credit", "v2") === "v2") ? this.credit2() : null;
     const SZN = ["1", "2", "3-4", "5-6", "7+"], szOf = n_ => n_ === 1 ? 0 : n_ === 2 ? 1 : n_ <= 4 ? 2 : n_ <= 6 ? 3 : 4;
     const aliveStep = d_ => { const c = Math.max(-3, Math.min(3, d_)); return c === 0 ? 0 : KC2.ks["alive_diff " + (c > 0 ? "+" : "") + c]; };
     /* the game's first dragon has its own fitted taker (opt-in, 13 Nov; research/sim4/s4_firstdragon.py) */
