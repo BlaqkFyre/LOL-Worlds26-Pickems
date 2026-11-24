@@ -1,0 +1,320 @@
+{
+ "opening": {
+  "all 640 timelines": {
+   "games": 640,
+   "games with no kill": 0,
+   "first blood time quantiles (s): 5, 10, 25, 50, 75, 90, 95%": [
+    109,
+    134,
+    170,
+    240,
+    378,
+    527,
+    658
+   ],
+   "share of games with first blood before (s)": {
+    "30": 0.0,
+    "60": 0.011,
+    "90": 0.03,
+    "120": 0.064,
+    "180": 0.281
+   },
+   "share of games with first blood after (s)": {
+    "600": 0.064,
+    "780": 0.023
+   },
+   "kills per game by 10 s, 0:00-3:00": [
+    0.0,
+    0.0,
+    0.0,
+    0.005,
+    0.003,
+    0.003,
+    0.011,
+    0.009,
+    0.008,
+    0.011,
+    0.019,
+    0.019,
+    0.022,
+    0.08,
+    0.059,
+    0.05,
+    0.069,
+    0.045
+   ]
+  },
+  "Worlds": {
+   "games": 94,
+   "games with no kill": 0,
+   "first blood time quantiles (s): 5, 10, 25, 50, 75, 90, 95%": [
+    129,
+    143,
+    182,
+    236,
+    384,
+    559,
+    680
+   ],
+   "share of games with first blood before (s)": {
+    "30": 0.0,
+    "60": 0.021,
+    "90": 0.021,
+    "120": 0.043,
+    "180": 0.234
+   },
+   "share of games with first blood after (s)": {
+    "600": 0.074,
+    "780": 0.032
+   },
+   "kills per game by 10 s, 0:00-3:00": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.011,
+    0.011,
+    0.0,
+    0.011,
+    0.0,
+    0.0,
+    0.011,
+    0.021,
+    0.021,
+    0.053,
+    0.064,
+    0.064,
+    0.074,
+    0.032
+   ]
+  }
+ },
+ "gaps between one team's consecutive events": {
+  "all 640 timelines": {
+   "monster then monster": {
+    "pairs": 1352,
+    "within 1 s": 0.0,
+    "within 2 s": 0.0,
+    "within 5 s": 0.001,
+    "within 10 s": 0.001,
+    "median s": 232.5
+   },
+   "monster then structure": {
+    "pairs": 2977,
+    "within 1 s": 0.006,
+    "within 2 s": 0.01,
+    "within 5 s": 0.027,
+    "within 10 s": 0.047,
+    "median s": 77.0
+   },
+   "structure then monster": {
+    "pairs": 2181,
+    "within 1 s": 0.007,
+    "within 2 s": 0.013,
+    "within 5 s": 0.027,
+    "within 10 s": 0.057,
+    "median s": 103.0
+   },
+   "structure then structure": {
+    "pairs": 6000,
+    "within 1 s": 0.026,
+    "within 2 s": 0.057,
+    "within 5 s": 0.213,
+    "within 10 s": 0.415,
+    "median s": 14.0
+   }
+  },
+  "Worlds": {
+   "monster then monster": {
+    "pairs": 208,
+    "within 1 s": 0.0,
+    "within 2 s": 0.0,
+    "within 5 s": 0.0,
+    "within 10 s": 0.0,
+    "median s": 230.0
+   },
+   "monster then structure": {
+    "pairs": 451,
+    "within 1 s": 0.002,
+    "within 2 s": 0.007,
+    "within 5 s": 0.027,
+    "within 10 s": 0.06,
+    "median s": 76.0
+   },
+   "structure then monster": {
+    "pairs": 330,
+    "within 1 s": 0.006,
+    "within 2 s": 0.006,
+    "within 5 s": 0.027,
+    "within 10 s": 0.055,
+    "median s": 104.0
+   },
+   "structure then structure": {
+    "pairs": 853,
+    "within 1 s": 0.019,
+    "within 2 s": 0.049,
+    "within 5 s": 0.217,
+    "within 10 s": 0.431,
+    "median s": 14.0
+   }
+  }
+ },
+ "dragons by side": {
+  "Worlds main event (from 23 Oct)": {
+   "games": 76,
+   "dragons per game": 5.026,
+   "blue share of dragons": 0.518,
+   "blue share of first dragons": 0.487
+  },
+  "other 2026 major games": {
+   "games": 2790,
+   "dragons per game": 4.572,
+   "blue share of dragons": 0.465,
+   "blue share of first dragons": 0.374
+  }
+ },
+ "gaps from the team's own kill to its next objective": {
+  "all 640 timelines": {
+   "kill then monster": {
+    "pairs": 2679,
+    "within 1 s": 0.022,
+    "within 2 s": 0.031,
+    "within 5 s": 0.068,
+    "within 10 s": 0.113,
+    "median s": 40.0
+   },
+   "kill then structure": {
+    "pairs": 3647,
+    "within 1 s": 0.044,
+    "within 2 s": 0.077,
+    "within 5 s": 0.178,
+    "within 10 s": 0.334,
+    "median s": 18.0
+   }
+  },
+  "Worlds": {
+   "kill then monster": {
+    "pairs": 387,
+    "within 1 s": 0.021,
+    "within 2 s": 0.026,
+    "within 5 s": 0.072,
+    "within 10 s": 0.132,
+    "median s": 41.0
+   },
+   "kill then structure": {
+    "pairs": 516,
+    "within 1 s": 0.037,
+    "within 2 s": 0.068,
+    "within 5 s": 0.172,
+    "within 10 s": 0.322,
+    "median s": 18.0
+   }
+  }
+ },
+ "fights starting in minutes 0-4": {
+  "all 640 timelines": {
+   "minute 0": {
+    "fights per game": 0.011,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     37,
+     38,
+     44,
+     49,
+     53
+    ]
+   },
+   "minute 1": {
+    "fights per game": 0.056,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     7,
+     19,
+     39,
+     47,
+     54
+    ]
+   },
+   "minute 2": {
+    "fights per game": 0.255,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     11,
+     16,
+     33,
+     46,
+     55
+    ]
+   },
+   "minute 3": {
+    "fights per game": 0.305,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     8,
+     18,
+     30,
+     44,
+     52
+    ]
+   },
+   "minute 4": {
+    "fights per game": 0.258,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     4,
+     11,
+     22,
+     41,
+     52
+    ]
+   }
+  },
+  "Worlds": {
+   "minute 0": {
+    "fights per game": 0.021,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     46,
+     47,
+     50,
+     52,
+     53
+    ]
+   },
+   "minute 1": {
+    "fights per game": 0.032,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     23,
+     32,
+     45,
+     48,
+     50
+    ]
+   },
+   "minute 2": {
+    "fights per game": 0.213,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     10,
+     15,
+     30,
+     42,
+     56
+    ]
+   },
+   "minute 3": {
+    "fights per game": 0.34,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     7,
+     14,
+     29,
+     40,
+     50
+    ]
+   },
+   "minute 4": {
+    "fights per game": 0.234,
+    "start second quantiles 10, 25, 50, 75, 90%": [
+     7,
+     13,
+     26,
+     50,
+     57
+    ]
+   }
+  }
+ }
+}

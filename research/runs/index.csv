@@ -70,3 +70,6 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261123T235152Z_memory_credit_diag.json,memory_credit_diag,ok,65.5,research/memory/m8_credit_diag.py,7ca9c89,True,research/model/memory/m8_credit_diag.json
 20261124T001632Z_memory_fit_credit.json,memory_fit_credit,ok,87.6,research/memory/m9_fit_credit.py,7ca9c89,True,research/model/memory/m9_fit_credit.json
 20261124T003151Z_memory_fit_credit.json,memory_fit_credit,ok,97.5,research/memory/m9_fit_credit.py,7ca9c89,True,research/local/sim4/app_params/participants_v2.json research/local/sim4/app_params/killside_alive.json research/model/memory/m9_fit_credit.json
+20261124T073344Z_memory_timing.json,memory_timing,ok,4.5,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
+20261124T073403Z_memory_timing.json,memory_timing,ok,3.4,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
+20261124T074853Z_memory_timing.json,memory_timing,ok,3.9,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
