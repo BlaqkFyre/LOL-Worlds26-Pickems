@@ -163,7 +163,27 @@ class Sim {
     /* game memory: an event drawn no later than the one before comes the next second (the clock's step), not in the same second;
        base structures in one push are spaced by the real base gaps (below) */
     const EO = g0(cal, "event_order", "off") === "on"; let cur = 0;
-    const at = d => !EO ? d : (cur = (MT && cur > 0 && d <= cur) ? cur + 1 : Math.max(cur, d));
+    /* timing fixes (26 Nov, v54; research/memory/m12_fit_timing.py, tables SIM_TABLES.timing; on by default, Luke: new versions go
+       into the app switched on). event_gap "v2": an event drawn no later than the last one placed comes a real gap after it (the gap
+       between consecutive events in real games, under 60 s, by previous kind -> this kind and same / other team) in place of 1 s.
+       Events that already carry a real gap from their own anchor keep their time ("anchored"): a fight's kills (real kill gaps from
+       the fight's start) and the structures of a push after a won fight (real structure and base gaps from the fight's start, the
+       way those gaps were measured: research/memory/build_memory_tables.py), so towers can fall during the fight as real ones do;
+       the play-by-play is then sorted by time. The Nexus still comes after every event placed. opening "v2" (the fight-type model
+       only): the early fight count has a term for each of minutes 0-4, and fights in minutes 0-4 start at real seconds of the
+       minute. "off" for either plays v53 exactly. */
+    const TMG = (typeof window !== "undefined" && window.SIM_TABLES && window.SIM_TABLES.timing) || null;
+    const EG = (EO && MT && TMG && g0(cal, "event_gap", "v2") === "v2") ? TMG.gap_q : null;
+    const OPN = (TMG && cal.fight_model === "typed" && EKC && g0(cal, "opening", "v2") === "v2") ? TMG : null;
+    const PC = (EG && window.SIM_TABLES.push && g0(cal, "push_chain", "v2") === "v2") ? window.SIM_TABLES.push : null;
+    let curK = null, curS = null;
+    const gapAfter = (kind, side) => { const q = EG[`${curK}>${kind}|${side == null || curS == null ? "any" : side === curS ? "same" : "other"}`] || EG[`${curK}>${kind}|any`];
+      return cur + (q ? quant(q, rng.random()) : 1); };
+    const at = (d, kind, side, anchored) => {
+      if(!EG) return !EO ? d : (cur = (MT && cur > 0 && d <= cur) ? cur + 1 : Math.max(cur, d));
+      if(cur > 0 && d <= cur && !anchored) d = gapAfter(kind, side);
+      if(d >= cur){ cur = d; curK = kind; curS = side; }
+      return d; };
     /* game memory: who is dead until when (official timer from each role's level at that time); the last fight's winner */
     const respawn = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
     const levelAt = (i, t) => { const c = MT.role_xp[ROLES[i]];
@@ -227,6 +247,10 @@ class Sim {
         feat = {per_1k_abs_lead: Math.min(Math.abs(gd) / 1000, 15), monster_up: monUp, buff_up: buffUp};
         lam = Math.exp(cc.intercept + g0(cc, "phase " + ph, 0) + Object.keys(feat).reduce((s, k) => s + cc[k] * feat[k], 0)
           + cc.pace_style * pace_s + cc.fight_last_minute * fprev + cc.log1p_kills_last_2min * Math.log1p(k2) + ewTerm(cc)); }
+      if(TYPED && OPN){ const cc = OPN.count_early;   /* opening v2: the refitted count (every minute), one term for each of minutes 0-4 */
+        lam = Math.exp(cc.intercept + g0(cc, "phase " + ph, 0) + Object.keys(feat).reduce((s, k) => s + cc[k] * feat[k], 0)
+          + cc.pace_style * pace_s + cc.fight_last_minute * (prevNf > 0 ? 1 : 0) + cc.log1p_kills_last_2min * Math.log1p(k2)
+          + (m < 5 ? cc["minute " + m] : m < 10 ? cc["early 5-9"] : 0)); }
       const nf = TYPED ? rng.poisson(lam) : this.count(rng, lam, "fights", m);
       prevNet = net; net = 0; const fought = nf > 0 ? 1 : 0; prevNf = nf;
       for(let f = 0; f < nf; f++){
@@ -243,7 +267,7 @@ class Sim {
            is added kill by kill; the same single noise draw as v51 */
         const lin = ks.intercept + ks.per_1k_gold_lead * gd / 1000 + ks.per_v1_logit * z + ks.baron * bdir + ks.elder * edir
           + g0(ks, "skirmish_style_early", 0) * skirm_d * (m < 15 ? 1 : 0) + rng.normal(0, cal.fight_eps), p = sig(lin);
-        const tf = at(t0 + rng.uniform(0, 55)), dead = [new Set(), new Set()], inv = [new Set(), new Set()], lanesIn = new Set();
+        const tf = at(OPN && m < 5 && OPN.start_q[m] ? t0 + quant(OPN.start_q[m], rng.random()) : t0 + rng.uniform(0, 55), "kill", null), dead = [new Set(), new Set()], inv = [new Set(), new Set()], lanesIn = new Set();
         const diedIn = [new Set(), new Set()]; let sideA = -1;  /* v2: players killed in this fight; the side of its first kill */
         /* game memory: players still waiting to respawn can't be in this fight; kills in a fight come real kill gaps apart */
         if(MT) for(const s_ of [0, 1]) for(let i = 0; i < 5; i++) if(respawn[s_][i] > tf) dead[s_].add(i);
@@ -279,7 +303,7 @@ class Sim {
             addGold(s, val.kill);
             if(LL && LL.ev && m < 15){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
             net += sd(s); setd(first, "blood", s);
-            const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
+            const tk = at(killT(j), "kill", s, true); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
             fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
@@ -303,7 +327,7 @@ class Sim {
             if(LL && LL.ev){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
             inv[s].add(k); ast.forEach(i => inv[s].add(i)); inv[o].add(v); [k, v, ...ast].forEach(i => { if(LANEID[i] >= 0) lanesIn.add(LANEID[i]); });
             net += sd(s); setd(first, "blood", s);
-            const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
+            const tk = at(killT(j), "kill", s, true); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v, ast]);
             fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
             continue;
           }
@@ -318,7 +342,7 @@ class Sim {
           addGold(s, val.kill);
           if(earlyLL && LL.ev){ const g = sd(s), E = LL.ev; gold[k] += g * E.own_kill[k]; gold[v] -= g * E.own_death[v]; ast.forEach(i => { gold[i] += g * E.own_assist[i]; }); }
           net += sd(s); setd(first, "blood", s);
-          const tk = at(killT(j)); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v]);
+          const tk = at(killT(j), "kill", s, true); if(MT){ respawn[o][v] = tk + deathWait(v, tk); lastKT = tk; } killLog.push([tk, s, k, v]);
           fk[s]++; note(tk, s, "kill", `${ROLES[k]} kills ${ROLES[v]}` + (ast.length ? "" : " (solo)"), {k, v, ast, f: fid});
         }
         /* the fight's record for the play-by-play (13 Nov; no random draws): kills each side, the fight type drawn, gold lead going in */
@@ -344,7 +368,7 @@ class Sim {
           if(FDT && kind === "dragon" && firstDrag){ const xb_ = FDT.blue_side + FDT.per_v1_logit * z + ["gd", "jng", "bot2", "mid", "top", "net60k", "objk"].reduce((a_, f_) => a_ + g0(FDT, f_ + "_per_1k", 0) * lanef[f_] / 1000, 0);
             s = rng.random() < sig(xb_) ? 0 : 1; }
           else s = taker(P.taker[kind] ? kind : "dragon", feats);
-          const tt = at(Math.max(t0, nxt.dragon) + rng.uniform(0, 50));
+          const tt = at(Math.max(t0, nxt.dragon) + rng.uniform(0, 50), "monster", s);
           if(kind === "elder"){ elderN[s]++; elderUntil[s] = tt + ELDER_BUFF; nxt.dragon = tt + 360; setd(first, "elder", s); note(tt, s, "elder", "Elder Dragon"); }
           else {
             let ty;
@@ -360,14 +384,14 @@ class Sim {
       for(const kind of ["grub", "herald"]){
         if(!takenOnce[kind] && nxt[kind] < t0 + 60 && P.monsters[kind] && rng.random() < takeChance(kind)){
           const s = taker(kind, pickF(["gd", "jng", "top", "mid", "net60k", "objk"]));
-          const tt = at(Math.max(t0, nxt[kind]) + rng.uniform(0, 50)); takenOnce[kind] = true;
+          const tt = at(Math.max(t0, nxt[kind]) + rng.uniform(0, 50), "monster", s); takenOnce[kind] = true;
           if(kind === "grub"){ const nOwn = rng.random() < P.grubs_split.one_team_all ? 3 : 2;
             grubs[s] += nOwn; grubs[1 - s] += 3 - nOwn; setd(first, "grub", s); addGold(s, val.grub * nOwn); addGold(1 - s, val.grub * (3 - nOwn)); note(tt, s, "grubs", `${nOwn} void grubs`); }
           else { heralds[s]++; heraldT[s] = tt; setd(first, "herald", s); addGold(s, val.herald); note(tt, s, "herald", "Rift Herald"); }
         }
       }
       if(nxt.baron != null && nxt.baron < t0 + 60 && rng.random() < takeChance("baron")){
-        const s = taker("baron", pickF(["gd", "net60k", "objk"])), tt = at(Math.max(t0, nxt.baron) + rng.uniform(0, 50));
+        const s = taker("baron", pickF(["gd", "net60k", "objk"])), tt = at(Math.max(t0, nxt.baron) + rng.uniform(0, 50), "monster", s);
         barons[s]++; baronUntil[s] = tt + BARON_BUFF; nxt.baron = tt + 360; addGold(s, val.baron);
         setd(first, "baron", s); setd(ftime, "baron", tt); note(tt, s, "baron", "Baron Nashor");
       }
@@ -378,6 +402,12 @@ class Sim {
         /* game memory: after a won fight (in the last minute) the winner's structures run from the fight, real gaps apart */
         const fromFight = MT && lastFight && lastFight.w === s && lastFight.t >= t0 - 60;
         let pt = MT ? (fromFight ? lastFight.t0 : null) : 0;
+        /* push_chain v2: the push's first structure from the fight's last kill (real offsets, research/memory/m14_push_timing.py; one table
+           for pushes that start in the base (T3 tower or base structure), one for pushes that start with an outer tower), later
+           ones real gaps after the push's previous structure, carried across minutes; the Nexus a real gap after the push's previous structure */
+        let pcFirst = false;
+        if(PC && fromFight){ if(lastFight.pt != null) pt = lastFight.pt; else { pt = null; pcFirst = true; } }
+        const pcNext = (gq, base) => { if(pcFirst){ pcFirst = false; pt = Math.max(lastFight.t0, lastFight.t + quant((base ? PC.first_base_q : PC.first_outer_q) || PC.first_q, rng.random())); }   /* real pushes are counted from the fight's start */ else pt += quant(gq, rng.random()); lastFight.pt = pt; return pt; };
         for(let li = 0; li < 3; li++){
           const L = LANES[li]; if(seg[s][li] >= 15) continue;
           const tier = Math.floor(seg[s][li] / 5);
@@ -404,7 +434,7 @@ class Sim {
               if(LL.ev.own_lane_plate){ if(m < 15){ const own = [...LANE_ROLES[L], 1]; for(let i = 0; i < 5; i++) gold[i] += sg * (own.includes(i) ? LL.ev.own_lane_plate[i] : LL.ev.other_lane_plate[i]); } }
               else if(m < 14){ for(let i = 0; i < 5; i++) gold[i] += sg * LL.ev.team_plate[i]; }
             }
-            if(seg[s][li] % 5 === 0){ towers[s]++; addGold(s, val.tower); setd(first, "tower", s); const twt = (MT && pt != null) ? at(pt += quant(MT.struct_gap, rng.random())) : at(t0 + rng.uniform(0, 59)); setd(ftime, "tower", EO ? twt : t0 + 30); setd(firstLane, "tower", L);
+            if(seg[s][li] % 5 === 0){ towers[s]++; addGold(s, val.tower); setd(first, "tower", s); const twt = (PC && fromFight) ? at(pcNext(MT.struct_gap, seg[s][li] === 15), "structure", s, true) : (MT && pt != null) ? at(pt += quant(MT.struct_gap, rng.random()), "structure", s, true) : at(t0 + rng.uniform(0, 59), "structure", s); setd(ftime, "tower", EO ? twt : t0 + 30); setd(firstLane, "tower", L);
               note(twt, s, "tower", `T${seg[s][li] / 5} ${L}`); }
           }
         }
@@ -427,19 +457,21 @@ class Sim {
         if(npush) lastBase[s] = t0;
         /* game memory: a base push starts with the won fight (real bases fall while it is still going), else at a random second; base
            structures come real base gaps apart, and a step draws its time only when it takes something */
-        if(MT && pt == null) pt = t0 + rng.uniform(0, 59);
+        if(MT && pt == null && !pcFirst) pt = t0 + rng.uniform(0, 59);
         for(let q = 0; q < npush; q++){
           down = [0, 1, 2].filter(li => inhibBack[s][li] > t0);
-          const upInh = opn.filter(li => inhibBack[s][li] <= t0), ttE = MT ? null : at(t0 + rng.uniform(0, 59));
-          const TT = () => MT ? at(pt += quant(MT.base_gap, rng.random())) : ttE;
+          const upInh = opn.filter(li => inhibBack[s][li] <= t0), ttE = MT ? null : at(t0 + rng.uniform(0, 59), "structure", s);
+          const TT = () => (PC && fromFight) ? at(pcNext(MT.base_gap, true), "structure", s, true) : MT ? at(pt += quant(MT.base_gap, rng.random()), "structure", s, fromFight) : ttE;
           if(down.length && (!upInh.length || rng.random() < P.nexus_tier_share)){
             if(nxTowers[s] > 0){ const tt = TT(); nxTowers[s]--; towers[s]++; addGold(s, val.tower); if(MT) nxDown[s].push(tt); note(tt, s, "tower", "nexus tower"); }
             else if(MT){  /* game memory: the Nexus falls only after a won fight, before the losers are all back (real: never 60 s+ after the last kill) */
               const o_ = 1 - s, back = Math.max(...respawn[o_]);
               if(!lastFight || lastFight.w !== s || back <= Math.max(t0, lastFight.t)) break;
-              const gapN = Math.max(lastFight.t + quant(MT.nexus_gap, rng.random()), EO && cur > 0 ? cur + 1 : 0);
+              let gapN = (PC && lastFight.pt != null) ? lastFight.pt + quant(PC.nexus_prev_q, rng.random()) : lastFight.t + quant(MT.nexus_gap, rng.random());
+              if(!EG) gapN = Math.max(gapN, EO && cur > 0 ? cur + 1 : 0);
+              else if(cur > 0 && gapN <= cur) gapN = gapAfter("structure", s);   /* event_gap v2: a real gap after the last event placed */
               if(gapN >= back) break;   /* the losers are back (counting from the events already placed) before the Nexus could fall */
-              const tn = at(gapN);
+              const tn = at(gapN, "structure", s, true);
               winner = s; tEnd = tn; note(tn, s, "nexus", "Nexus"); break; }
             else { const tt = TT(); winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); break; }
           } else if(upInh.length){ const tt = TT(), li = rng.pickUniform(upInh); inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
@@ -449,6 +481,7 @@ class Sim {
       if(winner != null) break;
     }
     let capped = false;
+    if(EG && log) steps.sort((a, b) => a.t - b.t);   /* event_gap v2: anchored structures can fall during a fight; the play-by-play in time order (stable) */
     if(winner == null){ winner = gd >= 0 ? 0 : 1; tEnd = 60 * cal.max_min; capped = true; }
     const sec = Math.floor(tEnd), mins = sec / 60, tk = [K[0].reduce((a, b) => a + b, 0), K[1].reduce((a, b) => a + b, 0)];
     const ps = {};

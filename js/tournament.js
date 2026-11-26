@@ -380,6 +380,7 @@ function tourPlay(){
   recordGame(m, rec);
   DS.tour.next = m.status === "done" ? "Back to the tournament" : `Next game (${team(m.a).id} ${seriesWins(m, m.a)}–${seriesWins(m, m.b)} ${team(m.b).id})`;
   DS.sim = {g, bwin: bw / 300};
+  saveGameText("tour", m.id, m.games.length - 1);   /* this game's text for the series export (core.js), page memory only */
   renderDraft();
   const sEl = document.querySelector(".sim"); if(sEl) sEl.scrollIntoView({behavior:"smooth", block:"start"});
 }

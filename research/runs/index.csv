@@ -73,3 +73,7 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261124T073344Z_memory_timing.json,memory_timing,ok,4.5,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
 20261124T073403Z_memory_timing.json,memory_timing,ok,3.4,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
 20261124T074853Z_memory_timing.json,memory_timing,ok,3.9,research/memory/m10_timing.py,ee1d9a6,True,research/model/memory/m10_timing.json
+20261126T044327Z_memory_timing_fit.json,memory_timing_fit,ok,41.3,research/memory/m12_fit_timing.py,70699d6,True,research/model/memory/m12_fit_timing.json
+20261126T053749Z_memory_push_timing.json,memory_push_timing,ok,25.0,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json
+20261126T054029Z_memory_push_timing.json,memory_push_timing,ok,59.5,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json
+20261126T054527Z_memory_push_timing.json,memory_push_timing,ok,60.1,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json

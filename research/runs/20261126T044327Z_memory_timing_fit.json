@@ -1,0 +1,93 @@
+{
+ "name": "memory_timing_fit",
+ "started_utc": "2026-11-26T04:42:45",
+ "script": {
+  "path": "research/memory/m12_fit_timing.py",
+  "sha256": "c12d7cf1626d7547f57c1ac7b8d2116be4000cc54db252b5d70dcb76d38de2a2",
+  "git_commit": "70699d6",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "app_cut": "2026-11-10",
+  "split": "2026-09-01",
+  "gap_under_s": 60,
+  "fallback_pairs": 20,
+  "ridge": 1.0
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/local/sim3/tl_gold.csv",
+   "bytes": 11603130,
+   "modified": "2026-11-12T11:01:47",
+   "sha256": "fbf6239e9b7314c901440f4173eb3a6e5b2f4433fd9e277875bb0dc232e41473"
+  },
+  {
+   "path": "research/model/sim2/v1_games.csv",
+   "bytes": 491255,
+   "modified": "2026-11-11T12:31:26",
+   "sha256": "635bb8bb28db2ff92d419ade178dbc3a4c7da498c2e7b4c8f7c1f8ccb2af050c"
+  },
+  {
+   "path": "research/local/sim3/out_11nov/comp3_games.csv",
+   "bytes": 222950,
+   "modified": "2026-11-11T13:55:29",
+   "sha256": "238fe347bc8e33a977c5aaa89f635de814963e899a952ec0a9494ca7e6de5946"
+  },
+  {
+   "path": "research/local/sim1/v1_all/v1_games_all_fresh.csv",
+   "bytes": 491169,
+   "modified": "2026-11-13T10:41:20",
+   "sha256": "f697e9af2ec29c20bea9b9e0762eb34149d5b96eeff8c333e13118dc56a5bb81"
+  },
+  {
+   "path": "research/local/sim3/refit_1110_v1fresh/fit/comp3_games.csv",
+   "bytes": 223498,
+   "modified": "2026-11-26T15:42:39",
+   "sha256": "f89be7cef683c8316d976cc3c56d6e79d2affecc5bba5ffc7927c11a25b9a5a6"
+  },
+  {
+   "path": "research/local/sim4/app_params/fighttypes.json",
+   "bytes": 7324,
+   "modified": "2026-11-13T20:27:36",
+   "sha256": "ab9732df08f3a4276d703f685c024a43b4d7510f2cca0ec23ba39bc364d2ef26"
+  }
+ ],
+ "record": "20261126T044327Z_memory_timing_fit.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 41.3,
+ "results": {
+  "research train deviance today v minute terms": [
+   0.73927,
+   0.73027
+  ],
+  "research test deviance today v minute terms": [
+   0.70896,
+   0.70226
+  ],
+  "research worlds deviance today v minute terms": [
+   0.69861,
+   0.69059
+  ],
+  "port check largest gap": 0.0
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m12_fit_timing.json",
+   "sha256": "5ba71f07ec089c3a4a6cea947a6600ff6413857fea63d00981c657e94bd1a08c"
+  }
+ ],
+ "not_written_because_failed": []
+}

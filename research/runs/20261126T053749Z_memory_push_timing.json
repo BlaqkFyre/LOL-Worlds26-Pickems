@@ -1,0 +1,42 @@
+{
+ "name": "memory_push_timing",
+ "started_utc": "2026-11-26T05:37:24",
+ "script": {
+  "path": "research/memory/m14_push_timing.py",
+  "sha256": "e7dfcf24772b8fc60799658f3b4723169350faac6fe193f577855fa8e157e307",
+  "git_commit": "70699d6",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "fight_gap_s": 20,
+  "push_until_s_after_last_kill": 120
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  }
+ ],
+ "record": "20261126T053749Z_memory_push_timing.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 25.0,
+ "results": {
+  "training won fights": 4663
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m14_push_timing.json",
+   "sha256": "ccfac34eebc4f1c7fecd9af5329f87ab391e3275b698b94c432adca05670ab47"
+  }
+ ],
+ "not_written_because_failed": []
+}

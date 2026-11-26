@@ -1,0 +1,1921 @@
+{
+ "research": {
+  "games": {
+   "train": 395,
+   "test": 151,
+   "worlds": 94
+  },
+  "count": {
+   "old": {
+    "intercept": -0.8516,
+    "phase 14-19": 0.0794,
+    "phase 20-24": -0.0273,
+    "phase 25-29": 0.0104,
+    "phase 30-34": 0.1299,
+    "phase 35+": 0.1058,
+    "per_1k_abs_lead": 0.0132,
+    "monster_up": 0.1174,
+    "buff_up": 0.0726,
+    "pace_style": 0.6216,
+    "fight_last_minute": -0.3323,
+    "log1p_kills_last_2min": -0.002,
+    "early 0-4": -0.8359,
+    "early 5-9": -0.1837
+   },
+   "new": {
+    "intercept": -0.8528,
+    "phase 14-19": 0.0898,
+    "phase 20-24": -0.0187,
+    "phase 25-29": 0.0202,
+    "phase 30-34": 0.1407,
+    "phase 35+": 0.1154,
+    "per_1k_abs_lead": 0.0128,
+    "monster_up": 0.12,
+    "buff_up": 0.077,
+    "pace_style": 0.628,
+    "fight_last_minute": -0.3454,
+    "log1p_kills_last_2min": -0.0084,
+    "minute 0": -3.449,
+    "minute 1": -1.8528,
+    "minute 2": -0.5264,
+    "minute 3": -0.2288,
+    "minute 4": -0.3857,
+    "early 5-9": -0.1777
+   },
+   "minutes": {
+    "train": {
+     "minute 0": {
+      "real": 0.005,
+      "today's count_early": 0.188,
+      "minute terms": 0.014
+     },
+     "minute 1": {
+      "real": 0.063,
+      "today's count_early": 0.188,
+      "minute terms": 0.068
+     },
+     "minute 2": {
+      "real": 0.251,
+      "today's count_early": 0.185,
+      "minute terms": 0.252
+     },
+     "minute 3": {
+      "real": 0.322,
+      "today's count_early": 0.176,
+      "minute terms": 0.322
+     },
+     "minute 4": {
+      "real": 0.268,
+      "today's count_early": 0.173,
+      "minute terms": 0.269
+     },
+     "minute 5": {
+      "real": 0.327,
+      "today's count_early": 0.38,
+      "minute terms": 0.38
+     }
+    },
+    "test": {
+     "minute 0": {
+      "real": 0.02,
+      "today's count_early": 0.184,
+      "minute terms": 0.014
+     },
+     "minute 1": {
+      "real": 0.053,
+      "today's count_early": 0.183,
+      "minute terms": 0.066
+     },
+     "minute 2": {
+      "real": 0.291,
+      "today's count_early": 0.182,
+      "minute terms": 0.247
+     },
+     "minute 3": {
+      "real": 0.238,
+      "today's count_early": 0.171,
+      "minute terms": 0.312
+     },
+     "minute 4": {
+      "real": 0.245,
+      "today's count_early": 0.173,
+      "minute terms": 0.27
+     },
+     "minute 5": {
+      "real": 0.311,
+      "today's count_early": 0.372,
+      "minute terms": 0.373
+     }
+    },
+    "worlds": {
+     "minute 0": {
+      "real": 0.021,
+      "today's count_early": 0.187,
+      "minute terms": 0.014
+     },
+     "minute 1": {
+      "real": 0.032,
+      "today's count_early": 0.185,
+      "minute terms": 0.067
+     },
+     "minute 2": {
+      "real": 0.213,
+      "today's count_early": 0.185,
+      "minute terms": 0.252
+     },
+     "minute 3": {
+      "real": 0.34,
+      "today's count_early": 0.176,
+      "minute terms": 0.321
+     },
+     "minute 4": {
+      "real": 0.234,
+      "today's count_early": 0.17,
+      "minute terms": 0.265
+     },
+     "minute 5": {
+      "real": 0.309,
+      "today's count_early": 0.38,
+      "minute terms": 0.381
+     }
+    }
+   },
+   "score": {
+    "train": {
+     "games": 395,
+     "minutes": 13100,
+     "today's count_early": 0.73927,
+     "minute terms": 0.73027,
+     "minutes 0-4 only": {
+      "today's count_early": 0.49528,
+      "minute terms": 0.43582
+     }
+    },
+    "test": {
+     "games": 151,
+     "minutes": 5003,
+     "today's count_early": 0.70896,
+     "minute terms": 0.70226,
+     "minutes 0-4 only": {
+      "today's count_early": 0.47051,
+      "minute terms": 0.42641
+     }
+    },
+    "worlds": {
+     "games": 94,
+     "minutes": 3180,
+     "today's count_early": 0.69861,
+     "minute terms": 0.69059,
+     "minutes 0-4 only": {
+      "today's count_early": 0.47265,
+      "minute terms": 0.41871
+     }
+    }
+   }
+  },
+  "start seconds (training games)": {
+   "0": {
+    "fights": 2,
+    "q": [
+     38.0,
+     38.8,
+     39.5,
+     40.2,
+     41.0,
+     41.8,
+     42.5,
+     43.2,
+     44.0,
+     44.8,
+     45.5,
+     46.2,
+     47.0,
+     47.8,
+     48.5,
+     49.2,
+     50.0,
+     50.8,
+     51.5,
+     52.2,
+     53.0
+    ]
+   },
+   "1": {
+    "fights": 25,
+    "q": [
+     0.0,
+     6.2,
+     9.0,
+     15.6,
+     18.8,
+     22.0,
+     23.8,
+     29.0,
+     32.6,
+     33.0,
+     38.0,
+     40.8,
+     44.4,
+     45.0,
+     45.0,
+     45.0,
+     46.8,
+     50.4,
+     52.8,
+     56.4,
+     58.0
+    ]
+   },
+   "2": {
+    "fights": 99,
+    "q": [
+     1.0,
+     8.7,
+     10.0,
+     13.0,
+     14.6,
+     15.0,
+     18.4,
+     19.3,
+     22.2,
+     27.0,
+     28.0,
+     33.0,
+     37.0,
+     40.0,
+     42.0,
+     44.5,
+     46.4,
+     47.3,
+     54.0,
+     55.1,
+     58.0
+    ]
+   },
+   "3": {
+    "fights": 127,
+    "q": [
+     0.0,
+     5.3,
+     8.6,
+     12.9,
+     15.0,
+     18.0,
+     20.0,
+     22.1,
+     26.0,
+     27.7,
+     31.0,
+     36.3,
+     38.0,
+     40.0,
+     43.0,
+     44.0,
+     45.8,
+     47.0,
+     48.8,
+     54.8,
+     59.0
+    ]
+   },
+   "4": {
+    "fights": 106,
+    "q": [
+     0.0,
+     1.0,
+     4.0,
+     5.8,
+     10.0,
+     11.0,
+     14.0,
+     15.0,
+     18.0,
+     19.2,
+     22.0,
+     24.5,
+     28.0,
+     33.2,
+     36.0,
+     39.5,
+     42.0,
+     47.3,
+     50.0,
+     54.0,
+     58.0
+    ]
+   }
+  },
+  "gaps (training games)": {
+   "kill>kill|same": {
+    "pairs": 369,
+    "from": "kill>kill|same",
+    "within 1 s": 0.0,
+    "median s": 32.0
+   },
+   "kill>kill|other": {
+    "pairs": 286,
+    "from": "kill>kill|other",
+    "within 1 s": 0.0,
+    "median s": 34.0
+   },
+   "kill>kill|any": {
+    "pairs": 655,
+    "from": "kill>kill|any",
+    "within 1 s": 0.0,
+    "median s": 33.0
+   },
+   "kill>monster|same": {
+    "pairs": 948,
+    "from": "kill>monster|same",
+    "within 1 s": 0.037,
+    "median s": 26.0
+   },
+   "kill>monster|other": {
+    "pairs": 274,
+    "from": "kill>monster|other",
+    "within 1 s": 0.084,
+    "median s": 18.0
+   },
+   "kill>monster|any": {
+    "pairs": 1222,
+    "from": "kill>monster|any",
+    "within 1 s": 0.047,
+    "median s": 25.0
+   },
+   "kill>structure|same": {
+    "pairs": 1496,
+    "from": "kill>structure|same",
+    "within 1 s": 0.068,
+    "median s": 11.0
+   },
+   "kill>structure|other": {
+    "pairs": 472,
+    "from": "kill>structure|other",
+    "within 1 s": 0.095,
+    "median s": 9.0
+   },
+   "kill>structure|any": {
+    "pairs": 1968,
+    "from": "kill>structure|any",
+    "within 1 s": 0.074,
+    "median s": 11.0
+   },
+   "monster>kill|same": {
+    "pairs": 656,
+    "from": "monster>kill|same",
+    "within 1 s": 0.047,
+    "median s": 14.0
+   },
+   "monster>kill|other": {
+    "pairs": 518,
+    "from": "monster>kill|other",
+    "within 1 s": 0.085,
+    "median s": 13.0
+   },
+   "monster>kill|any": {
+    "pairs": 1174,
+    "from": "monster>kill|any",
+    "within 1 s": 0.064,
+    "median s": 13.0
+   },
+   "monster>monster|same": {
+    "pairs": 100,
+    "from": "monster>monster|same",
+    "within 1 s": 0.0,
+    "median s": 41.0
+   },
+   "monster>monster|other": {
+    "pairs": 203,
+    "from": "monster>monster|other",
+    "within 1 s": 0.025,
+    "median s": 14.0
+   },
+   "monster>monster|any": {
+    "pairs": 303,
+    "from": "monster>monster|any",
+    "within 1 s": 0.017,
+    "median s": 21.0
+   },
+   "monster>structure|same": {
+    "pairs": 369,
+    "from": "monster>structure|same",
+    "within 1 s": 0.035,
+    "median s": 23.0
+   },
+   "monster>structure|other": {
+    "pairs": 233,
+    "from": "monster>structure|other",
+    "within 1 s": 0.06,
+    "median s": 16.0
+   },
+   "monster>structure|any": {
+    "pairs": 602,
+    "from": "monster>structure|any",
+    "within 1 s": 0.045,
+    "median s": 21.0
+   },
+   "structure>kill|same": {
+    "pairs": 922,
+    "from": "structure>kill|same",
+    "within 1 s": 0.087,
+    "median s": 9.0
+   },
+   "structure>kill|other": {
+    "pairs": 522,
+    "from": "structure>kill|other",
+    "within 1 s": 0.092,
+    "median s": 11.0
+   },
+   "structure>kill|any": {
+    "pairs": 1444,
+    "from": "structure>kill|any",
+    "within 1 s": 0.089,
+    "median s": 10.0
+   },
+   "structure>monster|same": {
+    "pairs": 310,
+    "from": "structure>monster|same",
+    "within 1 s": 0.029,
+    "median s": 24.0
+   },
+   "structure>monster|other": {
+    "pairs": 202,
+    "from": "structure>monster|other",
+    "within 1 s": 0.084,
+    "median s": 14.0
+   },
+   "structure>monster|any": {
+    "pairs": 512,
+    "from": "structure>monster|any",
+    "within 1 s": 0.051,
+    "median s": 20.0
+   },
+   "structure>structure|same": {
+    "pairs": 1947,
+    "from": "structure>structure|same",
+    "within 1 s": 0.048,
+    "median s": 7.0
+   },
+   "structure>structure|other": {
+    "pairs": 425,
+    "from": "structure>structure|other",
+    "within 1 s": 0.085,
+    "median s": 10.0
+   },
+   "structure>structure|any": {
+    "pairs": 2372,
+    "from": "structure>structure|any",
+    "within 1 s": 0.055,
+    "median s": 8.0
+   }
+  },
+  "start seconds (games from 1 Sep and Worlds)": {
+   "0": {
+    "fights": 5,
+    "q": [
+     36.0,
+     36.4,
+     36.8,
+     37.2,
+     37.6,
+     38.0,
+     39.2,
+     40.4,
+     41.6,
+     42.8,
+     44.0,
+     44.2,
+     44.4,
+     44.6,
+     44.8,
+     45.0,
+     46.8,
+     48.6,
+     50.4,
+     52.2,
+     54.0
+    ]
+   },
+   "1": {
+    "fights": 11,
+    "q": [
+     1.0,
+     4.0,
+     7.0,
+     10.0,
+     13.0,
+     15.5,
+     18.0,
+     28.0,
+     38.0,
+     41.5,
+     45.0,
+     45.0,
+     45.0,
+     47.0,
+     49.0,
+     50.0,
+     51.0,
+     52.5,
+     54.0,
+     56.0,
+     58.0
+    ]
+   },
+   "2": {
+    "fights": 64,
+    "q": [
+     1.0,
+     7.5,
+     11.3,
+     14.5,
+     15.0,
+     16.0,
+     18.9,
+     21.0,
+     23.4,
+     33.0,
+     36.5,
+     38.7,
+     39.8,
+     42.0,
+     43.1,
+     47.0,
+     49.4,
+     50.6,
+     55.7,
+     57.9,
+     59.0
+    ]
+   },
+   "3": {
+    "fights": 68,
+    "q": [
+     0.0,
+     2.4,
+     7.0,
+     11.1,
+     13.8,
+     16.8,
+     19.1,
+     22.0,
+     23.8,
+     27.2,
+     29.5,
+     32.9,
+     37.2,
+     39.0,
+     43.0,
+     45.5,
+     50.0,
+     52.0,
+     53.0,
+     56.0,
+     59.0
+    ]
+   },
+   "4": {
+    "fights": 59,
+    "q": [
+     1.0,
+     3.0,
+     4.8,
+     6.7,
+     8.0,
+     10.5,
+     13.0,
+     13.3,
+     20.2,
+     22.0,
+     23.0,
+     27.9,
+     34.8,
+     37.4,
+     41.0,
+     47.0,
+     50.0,
+     52.0,
+     53.0,
+     57.1,
+     59.0
+    ]
+   }
+  },
+  "gaps (games from 1 Sep and Worlds)": {
+   "kill>kill|same": {
+    "pairs": 160,
+    "from": "kill>kill|same",
+    "within 1 s": 0.0,
+    "median s": 32.0
+   },
+   "kill>kill|other": {
+    "pairs": 149,
+    "from": "kill>kill|other",
+    "within 1 s": 0.0,
+    "median s": 37.0
+   },
+   "kill>kill|any": {
+    "pairs": 309,
+    "from": "kill>kill|any",
+    "within 1 s": 0.0,
+    "median s": 34.0
+   },
+   "kill>monster|same": {
+    "pairs": 543,
+    "from": "kill>monster|same",
+    "within 1 s": 0.039,
+    "median s": 26.0
+   },
+   "kill>monster|other": {
+    "pairs": 165,
+    "from": "kill>monster|other",
+    "within 1 s": 0.097,
+    "median s": 25.0
+   },
+   "kill>monster|any": {
+    "pairs": 708,
+    "from": "kill>monster|any",
+    "within 1 s": 0.052,
+    "median s": 26.0
+   },
+   "kill>structure|same": {
+    "pairs": 880,
+    "from": "kill>structure|same",
+    "within 1 s": 0.068,
+    "median s": 12.0
+   },
+   "kill>structure|other": {
+    "pairs": 248,
+    "from": "kill>structure|other",
+    "within 1 s": 0.125,
+    "median s": 8.5
+   },
+   "kill>structure|any": {
+    "pairs": 1128,
+    "from": "kill>structure|any",
+    "within 1 s": 0.081,
+    "median s": 11.0
+   },
+   "monster>kill|same": {
+    "pairs": 353,
+    "from": "monster>kill|same",
+    "within 1 s": 0.074,
+    "median s": 11.0
+   },
+   "monster>kill|other": {
+    "pairs": 313,
+    "from": "monster>kill|other",
+    "within 1 s": 0.089,
+    "median s": 9.0
+   },
+   "monster>kill|any": {
+    "pairs": 666,
+    "from": "monster>kill|any",
+    "within 1 s": 0.081,
+    "median s": 10.0
+   },
+   "monster>monster|same": {
+    "pairs": 38,
+    "from": "monster>monster|same",
+    "within 1 s": 0.0,
+    "median s": 41.5
+   },
+   "monster>monster|other": {
+    "pairs": 164,
+    "from": "monster>monster|other",
+    "within 1 s": 0.006,
+    "median s": 16.0
+   },
+   "monster>monster|any": {
+    "pairs": 202,
+    "from": "monster>monster|any",
+    "within 1 s": 0.005,
+    "median s": 18.0
+   },
+   "monster>structure|same": {
+    "pairs": 256,
+    "from": "monster>structure|same",
+    "within 1 s": 0.02,
+    "median s": 26.5
+   },
+   "monster>structure|other": {
+    "pairs": 161,
+    "from": "monster>structure|other",
+    "within 1 s": 0.075,
+    "median s": 17.0
+   },
+   "monster>structure|any": {
+    "pairs": 417,
+    "from": "monster>structure|any",
+    "within 1 s": 0.041,
+    "median s": 21.0
+   },
+   "structure>kill|same": {
+    "pairs": 528,
+    "from": "structure>kill|same",
+    "within 1 s": 0.098,
+    "median s": 9.0
+   },
+   "structure>kill|other": {
+    "pairs": 297,
+    "from": "structure>kill|other",
+    "within 1 s": 0.104,
+    "median s": 12.0
+   },
+   "structure>kill|any": {
+    "pairs": 825,
+    "from": "structure>kill|any",
+    "within 1 s": 0.101,
+    "median s": 10.0
+   },
+   "structure>monster|same": {
+    "pairs": 195,
+    "from": "structure>monster|same",
+    "within 1 s": 0.036,
+    "median s": 24.0
+   },
+   "structure>monster|other": {
+    "pairs": 138,
+    "from": "structure>monster|other",
+    "within 1 s": 0.058,
+    "median s": 12.0
+   },
+   "structure>monster|any": {
+    "pairs": 333,
+    "from": "structure>monster|any",
+    "within 1 s": 0.045,
+    "median s": 19.0
+   },
+   "structure>structure|same": {
+    "pairs": 1199,
+    "from": "structure>structure|same",
+    "within 1 s": 0.05,
+    "median s": 7.0
+   },
+   "structure>structure|other": {
+    "pairs": 287,
+    "from": "structure>structure|other",
+    "within 1 s": 0.08,
+    "median s": 11.0
+   },
+   "structure>structure|any": {
+    "pairs": 1486,
+    "from": "structure>structure|any",
+    "within 1 s": 0.056,
+    "median s": 7.5
+   }
+  }
+ },
+ "app": {
+  "games": {
+   "train": 640,
+   "test": 0,
+   "worlds": 0
+  },
+  "count": {
+   "old": {
+    "intercept": -0.9006,
+    "phase 14-19": 0.0919,
+    "phase 20-24": -0.0525,
+    "phase 25-29": -0.0101,
+    "phase 30-34": 0.1142,
+    "phase 35+": 0.1047,
+    "per_1k_abs_lead": 0.0201,
+    "monster_up": 0.1569,
+    "buff_up": 0.1083,
+    "pace_style": 0.8825,
+    "fight_last_minute": -0.3095,
+    "log1p_kills_last_2min": -0.024,
+    "early 0-4": -0.7946,
+    "early 5-9": -0.1918
+   },
+   "new": {
+    "intercept": -0.8986,
+    "phase 14-19": 0.0991,
+    "phase 20-24": -0.0463,
+    "phase 25-29": -0.003,
+    "phase 30-34": 0.1219,
+    "phase 35+": 0.1118,
+    "per_1k_abs_lead": 0.0197,
+    "monster_up": 0.1588,
+    "buff_up": 0.1125,
+    "pace_style": 0.8908,
+    "fight_last_minute": -0.322,
+    "log1p_kills_last_2min": -0.0307,
+    "minute 0": -3.2338,
+    "minute 1": -1.9211,
+    "minute 2": -0.4482,
+    "minute 3": -0.2159,
+    "minute 4": -0.3638,
+    "early 5-9": -0.1885
+   },
+   "minutes": {
+    "train": {
+     "minute 0": {
+      "real": 0.011,
+      "today's count_early": 0.183,
+      "minute terms": 0.016
+     },
+     "minute 1": {
+      "real": 0.056,
+      "today's count_early": 0.182,
+      "minute terms": 0.059
+     },
+     "minute 2": {
+      "real": 0.255,
+      "today's count_early": 0.18,
+      "minute terms": 0.255
+     },
+     "minute 3": {
+      "real": 0.305,
+      "today's count_early": 0.171,
+      "minute terms": 0.305
+     },
+     "minute 4": {
+      "real": 0.258,
+      "today's count_early": 0.169,
+      "minute terms": 0.258
+     },
+     "minute 5": {
+      "real": 0.32,
+      "today's count_early": 0.365,
+      "minute terms": 0.366
+     }
+    }
+   },
+   "score": {
+    "train": {
+     "games": 640,
+     "minutes": 21283,
+     "today's count_early": 0.72525,
+     "minute terms": 0.71693,
+     "minutes 0-4 only": {
+      "today's count_early": 0.48637,
+      "minute terms": 0.43127
+     }
+    }
+   }
+  },
+  "start seconds (training games)": {
+   "0": {
+    "fights": 7,
+    "q": [
+     36.0,
+     36.6,
+     37.2,
+     37.8,
+     38.0,
+     38.0,
+     38.0,
+     38.6,
+     40.4,
+     42.2,
+     44.0,
+     44.3,
+     44.6,
+     44.9,
+     46.6,
+     49.0,
+     51.4,
+     53.1,
+     53.4,
+     53.7,
+     54.0
+    ]
+   },
+   "1": {
+    "fights": 36,
+    "q": [
+     0.0,
+     4.8,
+     7.0,
+     12.2,
+     18.0,
+     18.8,
+     22.5,
+     28.3,
+     33.0,
+     36.8,
+     39.0,
+     44.2,
+     45.0,
+     45.0,
+     45.0,
+     46.8,
+     50.0,
+     51.0,
+     54.0,
+     57.2,
+     58.0
+    ]
+   },
+   "2": {
+    "fights": 163,
+    "q": [
+     1.0,
+     7.2,
+     11.0,
+     13.0,
+     15.0,
+     15.5,
+     18.6,
+     20.0,
+     23.0,
+     27.0,
+     33.0,
+     36.1,
+     39.0,
+     40.3,
+     43.0,
+     45.5,
+     47.0,
+     49.7,
+     54.8,
+     57.0,
+     59.0
+    ]
+   },
+   "3": {
+    "fights": 195,
+    "q": [
+     0.0,
+     4.0,
+     8.0,
+     12.1,
+     15.0,
+     17.5,
+     20.0,
+     22.0,
+     25.0,
+     27.3,
+     30.0,
+     34.4,
+     38.0,
+     40.0,
+     43.0,
+     44.5,
+     46.2,
+     48.0,
+     51.6,
+     56.0,
+     59.0
+    ]
+   },
+   "4": {
+    "fights": 165,
+    "q": [
+     0.0,
+     1.0,
+     4.4,
+     6.0,
+     8.0,
+     11.0,
+     13.0,
+     15.0,
+     18.0,
+     20.8,
+     22.0,
+     25.2,
+     30.0,
+     35.0,
+     38.0,
+     41.0,
+     46.2,
+     50.0,
+     52.0,
+     55.8,
+     59.0
+    ]
+   }
+  },
+  "gaps (training games)": {
+   "kill>kill|same": {
+    "pairs": 529,
+    "from": "kill>kill|same",
+    "within 1 s": 0.0,
+    "median s": 32.0
+   },
+   "kill>kill|other": {
+    "pairs": 435,
+    "from": "kill>kill|other",
+    "within 1 s": 0.0,
+    "median s": 34.0
+   },
+   "kill>kill|any": {
+    "pairs": 964,
+    "from": "kill>kill|any",
+    "within 1 s": 0.0,
+    "median s": 33.0
+   },
+   "kill>monster|same": {
+    "pairs": 1491,
+    "from": "kill>monster|same",
+    "within 1 s": 0.038,
+    "median s": 26.0
+   },
+   "kill>monster|other": {
+    "pairs": 439,
+    "from": "kill>monster|other",
+    "within 1 s": 0.089,
+    "median s": 21.0
+   },
+   "kill>monster|any": {
+    "pairs": 1930,
+    "from": "kill>monster|any",
+    "within 1 s": 0.049,
+    "median s": 25.0
+   },
+   "kill>structure|same": {
+    "pairs": 2376,
+    "from": "kill>structure|same",
+    "within 1 s": 0.068,
+    "median s": 11.0
+   },
+   "kill>structure|other": {
+    "pairs": 720,
+    "from": "kill>structure|other",
+    "within 1 s": 0.106,
+    "median s": 9.0
+   },
+   "kill>structure|any": {
+    "pairs": 3096,
+    "from": "kill>structure|any",
+    "within 1 s": 0.077,
+    "median s": 11.0
+   },
+   "monster>kill|same": {
+    "pairs": 1009,
+    "from": "monster>kill|same",
+    "within 1 s": 0.056,
+    "median s": 12.0
+   },
+   "monster>kill|other": {
+    "pairs": 831,
+    "from": "monster>kill|other",
+    "within 1 s": 0.087,
+    "median s": 11.0
+   },
+   "monster>kill|any": {
+    "pairs": 1840,
+    "from": "monster>kill|any",
+    "within 1 s": 0.07,
+    "median s": 12.0
+   },
+   "monster>monster|same": {
+    "pairs": 138,
+    "from": "monster>monster|same",
+    "within 1 s": 0.0,
+    "median s": 41.0
+   },
+   "monster>monster|other": {
+    "pairs": 367,
+    "from": "monster>monster|other",
+    "within 1 s": 0.016,
+    "median s": 15.0
+   },
+   "monster>monster|any": {
+    "pairs": 505,
+    "from": "monster>monster|any",
+    "within 1 s": 0.012,
+    "median s": 20.0
+   },
+   "monster>structure|same": {
+    "pairs": 625,
+    "from": "monster>structure|same",
+    "within 1 s": 0.029,
+    "median s": 24.0
+   },
+   "monster>structure|other": {
+    "pairs": 394,
+    "from": "monster>structure|other",
+    "within 1 s": 0.066,
+    "median s": 16.0
+   },
+   "monster>structure|any": {
+    "pairs": 1019,
+    "from": "monster>structure|any",
+    "within 1 s": 0.043,
+    "median s": 21.0
+   },
+   "structure>kill|same": {
+    "pairs": 1450,
+    "from": "structure>kill|same",
+    "within 1 s": 0.091,
+    "median s": 9.0
+   },
+   "structure>kill|other": {
+    "pairs": 819,
+    "from": "structure>kill|other",
+    "within 1 s": 0.096,
+    "median s": 12.0
+   },
+   "structure>kill|any": {
+    "pairs": 2269,
+    "from": "structure>kill|any",
+    "within 1 s": 0.093,
+    "median s": 10.0
+   },
+   "structure>monster|same": {
+    "pairs": 505,
+    "from": "structure>monster|same",
+    "within 1 s": 0.032,
+    "median s": 24.0
+   },
+   "structure>monster|other": {
+    "pairs": 340,
+    "from": "structure>monster|other",
+    "within 1 s": 0.074,
+    "median s": 13.0
+   },
+   "structure>monster|any": {
+    "pairs": 845,
+    "from": "structure>monster|any",
+    "within 1 s": 0.049,
+    "median s": 20.0
+   },
+   "structure>structure|same": {
+    "pairs": 3146,
+    "from": "structure>structure|same",
+    "within 1 s": 0.049,
+    "median s": 7.0
+   },
+   "structure>structure|other": {
+    "pairs": 712,
+    "from": "structure>structure|other",
+    "within 1 s": 0.083,
+    "median s": 10.0
+   },
+   "structure>structure|any": {
+    "pairs": 3858,
+    "from": "structure>structure|any",
+    "within 1 s": 0.055,
+    "median s": 8.0
+   }
+  }
+ },
+ "port check: app count_early refitted v the app's table (largest gap)": 0.0,
+ "app tables": {
+  "cutoff": "2026-11-10",
+  "source": "research/memory/m12_fit_timing.py, gol.gg timelines before 2026-11-10 (640 games)",
+  "count_early": {
+   "intercept": -0.8986,
+   "phase 14-19": 0.0991,
+   "phase 20-24": -0.0463,
+   "phase 25-29": -0.003,
+   "phase 30-34": 0.1219,
+   "phase 35+": 0.1118,
+   "per_1k_abs_lead": 0.0197,
+   "monster_up": 0.1588,
+   "buff_up": 0.1125,
+   "pace_style": 0.8908,
+   "fight_last_minute": -0.322,
+   "log1p_kills_last_2min": -0.0307,
+   "minute 0": -3.2338,
+   "minute 1": -1.9211,
+   "minute 2": -0.4482,
+   "minute 3": -0.2159,
+   "minute 4": -0.3638,
+   "early 5-9": -0.1885
+  },
+  "start_q": {
+   "0": [
+    36.0,
+    36.6,
+    37.2,
+    37.8,
+    38.0,
+    38.0,
+    38.0,
+    38.6,
+    40.4,
+    42.2,
+    44.0,
+    44.3,
+    44.6,
+    44.9,
+    46.6,
+    49.0,
+    51.4,
+    53.1,
+    53.4,
+    53.7,
+    54.0
+   ],
+   "1": [
+    0.0,
+    4.8,
+    7.0,
+    12.2,
+    18.0,
+    18.8,
+    22.5,
+    28.3,
+    33.0,
+    36.8,
+    39.0,
+    44.2,
+    45.0,
+    45.0,
+    45.0,
+    46.8,
+    50.0,
+    51.0,
+    54.0,
+    57.2,
+    58.0
+   ],
+   "2": [
+    1.0,
+    7.2,
+    11.0,
+    13.0,
+    15.0,
+    15.5,
+    18.6,
+    20.0,
+    23.0,
+    27.0,
+    33.0,
+    36.1,
+    39.0,
+    40.3,
+    43.0,
+    45.5,
+    47.0,
+    49.7,
+    54.8,
+    57.0,
+    59.0
+   ],
+   "3": [
+    0.0,
+    4.0,
+    8.0,
+    12.1,
+    15.0,
+    17.5,
+    20.0,
+    22.0,
+    25.0,
+    27.3,
+    30.0,
+    34.4,
+    38.0,
+    40.0,
+    43.0,
+    44.5,
+    46.2,
+    48.0,
+    51.6,
+    56.0,
+    59.0
+   ],
+   "4": [
+    0.0,
+    1.0,
+    4.4,
+    6.0,
+    8.0,
+    11.0,
+    13.0,
+    15.0,
+    18.0,
+    20.8,
+    22.0,
+    25.2,
+    30.0,
+    35.0,
+    38.0,
+    41.0,
+    46.2,
+    50.0,
+    52.0,
+    55.8,
+    59.0
+   ]
+  },
+  "gap_q": {
+   "kill>kill|same": [
+    21.0,
+    21.0,
+    22.0,
+    23.0,
+    24.6,
+    26.0,
+    27.0,
+    28.0,
+    30.0,
+    31.0,
+    32.0,
+    34.0,
+    36.0,
+    38.0,
+    40.6,
+    43.0,
+    46.0,
+    50.0,
+    53.0,
+    57.0,
+    59.0
+   ],
+   "kill>kill|other": [
+    21.0,
+    21.0,
+    22.0,
+    23.0,
+    24.0,
+    26.0,
+    27.2,
+    29.9,
+    31.0,
+    33.0,
+    34.0,
+    37.0,
+    39.0,
+    41.0,
+    43.8,
+    46.0,
+    49.0,
+    53.0,
+    55.0,
+    58.0,
+    59.0
+   ],
+   "kill>kill|any": [
+    21.0,
+    21.0,
+    22.0,
+    23.0,
+    24.0,
+    26.0,
+    27.0,
+    28.0,
+    30.0,
+    32.0,
+    33.0,
+    35.0,
+    37.0,
+    39.0,
+    42.0,
+    45.0,
+    48.0,
+    51.0,
+    54.0,
+    57.0,
+    59.0
+   ],
+   "kill>monster|same": [
+    0.0,
+    2.0,
+    4.0,
+    8.0,
+    11.0,
+    15.0,
+    18.0,
+    20.0,
+    23.0,
+    25.0,
+    26.0,
+    28.0,
+    29.0,
+    31.0,
+    33.0,
+    35.0,
+    37.0,
+    40.0,
+    44.0,
+    50.5,
+    59.0
+   ],
+   "kill>monster|other": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    6.5,
+    8.0,
+    11.0,
+    13.0,
+    18.0,
+    21.0,
+    24.9,
+    29.0,
+    32.0,
+    35.6,
+    39.0,
+    43.0,
+    47.0,
+    53.0,
+    56.0,
+    59.0
+   ],
+   "kill>monster|any": [
+    0.0,
+    2.0,
+    3.0,
+    6.0,
+    9.0,
+    12.0,
+    15.0,
+    18.0,
+    21.0,
+    24.0,
+    25.0,
+    27.0,
+    29.0,
+    31.0,
+    33.0,
+    36.0,
+    38.0,
+    41.0,
+    46.0,
+    53.0,
+    59.0
+   ],
+   "kill>structure|same": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    9.0,
+    10.0,
+    11.0,
+    13.0,
+    15.0,
+    16.0,
+    18.0,
+    21.0,
+    23.0,
+    26.8,
+    31.0,
+    39.0,
+    59.0
+   ],
+   "kill>structure|other": [
+    0.0,
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    6.0,
+    7.0,
+    9.0,
+    10.0,
+    12.0,
+    14.0,
+    17.0,
+    19.0,
+    22.0,
+    26.0,
+    29.0,
+    37.0,
+    59.0
+   ],
+   "kill>structure|any": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    11.0,
+    13.0,
+    14.0,
+    16.0,
+    18.0,
+    20.0,
+    23.0,
+    26.0,
+    31.0,
+    38.2,
+    59.0
+   ],
+   "monster>kill|same": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    9.0,
+    11.0,
+    12.0,
+    15.0,
+    19.0,
+    23.0,
+    29.0,
+    34.0,
+    39.0,
+    44.0,
+    49.0,
+    54.0,
+    59.0
+   ],
+   "monster>kill|other": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    5.0,
+    7.0,
+    8.0,
+    9.0,
+    11.0,
+    14.0,
+    17.0,
+    21.0,
+    25.0,
+    30.0,
+    35.0,
+    39.0,
+    46.0,
+    52.0,
+    59.0
+   ],
+   "monster>kill|any": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    10.0,
+    12.0,
+    14.0,
+    18.0,
+    22.0,
+    27.0,
+    32.0,
+    37.0,
+    43.0,
+    47.1,
+    54.0,
+    59.0
+   ],
+   "monster>monster|same": [
+    3.0,
+    22.0,
+    26.0,
+    31.0,
+    32.0,
+    33.0,
+    34.0,
+    35.0,
+    37.0,
+    39.6,
+    41.0,
+    42.4,
+    44.0,
+    46.0,
+    48.0,
+    49.8,
+    51.6,
+    54.0,
+    56.0,
+    57.0,
+    59.0
+   ],
+   "monster>monster|other": [
+    1.0,
+    3.3,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    13.0,
+    15.0,
+    16.0,
+    18.0,
+    19.0,
+    22.0,
+    25.0,
+    29.0,
+    34.0,
+    40.0,
+    48.0,
+    59.0
+   ],
+   "monster>monster|any": [
+    1.0,
+    4.0,
+    7.0,
+    8.0,
+    9.0,
+    11.0,
+    12.2,
+    14.0,
+    16.0,
+    18.0,
+    20.0,
+    23.0,
+    27.0,
+    31.0,
+    34.0,
+    37.0,
+    41.0,
+    45.0,
+    49.6,
+    56.0,
+    59.0
+   ],
+   "monster>structure|same": [
+    0.0,
+    3.0,
+    5.0,
+    7.0,
+    10.0,
+    13.0,
+    16.0,
+    17.4,
+    20.0,
+    21.0,
+    24.0,
+    28.0,
+    31.0,
+    34.0,
+    39.0,
+    43.0,
+    46.0,
+    50.0,
+    53.0,
+    55.0,
+    59.0
+   ],
+   "monster>structure|other": [
+    0.0,
+    1.0,
+    3.0,
+    4.0,
+    6.0,
+    8.0,
+    9.0,
+    11.0,
+    12.0,
+    14.0,
+    16.0,
+    19.0,
+    21.0,
+    23.0,
+    26.0,
+    30.0,
+    33.4,
+    41.0,
+    45.0,
+    51.4,
+    59.0
+   ],
+   "monster>structure|any": [
+    0.0,
+    2.0,
+    4.0,
+    6.0,
+    8.0,
+    10.0,
+    12.0,
+    15.0,
+    17.0,
+    19.0,
+    21.0,
+    23.0,
+    26.8,
+    30.0,
+    33.6,
+    39.0,
+    43.0,
+    46.0,
+    51.0,
+    55.0,
+    59.0
+   ],
+   "structure>kill|same": [
+    0.0,
+    1.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    11.0,
+    13.0,
+    16.0,
+    20.0,
+    23.0,
+    28.0,
+    34.0,
+    42.0,
+    50.0,
+    59.0
+   ],
+   "structure>kill|other": [
+    0.0,
+    1.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    7.0,
+    8.0,
+    10.0,
+    12.0,
+    14.0,
+    17.0,
+    19.0,
+    23.0,
+    27.5,
+    33.0,
+    39.0,
+    45.0,
+    52.1,
+    59.0
+   ],
+   "structure>kill|any": [
+    0.0,
+    1.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    10.0,
+    12.0,
+    14.0,
+    17.0,
+    21.0,
+    25.0,
+    30.0,
+    36.0,
+    43.0,
+    51.0,
+    59.0
+   ],
+   "structure>monster|same": [
+    0.0,
+    2.0,
+    4.0,
+    7.0,
+    9.0,
+    12.0,
+    14.0,
+    17.0,
+    19.0,
+    21.0,
+    24.0,
+    26.0,
+    28.0,
+    30.0,
+    33.0,
+    36.0,
+    40.0,
+    44.0,
+    50.6,
+    56.0,
+    59.0
+   ],
+   "structure>monster|other": [
+    0.0,
+    1.0,
+    2.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    11.0,
+    13.0,
+    15.0,
+    18.0,
+    21.0,
+    25.0,
+    29.0,
+    33.0,
+    37.0,
+    43.0,
+    51.1,
+    59.0
+   ],
+   "structure>monster|any": [
+    0.0,
+    2.0,
+    3.0,
+    5.0,
+    7.0,
+    8.0,
+    10.0,
+    12.0,
+    15.0,
+    17.0,
+    20.0,
+    22.0,
+    25.0,
+    27.6,
+    30.8,
+    34.0,
+    38.0,
+    42.4,
+    48.0,
+    54.8,
+    59.0
+   ],
+   "structure>structure|same": [
+    0.0,
+    2.0,
+    2.0,
+    3.0,
+    3.0,
+    4.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    14.0,
+    18.0,
+    24.0,
+    38.0,
+    59.0
+   ],
+   "structure>structure|other": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    12.0,
+    14.0,
+    15.0,
+    17.0,
+    20.0,
+    24.0,
+    34.0,
+    42.0,
+    50.0,
+    59.0
+   ],
+   "structure>structure|any": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    3.0,
+    4.0,
+    5.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    8.0,
+    9.0,
+    10.0,
+    12.0,
+    14.0,
+    16.0,
+    20.0,
+    28.0,
+    42.0,
+    59.0
+   ]
+  }
+ }
+}

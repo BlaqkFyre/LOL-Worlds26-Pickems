@@ -783,11 +783,56 @@ function gameText(){if(!DS.sim)return "";const {g,bwin}=DS.sim,bid=idOnSide("blu
   if(g.pog)L.push(`Player of the Game: ${g.pog.n} (${g.pog.c}) ${g.pog.rt.toFixed(1)} · ${g.pog.why}`);
   L.push("Play-by-play:");g.ev.forEach(([t,s,x,sx])=>L.push(`${sx!=null?clk(sx):t+":00"} ${s?T(s):"--"} ${x}`));
   return L.join("\n")}
-function copyGame(b){const t=gameText(),box=b.closest(".sim")&&b.closest(".sim").querySelector(".gcopybox");
+function copyGame(b){copyText(b,gameText(),"Copy game data",b.closest(".sim")&&b.closest(".sim").querySelector(".gcopybox"))}
+function copyText(b,t,label,box){
   const show=()=>{if(box)box.innerHTML=`<p class="notes" style="margin:6px 0">Couldn't copy automatically: select the text below and copy it.</p><textarea class="gcopyta" readonly rows="8">${esc(t)}</textarea>`};
-  const done=()=>{b.textContent="Copied";setTimeout(()=>{b.textContent="Copy game data"},2000)};
+  const done=()=>{b.textContent="Copied";setTimeout(()=>{b.textContent=label},2000)};
   const legacy=()=>{try{const ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);const ok=document.execCommand("copy");ta.remove();ok?done():show()}catch(e){show()}};
   if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(done).catch(legacy);else legacy()}
+/* series export (Luke, 26 Nov: save a series with every game's play-by-play, final scoreboards and MVP, to share for reviews).
+   Each game a user plays keeps its "Copy game data" text, in page memory only (not in the saved run, so the run file and its import
+   checks don't change): Champ Select series in DS.series.texts, tournament matches in GAME_TXT by run and match. Games the AI simmed
+   (Sim buttons) have no play-by-play; the export gives their scoreboard from the stored record. */
+const GAME_TXT={};
+const tourTxtKey=mid=>`${typeof RUN!=="undefined"&&RUN?RUN.created:""}|${mid}`;
+function saveGameText(ctx,mid,i){const t=gameText();if(!t)return;
+  if(ctx==="cs"){if(DS.series)(DS.series.texts=DS.series.texts||[])[i]=t}else (GAME_TXT[tourTxtKey(mid)]=GAME_TXT[tourTxtKey(mid)]||[])[i]=t}
+function seriesTexts(S){return S.ctx==="cs"?((DS.series&&DS.series.games===S.games&&DS.series.texts)||[]):(GAME_TXT[tourTxtKey(S.mid)]||[])}
+function seriesOf(ctx,mid){if(ctx==="cs"){const D=DS.series;return D?{bo:D.bo,fearless:D.fearless,a:D.me,b:D.opp,games:D.games,ctx:"cs"}:null}
+  const m=typeof M==="function"?M(mid):null;return m?{bo:m.bo,fearless:true,a:m.a,b:m.b,games:m.games,ctx:"tour",mid:m.id}:null}
+function seriesText(S){const A=S.a,B=S.b,G=S.games,W=id=>G.filter(g=>g.winner===id).length,wa=W(A),wb=W(B),need=Math.ceil(S.bo/2),done=wa>=need||wb>=need,TX=seriesTexts(S);
+  const ver=((document.querySelector('script[src*="core.js"]')||{}).src||"").match(/v=(\d+)/),mode={data:"data model","data-alt":"data model, simpler fights",classic:"classic"}[simMode()]||simMode();
+  const mm=g=>`${g.time}:${String(g.sec).padStart(2,"0")}`,sd=(g,id)=>g.blue===id?"blue":"red",sum=f=>G.reduce((t,g)=>t+f(g),0);
+  const m=S.ctx==="tour"&&typeof M==="function"?M(S.mid):null,ctx=S.ctx==="cs"?"Champ Select series":`Worlds run${m?`, ${m.id}${typeof stageName==="function"?` (${stageName(m)})`:""}`:""}`;
+  const P={[A]:seriesPlayers(A,S),[B]:seriesPlayers(B,S)},all=[...P[A].map(o=>({...o,id:A})),...P[B].map(o=>({...o,id:B}))].sort((x,y)=>y.pts-x.pts||y.avg-x.avg);
+  const winner=done?(wa>wb?A:B):null,mvp=done?all.filter(o=>o.id===winner)[0]:null;
+  const L=[`# Pick'Em Lab series: ${A} ${wa}–${wb} ${B}`,"",`v${ver?ver[1]:"?"} · ${mode} · Bo${S.bo}${S.fearless&&S.bo>1?" Fearless":""} · ${ctx} · saved ${new Date().toLocaleDateString("en-CA")}`,"",
+    done?`**Result:** ${team(winner).name} win ${Math.max(wa,wb)}–${Math.min(wa,wb)}`:`**In progress:** ${A} ${wa}–${wb} ${B} (first to ${need})`];
+  if(mvp)L.push(`**Series MVP:** ${mvp.pl.n} (${winner} ${mvp.r}) · ${mvp.pts} POG points · KDA ${mvp.kda.toFixed(1)} · average rating ${mvp.avg.toFixed(1)} · ${[...new Set(mvp.champs.map(c=>c[0]))].join(", ")}`);
+  L.push("","## Games","","| Game | Blue | Red | Winner | Time | Kills | Winner's odds | Player of the Game | Play-by-play |","|---|---|---|---|---|---|---|---|---|");
+  G.forEach((g,i)=>L.push(`| G${i+1} | ${g.blue} | ${g.red} | ${g.winner}${g.up?" (upset)":""} | ${mm(g)} | ${g.kills.blue}–${g.kills.red} | ${g.pct!=null?g.pct+"%":"–"} | ${g.pog.n} (${g.pog.team} ${g.pog.r}, ${g.pog.c}) ${(+g.pog.rt).toFixed(1)} | ${TX[i]?"below":"not kept (AI-simmed)"} |`));
+  L.push("","## Series scoreboard");
+  [A,B].forEach(id=>{L.push("",`### ${team(id).name} (${W(id)} win${W(id)===1?"":"s"})`,"","| Player | Role | Champions (W/L) | K/D/A | KDA | Avg rating | POG pts |","|---|---|---|---|---|---|---|");
+    P[id].forEach(o=>L.push(`| ${o.pl.n} | ${o.r} | ${o.champs.map(([c,w])=>`${c} ${w?"W":"L"}`).join(", ")} | ${o.k}/${o.d}/${o.a} | ${o.kda.toFixed(1)} | ${o.avg.toFixed(1)} | ${o.pts} |`))});
+  L.push("","## Series MVP race (100 POG points per Player of the Game; ties to the higher average rating)","");
+  all.slice(0,5).forEach((o,i)=>L.push(`${i+1}. ${o.pl.n} (${o.id} ${o.r}): ${o.pts} points, average rating ${o.avg.toFixed(1)}`));
+  const has=k=>G.every(g=>g[k]!=null),kl=id=>sum(g=>g.kills[sd(g,id)]),longest=G.reduce((x,g,i)=>(g.time*60+g.sec)>(x.t||0)?{t:g.time*60+g.sec,i,g}:x,{});
+  L.push("","## Series stats","",`- Kills: ${A} ${kl(A)} – ${kl(B)} ${B}`);
+  if(has("dr"))L.push(`- Dragons: ${A} ${sum(g=>g.dr[sd(g,A)])} – ${sum(g=>g.dr[sd(g,B)])} ${B} · Barons: ${A} ${sum(g=>g.ba[sd(g,A)])} – ${sum(g=>g.ba[sd(g,B)])} ${B}`);
+  if(has("g15")){const g15=sum(g=>(g.blue===A?1:-1)*g.g15)/G.length;L.push(`- Gold at 15 (average): ${Math.abs(g15)<300?"even":`${g15>0?A:B} +${(Math.abs(g15)/1000).toFixed(1)}k`}`)}
+  L.push(`- Longest game: G${longest.i+1} (${mm(longest.g)})`);
+  G.forEach((g,i)=>{L.push("",`## Game ${i+1}: ${g.winner} win (${g.blue} blue v ${g.red} red, ${mm(g)})`,"");
+    if(TX[i])L.push("```text",TX[i],"```");
+    else{L.push("No play-by-play: this game was simmed by the AI. Its draft and box score:","","```text");
+      ["blue","red"].forEach(s=>{const id=g[s];L.push(`Bans ${id}: ${g.steps.filter(x=>x[0]===id&&x[1]==="ban").map(x=>x[2]).join(", ")||"none"}`)});
+      L.push("Box score (role champion K/D/A dmg% csd@15 rating):");
+      ["blue","red"].forEach(s=>{const id=g[s];L.push(`${id}${g.winner===id?" (won)":""}`);ROLES.forEach(r=>{const p=g.ps[s][r];L.push(`  ${r} ${team(id).p[ROLES.indexOf(r)].n} ${p.c} ${p.k}/${p.d}/${p.a} ${Math.round(p.dmgS*100)}% ${p.csd>0?"+":""}${p.csd} ${(+p.rt).toFixed(1)}${g.pog.team===id&&g.pog.r===r?" POG":""}`)})});
+      L.push("```")}});
+  return L.join("\n")}
+function seriesFileName(S){const G=S.games,W=id=>G.filter(g=>g.winner===id).length;return `series_${S.a}-${S.b}_${W(S.a)}-${W(S.b)}_Bo${S.bo}_${new Date().toLocaleDateString("en-CA")}.md`.replace(/[^\w.-]+/g,"_")}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-sx]");if(!b)return;const S=seriesOf(b.dataset.sctx,b.dataset.m);if(!S||!S.games.length)return;const t=seriesText(S);
+  if(b.dataset.sx==="copy"){copyText(b,t,"Copy series",b.closest(".sexport")&&b.closest(".sexport").querySelector(".gcopybox"));return}
+  const url=URL.createObjectURL(new Blob([t],{type:"text/markdown;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download=seriesFileName(S);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)});
 /* ---- render ---- */
 function teamPanel(id){
   const t=team(id),sd=sideOf(id),ps=picksOf(id),bs=bansOf(id),i=DS.steps.length,nxt=i<20?SEQ[i]:null,isNext=nxt&&actorId(nxt[0])===id;
@@ -828,7 +873,7 @@ function seriesGame(){const S=DS.series,last=S.games[S.games.length-1];
   Object.assign(DS,{me:S.me,opp:S.opp,fp:"blue",fmt:S.fearless?"fearless":"bo1",locked:seriesLocked(),steps:[],sim:null,game:S.games.length+1,fresh:-1,q:"",roleF:"ALL",ai:S.ai,showUsed:false});
   renderDraft();queueAI();window.scrollTo({top:document.getElementById("v-draft").offsetTop-60,behavior:"smooth"})}
 function playSeriesGame(){if(seriesDone())return;runGame();const g=DS.sim.g,rec=pack(g),pct=Math.round((g.winner==="blue"?DS.sim.bwin:1-DS.sim.bwin)*100);
-  Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:g.g15!=null?g.g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec)}
+  Object.assign(rec,{dr:{...g.dr},ba:{...g.ba},g15:g.g15!=null?g.g15:(g.gl.find(x=>x[0]>=14)||[0,0])[1],pct,up:pct<25,odds:{blue:DS.sim.bwin}});DS.series.games.push(rec);saveGameText("cs",null,DS.series.games.length-1)}
 /* per-player series totals from the stored games */
 function seriesPlayers(id,S){S=S||{games:DS.series.games};const t=team(id);return ROLES.map((r,i)=>{const o={pl:t.p[i],r,g:0,k:0,d:0,a:0,rt:0,pts:0,champs:[]};
   S.games.forEach(gm=>{const sd=gm.blue===id?"blue":"red",p=gm.ps[sd][r];o.g++;o.k+=p.k;o.d+=p.d;o.a+=p.a;o.rt+=p.rt;o.champs.push([p.c,gm.winner===id]);if(gm.pog.team===id&&gm.pog.r===r)o.pts+=100});
@@ -886,6 +931,7 @@ function seriesPanel(S){
     <div class="stwo">${ptable(A)}${ptable(B)}</div>
     <div class="stwo"><div class="srace"><span class="eyebrow">Series MVP race · POG points</span>${race.map((o,i)=>`<div class="rc"><span class="notes">#${i+1}</span><span>${teamTag(o.id)} <b>${esc(o.pl.n)}</b></span><span class="rbar"><b style="width:${o.pts/maxP*100}%"></b></span><span class="num">${o.pts} <small>· ${o.avg.toFixed(1)}</small></span></div>`).join("")}<span class="notes small">100 points per Player of the Game; ties go to the higher average rating. The Series MVP comes from the winning team.</span></div>
       <div><span class="eyebrow">Series so far</span><div class="sfacts">${facts.map(([k,v])=>`<span><b>${k}</b>${esc(v)}</span>`).join("")}</div></div></div>
+    ${(()=>{const n=seriesTexts(S).filter(Boolean).length;return `<div class="sexport"><div class="ctrls"><button class="btn" data-sx="copy" data-sctx="${S.ctx}" data-m="${esc(S.mid||"")}" title="Copies the series as text: games, scoreboards, MVP and each game's play-by-play">Copy series</button><button class="btn" data-sx="dl" data-sctx="${S.ctx}" data-m="${esc(S.mid||"")}" title="Saves the same text as a .md file to share">Download series</button><span class="notes small">${done?"The whole series":"The series so far"}: scoreboards, MVP and every game's text (play-by-play kept for ${n} of ${S.games.length} game${S.games.length===1?"":"s"}; games simmed by the AI keep their box score only). Kept until the page is reloaded.</span></div><div class="gcopybox"></div></div>`})()}
   </div>`}
 
 function renderDraft(){
