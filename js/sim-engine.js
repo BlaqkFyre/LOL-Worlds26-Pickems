@@ -176,6 +176,16 @@ class Sim {
     const EG = (EO && MT && TMG && g0(cal, "event_gap", "v2") === "v2") ? TMG.gap_q : null;
     const OPN = (TMG && cal.fight_model === "typed" && EKC && g0(cal, "opening", "v2") === "v2") ? TMG : null;
     const PC = (EG && window.SIM_TABLES.push && g0(cal, "push_chain", "v2") === "v2") ? window.SIM_TABLES.push : null;
+    /* fight window v1 (27 Nov, v55; research/memory/fight-window-plan.md, fitted by research/memory/m21_fight_window.py, tables
+       SIM_TABLES.window; on by default, Luke: new versions go into the app switched on). After every won fight the winners take
+       objectives one at a time, or reset: stage 1 (take something or reset) and stage 2 (which one, among those up) are fitted on real
+       won fights from players alive on each side, seconds until the first and the last dead loser is back (the death timers), the step,
+       gold lead, v1, own buffs, game time and what is up; each take falls a real time later (by objective and players alive). The Nexus
+       falls only before the losers are all back. Options: dragon, elder, baron, herald, grubs, an inhibitor, a nexus tower, the Nexus;
+       lane towers stay on the segment draws. The per-minute base push (winner's team-minutes) and monster draws (all minutes) skip
+       the minutes a window covers and use tables refitted without them. cal.fight_window = "off" plays v54 exactly. */
+    const FW = (MT && g0(cal, "fight_window", "v1") === "v1" && window.SIM_TABLES.window) ? window.SIM_TABLES.window : null;
+    const winM = [new Set(), new Set()], winAny = new Set(), windows = [];
     let curK = null, curS = null;
     const gapAfter = (kind, side) => { const q = EG[`${curK}>${kind}|${side == null || curS == null ? "any" : side === curS ? "same" : "other"}`] || EG[`${curK}>${kind}|any`];
       return cur + (q ? quant(q, rng.random()) : 1); };
@@ -219,6 +229,58 @@ class Sim {
     const addGold = (side, amount) => { if(LL && m < 15) return; const w = m < 15 ? this.swLane : this.swLate; for(let i = 0; i < 5; i++) gold[i] += sd(side) * amount * w[i]; };
     const note = (t, side, kind, text, who) => { if(log) steps.push(Object.assign({t: Math.floor(t), side: side == null ? "" : ["blue", "red"][side], kind, text}, who || {})); };
     const setd = (o, k, v) => { if(!(k in o)) o[k] = v; };
+    /* fight window: what is up for side s at time t, and structures left to the Nexus (null while no lane is open) */
+    const fwAvail = (s, t) => { const A = {dragon: !elderMode && nxt.dragon <= t, elder: elderMode && nxt.dragon <= t, baron: nxt.baron <= t,
+        herald: !takenOnce.herald && t >= SPAWN.herald, grub: !takenOnce.grub && t >= SPAWN.grub};
+      const open = [0, 1, 2].filter(li => seg[s][li] >= 15), dn = [0, 1, 2].some(li => inhibBack[s][li] > t);
+      A.inhib = open.some(li => inhibBack[s][li] <= t); A.nxt = dn && nxTowers[s] > 0; A.nexus = dn && nxTowers[s] === 0;
+      return [A, open.length ? nxTowers[s] + (dn ? 0 : 1) : null]; };
+    /* a take inside a window: the same effects as the per-minute draws (the winners take it, so no taker draw) */
+    const fwTake = (k, s, tt, ta) => {
+      if(k === "dragon"){ let ty;
+        if(dragSeq.length < 2){ const opts = this.dtypes.map((t, i) => i).filter(i => !dragSeq.includes(this.dtypes[i])); ty = this.dtypes[rng.pick(opts, norm(opts.map(i => this.dprob[i])))]; }
+        else { if(soulType == null){ soulType = this.dtypes[rng.pick(this.dtypes.map((t, i) => i), this.dprob)]; } ty = soulType; }
+        dragSeq.push(ty); drag[s].push(ty); addGold(s, val.dragon_n);
+        setd(first, "dragon", s); setd(ftime, "dragon", tt); note(tt, s, "dragon", `${ty} dragon`);
+        if(drag[s].length >= 4 && !elderMode){ soul[s] = ty; elderMode = true; note(tt, s, "soul", `${ty} soul`); }
+        nxt.dragon = tt + (elderMode ? 360 : 300); }
+      else if(k === "elder"){ elderN[s]++; elderUntil[s] = tt + ELDER_BUFF; nxt.dragon = tt + 360; setd(first, "elder", s); note(tt, s, "elder", "Elder Dragon"); }
+      else if(k === "baron"){ barons[s]++; baronUntil[s] = tt + BARON_BUFF; nxt.baron = tt + 360; addGold(s, val.baron); setd(first, "baron", s); setd(ftime, "baron", tt); note(tt, s, "baron", "Baron Nashor"); }
+      else if(k === "grub"){ takenOnce.grub = true; const nOwn = rng.random() < P.grubs_split.one_team_all ? 3 : 2;
+        grubs[s] += nOwn; grubs[1 - s] += 3 - nOwn; setd(first, "grub", s); addGold(s, val.grub * nOwn); addGold(1 - s, val.grub * (3 - nOwn)); note(tt, s, "grubs", `${nOwn} void grubs`); }
+      else if(k === "herald"){ takenOnce.herald = true; heralds[s]++; heraldT[s] = tt; setd(first, "herald", s); addGold(s, val.herald); note(tt, s, "herald", "Rift Herald"); }
+      else if(k === "inhib"){ const li = rng.pickUniform([0, 1, 2].filter(l => seg[s][l] >= 15 && inhibBack[s][l] <= Math.max(tt, ta)));   /* up when chosen (a take time can be drawn just before the step) */ inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++;
+        addGold(s, val.inhib); lastBase[s] = 60 * Math.floor(tt / 60); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
+      else if(k === "nxt"){ nxTowers[s]--; towers[s]++; addGold(s, val.tower); nxDown[s].push(tt); lastBase[s] = 60 * Math.floor(tt / 60); note(tt, s, "tower", "nexus tower"); }
+      else if(k === "nexus"){ winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); } };
+    /* the window after a won fight: w won, the fight started at tf, its last kill at t1 */
+    const fwRun = (w, tf, t1) => {
+      const o = 1 - w, sg = sd(w), S1 = FW.stage1, S2 = FW.stage2, rec = log ? {f: fid - 1, t0: Math.floor(tf), t1: Math.floor(t1), w: ["blue", "red"][w]} : null;
+      if(rec){ const [A0, left0] = fwAvail(w, tf); rec.left = left0; rec.up = A0; }
+      let ta = t1; const took = [];
+      for(let j = 0; j < 8; j++){
+        const [A] = fwAvail(w, ta), up = FW.options.filter(k => A[k]);
+        const ownA = 5 - respawn[w].filter(r => r > ta).length, enA = 5 - respawn[o].filter(r => r > ta).length;
+        const back = respawn[o].filter(r => r > ta).sort((a, b) => a - b), fb = back.length ? back[0] - ta : 0, ab = back.length ? back[back.length - 1] - ta : 0;
+        if(rec && j === 0) rec.alive = [ownA, enA];
+        if(!up.length) break;
+        const x1 = S1.intercept + S1.own_alive * ownA + S1.enemy_alive * enA + S1.per_10s_until_first_back * fb / 10 + S1.per_10s_until_all_back * ab / 10
+          + S1["step 1"] * (j === 1) + S1["step 2+"] * (j >= 2) + S1.per_1k_lead * clamp(sg * gd / 1000, -15, 15) + S1.per_v1_logit * sg * z
+          + S1.baron_buff * (baronUntil[w] > ta) + S1.elder_buff * (elderUntil[w] > ta) + S1["from 25"] * (ta >= 1500) + S1["from 35"] * (ta >= 2100)
+          + FW.options.reduce((a, k) => a + S1["up_" + k] * (A[k] ? 1 : 0), 0);
+        if(rng.random() >= sig(x1)) break;
+        const u = up.map(k => S2[k].intercept + S2[k].per_alive_diff * (ownA - enA) + S2[k].per_10s_until_all_back * ab / 10), mx = Math.max(...u);
+        const k = rng.pick(up, norm(u.map(v => Math.exp(v - mx))));
+        const d = ownA - enA, TQ = FW.take_q[k] || {}, q = TQ[d >= 3 ? "ahead 3+" : d >= 1 ? "ahead 1-2" : "even or behind"] || TQ.pooled || FW.take_q.all;
+        let tk = ta + quant(q, rng.random());
+        if(k === "nexus"){ const allBack = back.length ? back[back.length - 1] : ta;
+          if(tk >= allBack) break;
+          if(cur > 0 && tk <= cur){ tk = EG ? gapAfter("structure", w) : cur + 1; if(tk >= allBack) break; }   /* the Nexus comes after every event placed */
+          took.push(k); fwTake(k, w, at(tk, "structure", w, true)); break; }
+        took.push(k); fwTake(k, w, at(tk, k === "inhib" || k === "nxt" ? "structure" : "monster", w, true), ta); ta = Math.max(ta, tk);
+      }
+      for(let mm = Math.floor(tf / 60); mm <= Math.floor(Math.max(ta, t1) / 60); mm++){ winM[w].add(mm); winAny.add(mm); }
+      if(rec){ rec.took = took; windows.push(rec); } };
 
     for(m = 0; m <= cal.max_min; m++){
       const t0 = 60 * m;
@@ -349,18 +411,21 @@ class Sim {
         if(log && (fk[0] || fk[1])) fights.push({t: Math.floor(tf), f: fid, b: fk[0], r: fk[1], type: ftype, gd});
         if(MT && fk[0] !== fk[1]) lastFight = {w: fk[0] > fk[1] ? 0 : 1, t: lastKT, t0: tf};
         fid++;
+        if(FW && fk[0] !== fk[1]){ fwRun(lastFight.w, tf, lastKT); if(winner != null) break; }   /* fight window v1 */
       }
+      if(winner != null) break;   /* fight window v1: the Nexus fell in a window (never set here when it is off) */
       /* monsters */
       const taker = (kind, feats) => { const c = TAKC[kind] || TAKC.dragon; let xb = c.blue_side + c.per_v1_logit * z;
         for(const f in feats) xb += g0(c, f + "_per_1k", 0) * feats[f] / 1000; return rng.random() < sig(xb) ? 0 : 1; };
       const firstDrag = !dragSeq.length && !elderMode;
-      const takeChance = kind => { const c = P.monsters[kind], since = Math.max(0, Math.floor((t0 - nxt[kind !== "elder" ? kind : "dragon"]) / 60));
+      const fwSkip = FW && winAny.has(m);   /* fight window v1: a minute a window covers has no per-minute monster draw */
+      const takeChance = kind => { const c = (FW && FW.monsters[kind]) || P.monsters[kind], since = Math.max(0, Math.floor((t0 - nxt[kind !== "elder" ? kind : "dragon"]) / 60));
         return sig(c.intercept + c.spawn_minute * (since === 0) + c["1_min_after"] * (since === 1) + c["4+_min_after"] * (since >= 4)
           + c.per_1k_abs_lead * Math.min(Math.abs(gd) / 1000, 15) + c.fight_this_minute * fought
           + g0(c, "first_dragon", 0) * (kind === "dragon" && firstDrag ? 1 : 0) + g0(c, "objectives_style_sum", 0) * obj_s); };
       const lanef = {gd, jng: roleLead[1], mid: roleLead[2], top: roleLead[0], bot2: roleLead[3] + roleLead[4], net60k: net * 1000, objk: obj_d * 1000, first1k: 1000 * (firstDrag ? 1 : 0)};
       const pickF = ks_ => { const o = {}; ks_.forEach(k => { o[k] = lanef[k]; }); return o; };
-      if(nxt.dragon != null && nxt.dragon < t0 + 60){
+      if(!fwSkip && nxt.dragon != null && nxt.dragon < t0 + 60){
         const kind = elderMode ? "elder" : "dragon";
         if(rng.random() < takeChance(P.monsters[kind] ? kind : "dragon")){
           const feats = pickF(kind === "dragon" ? ["gd", "jng", "bot2", "mid", "net60k", "objk", "first1k"] : ["gd", "net60k", "objk"]);
@@ -382,7 +447,7 @@ class Sim {
         }
       }
       for(const kind of ["grub", "herald"]){
-        if(!takenOnce[kind] && nxt[kind] < t0 + 60 && P.monsters[kind] && rng.random() < takeChance(kind)){
+        if(!fwSkip && !takenOnce[kind] && nxt[kind] < t0 + 60 && P.monsters[kind] && rng.random() < takeChance(kind)){
           const s = taker(kind, pickF(["gd", "jng", "top", "mid", "net60k", "objk"]));
           const tt = at(Math.max(t0, nxt[kind]) + rng.uniform(0, 50), "monster", s); takenOnce[kind] = true;
           if(kind === "grub"){ const nOwn = rng.random() < P.grubs_split.one_team_all ? 3 : 2;
@@ -390,7 +455,7 @@ class Sim {
           else { heralds[s]++; heraldT[s] = tt; setd(first, "herald", s); addGold(s, val.herald); note(tt, s, "herald", "Rift Herald"); }
         }
       }
-      if(nxt.baron != null && nxt.baron < t0 + 60 && rng.random() < takeChance("baron")){
+      if(!fwSkip && nxt.baron != null && nxt.baron < t0 + 60 && rng.random() < takeChance("baron")){
         const s = taker("baron", pickF(["gd", "net60k", "objk"])), tt = at(Math.max(t0, nxt.baron) + rng.uniform(0, 50), "monster", s);
         barons[s]++; baronUntil[s] = tt + BARON_BUFF; nxt.baron = tt + 360; addGold(s, val.baron);
         setd(first, "baron", s); setd(ftime, "baron", tt); note(tt, s, "baron", "Baron Nashor");
@@ -442,8 +507,10 @@ class Sim {
         const opn = [0, 1, 2].filter(li => seg[s][li] >= 15);
         opn.forEach(li => { if(openT[s][li] == null) openT[s][li] = t0; });
         if(!opn.length) continue;
+        if(FW && winM[s].has(m)) continue;   /* fight window v1: the winners' minutes a window covers have no per-minute base push */
         let down = [0, 1, 2].filter(li => inhibBack[s][li] > t0);
-        const bc = PUSHC;
+        const bc = FW ? FW.base_push.coef : PUSHC;
+        if(FW) cutB = FW.base_push.clear_fight_cutoff || 99;
         const xb = bc.intercept + bc["from 25"] * (m >= 25) + bc["from 35"] * (m >= 35) + bc.per_1k_lead * clamp(sg * gd / 1000, -15, 15)
           + bc.per_v1_logit * sg * z + bc.baron * (baronUntil[s] > t0) + bc.elder * (elderUntil[s] > t0)
           + bc.enemy_inhibs_down * down.length + bc.open_lanes * opn.length + g0(bc, "siege_style", 0) * sg * siege_d + g0(bc, "siege_style_sum", 0) * siege_s
@@ -497,7 +564,7 @@ class Sim {
       first: Object.fromEntries(Object.entries(first).map(([k, v]) => [k, ["blue", "red"][v]])), first_t: Object.fromEntries(Object.entries(ftime).map(([k, v]) => [k, Math.floor(v)])),
       roles5: kd.roles5 || nan5, g15: gdAt[15] != null ? gdAt[15] : NaN, gd: gdAt, roles15: kd.roles15 || nan5, roles10: kd.roles10 || nan5,
       kd15: kd.kd15 || ROLES.map((r, i) => (K[0][i] - D[0][i]) - (K[1][i] - D[1][i])), first_tower_lane: firstLane.tower || "",
-      capped, steps: log ? steps.sort((a, b) => a.t - b.t) : [], fights};
+      capped, steps: log ? steps.sort((a, b) => a.t - b.t) : [], fights, ...(FW && log ? {windows} : {})};
   }
 }
 /* ---- app bridge (sim session 4, 13 Nov): the sim's inputs from js/sim-tables.js, as research/sim4/s4_tables.py builds them ----
