@@ -1,0 +1,613 @@
+{
+ "source": "research/memory/m20_fight_windows.py (27 Nov 2026 AEST)",
+ "games": 640,
+ "deaths matched to the file's XP": [
+  17192,
+  17665
+ ],
+ "won fights": 7271,
+ "won fights at Worlds": 976,
+ "won fights by players alive at the last kill (winners v losers)": {
+  "0v3": 2,
+  "0v4": 1,
+  "1v0": 3,
+  "1v3": 2,
+  "1v4": 3,
+  "2v0": 14,
+  "2v1": 29,
+  "2v2": 6,
+  "2v3": 9,
+  "2v4": 5,
+  "3v0": 84,
+  "3v1": 98,
+  "3v2": 126,
+  "3v3": 28,
+  "3v4": 18,
+  "4v0": 174,
+  "4v1": 241,
+  "4v2": 356,
+  "4v3": 456,
+  "4v4": 142,
+  "4v5": 2,
+  "5v0": 231,
+  "5v1": 308,
+  "5v2": 461,
+  "5v3": 903,
+  "5v4": 3569
+ },
+ "window s (10/25/50/75/90%), until the first / all of the losers dead at the last kill respawn": {
+  "first back": [
+   9.5,
+   14.3,
+   25.7,
+   37.5,
+   45.9
+  ],
+  "all back": [
+   14.0,
+   25.0,
+   37.7,
+   47.7,
+   55.1
+  ]
+ },
+ "window until all back by losers dead": {
+  "1": [
+   3738,
+   [
+    12.0,
+    16.0,
+    31.5,
+    41.4,
+    49.8
+   ]
+  ],
+  "2": [
+   1400,
+   [
+    16.0,
+    25.0,
+    36.1,
+    45.8,
+    53.6
+   ]
+  ],
+  "3": [
+   949,
+   [
+    25.0,
+    35.0,
+    43.6,
+    51.0,
+    57.2
+   ]
+  ],
+  "4": [
+   676,
+   [
+    34.6,
+    42.3,
+    49.0,
+    54.8,
+    59.8
+   ]
+  ],
+  "5": [
+   505,
+   [
+    40.6,
+    45.6,
+    51.0,
+    56.2,
+    60.5
+   ]
+  ]
+ },
+ "next fight from the last kill s (10/25/50/75/90%; none = game over or no fight)": [
+  32.0,
+  62.0,
+  116.0,
+  210.0,
+  474.0
+ ],
+ "winner's takes before the next fight, by kind and when (count)": {
+  "dragon": {
+   "after all back": 1073,
+   "before first back": 460,
+   "before all back": 161
+  },
+  "elder": {
+   "before first back": 32,
+   "before all back": 19,
+   "after all back": 8
+  },
+  "baron": {
+   "before first back": 289,
+   "before all back": 242,
+   "after all back": 198
+  },
+  "herald": {
+   "after all back": 245,
+   "before first back": 73,
+   "before all back": 30
+  },
+  "grub": {
+   "after all back": 732,
+   "before first back": 96,
+   "before all back": 19
+  },
+  "outer": {
+   "after all back": 1850,
+   "before first back": 1151,
+   "before all back": 287
+  },
+  "T3": {
+   "before first back": 618,
+   "after all back": 269,
+   "before all back": 72
+  },
+  "inhib": {
+   "before first back": 668,
+   "after all back": 200,
+   "before all back": 76
+  },
+  "nxt": {
+   "before first back": 1001,
+   "before all back": 150,
+   "after all back": 68
+  },
+  "nexus": {
+   "before first back": 315,
+   "before all back": 250,
+   "after all back": 2
+  }
+ },
+ "won fights where the winners took nothing before the next fight": 2651,
+ "won fights where the winners took something before all losers were back": 3165,
+ "losers' takes before all of them are back (count by kind)": {
+  "outer": 512,
+  "dragon": 153,
+  "grub": 63,
+  "T3": 51,
+  "herald": 40,
+  "baron": 38,
+  "nxt": 35,
+  "nexus": 30,
+  "inhib": 22,
+  "elder": 4
+ },
+ "taken when available, by players alive (won fights, share)": {
+  "dragon up, ahead 3+": [
+   315,
+   0.403
+  ],
+  "dragon up, ahead 1-2": [
+   1185,
+   0.256
+  ],
+  "dragon up, even or behind": [
+   39,
+   0.231
+  ],
+  "elder up, ahead 3+": [
+   47,
+   0.213
+  ],
+  "elder up, ahead 1-2": [
+   42,
+   0.571
+  ],
+  "elder up, even or behind": [
+   1,
+   0.0
+  ],
+  "baron up, ahead 3+": [
+   539,
+   0.395
+  ],
+  "baron up, ahead 1-2": [
+   1202,
+   0.219
+  ],
+  "baron up, even or behind": [
+   54,
+   0.019
+  ],
+  "lane open, 0 left, ahead 3+: Nexus": [
+   74,
+   0.986
+  ],
+  "lane open, 0 left, ahead 1-2: Nexus": [
+   20,
+   0.85
+  ],
+  "lane open, 0 left, even or behind: Nexus": [
+   3,
+   0.333
+  ],
+  "lane open, 1 left, ahead 3+: Nexus": [
+   79,
+   0.949
+  ],
+  "lane open, 1 left, ahead 1-2: Nexus": [
+   31,
+   0.581
+  ],
+  "lane open, 1 left, even or behind: Nexus": [
+   1,
+   0.0
+  ],
+  "lane open, 2 left, ahead 3+: Nexus": [
+   228,
+   0.855
+  ],
+  "lane open, 2 left, ahead 1-2: Nexus": [
+   149,
+   0.121
+  ],
+  "lane open, 2 left, even or behind: Nexus": [
+   6,
+   0.0
+  ],
+  "lane open, 3 left, ahead 3+: Nexus": [
+   88,
+   0.511
+  ],
+  "lane open, 3 left, ahead 1-2: Nexus": [
+   96,
+   0.104
+  ],
+  "lane open, 3 left, even or behind: Nexus": [
+   2,
+   0.0
+  ]
+ },
+ "time from the last kill to each take s (10/25/50/75/90%), by players alive": {
+  "dragon, ahead 3+": [
+   326,
+   [
+    -3.0,
+    13.0,
+    32.5,
+    90.0,
+    194.5
+   ]
+  ],
+  "dragon, ahead 1-2": [
+   1330,
+   [
+    13.0,
+    27.0,
+    64.0,
+    146.0,
+    246.1
+   ]
+  ],
+  "dragon, even or behind": [
+   38,
+   [
+    25.4,
+    32.0,
+    80.5,
+    150.5,
+    228.3
+   ]
+  ],
+  "elder, ahead 3+": [
+   23,
+   [
+    -13.8,
+    -4.5,
+    8.0,
+    44.0,
+    60.8
+   ]
+  ],
+  "elder, ahead 1-2": [
+   36,
+   [
+    7.0,
+    15.2,
+    26.5,
+    48.5,
+    57.0
+   ]
+  ],
+  "elder, even or behind": [
+   0,
+   null
+  ],
+  "baron, ahead 3+": [
+   302,
+   [
+    16.0,
+    25.2,
+    34.0,
+    43.0,
+    61.6
+   ]
+  ],
+  "baron, ahead 1-2": [
+   423,
+   [
+    18.0,
+    27.0,
+    37.0,
+    51.0,
+    122.2
+   ]
+  ],
+  "baron, even or behind": [
+   4,
+   [
+    6.0,
+    15.0,
+    27.5,
+    40.0,
+    49.0
+   ]
+  ],
+  "herald, ahead 3+": [
+   39,
+   [
+    16.8,
+    26.0,
+    62.0,
+    101.5,
+    159.6
+   ]
+  ],
+  "herald, ahead 1-2": [
+   299,
+   [
+    13.0,
+    29.0,
+    61.0,
+    151.5,
+    246.8
+   ]
+  ],
+  "herald, even or behind": [
+   10,
+   [
+    10.8,
+    34.0,
+    48.0,
+    76.2,
+    155.4
+   ]
+  ],
+  "grub, ahead 3+": [
+   27,
+   [
+    16.8,
+    34.5,
+    134.0,
+    197.5,
+    227.0
+   ]
+  ],
+  "grub, ahead 1-2": [
+   800,
+   [
+    15.0,
+    28.0,
+    81.0,
+    157.2,
+    257.1
+   ]
+  ],
+  "grub, even or behind": [
+   20,
+   [
+    -17.1,
+    18.0,
+    77.0,
+    112.2,
+    158.1
+   ]
+  ],
+  "outer, ahead 3+": [
+   946,
+   [
+    5.0,
+    16.0,
+    39.5,
+    98.8,
+    150.0
+   ]
+  ],
+  "outer, ahead 1-2": [
+   2273,
+   [
+    10.0,
+    21.0,
+    56.0,
+    121.0,
+    204.0
+   ]
+  ],
+  "outer, even or behind": [
+   69,
+   [
+    16.6,
+    27.0,
+    60.0,
+    102.0,
+    214.2
+   ]
+  ],
+  "T3, ahead 3+": [
+   512,
+   [
+    -3.0,
+    9.0,
+    19.0,
+    31.0,
+    119.0
+   ]
+  ],
+  "T3, ahead 1-2": [
+   443,
+   [
+    7.0,
+    16.0,
+    31.0,
+    111.0,
+    153.0
+   ]
+  ],
+  "T3, even or behind": [
+   4,
+   [
+    7.6,
+    8.5,
+    11.5,
+    15.2,
+    17.5
+   ]
+  ],
+  "inhib, ahead 3+": [
+   523,
+   [
+    -6.0,
+    10.0,
+    19.0,
+    28.0,
+    106.8
+   ]
+  ],
+  "inhib, ahead 1-2": [
+   417,
+   [
+    7.0,
+    15.0,
+    29.0,
+    93.0,
+    154.8
+   ]
+  ],
+  "inhib, even or behind": [
+   4,
+   [
+    19.0,
+    19.0,
+    21.5,
+    26.8,
+    31.7
+   ]
+  ],
+  "nxt, ahead 3+": [
+   955,
+   [
+    -5.0,
+    2.0,
+    14.0,
+    26.0,
+    34.6
+   ]
+  ],
+  "nxt, ahead 1-2": [
+   263,
+   [
+    -7.0,
+    11.5,
+    24.0,
+    39.0,
+    133.2
+   ]
+  ],
+  "nxt, even or behind": [
+   1,
+   [
+    40.0,
+    40.0,
+    40.0,
+    40.0,
+    40.0
+   ]
+  ],
+  "nexus, ahead 3+": [
+   498,
+   [
+    6.0,
+    9.0,
+    15.0,
+    29.0,
+    39.0
+   ]
+  ],
+  "nexus, ahead 1-2": [
+   68,
+   [
+    5.0,
+    7.0,
+    10.0,
+    23.0,
+    32.3
+   ]
+  ],
+  "nexus, even or behind": [
+   1,
+   [
+    7.0,
+    7.0,
+    7.0,
+    7.0,
+    7.0
+   ]
+  ]
+ },
+ "objectives inside a won-fight window / all (by kind)": {
+  "dragon": [
+   621,
+   2901
+  ],
+  "elder": [
+   51,
+   73
+  ],
+  "baron": [
+   531,
+   886
+  ],
+  "herald": [
+   103,
+   640
+  ],
+  "grub": [
+   115,
+   1920
+  ],
+  "outer": [
+   1438,
+   5193
+  ],
+  "T3": [
+   690,
+   1101
+  ],
+  "inhib": [
+   744,
+   1058
+  ],
+  "nxt": [
+   1151,
+   1300
+  ],
+  "nexus": [
+   565,
+   620
+  ]
+ },
+ "objectives inside a won-fight window, all kinds": [
+  6009,
+  15692
+ ],
+ "examples (Worlds)": [
+  "Worlds 2026 Play-In ROUND1 2026-10-15 MVK Esports v FURIA: fight ends 23:51 (4-1), alive 4v1, losers back +30 s (first) / +44 s (all); winners took [(11, 'dragon'), (49, 'baron')]; next fight +104 s",
+  "Worlds 2026 Play-In ROUND1 2026-10-15 MVK Esports v FURIA: fight ends 32:22 (3-1), alive 4v2, losers back +39 s (first) / +54 s (all); winners took [(6, 'T3'), (11, 'outer'), (36, 'baron')]; next fight +129 s",
+  "Worlds 2026 Play-In ROUND1 2026-10-15 MVK Esports v FURIA: fight ends 22:13 (1-0), alive 5v3, losers back +3 s (first) / +30 s (all); winners took [(14, 'baron'), (84, 'outer'), (133, 'outer')]; next fight +145 s",
+  "Worlds 2026 Play-In ROUND1 2026-10-15 Cloud9 v Karmine Corp: fight ends 24:24 (3-1), alive 4v2, losers back +32 s (first) / +46 s (all); winners took [(61, 'baron'), (104, 'outer')]; next fight +189 s"
+ ]
+}

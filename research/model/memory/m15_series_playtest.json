@@ -1,0 +1,18 @@
+{
+  "source": "research/memory/m15_series_playtest.js (27 Nov 2026 AEST), app v54 data model, 100 Champ Select Bo5 Fearless series (random team pairs, both drafts by the app's AI via autoStep), run in a new localhost tab; copied by hand from the tab",
+  "series": 100, "games": 407, "seconds": 404, "errors": [],
+  "replay from seed matches the game record": 407, "steps in time order": 407,
+  "series scores": {"3-0": 28, "3-1": 37, "3-2": 35},
+  "Fearless repeats (series with a repeat pick)": 0, "loser took blue (series OK)": 100,
+  "export: series with a play-by-play block for every game": 100, "export: play-by-play in time order": 100, "export: Series MVP line": 100,
+  "export: NaN/undefined in text": 0, "export: median size (chars)": 19470,
+  "length min (10/25/50/75/90%)": [28.7, 33.6, 39.2, 46.1, 52.4], "45+ min %": 27.8, "50+ min %": 16, "under 25 min %": 2.2,
+  "kills per game (10/25/50/75/90%)": [19, 25, 33, 42, 49.4],
+  "first blood s (10/50/90%)": [132, 241, 506.4], "first blood before 0:30 / 1:00 / 3:00 %": [0, 1.7, 28.7],
+  "Nexus from the last kill s (10/25/50/75/90%)": [8, 17, 29, 43, 52], "Nexus 60 s+ after the last kill %": 3.2,
+  "7+ kill fights (engine fight ids)": 34, "solo share of kills in 7+ kill fights (engine fight ids)": 0.012,
+  "support 4+ kills in one fight (count)": 1, "same-team objective pairs within 1 s": 0.023, "own kill then structure within 1 s": 0.032,
+  "blue win %": 52.1, "Player of the Game by role %": {"TOP": 17.9, "JGL": 30, "MID": 27.5, "ADC": 20.1, "SUP": 4.4},
+  "real for comparison (640 gol.gg timelines)": {"length min (10/25/50/75/90%)": [26.4, 28.8, 32.2, 35.9, 39.9], "45+": 0.028, "kills median": 27, "first blood before 0:30 / 1:00 / 3:00 %": [0, 1.1, 28.1], "Nexus from the last kill median s": 14},
+  "sample export (series 1, IG 3-1 T1) worked example": "game 1 (seed 1716133153739033): IG took the mid inhibitor and both nexus towers 28:49-29:02, won fights at 30:53, 44:24, 47:03 (5-0), broke the base again 49:04-49:24 and 57:36-58:05, and ended at 61:23"
+}

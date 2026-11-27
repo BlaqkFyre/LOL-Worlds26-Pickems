@@ -1,0 +1,78 @@
+{
+ "source": "research/memory/m15_series_playtest.js (27 Nov 2026 AEST), app v55 (fight window on), 100 Champ Select Bo5 Fearless series (same random team pairs as the v54 run: fixed seed 20261127), run in a new localhost tab; copied by hand from the tab (sample export left out)",
+ "version": "55",
+ "sim": "data",
+ "series": 100,
+ "games": 401,
+ "seconds": 433,
+ "errors": [],
+ "replay matches record": 401,
+ "steps in time order": 401,
+ "series scores": {
+  "3-2": 35,
+  "3-0": 34,
+  "3-1": 31
+ },
+ "Fearless repeats (series with a repeat pick)": 0,
+ "loser took blue (series OK)": 100,
+ "export: series with a play-by-play block for every game": 100,
+ "export: play-by-play in time order": 100,
+ "export: Series MVP line": 100,
+ "export: NaN/undefined in text": 0,
+ "export: median size (chars)": 17178.5,
+ "length min (10/25/50/75/90%)": [
+  27.7,
+  31.7,
+  36.5,
+  42.3,
+  47.8
+ ],
+ "45+ min %": 16.5,
+ "50+ min %": 8,
+ "under 25 min %": 4.5,
+ "kills per game (10/25/50/75/90%)": [
+  18,
+  22,
+  28,
+  36,
+  42
+ ],
+ "first blood s (10/50/90%)": [
+  134,
+  245,
+  561
+ ],
+ "first blood before 0:30 / 1:00 / 3:00 %": [
+  0,
+  0.2,
+  26.9
+ ],
+ "Nexus from the last kill s (10/25/50/75/90%)": [
+  7,
+  9,
+  15,
+  28,
+  41
+ ],
+ "Nexus from the winner's last kill s (10/25/50/75/90%)": [
+  7,
+  9,
+  15,
+  29,
+  41
+ ],
+ "Nexus 60 s+ after the last kill %": 1.2,
+ "7+ kill fights": 37,
+ "solo share of kills in 7+ kill fights": 0.019,
+ "support 4+ kills in one fight (count)": 0,
+ "same-team objective pairs within 1 s": 0.022,
+ "own kill then structure within 1 s": 0.025,
+ "blue win %": 54.1,
+ "Player of the Game by role %": {
+  "JGL": 31.4,
+  "MID": 28.2,
+  "ADC": 18.2,
+  "TOP": 17,
+  "SUP": 5.2
+ }
+}

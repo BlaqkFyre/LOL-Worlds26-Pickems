@@ -1,0 +1,203 @@
+{
+ "source": "research/memory/m22_app_check.js run in a local app tab, 27 Nov 2026 AEST (v55; js/sim-engine.js and js/sim-tables.js uncommitted)",
+ "m22": {
+  "drafts": 72,
+  "seeds": 100,
+  "settings": {
+   "gain": 1.597,
+   "lane_mu": 1,
+   "lane_k": 1,
+   "fight_eps": 1.05,
+   "style_mode": "timing",
+   "form": "off",
+   "fight_model": "typed",
+   "push_fight": "on",
+   "lane_level": "on",
+   "early_kills": "counts",
+   "first_dragon_taker": "on",
+   "fight_players": "on",
+   "event_order": "on"
+  },
+  "window_table_cutoff": "2026-11-10",
+  "v55": {
+   "label": "v55 (default, fight_window v1)",
+   "games": 7200,
+   "blue win": 0.575,
+   "length min (10/25/50/75/90%)": [
+    27.2,
+    31.5,
+    36.8,
+    43.3,
+    50.1
+   ],
+   "45+ min": 0.199,
+   "50+ min": 0.102,
+   "capped at 70 min": 11,
+   "kills per game": 30.008,
+   "objectives per game (both sides; grubs = takes, towers all tiers)": {
+    "grub": 1,
+    "dragon": 4.603,
+    "tower": 13.078,
+    "herald": 0.999,
+    "baron": 1.628,
+    "inhib": 2.158,
+    "nexus": 0.998,
+    "elder": 0.362
+   },
+   "Player of the Game by role": {
+    "top": 0.199,
+    "jng": 0.312,
+    "mid": 0.285,
+    "bot": 0.164,
+    "sup": 0.041
+   },
+   "window shares (won fights, share taking it in the 60 s chain)": {
+    "Nexus, 0 left, ahead 1-2": [
+     2057,
+     0.712
+    ],
+    "Nexus, 0 left, ahead 3+": [
+     1355,
+     0.912
+    ],
+    "Nexus, 0 left, even or behind": [
+     132,
+     0.477
+    ],
+    "Nexus, 1 left, ahead 1-2": [
+     1382,
+     0.374
+    ],
+    "Nexus, 1 left, ahead 3+": [
+     895,
+     0.81
+    ],
+    "Nexus, 1 left, even or behind": [
+     81,
+     0.309
+    ],
+    "Nexus, 2 left, ahead 1-2": [
+     2539,
+     0.168
+    ],
+    "Nexus, 2 left, ahead 3+": [
+     1569,
+     0.674
+    ],
+    "Nexus, 2 left, even or behind": [
+     168,
+     0.042
+    ],
+    "Nexus, 3 left, ahead 1-2": [
+     4622,
+     0.063
+    ],
+    "Nexus, 3 left, ahead 3+": [
+     2378,
+     0.505
+    ],
+    "Nexus, 3 left, even or behind": [
+     315,
+     0.025
+    ],
+    "any objective": [
+     93349,
+     0.496
+    ],
+    "baron when up, ahead 1-2": [
+     17663,
+     0.284
+    ],
+    "baron when up, ahead 3+": [
+     7459,
+     0.424
+    ],
+    "baron when up, even or behind": [
+     979,
+     0.221
+    ],
+    "dragon when up, ahead 1-2": [
+     18361,
+     0.449
+    ],
+    "dragon when up, ahead 3+": [
+     3831,
+     0.607
+    ],
+    "dragon when up, even or behind": [
+     619,
+     0.351
+    ]
+   },
+   "window takes per game, by option": {
+    "grub": 0.311,
+    "dragon": 1.694,
+    "baron": 1.251,
+    "inhib": 1.419,
+    "nxt": 1.572,
+    "nexus": 0.963,
+    "elder": 0.282,
+    "herald": 0.364
+   }
+  },
+  "v55_off": {
+   "label": "v55 with fight_window off (= v54)",
+   "games": 7200,
+   "blue win": 0.586,
+   "length min (10/25/50/75/90%)": [
+    28.7,
+    33.1,
+    39,
+    46,
+    53.5
+   ],
+   "45+ min": 0.28,
+   "50+ min": 0.151,
+   "capped at 70 min": 50,
+   "kills per game": 33.097,
+   "objectives per game (both sides; grubs = takes, towers all tiers)": {
+    "grub": 1,
+    "tower": 15.014,
+    "dragon": 4.797,
+    "herald": 1,
+    "inhib": 2.463,
+    "baron": 1.998,
+    "nexus": 0.993,
+    "elder": 0.563
+   },
+   "Player of the Game by role": {
+    "top": 0.184,
+    "jng": 0.291,
+    "mid": 0.287,
+    "bot": 0.195,
+    "sup": 0.042
+   }
+  },
+  "replay": {
+   "default": {
+    "v54": "cb7225e9",
+    "v55 off": "cb7225e9",
+    "identical": true
+   },
+   "alt": {
+    "v54": "c993b12b",
+    "v55 off": "c993b12b",
+    "identical": true
+   }
+  },
+  "real_72": {
+   "source": "the 72 Worlds games as played (js/worlds-live.js WORLDS_LIVE.games: len, w, pl kills)",
+   "blue win": 0.5694444444444444,
+   "length min (10/25/50/75/90%)": [
+    26.2,
+    29,
+    33.1,
+    37.5,
+    40.1
+   ],
+   "45+ min": 0.05555555555555555,
+   "50+ min": 0,
+   "kills per game": 26.3
+  }
+ }
+}

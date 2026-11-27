@@ -77,3 +77,10 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261126T053749Z_memory_push_timing.json,memory_push_timing,ok,25.0,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json
 20261126T054029Z_memory_push_timing.json,memory_push_timing,ok,59.5,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json
 20261126T054527Z_memory_push_timing.json,memory_push_timing,ok,60.1,research/memory/m14_push_timing.py,70699d6,True,research/model/memory/m14_push_timing.json
+20261126T222157Z_memory_nexus_push.json,memory_nexus_push,ok,8.0,research/memory/m16_nexus_push.py,0df8bfd,True,research/model/memory/m16_nexus_push.json
+20261127T014209Z_memory_base_push_state.json,memory_base_push_state,failed,1.1,research/memory/m17_base_push_state.py,0df8bfd,True,
+20261127T015744Z_memory_base_push_state.json,memory_base_push_state,ok,928.3,research/memory/m17_base_push_state.py,0df8bfd,True,research/model/memory/m17_base_push_state.json
+20261127T035735Z_memory_base_push_state.json,memory_base_push_state,ok,943.8,research/memory/m17_base_push_state.py,0df8bfd,True,research/model/memory/m17_base_push_state.json
+20261127T062531Z_memory_fight_windows.json,memory_fight_windows,ok,21.6,research/memory/m20_fight_windows.py,0df8bfd,True,research/model/memory/m20_fight_windows.json
+20261127T062634Z_memory_push_continue.json,memory_push_continue,ok,1118.2,research/memory/m19_push_continue.py,0df8bfd,True,research/model/memory/m19_push_continue.json
+20261127T075352Z_memory_fight_window.json,memory_fight_window,ok,4259.2,research/memory/m21_fight_window.py,0df8bfd,True,research/model/memory/m21_fight_window.json

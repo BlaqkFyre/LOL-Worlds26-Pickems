@@ -1,0 +1,1018 @@
+{
+ "source": "research/memory/m19_push_continue.py (27 Nov 2026 AEST)",
+ "chain_s": 60,
+ "research": {
+  "counts": {
+   "deaths matched to the file's XP": [
+    17192,
+    17665
+   ],
+   "step rows (train) by structures left now x step": {
+    "0 left": {
+     "step 0": 54,
+     "step 1": 61,
+     "step 2": 215
+    },
+    "1 left": {
+     "step 0": 70,
+     "step 1": 117,
+     "step 2": 111
+    },
+    "2 left": {
+     "step 0": 234,
+     "step 1": 148,
+     "step 2": 21
+    },
+    "3 left": {
+     "step 0": 122,
+     "step 1": 0,
+     "step 2": 0
+    }
+   },
+   "step rows by split": {
+    "train": 1153,
+    "test": 452,
+    "worlds": 258
+   },
+   "won fights (train) by structures left at the fight's start": {
+    "0": 55,
+    "1": 71,
+    "2": 237,
+    "3": 120
+   },
+   "censored (base race) won fights, all splits": 4,
+   "real Nexus share by structures left (won fights, share), chain 60 s": {
+    "0": [
+     96,
+     0.948
+    ],
+    "1": [
+     110,
+     0.845
+    ],
+    "2": [
+     383,
+     0.556
+    ],
+    "3": [
+     184,
+     0.299
+    ]
+   },
+   "chain 45 s": {
+    "step rows": 1859,
+    "fight-push minutes": 974,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   },
+   "chain 90 s": {
+    "step rows": 1867,
+    "fight-push minutes": 975,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   },
+   "window 120 s from the last kill (the plan's first reading)": {
+    "step rows": 1880,
+    "fight-push minutes": 987,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   }
+  },
+  "steps": {
+   "choice": {
+    "split_date": "2026-08-09",
+    "n_fit": 570,
+    "n_check": 583,
+    "later-half log loss": {
+     "linear": 0.29454,
+     "dummies": 0.29424
+    },
+    "left form": "dummies"
+   },
+   "versions": {
+    "left + step": {
+     "coef": {
+      "intercept": 0.7809,
+      "left 0": 1.7566,
+      "left 1": 1.3326,
+      "left 2": 0.367,
+      "step 1": 0.3241,
+      "step 2+": -0.7376
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.44358
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.42202
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.42225
+     }
+    },
+    "left + step + dead": {
+     "coef": {
+      "intercept": -1.6511,
+      "left 0": 1.0127,
+      "left 1": 0.8359,
+      "left 2": 0.3805,
+      "step 1": 0.2871,
+      "step 2+": -0.6151,
+      "enemies_dead_now": 0.9583,
+      "own_dead_now": -0.5362
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.34958
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.31926
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.32139
+     }
+    },
+    "left + step + since": {
+     "coef": {
+      "intercept": 0.7794,
+      "left 0": 1.5957,
+      "left 1": 1.3716,
+      "left 2": 0.4484,
+      "step 1": 1.4545,
+      "step 2+": 1.0503,
+      "per_10s_since_last_kill": -0.9472
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.40095
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.36734
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.35123
+     }
+    },
+    "left + step + game state": {
+     "coef": {
+      "intercept": 0.1014,
+      "left 0": 1.724,
+      "left 1": 1.2801,
+      "left 2": 0.2559,
+      "step 1": 0.2444,
+      "step 2+": -0.9337,
+      "per_1k_lead": 0.0877,
+      "per_v1_logit": 0.0333,
+      "baron": 0.518,
+      "elder": 0.117
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.42861
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.41855
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.41454
+     }
+    },
+    "left + step + margin": {
+     "coef": {
+      "intercept": -0.8689,
+      "left 0": 2.021,
+      "left 1": 1.5761,
+      "left 2": 0.5064,
+      "step 1": 1.7563,
+      "step 2+": 0.6404,
+      "fight_kill_margin_step0": 0.7917
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.41381
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.4005
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.39054
+     }
+    },
+    "all": {
+     "coef": {
+      "intercept": -2.4368,
+      "left 0": 0.965,
+      "left 1": 0.8973,
+      "left 2": 0.3165,
+      "step 1": 0.9853,
+      "step 2+": 0.3418,
+      "enemies_dead_now": 0.9305,
+      "own_dead_now": -0.4693,
+      "per_10s_since_last_kill": -0.594,
+      "per_1k_lead": 0.0742,
+      "per_v1_logit": 0.0119,
+      "baron": 0.9927,
+      "elder": 0.2411,
+      "fight_kill_margin_step0": 0.0408
+     },
+     "train": {
+      "n": 1153,
+      "logloss": 0.31441
+     },
+     "test": {
+      "n": 452,
+      "logloss": 0.29092
+     },
+     "worlds": {
+      "n": 258,
+      "logloss": 0.26443
+     }
+    }
+   },
+   "form": "dummies",
+   "replay (no sim)": {
+    "train": {
+     "0": {
+      "won fights": 54,
+      "real Nexus share": 0.944,
+      "fitted chance (mean)": 0.915
+     },
+     "1": {
+      "won fights": 70,
+      "real Nexus share": 0.843,
+      "fitted chance (mean)": 0.851
+     },
+     "2": {
+      "won fights": 237,
+      "real Nexus share": 0.54,
+      "fitted chance (mean)": 0.603
+     },
+     "3": {
+      "won fights": 119,
+      "real Nexus share": 0.294,
+      "fitted chance (mean)": 0.416
+     }
+    },
+    "test": {
+     "0": {
+      "won fights": 29,
+      "real Nexus share": 0.931,
+      "fitted chance (mean)": 0.912
+     },
+     "1": {
+      "won fights": 23,
+      "real Nexus share": 0.783,
+      "fitted chance (mean)": 0.824
+     },
+     "2": {
+      "won fights": 94,
+      "real Nexus share": 0.585,
+      "fitted chance (mean)": 0.622
+     },
+     "3": {
+      "won fights": 38,
+      "real Nexus share": 0.368,
+      "fitted chance (mean)": 0.463
+     }
+    },
+    "worlds": {
+     "0": {
+      "won fights": 13,
+      "real Nexus share": 1.0,
+      "fitted chance (mean)": 0.928
+     },
+     "1": {
+      "won fights": 17,
+      "real Nexus share": 0.941,
+      "fitted chance (mean)": 0.905
+     },
+     "2": {
+      "won fights": 52,
+      "real Nexus share": 0.577,
+      "fitted chance (mean)": 0.673
+     },
+     "3": {
+      "won fights": 27,
+      "real Nexus share": 0.222,
+      "fitted chance (mean)": 0.379
+     }
+    }
+   },
+   "replay step time s (median, train)": 6.0
+  },
+  "per-minute, all rows (port check)": {
+   "coef": {
+    "intercept": -3.8093,
+    "from 25": 0.3975,
+    "from 35": 0.2354,
+    "per_1k_lead": 0.013,
+    "per_v1_logit": -0.0184,
+    "baron": 0.6356,
+    "elder": 0.845,
+    "enemy_inhibs_down": 0.4751,
+    "open_lanes": 0.8736,
+    "siege_style_sum": -0.1921,
+    "lane_just_opened": 1.3431,
+    "base_take_last_minute": -3.0893,
+    "net_kills_this_minute": 0.0419,
+    "net_kills_last_minute": 0.0105,
+    "clear_fight_win": 0.1774,
+    "left 0": -0.514,
+    "left 1": -1.2882,
+    "left 2": -0.9003,
+    "enemies_dead_max": 0.5221,
+    "own_dead_max": -0.1927,
+    "own_base_under_attack": -0.5563,
+    "left 0 x enemies_dead": -0.5858
+   },
+   "left_form": "dummies",
+   "interaction": true,
+   "clear_fight_cutoff": 2,
+   "choice later-half log loss": {
+    "linear": 0.41878,
+    "linear + interaction": 0.41545,
+    "dummies": 0.41434,
+    "dummies + interaction": 0.4113
+   },
+   "n": {
+    "train": 1636,
+    "test": 578,
+    "worlds": 390
+   }
+  },
+  "per-minute, outside fight pushes": {
+   "coef": {
+    "intercept": -4.1923,
+    "from 25": 0.3395,
+    "from 35": 0.093,
+    "per_1k_lead": -0.0044,
+    "per_v1_logit": 0.008,
+    "baron": 0.7228,
+    "elder": 1.39,
+    "enemy_inhibs_down": 0.3652,
+    "open_lanes": 1.0005,
+    "siege_style_sum": -0.0227,
+    "lane_just_opened": 1.8666,
+    "base_take_last_minute": -2.2261,
+    "net_kills_this_minute": 0.0765,
+    "net_kills_last_minute": 0.067,
+    "clear_fight_win": -0.0461,
+    "left 0": -1.0082,
+    "left 1": -1.5498,
+    "left 2": -1.1988,
+    "enemies_dead_max": 0.4113,
+    "own_dead_max": -0.1113,
+    "own_base_under_attack": -0.4242,
+    "left 0 x enemies_dead": -0.9284
+   },
+   "left_form": "dummies",
+   "interaction": true,
+   "clear_fight_cutoff": 2,
+   "choice later-half log loss": {
+    "linear": 0.41793,
+    "linear + interaction": 0.41261,
+    "dummies": 0.40841,
+    "dummies + interaction": 0.40494
+   },
+   "n": {
+    "train": 1030,
+    "test": 350,
+    "worlds": 250
+   },
+   "held-out log loss on rows outside fight pushes (refit | v2 fit on all rows)": {
+    "train": [
+     0.34354,
+     0.35777
+    ],
+    "test": [
+     0.33825,
+     0.35
+    ],
+    "worlds": [
+     0.29907,
+     0.29975
+    ]
+   },
+   "push start share outside fight pushes by structures left (train)": {
+    "0": [
+     0.023,
+     44
+    ],
+    "1": [
+     0.046,
+     65
+    ],
+    "2": [
+     0.11,
+     347
+    ],
+    "3": [
+     0.462,
+     574
+    ]
+   }
+  },
+  "fight-push team-minutes left out": 974
+ },
+ "app": {
+  "counts": {
+   "deaths matched to the file's XP": [
+    17192,
+    17665
+   ],
+   "step rows (train) by structures left now x step": {
+    "0 left": {
+     "step 0": 96,
+     "step 1": 95,
+     "step 2": 352
+    },
+    "1 left": {
+     "step 0": 110,
+     "step 1": 203,
+     "step 2": 169
+    },
+    "2 left": {
+     "step 0": 380,
+     "step 1": 231,
+     "step 2": 40
+    },
+    "3 left": {
+     "step 0": 187,
+     "step 1": 0,
+     "step 2": 0
+    }
+   },
+   "step rows by split": {
+    "train": 1863,
+    "test": 0,
+    "worlds": 0
+   },
+   "won fights (train) by structures left at the fight's start": {
+    "0": 97,
+    "1": 111,
+    "2": 383,
+    "3": 186
+   },
+   "censored (base race) won fights, all splits": 4,
+   "real Nexus share by structures left (won fights, share), chain 60 s": {
+    "0": [
+     96,
+     0.948
+    ],
+    "1": [
+     110,
+     0.845
+    ],
+    "2": [
+     383,
+     0.556
+    ],
+    "3": [
+     184,
+     0.299
+    ]
+   },
+   "chain 45 s": {
+    "step rows": 1859,
+    "fight-push minutes": 974,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   },
+   "chain 90 s": {
+    "step rows": 1867,
+    "fight-push minutes": 975,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   },
+   "window 120 s from the last kill (the plan's first reading)": {
+    "step rows": 1880,
+    "fight-push minutes": 987,
+    "real Nexus share by structures left": {
+     "0": [
+      96,
+      0.948
+     ],
+     "1": [
+      110,
+      0.845
+     ],
+     "2": [
+      383,
+      0.556
+     ],
+     "3": [
+      184,
+      0.299
+     ]
+    }
+   }
+  },
+  "steps": {
+   "choice": {
+    "split_date": "2026-08-30",
+    "n_fit": 1096,
+    "n_check": 767,
+    "later-half log loss": {
+     "linear": 0.29938,
+     "dummies": 0.29583
+    },
+    "left form": "dummies"
+   },
+   "versions": {
+    "left + step": {
+     "coef": {
+      "intercept": 0.823,
+      "left 0": 1.7784,
+      "left 1": 1.5382,
+      "left 2": 0.4463,
+      "step 1": 0.1462,
+      "step 2+": -0.8585
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.43446
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    },
+    "left + step + dead": {
+     "coef": {
+      "intercept": -1.6812,
+      "left 0": 1.024,
+      "left 1": 1.0316,
+      "left 2": 0.3881,
+      "step 1": 0.1231,
+      "step 2+": -0.8038,
+      "enemies_dead_now": 1.0066,
+      "own_dead_now": -0.5551
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.33732
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    },
+    "left + step + since": {
+     "coef": {
+      "intercept": 0.8196,
+      "left 0": 1.5288,
+      "left 1": 1.5665,
+      "left 2": 0.5296,
+      "step 1": 1.4725,
+      "step 2+": 1.2355,
+      "per_10s_since_last_kill": -1.0521
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.38453
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    },
+    "left + step + game state": {
+     "coef": {
+      "intercept": 0.2367,
+      "left 0": 1.7154,
+      "left 1": 1.4701,
+      "left 2": 0.3305,
+      "step 1": 0.0814,
+      "step 2+": -1.0016,
+      "per_1k_lead": 0.0703,
+      "per_v1_logit": -0.0053,
+      "baron": 0.5461,
+      "elder": 0.2364
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.42296
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    },
+    "left + step + margin": {
+     "coef": {
+      "intercept": -0.9112,
+      "left 0": 2.0654,
+      "left 1": 1.8079,
+      "left 2": 0.6109,
+      "step 1": 1.6515,
+      "step 2+": 0.5908,
+      "fight_kill_margin_step0": 0.8122
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.40663
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    },
+    "all": {
+     "coef": {
+      "intercept": -2.3987,
+      "left 0": 0.8601,
+      "left 1": 1.059,
+      "left 2": 0.3076,
+      "step 1": 0.9748,
+      "step 2+": 0.4043,
+      "enemies_dead_now": 0.9778,
+      "own_dead_now": -0.4945,
+      "per_10s_since_last_kill": -0.6955,
+      "per_1k_lead": 0.0714,
+      "per_v1_logit": 0.0185,
+      "baron": 0.9495,
+      "elder": 0.3152,
+      "fight_kill_margin_step0": 0.0134
+     },
+     "train": {
+      "n": 1863,
+      "logloss": 0.30079
+     },
+     "test": {
+      "n": 0,
+      "logloss": null
+     },
+     "worlds": {
+      "n": 0,
+      "logloss": null
+     }
+    }
+   },
+   "form": "dummies",
+   "replay (no sim)": {
+    "train": {
+     "0": {
+      "won fights": 96,
+      "real Nexus share": 0.948,
+      "fitted chance (mean)": 0.915
+     },
+     "1": {
+      "won fights": 110,
+      "real Nexus share": 0.845,
+      "fitted chance (mean)": 0.864
+     },
+     "2": {
+      "won fights": 383,
+      "real Nexus share": 0.556,
+      "fitted chance (mean)": 0.626
+     },
+     "3": {
+      "won fights": 184,
+      "real Nexus share": 0.299,
+      "fitted chance (mean)": 0.432
+     }
+    },
+    "test": {
+     "0": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "1": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "2": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "3": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     }
+    },
+    "worlds": {
+     "0": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "1": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "2": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     },
+     "3": {
+      "won fights": 0,
+      "real Nexus share": null,
+      "fitted chance (mean)": null
+     }
+    }
+   },
+   "replay step time s (median, train)": 6.0
+  },
+  "per-minute, all rows (port check)": {
+   "coef": {
+    "intercept": -4.4073,
+    "from 25": 0.3926,
+    "from 35": 0.1167,
+    "per_1k_lead": 0.0119,
+    "per_v1_logit": 0.0038,
+    "baron": 0.7229,
+    "elder": 1.0731,
+    "enemy_inhibs_down": 0.1213,
+    "open_lanes": 0.8268,
+    "siege_style_sum": -0.2497,
+    "lane_just_opened": 1.4827,
+    "base_take_last_minute": -3.2372,
+    "net_kills_this_minute": 0.0641,
+    "net_kills_last_minute": 0.0056,
+    "clear_fight_win": -0.3197,
+    "structures_left": 0.1787,
+    "enemies_dead_max": 0.6027,
+    "own_dead_max": -0.27,
+    "own_base_under_attack": -0.593,
+    "left 0 x enemies_dead": -0.3266
+   },
+   "left_form": "linear",
+   "interaction": true,
+   "clear_fight_cutoff": 4,
+   "choice later-half log loss": {
+    "linear": 0.39919,
+    "linear + interaction": 0.3978,
+    "dummies": 0.40138,
+    "dummies + interaction": 0.39903
+   },
+   "n": {
+    "train": 2604,
+    "test": 0,
+    "worlds": 0
+   }
+  },
+  "per-minute, outside fight pushes": {
+   "coef": {
+    "intercept": -4.3212,
+    "from 25": 0.4136,
+    "from 35": 0.1351,
+    "per_1k_lead": 0.0045,
+    "per_v1_logit": -0.0148,
+    "baron": 0.8028,
+    "elder": 1.5726,
+    "enemy_inhibs_down": 0.4533,
+    "open_lanes": 0.8965,
+    "siege_style_sum": -0.0886,
+    "lane_just_opened": 2.0584,
+    "base_take_last_minute": -2.6038,
+    "net_kills_this_minute": 0.0371,
+    "net_kills_last_minute": -0.0341,
+    "clear_fight_win": -0.4533,
+    "left 0": -0.9853,
+    "left 1": -1.6441,
+    "left 2": -1.1366,
+    "enemies_dead_max": 0.5403,
+    "own_dead_max": -0.2806,
+    "own_base_under_attack": -0.4324,
+    "left 0 x enemies_dead": -0.9614
+   },
+   "left_form": "dummies",
+   "interaction": true,
+   "clear_fight_cutoff": 4,
+   "choice later-half log loss": {
+    "linear": 0.32883,
+    "linear + interaction": 0.32883,
+    "dummies": 0.32582,
+    "dummies + interaction": 0.32532
+   },
+   "n": {
+    "train": 1630,
+    "test": 0,
+    "worlds": 0
+   },
+   "held-out log loss on rows outside fight pushes (refit | v2 fit on all rows)": {
+    "train": [
+     0.33125,
+     0.3459
+    ],
+    "test": null,
+    "worlds": null
+   },
+   "push start share outside fight pushes by structures left (train)": {
+    "0": [
+     0.016,
+     61
+    ],
+    "1": [
+     0.032,
+     94
+    ],
+    "2": [
+     0.099,
+     538
+    ],
+    "3": [
+     0.454,
+     937
+    ]
+   }
+  },
+  "fight-push team-minutes left out": 974
+ },
+ "port check": {
+  "app copy, per-minute fit on all rows v SIM_TABLES.base.coef (differences)": {
+   "intercept": 0.0,
+   "from 25": 0.0,
+   "from 35": 0.0,
+   "per_1k_lead": 0.0,
+   "per_v1_logit": 0.0,
+   "baron": 0.0,
+   "elder": 0.0,
+   "enemy_inhibs_down": 0.0,
+   "open_lanes": 0.0,
+   "siege_style_sum": 0.0,
+   "lane_just_opened": 0.0,
+   "base_take_last_minute": 0.0,
+   "net_kills_this_minute": 0.0,
+   "net_kills_last_minute": 0.0,
+   "clear_fight_win": 0.0,
+   "structures_left": 0.0,
+   "enemies_dead_max": 0.0,
+   "own_dead_max": 0.0,
+   "own_base_under_attack": 0.0,
+   "left 0 x enemies_dead": 0.0
+  },
+  "identical": true
+ },
+ "app block": {
+  "cutoff": "2026-11-10",
+  "source": "research/memory/m19_push_continue.py, gol.gg timelines before 2026-11-10",
+  "chain_s": 60,
+  "step": {
+   "coef": {
+    "intercept": -2.3987,
+    "left 0": 0.8601,
+    "left 1": 1.059,
+    "left 2": 0.3076,
+    "step 1": 0.9748,
+    "step 2+": 0.4043,
+    "enemies_dead_now": 0.9778,
+    "own_dead_now": -0.4945,
+    "per_10s_since_last_kill": -0.6955,
+    "per_1k_lead": 0.0714,
+    "per_v1_logit": 0.0185,
+    "baron": 0.9495,
+    "elder": 0.3152,
+    "fight_kill_margin_step0": 0.0134
+   },
+   "left_form": "dummies",
+   "since_unit_s": 10,
+   "margin_cap": 5
+  },
+  "minute": {
+   "coef": {
+    "intercept": -4.3212,
+    "from 25": 0.4136,
+    "from 35": 0.1351,
+    "per_1k_lead": 0.0045,
+    "per_v1_logit": -0.0148,
+    "baron": 0.8028,
+    "elder": 1.5726,
+    "enemy_inhibs_down": 0.4533,
+    "open_lanes": 0.8965,
+    "siege_style_sum": -0.0886,
+    "lane_just_opened": 2.0584,
+    "base_take_last_minute": -2.6038,
+    "net_kills_this_minute": 0.0371,
+    "net_kills_last_minute": -0.0341,
+    "clear_fight_win": -0.4533,
+    "left 0": -0.9853,
+    "left 1": -1.6441,
+    "left 2": -1.1366,
+    "enemies_dead_max": 0.5403,
+    "own_dead_max": -0.2806,
+    "own_base_under_attack": -0.4324,
+    "left 0 x enemies_dead": -0.9614
+   },
+   "left_form": "dummies",
+   "interaction": true,
+   "clear_fight_cutoff": 4
+  }
+ }
+}

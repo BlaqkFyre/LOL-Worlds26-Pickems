@@ -1,0 +1,54 @@
+{
+ "name": "memory_fight_windows",
+ "started_utc": "2026-11-27T06:25:10",
+ "script": {
+  "path": "research/memory/m20_fight_windows.py",
+  "sha256": "71e75ec774f2f74455f2e9702e19fe5deda742ed9b6c556b3d6b7531af6136b9",
+  "git_commit": "0df8bfd",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "fight_gap_s": 20
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  },
+  {
+   "path": "research/model/sim4/deathtimer.json",
+   "bytes": 1079,
+   "modified": "2026-11-13T23:52:04",
+   "sha256": "c7c59c7b2aa809ee12a7f6f79531985d0c51fc4bd2f35441fa3c162f2de5eb2e"
+  }
+ ],
+ "record": "20261127T062531Z_memory_fight_windows.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 21.6,
+ "results": {
+  "won fights": 7271,
+  "inside share": 0.383
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m20_fight_windows.json",
+   "sha256": "e7d3151c60b89edd7b91510669e60a15a55ef2e6f86efbc7ad3d759486d27fc2"
+  }
+ ],
+ "not_written_because_failed": []
+}

@@ -1,0 +1,298 @@
+{
+ "source": "research/memory/m18_app_check.js and m16_nexus_sim.js (M16_CAL {} v {base_push: 'off'}) in a locally served v55 tab, 27 Nov 2026 AEST; full output trimmed to the read tables",
+ "m18": {
+  "drafts": 72,
+  "seeds": 100,
+  "base_table_cutoff": "2026-11-10",
+  "v55": {
+   "label": "v55 (default, base_push v2)",
+   "games": 7200,
+   "blue win": 0.584,
+   "length min (10/25/50/75/90%)": [
+    28.8,
+    33.4,
+    39.5,
+    46.7,
+    54.4
+   ],
+   "45+ min": 0.301,
+   "50+ min": 0.171,
+   "capped at 70 min": 60,
+   "kills per game": 33.819,
+   "winner's first T3 tower to the Nexus s (10/25/50/75/90%)": [
+    57,
+    213,
+    493,
+    865,
+    1278
+   ],
+   "Player of the Game by role": {
+    "top": 0.18,
+    "jng": 0.291,
+    "mid": 0.288,
+    "bot": 0.199,
+    "sup": 0.041
+   }
+  },
+  "v55_off": {
+   "label": "v55 with base_push off (= v54)",
+   "games": 7200,
+   "blue win": 0.586,
+   "length min (10/25/50/75/90%)": [
+    28.7,
+    33.1,
+    39,
+    46,
+    53.5
+   ],
+   "45+ min": 0.28,
+   "50+ min": 0.151,
+   "capped at 70 min": 50,
+   "kills per game": 33.097,
+   "winner's first T3 tower to the Nexus s (10/25/50/75/90%)": [
+    69,
+    200,
+    455,
+    826,
+    1234
+   ],
+   "Player of the Game by role": {
+    "top": 0.184,
+    "jng": 0.291,
+    "mid": 0.287,
+    "bot": 0.195,
+    "sup": 0.042
+   }
+  },
+  "replay": {
+   "default": {
+    "v54": "cb7225e9",
+    "v55 off": "cb7225e9",
+    "identical": true
+   },
+   "alt": {
+    "v54": "c993b12b",
+    "v55 off": "c993b12b",
+    "identical": true
+   }
+  }
+ },
+ "m16 reading": {
+  "v55": {
+   "0 left": {
+    "won fights": 5913,
+    "push takes the Nexus": 0.302,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     6,
+     7,
+     11,
+     31,
+     47
+    ]
+   },
+   "1 left": {
+    "won fights": 2824,
+    "push takes the Nexus": 0.308,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     8,
+     11,
+     23.5,
+     38,
+     50
+    ]
+   },
+   "2 left": {
+    "won fights": 6737,
+    "push takes the Nexus": 0.286,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     13,
+     18,
+     29,
+     40,
+     50
+    ]
+   },
+   "3 left": {
+    "won fights": 8722,
+    "push takes the Nexus": 0.182,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     24,
+     29,
+     37,
+     43,
+     52
+    ]
+   },
+   "gaps s (10/25/50/75/90%), n": {
+    "T3 > inhib": [
+     [
+      3,
+      3,
+      5,
+      7,
+      13
+     ],
+     4183
+    ],
+    "inhib > nxt": [
+     [
+      5,
+      7,
+      9,
+      13,
+      21
+     ],
+     6403
+    ],
+    "nxt > nxt": [
+     [
+      1,
+      3,
+      4,
+      6,
+      12
+     ],
+     6630
+    ],
+    "nxt > nexus": [
+     [
+      2,
+      4,
+      10,
+      18,
+      30
+     ],
+     4225
+    ],
+    "inhib > nexus": [
+     [
+      2,
+      4,
+      9,
+      19.8,
+      36
+     ],
+     710
+    ],
+    "T3 > nxt": [
+     [
+      2,
+      2,
+      6,
+      13,
+      28
+     ],
+     946
+    ]
+   }
+  },
+  "v54": {
+   "0 left": {
+    "won fights": 5501,
+    "push takes the Nexus": 0.4,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     7,
+     11,
+     22,
+     35,
+     47
+    ]
+   },
+   "1 left": {
+    "won fights": 2939,
+    "push takes the Nexus": 0.34,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     8,
+     15,
+     26,
+     37,
+     49
+    ]
+   },
+   "2 left": {
+    "won fights": 6301,
+    "push takes the Nexus": 0.258,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     11,
+     19,
+     29,
+     41,
+     50
+    ]
+   },
+   "3 left": {
+    "won fights": 8042,
+    "push takes the Nexus": 0.179,
+    "Nexus from the last kill s (10/25/50/75/90%)": [
+     17,
+     26,
+     35,
+     45,
+     53
+    ]
+   },
+   "gaps s (10/25/50/75/90%), n": {
+    "T3 > inhib": [
+     [
+      3,
+      4,
+      7,
+      11,
+      17
+     ],
+     4070
+    ],
+    "inhib > nxt": [
+     [
+      3,
+      4,
+      7,
+      11,
+      17
+     ],
+     5888
+    ],
+    "nxt > nxt": [
+     [
+      3,
+      4,
+      7,
+      11,
+      16
+     ],
+     5810
+    ],
+    "nxt > nexus": [
+     [
+      7,
+      8,
+      9,
+      12,
+      23
+     ],
+     3745
+    ],
+    "inhib > nexus": [
+     [
+      7,
+      8,
+      10,
+      13,
+      33
+     ],
+     678
+    ],
+    "T3 > nxt": [
+     [
+      3,
+      4,
+      8,
+      11,
+      19.6
+     ],
+     855
+    ]
+   }
+  }
+ }
+}

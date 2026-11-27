@@ -1,0 +1,1601 @@
+{
+ "source": "research/memory/m17_base_push_state.py (27 Nov 2026 AEST)",
+ "research": {
+  "port": {
+   "refit of today's inputs": {
+    "intercept": -3.7034,
+    "from 25": 0.4259,
+    "from 35": 0.2437,
+    "per_1k_lead": 0.0074,
+    "per_v1_logit": 0.0126,
+    "baron": 0.6053,
+    "elder": 0.6856,
+    "enemy_inhibs_down": -0.0489,
+    "open_lanes": 0.8782,
+    "siege_style_sum": -0.0584,
+    "lane_just_opened": 1.4621,
+    "base_take_last_minute": -3.3441,
+    "net_kills_this_minute": 0.3795,
+    "net_kills_last_minute": 0.251,
+    "clear_fight_win": 0.6829
+   },
+   "s3_rates.py base_push_fight": {
+    "intercept": -3.7034,
+    "from 25": 0.4259,
+    "from 35": 0.2437,
+    "per_1k_lead": 0.0074,
+    "per_v1_logit": 0.0126,
+    "baron": 0.6053,
+    "elder": 0.6856,
+    "enemy_inhibs_down": -0.0489,
+    "open_lanes": 0.8782,
+    "siege_style_sum": -0.0584,
+    "lane_just_opened": 1.4621,
+    "base_take_last_minute": -3.3441,
+    "net_kills_this_minute": 0.3795,
+    "net_kills_last_minute": 0.251,
+    "clear_fight_win": 0.6829
+   }
+  },
+  "choice": {
+   "split_date": "2026-08-09",
+   "n_fit": 769,
+   "n_check": 867,
+   "later-half log loss": {
+    "linear": 0.41878,
+    "linear + interaction": 0.41545,
+    "dummies": 0.41434,
+    "dummies + interaction": 0.4113,
+    "today's inputs": 0.42717
+   },
+   "left form": "dummies",
+   "interaction kept": true
+  },
+  "versions": {
+   "today's inputs": {
+    "coef": {
+     "intercept": -3.7034,
+     "from 25": 0.4259,
+     "from 35": 0.2437,
+     "per_1k_lead": 0.0074,
+     "per_v1_logit": 0.0126,
+     "baron": 0.6053,
+     "elder": 0.6856,
+     "enemy_inhibs_down": -0.0489,
+     "open_lanes": 0.8782,
+     "siege_style_sum": -0.0584,
+     "lane_just_opened": 1.4621,
+     "base_take_last_minute": -3.3441,
+     "net_kills_this_minute": 0.3795,
+     "net_kills_last_minute": 0.251,
+     "clear_fight_win": 0.6829
+    },
+    "train": {
+     "n": 1636,
+     "logloss": 0.41251
+    },
+    "test": {
+     "n": 578,
+     "logloss": 0.42201
+    },
+    "worlds": {
+     "n": 390,
+     "logloss": 0.3845
+    }
+   },
+   "+ structures left": {
+    "coef": {
+     "intercept": -3.5948,
+     "from 25": 0.4745,
+     "from 35": 0.2712,
+     "per_1k_lead": 0.011,
+     "per_v1_logit": -0.0316,
+     "baron": 0.5793,
+     "elder": 0.7666,
+     "enemy_inhibs_down": 0.4255,
+     "open_lanes": 0.8439,
+     "siege_style_sum": -0.1304,
+     "lane_just_opened": 1.3887,
+     "base_take_last_minute": -3.11,
+     "net_kills_this_minute": 0.3727,
+     "net_kills_last_minute": 0.269,
+     "clear_fight_win": 0.6728,
+     "left 0": -1.7692,
+     "left 1": -1.0537,
+     "left 2": -0.7815
+    },
+    "train": {
+     "n": 1636,
+     "logloss": 0.40664
+    },
+    "test": {
+     "n": 578,
+     "logloss": 0.42193
+    },
+    "worlds": {
+     "n": 390,
+     "logloss": 0.38333
+    }
+   },
+   "+ dead": {
+    "coef": {
+     "intercept": -3.8825,
+     "from 25": 0.3407,
+     "from 35": 0.1748,
+     "per_1k_lead": 0.0084,
+     "per_v1_logit": 0.0327,
+     "baron": 0.6798,
+     "elder": 0.7114,
+     "enemy_inhibs_down": -0.0466,
+     "open_lanes": 0.8956,
+     "siege_style_sum": -0.0691,
+     "lane_just_opened": 1.418,
+     "base_take_last_minute": -3.4642,
+     "net_kills_this_minute": 0.0967,
+     "net_kills_last_minute": 0.0136,
+     "clear_fight_win": 0.1765,
+     "enemies_dead_max": 0.4706,
+     "own_dead_max": -0.1541
+    },
+    "train": {
+     "n": 1636,
+     "logloss": 0.40414
+    },
+    "test": {
+     "n": 578,
+     "logloss": 0.41598
+    },
+    "worlds": {
+     "n": 390,
+     "logloss": 0.37513
+    }
+   },
+   "+ base under attack": {
+    "coef": {
+     "intercept": -3.6696,
+     "from 25": 0.422,
+     "from 35": 0.2525,
+     "per_1k_lead": 0.0033,
+     "per_v1_logit": 0.0094,
+     "baron": 0.5962,
+     "elder": 0.7089,
+     "enemy_inhibs_down": -0.0477,
+     "open_lanes": 0.8789,
+     "siege_style_sum": -0.0624,
+     "lane_just_opened": 1.469,
+     "base_take_last_minute": -3.3331,
+     "net_kills_this_minute": 0.375,
+     "net_kills_last_minute": 0.2456,
+     "clear_fight_win": 0.6983,
+     "own_base_under_attack": -0.7245
+    },
+    "train": {
+     "n": 1636,
+     "logloss": 0.41176
+    },
+    "test": {
+     "n": 578,
+     "logloss": 0.42173
+    },
+    "worlds": {
+     "n": 390,
+     "logloss": 0.3838
+    }
+   },
+   "all (chosen)": {
+    "coef": {
+     "intercept": -3.8093,
+     "from 25": 0.3975,
+     "from 35": 0.2354,
+     "per_1k_lead": 0.013,
+     "per_v1_logit": -0.0184,
+     "baron": 0.6356,
+     "elder": 0.845,
+     "enemy_inhibs_down": 0.4751,
+     "open_lanes": 0.8736,
+     "siege_style_sum": -0.1921,
+     "lane_just_opened": 1.3431,
+     "base_take_last_minute": -3.0893,
+     "net_kills_this_minute": 0.0419,
+     "net_kills_last_minute": 0.0105,
+     "clear_fight_win": 0.1774,
+     "left 0": -0.514,
+     "left 1": -1.2882,
+     "left 2": -0.9003,
+     "enemies_dead_max": 0.5221,
+     "own_dead_max": -0.1927,
+     "own_base_under_attack": -0.5563,
+     "left 0 x enemies_dead": -0.5858
+    },
+    "train": {
+     "n": 1636,
+     "logloss": 0.39509
+    },
+    "test": {
+     "n": 578,
+     "logloss": 0.41288
+    },
+    "worlds": {
+     "n": 390,
+     "logloss": 0.36987
+    }
+   }
+  },
+  "descriptive": {
+   "push start share by structures left (train)": {
+    "0": [
+     0.088,
+     102
+    ],
+    "1": [
+     0.154,
+     117
+    ],
+    "2": [
+     0.258,
+     598
+    ],
+    "3": [
+     0.535,
+     819
+    ]
+   },
+   "push start share by enemies dead (train)": {
+    "0": [
+     0.146,
+     499
+    ],
+    "1": [
+     0.316,
+     282
+    ],
+    "2": [
+     0.385,
+     156
+    ],
+    "3": [
+     0.5,
+     184
+    ],
+    "4": [
+     0.592,
+     515
+    ]
+   },
+   "push start share, 0 left, by enemies dead (train)": {
+    "0": [
+     0.0,
+     10
+    ],
+    "1": [
+     0.308,
+     13
+    ],
+    "2": [
+     0.0,
+     10
+    ],
+    "3": [
+     0.118,
+     17
+    ],
+    "4": [
+     0.058,
+     52
+    ]
+   },
+   "push start share by own base under attack (train)": {
+    "0": [
+     0.385,
+     1594
+    ],
+    "1": [
+     0.143,
+     42
+    ]
+   }
+  },
+  "cutoff": 2,
+  "form": "dummies",
+  "inter": true,
+  "deaths matched to the file's XP": [
+   17192,
+   17665
+  ],
+  "games by split": {
+   "train": 395,
+   "test": 151,
+   "worlds": 94
+  }
+ },
+ "tables, training games (before 1 Sep)": {
+  "push sizes by structures left (share, n, ends in the Nexus)": {
+   "0": {
+    "sizes": [
+     1,
+     2
+    ],
+    "p": [
+     0.9,
+     0.1
+    ],
+    "n": 10,
+    "ends_in_nexus": 1.0
+   },
+   "1": {
+    "sizes": [
+     1,
+     2,
+     3
+    ],
+    "p": [
+     0.2,
+     0.55,
+     0.25
+    ],
+    "n": 20,
+    "ends_in_nexus": 0.7
+   },
+   "2": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "p": [
+     0.223,
+     0.0541,
+     0.3581,
+     0.3378,
+     0.027
+    ],
+    "n": 148,
+    "ends_in_nexus": 0.676
+   },
+   "3": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "p": [
+     0.2774,
+     0.1119,
+     0.0313,
+     0.4474,
+     0.1208,
+     0.0112
+    ],
+    "n": 447,
+    "ends_in_nexus": 0.573
+   }
+  },
+  "base gaps s (10/25/50/75/90%), n": {
+   "T3>inhib": [
+    [
+     3.0,
+     3.0,
+     5.0,
+     7.0,
+     14.0
+    ],
+    498
+   ],
+   "T3>nxt": [
+    [
+     1.0,
+     2.0,
+     7.0,
+     12.0,
+     25.8
+    ],
+    27
+   ],
+   "inhib>inhib": [
+    [
+     1.0,
+     3.0,
+     5.0,
+     11.0,
+     21.0
+    ],
+    55
+   ],
+   "inhib>nxt": [
+    [
+     5.0,
+     7.0,
+     9.0,
+     13.0,
+     19.1
+    ],
+    360
+   ],
+   "nxt>inhib": [
+    [
+     1.0,
+     2.0,
+     4.0,
+     8.0,
+     10.0
+    ],
+    32
+   ],
+   "nxt>nxt": [
+    [
+     1.0,
+     3.0,
+     4.0,
+     7.0,
+     12.0
+    ],
+    355
+   ],
+   "outer>inhib": [
+    [
+     3.0,
+     4.8,
+     8.0,
+     17.0,
+     26.5
+    ],
+    16
+   ],
+   "outer>nxt": [
+    [
+     4.9,
+     12.0,
+     37.5,
+     48.2,
+     51.4
+    ],
+    10
+   ]
+  },
+  "base gaps pooled": [
+   [
+    2.0,
+    4.0,
+    6.0,
+    9.0,
+    17.0
+   ],
+   1353
+  ],
+  "Nexus from the last kill by structures left at the fight's start s (10/25/50/75/90%), n": {
+   "0": [
+    [
+     5.0,
+     6.0,
+     7.0,
+     10.0,
+     12.0
+    ],
+    51
+   ],
+   "1": [
+    [
+     6.0,
+     8.0,
+     9.0,
+     12.0,
+     18.6
+    ],
+    59
+   ],
+   "2": [
+    [
+     7.0,
+     10.0,
+     16.5,
+     23.0,
+     31.3
+    ],
+    128
+   ],
+   "3": [
+    [
+     10.4,
+     22.0,
+     28.0,
+     36.0,
+     40.6
+    ],
+    35
+   ]
+  },
+  "won fights by structures left (lane open)": {
+   "0": 55,
+   "1": 71,
+   "2": 237,
+   "3": 120
+  }
+ },
+ "tables, all timelines": {
+  "push sizes by structures left (share, n, ends in the Nexus)": {
+   "0": {
+    "sizes": [
+     1,
+     2
+    ],
+    "p": [
+     0.875,
+     0.125
+    ],
+    "n": 16,
+    "ends_in_nexus": 1.0
+   },
+   "1": {
+    "sizes": [
+     1,
+     2,
+     3
+    ],
+    "p": [
+     0.1724,
+     0.5517,
+     0.2759
+    ],
+    "n": 29,
+    "ends_in_nexus": 0.759
+   },
+   "2": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "p": [
+     0.1958,
+     0.0458,
+     0.3792,
+     0.3333,
+     0.0458
+    ],
+    "n": 240,
+    "ends_in_nexus": 0.721
+   },
+   "3": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "p": [
+     0.292,
+     0.1102,
+     0.0275,
+     0.449,
+     0.1129,
+     0.0083
+    ],
+    "n": 726,
+    "ends_in_nexus": 0.563
+   }
+  },
+  "base gaps s (10/25/50/75/90%), n": {
+   "T3>inhib": [
+    [
+     3.0,
+     3.0,
+     5.0,
+     7.0,
+     13.0
+    ],
+    813
+   ],
+   "T3>nxt": [
+    [
+     2.0,
+     2.0,
+     6.0,
+     12.0,
+     25.0
+    ],
+    45
+   ],
+   "inhib>inhib": [
+    [
+     1.0,
+     3.0,
+     5.0,
+     10.0,
+     21.0
+    ],
+    85
+   ],
+   "inhib>nxt": [
+    [
+     5.0,
+     7.0,
+     9.0,
+     13.0,
+     21.0
+    ],
+    576
+   ],
+   "nxt>inhib": [
+    [
+     0.0,
+     2.0,
+     4.0,
+     8.0,
+     13.8
+    ],
+    43
+   ],
+   "nxt>nxt": [
+    [
+     1.0,
+     3.0,
+     4.0,
+     6.0,
+     13.0
+    ],
+    581
+   ],
+   "outer>inhib": [
+    [
+     3.2,
+     5.5,
+     8.0,
+     21.0,
+     28.0
+    ],
+    23
+   ],
+   "outer>nxt": [
+    [
+     4.6,
+     7.0,
+     30.0,
+     46.0,
+     51.0
+    ],
+    17
+   ]
+  },
+  "base gaps pooled": [
+   [
+    2.0,
+    3.0,
+    6.0,
+    9.0,
+    17.0
+   ],
+   2183
+  ],
+  "Nexus from the last kill by structures left at the fight's start s (10/25/50/75/90%), n": {
+   "0": [
+    [
+     5.0,
+     6.0,
+     7.0,
+     9.0,
+     12.0
+    ],
+    91
+   ],
+   "1": [
+    [
+     6.0,
+     8.0,
+     9.0,
+     12.0,
+     16.8
+    ],
+    93
+   ],
+   "2": [
+    [
+     6.0,
+     9.0,
+     15.0,
+     22.0,
+     30.8
+    ],
+    213
+   ],
+   "3": [
+    [
+     10.4,
+     21.0,
+     28.0,
+     36.0,
+     39.6
+    ],
+    55
+   ]
+  },
+  "won fights by structures left (lane open)": {
+   "0": 97,
+   "1": 111,
+   "2": 383,
+   "3": 186
+  }
+ },
+ "app": {
+  "port": {
+   "refit of today's inputs": {
+    "intercept": -3.6441,
+    "from 25": 0.4749,
+    "from 35": 0.1533,
+    "per_1k_lead": 0.0084,
+    "per_v1_logit": -0.0082,
+    "baron": 0.6669,
+    "elder": 0.9086,
+    "enemy_inhibs_down": -0.034,
+    "open_lanes": 0.8239,
+    "siege_style_sum": -0.2757,
+    "lane_just_opened": 1.5407,
+    "base_take_last_minute": -3.3115,
+    "net_kills_this_minute": 0.5626,
+    "net_kills_last_minute": 0.407,
+    "clear_fight_win": -0.1766
+   },
+   "s3_rates.py base_push_fight": {
+    "intercept": -3.6441,
+    "from 25": 0.4749,
+    "from 35": 0.1533,
+    "per_1k_lead": 0.0084,
+    "per_v1_logit": -0.0082,
+    "baron": 0.6669,
+    "elder": 0.9086,
+    "enemy_inhibs_down": -0.034,
+    "open_lanes": 0.8239,
+    "siege_style_sum": -0.2757,
+    "lane_just_opened": 1.5407,
+    "base_take_last_minute": -3.3115,
+    "net_kills_this_minute": 0.5626,
+    "net_kills_last_minute": 0.407,
+    "clear_fight_win": -0.1766
+   }
+  },
+  "choice": {
+   "split_date": "2026-08-30",
+   "n_fit": 1536,
+   "n_check": 1068,
+   "later-half log loss": {
+    "linear": 0.39919,
+    "linear + interaction": 0.3978,
+    "dummies": 0.40138,
+    "dummies + interaction": 0.39903,
+    "today's inputs": 0.41127
+   },
+   "left form": "linear",
+   "interaction kept": true
+  },
+  "versions": {
+   "today's inputs": {
+    "coef": {
+     "intercept": -3.6441,
+     "from 25": 0.4749,
+     "from 35": 0.1533,
+     "per_1k_lead": 0.0084,
+     "per_v1_logit": -0.0082,
+     "baron": 0.6669,
+     "elder": 0.9086,
+     "enemy_inhibs_down": -0.034,
+     "open_lanes": 0.8239,
+     "siege_style_sum": -0.2757,
+     "lane_just_opened": 1.5407,
+     "base_take_last_minute": -3.3115,
+     "net_kills_this_minute": 0.5626,
+     "net_kills_last_minute": 0.407,
+     "clear_fight_win": -0.1766
+    },
+    "train": {
+     "n": 2604,
+     "logloss": 0.41127
+    },
+    "test": {
+     "n": 0,
+     "logloss": null
+    },
+    "worlds": {
+     "n": 0,
+     "logloss": null
+    }
+   },
+   "+ structures left": {
+    "coef": {
+     "intercept": -4.6977,
+     "from 25": 0.4634,
+     "from 35": 0.1573,
+     "per_1k_lead": 0.009,
+     "per_v1_logit": -0.0256,
+     "baron": 0.6464,
+     "elder": 0.9779,
+     "enemy_inhibs_down": 0.2482,
+     "open_lanes": 0.7823,
+     "siege_style_sum": -0.2941,
+     "lane_just_opened": 1.4907,
+     "base_take_last_minute": -3.1207,
+     "net_kills_this_minute": 0.5474,
+     "net_kills_last_minute": 0.4149,
+     "clear_fight_win": -0.1335,
+     "structures_left": 0.3973
+    },
+    "train": {
+     "n": 2604,
+     "logloss": 0.40777
+    },
+    "test": {
+     "n": 0,
+     "logloss": null
+    },
+    "worlds": {
+     "n": 0,
+     "logloss": null
+    }
+   },
+   "+ dead": {
+    "coef": {
+     "intercept": -3.8977,
+     "from 25": 0.3978,
+     "from 35": 0.0842,
+     "per_1k_lead": 0.0122,
+     "per_v1_logit": 0.0042,
+     "baron": 0.7543,
+     "elder": 0.963,
+     "enemy_inhibs_down": -0.0492,
+     "open_lanes": 0.8363,
+     "siege_style_sum": -0.2121,
+     "lane_just_opened": 1.4901,
+     "base_take_last_minute": -3.432,
+     "net_kills_this_minute": 0.1148,
+     "net_kills_last_minute": 0.0086,
+     "clear_fight_win": -0.3577,
+     "enemies_dead_max": 0.5657,
+     "own_dead_max": -0.2419
+    },
+    "train": {
+     "n": 2604,
+     "logloss": 0.40029
+    },
+    "test": {
+     "n": 0,
+     "logloss": null
+    },
+    "worlds": {
+     "n": 0,
+     "logloss": null
+    }
+   },
+   "+ base under attack": {
+    "coef": {
+     "intercept": -3.6146,
+     "from 25": 0.4709,
+     "from 35": 0.1597,
+     "per_1k_lead": 0.0045,
+     "per_v1_logit": -0.0077,
+     "baron": 0.6574,
+     "elder": 0.9234,
+     "enemy_inhibs_down": -0.0353,
+     "open_lanes": 0.8289,
+     "siege_style_sum": -0.2883,
+     "lane_just_opened": 1.544,
+     "base_take_last_minute": -3.305,
+     "net_kills_this_minute": 0.5616,
+     "net_kills_last_minute": 0.407,
+     "clear_fight_win": -0.1749,
+     "own_base_under_attack": -0.6591
+    },
+    "train": {
+     "n": 2604,
+     "logloss": 0.41075
+    },
+    "test": {
+     "n": 0,
+     "logloss": null
+    },
+    "worlds": {
+     "n": 0,
+     "logloss": null
+    }
+   },
+   "all (chosen)": {
+    "coef": {
+     "intercept": -4.4073,
+     "from 25": 0.3926,
+     "from 35": 0.1167,
+     "per_1k_lead": 0.0119,
+     "per_v1_logit": 0.0038,
+     "baron": 0.7229,
+     "elder": 1.0731,
+     "enemy_inhibs_down": 0.1213,
+     "open_lanes": 0.8268,
+     "siege_style_sum": -0.2497,
+     "lane_just_opened": 1.4827,
+     "base_take_last_minute": -3.2372,
+     "net_kills_this_minute": 0.0641,
+     "net_kills_last_minute": 0.0056,
+     "clear_fight_win": -0.3197,
+     "structures_left": 0.1787,
+     "enemies_dead_max": 0.6027,
+     "own_dead_max": -0.27,
+     "own_base_under_attack": -0.593,
+     "left 0 x enemies_dead": -0.3266
+    },
+    "train": {
+     "n": 2604,
+     "logloss": 0.39491
+    },
+    "test": {
+     "n": 0,
+     "logloss": null
+    },
+    "worlds": {
+     "n": 0,
+     "logloss": null
+    }
+   }
+  },
+  "descriptive": {
+   "push start share by structures left (train)": {
+    "0": [
+     0.089,
+     157
+    ],
+    "1": [
+     0.148,
+     176
+    ],
+    "2": [
+     0.262,
+     931
+    ],
+    "3": [
+     0.532,
+     1340
+    ]
+   },
+   "push start share by enemies dead (train)": {
+    "0": [
+     0.146,
+     793
+    ],
+    "1": [
+     0.315,
+     460
+    ],
+    "2": [
+     0.376,
+     242
+    ],
+    "3": [
+     0.492,
+     295
+    ],
+    "4": [
+     0.614,
+     814
+    ]
+   },
+   "push start share, 0 left, by enemies dead (train)": {
+    "0": [
+     0.0,
+     12
+    ],
+    "1": [
+     0.263,
+     19
+    ],
+    "2": [
+     0.077,
+     13
+    ],
+    "3": [
+     0.107,
+     28
+    ],
+    "4": [
+     0.059,
+     85
+    ]
+   },
+   "push start share by own base under attack (train)": {
+    "0": [
+     0.388,
+     2542
+    ],
+    "1": [
+     0.161,
+     62
+    ]
+   }
+  },
+  "cutoff": 4,
+  "form": "linear",
+  "inter": true,
+  "deaths matched to the file's XP": [
+   17192,
+   17665
+  ],
+  "games by split": {
+   "train": 640
+  }
+ },
+ "tables, app games (before 10 Nov)": {
+  "push sizes by structures left (share, n, ends in the Nexus)": {
+   "0": {
+    "sizes": [
+     1,
+     2
+    ],
+    "p": [
+     0.875,
+     0.125
+    ],
+    "n": 16,
+    "ends_in_nexus": 1.0
+   },
+   "1": {
+    "sizes": [
+     1,
+     2,
+     3
+    ],
+    "p": [
+     0.1724,
+     0.5517,
+     0.2759
+    ],
+    "n": 29,
+    "ends_in_nexus": 0.759
+   },
+   "2": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "p": [
+     0.1958,
+     0.0458,
+     0.3792,
+     0.3333,
+     0.0458
+    ],
+    "n": 240,
+    "ends_in_nexus": 0.721
+   },
+   "3": {
+    "sizes": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "p": [
+     0.292,
+     0.1102,
+     0.0275,
+     0.449,
+     0.1129,
+     0.0083
+    ],
+    "n": 726,
+    "ends_in_nexus": 0.563
+   }
+  },
+  "base gaps s (10/25/50/75/90%), n": {
+   "T3>inhib": [
+    [
+     3.0,
+     3.0,
+     5.0,
+     7.0,
+     13.0
+    ],
+    813
+   ],
+   "T3>nxt": [
+    [
+     2.0,
+     2.0,
+     6.0,
+     12.0,
+     25.0
+    ],
+    45
+   ],
+   "inhib>inhib": [
+    [
+     1.0,
+     3.0,
+     5.0,
+     10.0,
+     21.0
+    ],
+    85
+   ],
+   "inhib>nxt": [
+    [
+     5.0,
+     7.0,
+     9.0,
+     13.0,
+     21.0
+    ],
+    576
+   ],
+   "nxt>inhib": [
+    [
+     0.0,
+     2.0,
+     4.0,
+     8.0,
+     13.8
+    ],
+    43
+   ],
+   "nxt>nxt": [
+    [
+     1.0,
+     3.0,
+     4.0,
+     6.0,
+     13.0
+    ],
+    581
+   ],
+   "outer>inhib": [
+    [
+     3.2,
+     5.5,
+     8.0,
+     21.0,
+     28.0
+    ],
+    23
+   ],
+   "outer>nxt": [
+    [
+     4.6,
+     7.0,
+     30.0,
+     46.0,
+     51.0
+    ],
+    17
+   ]
+  },
+  "base gaps pooled": [
+   [
+    2.0,
+    3.0,
+    6.0,
+    9.0,
+    17.0
+   ],
+   2183
+  ],
+  "Nexus from the last kill by structures left at the fight's start s (10/25/50/75/90%), n": {
+   "0": [
+    [
+     5.0,
+     6.0,
+     7.0,
+     9.0,
+     12.0
+    ],
+    91
+   ],
+   "1": [
+    [
+     6.0,
+     8.0,
+     9.0,
+     12.0,
+     16.8
+    ],
+    93
+   ],
+   "2": [
+    [
+     6.0,
+     9.0,
+     15.0,
+     22.0,
+     30.8
+    ],
+    213
+   ],
+   "3": [
+    [
+     10.4,
+     21.0,
+     28.0,
+     36.0,
+     39.6
+    ],
+    55
+   ]
+  },
+  "won fights by structures left (lane open)": {
+   "0": 97,
+   "1": 111,
+   "2": 383,
+   "3": 186
+  }
+ },
+ "port check": {
+  "app copy refit v js/sim-tables.js base_push_fight (differences)": {
+   "intercept": 0.0,
+   "from 25": 0.0,
+   "from 35": 0.0,
+   "per_1k_lead": 0.0,
+   "per_v1_logit": 0.0,
+   "baron": 0.0,
+   "elder": 0.0,
+   "enemy_inhibs_down": 0.0,
+   "open_lanes": 0.0,
+   "siege_style_sum": 0.0,
+   "lane_just_opened": 0.0,
+   "base_take_last_minute": 0.0,
+   "net_kills_this_minute": 0.0,
+   "net_kills_last_minute": 0.0,
+   "clear_fight_win": 0.0
+  },
+  "identical": true
+ },
+ "app block": {
+  "cutoff": "2026-11-10",
+  "source": "research/memory/m17_base_push_state.py, gol.gg timelines before 2026-11-10",
+  "coef": {
+   "intercept": -4.4073,
+   "from 25": 0.3926,
+   "from 35": 0.1167,
+   "per_1k_lead": 0.0119,
+   "per_v1_logit": 0.0038,
+   "baron": 0.7229,
+   "elder": 1.0731,
+   "enemy_inhibs_down": 0.1213,
+   "open_lanes": 0.8268,
+   "siege_style_sum": -0.2497,
+   "lane_just_opened": 1.4827,
+   "base_take_last_minute": -3.2372,
+   "net_kills_this_minute": 0.0641,
+   "net_kills_last_minute": 0.0056,
+   "clear_fight_win": -0.3197,
+   "structures_left": 0.1787,
+   "enemies_dead_max": 0.6027,
+   "own_dead_max": -0.27,
+   "own_base_under_attack": -0.593,
+   "left 0 x enemies_dead": -0.3266
+  },
+  "clear_fight_cutoff": 4,
+  "left_form": "linear",
+  "size_by_left": {
+   "2": [
+    [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     0.1958,
+     0.0458,
+     0.3792,
+     0.3333,
+     0.0458
+    ]
+   ],
+   "3": [
+    [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    [
+     0.292,
+     0.1102,
+     0.0275,
+     0.449,
+     0.1129,
+     0.0083
+    ]
+   ]
+  },
+  "gap_q": {
+   "T3>inhib": [
+    0.0,
+    2.0,
+    3.0,
+    3.0,
+    3.0,
+    3.0,
+    4.0,
+    4.0,
+    4.0,
+    4.0,
+    5.0,
+    5.0,
+    5.0,
+    6.0,
+    6.0,
+    7.0,
+    8.0,
+    10.0,
+    13.0,
+    21.0,
+    56.0
+   ],
+   "inhib>nxt": [
+    1.0,
+    4.0,
+    5.0,
+    6.0,
+    6.0,
+    7.0,
+    7.0,
+    7.0,
+    8.0,
+    8.0,
+    9.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    13.0,
+    14.0,
+    17.0,
+    21.0,
+    28.0,
+    59.0
+   ],
+   "nxt>nxt": [
+    0.0,
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    3.0,
+    3.0,
+    3.0,
+    3.0,
+    4.0,
+    4.0,
+    4.0,
+    5.0,
+    5.0,
+    6.0,
+    6.0,
+    8.0,
+    9.0,
+    13.0,
+    17.0,
+    49.0
+   ],
+   "inhib>inhib": [
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    3.0,
+    3.0,
+    4.0,
+    4.0,
+    5.0,
+    5.0,
+    6.0,
+    7.0,
+    8.8,
+    10.0,
+    12.0,
+    16.4,
+    21.0,
+    28.8,
+    52.0
+   ],
+   "outer>inhib": [
+    1.0,
+    3.0,
+    3.2,
+    4.0,
+    4.4,
+    5.5,
+    6.0,
+    6.0,
+    6.8,
+    7.9,
+    8.0,
+    11.5,
+    16.2,
+    17.0,
+    17.0,
+    21.0,
+    26.2,
+    27.7,
+    28.0,
+    30.7,
+    52.0
+   ],
+   "T3>nxt": [
+    0.0,
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    3.0,
+    3.0,
+    3.6,
+    4.8,
+    6.0,
+    7.0,
+    7.4,
+    8.0,
+    9.0,
+    12.0,
+    17.0,
+    22.0,
+    25.0,
+    34.2,
+    59.0
+   ],
+   "nxt>inhib": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    2.0,
+    2.8,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    13.8,
+    17.9,
+    21.0
+   ]
+  },
+  "gap_pooled_q": [
+   0.0,
+   2.0,
+   2.0,
+   3.0,
+   3.0,
+   3.0,
+   4.0,
+   4.0,
+   5.0,
+   5.0,
+   6.0,
+   6.0,
+   7.0,
+   7.0,
+   8.0,
+   9.0,
+   11.0,
+   13.0,
+   17.0,
+   25.0,
+   59.0
+  ],
+  "nexus_q": {
+   "0": [
+    4.0,
+    5.0,
+    5.0,
+    5.0,
+    6.0,
+    6.0,
+    6.0,
+    6.0,
+    7.0,
+    7.0,
+    7.0,
+    7.5,
+    8.0,
+    9.0,
+    9.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    14.0,
+    19.0
+   ],
+   "1": [
+    5.0,
+    6.0,
+    6.0,
+    7.0,
+    7.0,
+    8.0,
+    8.0,
+    8.0,
+    9.0,
+    9.0,
+    9.0,
+    9.6,
+    10.0,
+    10.8,
+    11.0,
+    12.0,
+    12.6,
+    14.0,
+    16.8,
+    21.0,
+    27.0
+   ],
+   "2": [
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.4,
+    9.0,
+    11.0,
+    12.0,
+    13.0,
+    14.0,
+    15.0,
+    16.6,
+    18.0,
+    18.0,
+    20.4,
+    22.0,
+    24.0,
+    26.0,
+    30.8,
+    34.0,
+    43.0
+   ],
+   "3": [
+    5.0,
+    6.7,
+    10.4,
+    16.1,
+    19.0,
+    21.0,
+    23.0,
+    25.0,
+    26.0,
+    27.3,
+    28.0,
+    30.0,
+    31.0,
+    32.1,
+    33.8,
+    36.0,
+    38.0,
+    38.0,
+    39.6,
+    41.6,
+    46.0
+   ]
+  }
+ }
+}

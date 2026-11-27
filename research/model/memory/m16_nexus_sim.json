@@ -1,0 +1,34 @@
+{
+  "source": "research/memory/m16_nexus_sim.js and in-page diagnostics (27 Nov 2026 AEST), app v54 default sim, 72 Worlds drafts x 100 large seeds; copied by hand from the tab. Real side: research/model/memory/m16_nexus_push.json (all 640 timelines unless noted)",
+  "by structures left to the Nexus at the fight's start (sim v54 | real)": {
+    "0 left": {"won fights per game": [0.764, 0.152], "push takes the Nexus": [0.40, 0.938], "Nexus from the last kill s (10/25/50/75/90%)": [[7, 11, 22, 35, 47], [5, 6, 7, 9, 12]]},
+    "1 left": {"won fights per game": [0.408, 0.173], "push takes the Nexus": [0.34, 0.838], "Nexus from the last kill s": [[8, 15, 26, 37, 49], [6, 8, 9, 12, 16.8]]},
+    "2 left": {"won fights per game": [0.875, 0.598], "push takes the Nexus": [0.258, 0.556], "Nexus from the last kill s": [[11, 19, 29, 41, 50], [6, 9, 15, 22, 30.8]]},
+    "3 left": {"won fights per game": [1.117, 0.291], "push takes the Nexus": [0.179, 0.296], "Nexus from the last kill s": [[17, 26, 35, 45, 53], [10.4, 21, 28, 36, 39.6]]}
+  },
+  "gaps between base structures s (10/25/50/75/90%; sim v54 | real)": {
+    "T3 > inhib": [[3, 4, 7, 11, 17], [3, 3, 4, 6, 8]],
+    "inhib > nexus tower": [[3, 4, 7, 11, 17], [5, 6, 7.5, 10, 13.1]],
+    "nexus tower > nexus tower": [[3, 4, 7, 11, 16], [1, 2, 3, 5, 8]],
+    "nexus tower > Nexus": [[7, 8, 9, 12, 23], [7, 8, 9, 11, 15]]
+  },
+  "traced engine copy (same results as the app on 216 of 216 checked games): minutes after a won fight with an inhibitor down and no nexus tower standing": {
+    "minutes": 10951, "no base push drawn": 7148, "base push size 1/2/3/4+": [879, 400, 1305, 1219], "took an inhibitor instead": 538,
+    "losers already back": 39, "Nexus draw later than the losers' respawn": 785, "Nexus fell": 2853,
+    "losers' last respawn from the fight's last kill s (10/25/50/75/90%)": [46, 52, 60, 63, 73], "Nexus drawn from the fight's last kill s": [7.7, 14, 30.7, 54.8, 90.6]
+  },
+  "what-ifs in the page (diagnostic only, hand-set, never for the app)": {
+    "v54": {"length min (10/25/50/75/90%)": [28.7, 33.1, 39, 46, 53.5], "45+ %": 28, "50+ %": 15.1, "kills median": 32, "blue win %": 58.6, "Nexus from the last kill s": [9, 17, 29, 41, 51]},
+    "a base push always drawn when the Nexus is exposed after a won fight": {"length min": [27.2, 31.3, 36.8, 43, 49.6], "45+ %": 19.6, "50+ %": 9.4, "kills median": 29, "blue win %": 58.6, "Nexus from the last kill s": [7, 14, 27, 39, 49]},
+    "that + the Nexus at the real 0-left time": {"length min": [27.2, 31.2, 36.8, 43, 49.5], "45+ %": 19.8, "Nexus from the last kill s": [6, 8, 21, 38, 48]},
+    "the real 0-left time only": {"length min": [28.6, 33.1, 39, 46.1, 53.4], "45+ %": 28.3, "Nexus from the last kill s": [6, 11, 27, 41, 51]}
+  },
+  "open-base phase, games that end in the Nexus (sim v54 | sim with the push always drawn | real 620 timelines), s (10/25/50/75/90%)": {
+    "winner's first T3 tower to the Nexus": [[69, 200, 455, 826, 1234], [58, 153, 320, 645, 1008], [23, 30, 68, 209, 361]],
+    "winner's first inhibitor to the Nexus": [[26, 117, 325, 697, 1092], [25, 80, 204, 504, 853], [18, 22, 36, 139, 272]],
+    "inhibitors taken by the winner": [[1, 1, 2, 3, 4], [1, 1, 1, 2, 3], [1, 1, 1, 2, 3]],
+    "towers taken by the winner": [[8, 9, 11, 13, 15], [8, 8, 10, 11, 13], [7, 8, 9, 10, 11]],
+    "loser opened a lane (share of games)": [0.233, 0.195, 0.076]
+  },
+  "real length (640 timelines)": {"min (10/25/50/75/90%)": [26.4, 28.8, 32.2, 35.9, 39.9], "45+": 0.028, "50+": 0.0, "Worlds (145 games) median": 32.7, "Worlds 45+": 0.034}
+}

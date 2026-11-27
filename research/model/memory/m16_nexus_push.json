@@ -1,0 +1,352 @@
+{
+ "training games (before 1 Sep)": {
+  "0 left": {
+   "won fights": 55,
+   "push takes the Nexus": 0.927,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    5.0,
+    6.0,
+    7.0,
+    10.0,
+    12.0
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "first structure from the last kill s": [
+    0.8,
+    6.0,
+    7.0,
+    10.0,
+    12.8
+   ],
+   "pushes with a structure": 53
+  },
+  "1 left": {
+   "won fights": 71,
+   "push takes the Nexus": 0.831,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    6.0,
+    8.0,
+    9.0,
+    12.0,
+    18.6
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.2
+   ],
+   "first structure from the last kill s": [
+    -10.8,
+    -7.0,
+    0.0,
+    3.5,
+    8.6
+   ],
+   "pushes with a structure": 63
+  },
+  "2 left": {
+   "won fights": 237,
+   "push takes the Nexus": 0.54,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    7.0,
+    10.0,
+    16.5,
+    23.0,
+    31.3
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    2.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0
+   ],
+   "first structure from the last kill s": [
+    -13.0,
+    -2.0,
+    5.0,
+    15.0,
+    26.0
+   ],
+   "pushes with a structure": 202
+  },
+  "3 left": {
+   "won fights": 120,
+   "push takes the Nexus": 0.292,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    10.4,
+    22.0,
+    28.0,
+    36.0,
+    40.6
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    3.0,
+    3.0,
+    4.0,
+    4.0,
+    5.0
+   ],
+   "first structure from the last kill s": [
+    -8.0,
+    4.0,
+    10.0,
+    17.8,
+    28.7
+   ],
+   "pushes with a structure": 94
+  },
+  "gaps s (10/25/50/75/90%), n": {
+   "T3 > inhib": [
+    [
+     3.0,
+     3.0,
+     4.0,
+     6.0,
+     8.0
+    ],
+    358
+   ],
+   "inhib > nxt": [
+    [
+     5.0,
+     6.0,
+     8.0,
+     10.0,
+     14.0
+    ],
+    244
+   ],
+   "nxt > nxt": [
+    [
+     1.0,
+     2.0,
+     4.0,
+     5.0,
+     8.0
+    ],
+    275
+   ],
+   "nxt > nexus": [
+    [
+     7.0,
+     8.0,
+     9.0,
+     12.0,
+     15.0
+    ],
+    272
+   ],
+   "inhib > nexus": [
+    [
+     5.0,
+     6.0,
+     8.0,
+     12.0,
+     16.0
+    ],
+    19
+   ],
+   "T3 > nxt": [
+    [
+     1.0,
+     2.0,
+     3.0,
+     8.0,
+     9.0
+    ],
+    21
+   ]
+  },
+  "pushes ending in the Nexus, by structures left at the fight's start (0, 1, 2, 3, lane closed)": [
+   51,
+   59,
+   128,
+   35,
+   70
+  ]
+ },
+ "all 640 timelines": {
+  "0 left": {
+   "won fights": 97,
+   "push takes the Nexus": 0.938,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    5.0,
+    6.0,
+    7.0,
+    9.0,
+    12.0
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "first structure from the last kill s": [
+    4.2,
+    5.0,
+    7.0,
+    9.0,
+    12.0
+   ],
+   "pushes with a structure": 93
+  },
+  "1 left": {
+   "won fights": 111,
+   "push takes the Nexus": 0.838,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    6.0,
+    8.0,
+    9.0,
+    12.0,
+    16.8
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0
+   ],
+   "first structure from the last kill s": [
+    -8.9,
+    -5.0,
+    0.5,
+    3.0,
+    8.9
+   ],
+   "pushes with a structure": 102
+  },
+  "2 left": {
+   "won fights": 383,
+   "push takes the Nexus": 0.556,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    6.0,
+    9.0,
+    15.0,
+    22.0,
+    30.8
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    2.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0
+   ],
+   "first structure from the last kill s": [
+    -13.0,
+    -4.0,
+    4.0,
+    15.0,
+    26.0
+   ],
+   "pushes with a structure": 330
+  },
+  "3 left": {
+   "won fights": 186,
+   "push takes the Nexus": 0.296,
+   "Nexus from the last kill s (10/25/50/75/90%)": [
+    10.4,
+    21.0,
+    28.0,
+    36.0,
+    39.6
+   ],
+   "structures before the Nexus (10/25/50/75/90%)": [
+    3.0,
+    3.0,
+    3.0,
+    4.0,
+    5.0
+   ],
+   "first structure from the last kill s": [
+    -7.0,
+    4.0,
+    11.0,
+    19.0,
+    29.6
+   ],
+   "pushes with a structure": 149
+  },
+  "gaps s (10/25/50/75/90%), n": {
+   "T3 > inhib": [
+    [
+     3.0,
+     3.0,
+     4.0,
+     6.0,
+     8.0
+    ],
+    593
+   ],
+   "inhib > nxt": [
+    [
+     5.0,
+     6.0,
+     7.5,
+     10.0,
+     13.1
+    ],
+    390
+   ],
+   "nxt > nxt": [
+    [
+     1.0,
+     2.0,
+     3.0,
+     5.0,
+     8.0
+    ],
+    456
+   ],
+   "nxt > nexus": [
+    [
+     7.0,
+     8.0,
+     9.0,
+     11.0,
+     15.0
+    ],
+    449
+   ],
+   "inhib > nexus": [
+    [
+     5.2,
+     6.0,
+     8.0,
+     13.0,
+     17.4
+    ],
+    23
+   ],
+   "T3 > nxt": [
+    [
+     1.0,
+     2.0,
+     3.0,
+     6.8,
+     9.0
+    ],
+    34
+   ]
+  },
+  "pushes ending in the Nexus, by structures left at the fight's start (0, 1, 2, 3, lane closed)": [
+   91,
+   93,
+   213,
+   55,
+   115
+  ]
+ }
+}
