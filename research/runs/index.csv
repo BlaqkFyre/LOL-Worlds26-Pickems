@@ -84,3 +84,7 @@ run,name,status,seconds,script,git_commit,uncommitted_edits,outputs
 20261127T062531Z_memory_fight_windows.json,memory_fight_windows,ok,21.6,research/memory/m20_fight_windows.py,0df8bfd,True,research/model/memory/m20_fight_windows.json
 20261127T062634Z_memory_push_continue.json,memory_push_continue,ok,1118.2,research/memory/m19_push_continue.py,0df8bfd,True,research/model/memory/m19_push_continue.json
 20261127T075352Z_memory_fight_window.json,memory_fight_window,ok,4259.2,research/memory/m21_fight_window.py,0df8bfd,True,research/model/memory/m21_fight_window.json
+20261128T023357Z_memory_window_outside.json,memory_window_outside,ok,491.1,research/memory/m23_window_outside.py,e2f5804,True,research/model/memory/m23_window_outside.json
+20261128T084832Z_memory_joint_window.json,memory_joint_window,ok,504.4,research/memory/m24_joint_window.py,e2f5804,True,research/model/memory/m24_joint_window.json
+20261128T091015Z_memory_joint_replay.json,memory_joint_replay,ok,984.4,research/memory/m25_joint_replay.py,e2f5804,True,research/model/memory/m25_joint_replay.json
+20261128T093804Z_memory_outside_tables.json,memory_outside_tables,ok,917.7,research/memory/m26_outside_tables.py,e2f5804,True,research/model/memory/m26_outside_tables.json

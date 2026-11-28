@@ -1,0 +1,267 @@
+{
+ "run": "28 Nov 2026 AEST, app tab on localhost after the v56 build (js/sim-engine.js with nxHist fix; js/sim-tables.js from m26 --write-app)",
+ "drafts": 72,
+ "seeds": 50,
+ "v56_engine": "app SIM_ENGINE",
+ "replay": {
+  "default": {
+   "v56 structure_rules off": "f86fb56",
+   "v56 both off": "cb7225e9",
+   "v54 (m22)": "cb7225e9",
+   "both off = v54": true,
+   "v55": "f86fb56",
+   "off = v55": true
+  },
+  "alt": {
+   "v56 structure_rules off": "f19b0453",
+   "v56 both off": "c993b12b",
+   "v54 (m22)": "c993b12b",
+   "both off = v54": true,
+   "v55": "f19b0453",
+   "off = v55": true
+  }
+ },
+ "v56": {
+  "label": "v56 (structure_rules v1)",
+  "games": 3600,
+  "blue win": 0.581,
+  "length min (10/25/50/75/90%)": [
+   28.2,
+   32.3,
+   37.9,
+   44.4,
+   51.6
+  ],
+  "45+ min": 0.229,
+  "50+ min": 0.13,
+  "kills per game": 31.178,
+  "per game (both sides)": {
+   "tower": 13.401,
+   "inhib": 2.705,
+   "nexus tower": 2.771
+  },
+  "Nexus inside a window (share of games)": 0.923,
+  "Nexus in an outside chain (share of games)": 0.07,
+  "outside chains per game": 1.977,
+  "takes per outside chain": 0.903,
+  "rule breaks beyond 1 s rounding (count | games with one)": {
+   "nxt_no_inhib": [
+    0,
+    0
+   ],
+   "nexus_no_inhib": [
+    0,
+    0
+   ],
+   "nexus_tower_standing": [
+    0,
+    0
+   ],
+   "inhib_already_down": [
+    0,
+    0
+   ],
+   "over_2_nxt_down": [
+    0,
+    0
+   ],
+   "inhib_before_t3": [
+    0,
+    0
+   ]
+  },
+  "rule breaks, strict whole seconds (count)": {
+   "nxt_no_inhib": 4,
+   "nexus_no_inhib": 0,
+   "nexus_tower_standing": 2,
+   "inhib_already_down": 0,
+   "over_2_nxt_down": 0,
+   "inhib_before_t3": 0
+  }
+ },
+ "v56_off": {
+  "label": "v56 with structure_rules off (= v55)",
+  "games": 3600,
+  "blue win": 0.571,
+  "length min (10/25/50/75/90%)": [
+   27.3,
+   31.6,
+   36.9,
+   43.3,
+   50.1
+  ],
+  "45+ min": 0.199,
+  "50+ min": 0.102,
+  "kills per game": 30.132,
+  "per game (both sides)": {
+   "tower": 13.033,
+   "inhib": 2.163,
+   "nexus tower": 2.625
+  },
+  "Nexus inside a window (share of games)": 0.959,
+  "Nexus in an outside chain (share of games)": 0,
+  "outside chains per game": 0,
+  "takes per outside chain": null,
+  "rule breaks beyond 1 s rounding (count | games with one)": {
+   "nxt_no_inhib": [
+    546,
+    448
+   ],
+   "nexus_no_inhib": [
+    24,
+    24
+   ],
+   "nexus_tower_standing": [
+    684,
+    684
+   ],
+   "inhib_already_down": [
+    14,
+    14
+   ],
+   "over_2_nxt_down": [
+    1,
+    1
+   ],
+   "inhib_before_t3": [
+    11,
+    11
+   ]
+  },
+  "rule breaks, strict whole seconds (count)": {
+   "nxt_no_inhib": 553,
+   "nexus_no_inhib": 28,
+   "nexus_tower_standing": 692,
+   "inhib_already_down": 18,
+   "over_2_nxt_down": 1,
+   "inhib_before_t3": 11
+  }
+ },
+ "examples": {
+  "T1 v TES game 2 (seed 3187772510790416)": {
+   "v55": {
+    "winner": "red",
+    "sec": 2148,
+    "kills": [
+     11,
+     22
+    ],
+    "base": [
+     "35:09 red nexus tower",
+     "35:22 red inhibitor BOT",
+     "35:40 red nexus tower",
+     "35:48 red Nexus"
+    ]
+   },
+   "v56": {
+    "winner": "red",
+    "sec": 3276,
+    "kills": [
+     20,
+     32
+    ],
+    "base": [
+     "37:52 blue inhibitor TOP",
+     "41:14 red inhibitor BOT",
+     "41:47 blue nexus tower",
+     "42:56 blue inhibitor TOP",
+     "48:12 red inhibitor BOT",
+     "48:25 red nexus tower",
+     "48:36 red nexus tower",
+     "50:54 red inhibitor MID",
+     "52:21 blue inhibitor MID",
+     "52:28 blue nexus tower",
+     "53:19 blue inhibitor TOP",
+     "54:19 red nexus tower",
+     "54:19 red inhibitor TOP",
+     "54:27 red nexus tower",
+     "54:36 red Nexus"
+    ]
+   }
+  },
+  "WORLDS_LIVE.games[0], seed index 0, fight_window off": {
+   "v55": {
+    "winner": "blue",
+    "sec": 2792,
+    "kills": [
+     25,
+     30
+    ],
+    "base": [
+     "20:21 blue inhibitor TOP",
+     "20:31 blue nexus tower",
+     "20:35 blue nexus tower",
+     "33:00 red inhibitor MID",
+     "38:10 red nexus tower",
+     "38:18 red nexus tower",
+     "39:49 red inhibitor BOT",
+     "42:30 blue inhibitor TOP",
+     "46:13 blue nexus tower",
+     "46:24 blue nexus tower",
+     "46:32 blue Nexus"
+    ]
+   },
+   "v56": {
+    "winner": "blue",
+    "sec": 1703,
+    "kills": [
+     20,
+     5
+    ],
+    "base": [
+     "20:21 blue inhibitor TOP",
+     "20:31 blue nexus tower",
+     "20:35 blue nexus tower",
+     "25:42 blue inhibitor TOP",
+     "25:53 blue inhibitor MID",
+     "26:01 blue nexus tower",
+     "28:11 blue nexus tower",
+     "28:23 blue Nexus"
+    ]
+   }
+  }
+ },
+ "split by part (72 drafts x 50 seeds, default cal; parts 1-2 only = SIM_TABLES.window.outside removed in page memory)": {
+  "v55 (off)": {
+   "median": 36.9,
+   "p90": 50.1,
+   "45+": 0.199,
+   "50+": 0.102,
+   "inhib": 2.16,
+   "nexus tower": 2.63,
+   "capped at 70 min": 5
+  },
+  "v56 full": {
+   "median": 37.8,
+   "p90": 51.6,
+   "45+": 0.229,
+   "50+": 0.13,
+   "inhib": 2.71,
+   "nexus tower": 2.77,
+   "capped at 70 min": 11
+  },
+  "v56 parts 1-2 only": {
+   "median": 37.5,
+   "p90": 51.6,
+   "45+": 0.236,
+   "50+": 0.127,
+   "inhib": 2.45,
+   "nexus tower": 3.1,
+   "capped at 70 min": 7
+  }
+ },
+ "real Worlds 2026 (WORLDS_LIVE.games, 72 games)": {
+  "length min (10/25/50/75/90%)": [
+   26.2,
+   28.9,
+   32.9,
+   37.5,
+   40.1
+  ],
+  "45+ min": 0.056,
+  "50+ min": 0.0,
+  "blue win": 0.569,
+  "kills per game": 26.32,
+  "inhibitors and nexus towers": "not read from WORLDS_LIVE; not checked"
+ }
+}

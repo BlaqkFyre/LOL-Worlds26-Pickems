@@ -1,0 +1,376 @@
+{
+ "source": "research/memory/m24_joint_window.py (28 Nov 2026 AEST)",
+ "deaths matched": [
+  17192,
+  17665
+ ],
+ "rows by split (window | outside)": {
+  "train": [
+   7349,
+   337
+  ],
+  "test": [
+   2605,
+   130
+  ],
+  "worlds": [
+   1562,
+   61
+  ]
+ },
+ "anchors": 305,
+ "anchors inside a window (skipped)": 2890,
+ "shift ridge chosen (stage 1, stage 2)": [
+  1,
+  100
+ ],
+ "CV log loss on outside rows by ridge: stage 1": {
+  "1": 0.67447,
+  "3": 0.67844,
+  "10": 0.68609,
+  "30": 0.68909,
+  "100": 0.6896,
+  "300": 0.69201,
+  "1000": 0.6978,
+  "10000": 0.70463
+ },
+ "stage 2": {
+  "1": 0.35433,
+  "3": 0.31531,
+  "10": 0.29381,
+  "30": 0.2846,
+  "100": 0.2814,
+  "300": 0.28147,
+  "1000": 0.28201,
+  "10000": 0.28237
+ },
+ "scores": {
+  "test": {
+   "outside steps, takes": [
+    130,
+    56
+   ],
+   "window steps, takes": [
+    2605,
+    1120
+   ],
+   "outside real take share | joint mean | window model mean": [
+    0.431,
+    0.462,
+    0.32
+   ],
+   "outside stage 1 log loss (joint | window model | base share | outside refit)": [
+    0.65876,
+    0.76166,
+    0.6962,
+    0.6578
+   ],
+   "outside stage 2 log loss (joint | window model | equal among up | outside refit)": [
+    0.21769,
+    0.24975,
+    0.3384,
+    0.19038
+   ],
+   "window stage 1 log loss (joint | window model)": [
+    0.31581,
+    0.31557
+   ],
+   "window stage 2 log loss (joint | window model)": [
+    0.15158,
+    0.15223
+   ],
+   "inhibitor up, outside: steps, real share taking it next, joint, window model (by enemies alive)": {
+    "3 enemies alive": [
+     2,
+     0.5,
+     0.625,
+     0.635
+    ],
+    "4 enemies alive": [
+     8,
+     0.5,
+     0.585,
+     0.458
+    ],
+    "5 enemies alive": [
+     66,
+     0.545,
+     0.474,
+     0.257
+    ]
+   },
+   "checks": {
+    "outside stage 1: joint beats window model": true,
+    "outside stage 1: joint beats base share": true,
+    "outside stage 2: joint beats window model": true,
+    "outside stage 2: joint beats equal": true,
+    "window stage 1: joint no worse (3 dp)": true,
+    "window stage 2: joint no worse (3 dp)": true
+   }
+  },
+  "worlds": {
+   "outside steps, takes": [
+    61,
+    27
+   ],
+   "window steps, takes": [
+    1562,
+    671
+   ],
+   "outside real take share | joint mean | window model mean": [
+    0.443,
+    0.514,
+    0.323
+   ],
+   "outside stage 1 log loss (joint | window model | base share | outside refit)": [
+    0.51186,
+    0.56937,
+    0.69571,
+    0.54156
+   ],
+   "outside stage 2 log loss (joint | window model | equal among up | outside refit)": [
+    0.3686,
+    0.44681,
+    0.38944,
+    0.35333
+   ],
+   "window stage 1 log loss (joint | window model)": [
+    0.31158,
+    0.31117
+   ],
+   "window stage 2 log loss (joint | window model)": [
+    0.14872,
+    0.14886
+   ],
+   "inhibitor up, outside: steps, real share taking it next, joint, window model (by enemies alive)": {
+    "2 enemies alive": [
+     1,
+     1.0,
+     0.655,
+     0.691
+    ],
+    "4 enemies alive": [
+     6,
+     0.333,
+     0.336,
+     0.446
+    ],
+    "5 enemies alive": [
+     27,
+     0.407,
+     0.502,
+     0.212
+    ]
+   },
+   "checks": {
+    "outside stage 1: joint beats window model": true,
+    "outside stage 1: joint beats base share": true,
+    "outside stage 2: joint beats window model": true,
+    "outside stage 2: joint beats equal": true,
+    "window stage 1: joint no worse (3 dp)": false,
+    "window stage 2: joint no worse (3 dp)": true
+   }
+  }
+ },
+ "pass": false,
+ "stage 1 coef (window terms | outside shifts)": {
+  "intercept": [
+   -5.29,
+   1.0198
+  ],
+  "own_alive": [
+   0.4755,
+   0.2714
+  ],
+  "enemy_alive": [
+   -0.5402,
+   -0.2341
+  ],
+  "per_10s_until_first_back": [
+   0.0101,
+   0.0539
+  ],
+  "per_10s_until_all_back": [
+   0.4694,
+   -0.1932
+  ],
+  "step 1": [
+   0.0438,
+   0.8779
+  ],
+  "step 2+": [
+   0.5797,
+   0.1419
+  ],
+  "per_1k_lead": [
+   0.1201,
+   -0.0888
+  ],
+  "per_v1_logit": [
+   0.02,
+   0.3717
+  ],
+  "baron_buff": [
+   0.5474,
+   0.2614
+  ],
+  "elder_buff": [
+   1.5133,
+   -0.3167
+  ],
+  "from 25": [
+   0.2005,
+   1.159
+  ],
+  "from 35": [
+   0.1439,
+   0.2342
+  ],
+  "up_dragon": [
+   2.9822,
+   -1.4295
+  ],
+  "up_elder": [
+   1.2344,
+   -0.3959
+  ],
+  "up_baron": [
+   1.5084,
+   -1.2363
+  ],
+  "up_herald": [
+   3.5752,
+   0.0
+  ],
+  "up_grub": [
+   6.1032,
+   0.0
+  ],
+  "up_inhib": [
+   2.5205,
+   -1.0286
+  ],
+  "up_nxt": [
+   1.0686,
+   -1.0358
+  ],
+  "up_nexus": [
+   0.9862,
+   -1.5695
+  ]
+ },
+ "stage 2 coef (window terms | outside shifts)": {
+  "dragon": {
+   "intercept": [
+    0.2902,
+    -0.0126
+   ],
+   "per_alive_diff": [
+    -0.404,
+    0.0035
+   ],
+   "per_10s_until_all_back": [
+    0.0745,
+    -0.0274
+   ]
+  },
+  "elder": {
+   "intercept": [
+    -1.107,
+    -0.0096
+   ],
+   "per_alive_diff": [
+    -0.2368,
+    0.0
+   ],
+   "per_10s_until_all_back": [
+    0.2717,
+    0.0055
+   ]
+  },
+  "baron": {
+   "intercept": [
+    -1.0931,
+    0.012
+   ],
+   "per_alive_diff": [
+    -0.2119,
+    0.0074
+   ],
+   "per_10s_until_all_back": [
+    -0.0094,
+    -0.0197
+   ]
+  },
+  "herald": {
+   "intercept": [
+    -0.5056,
+    0.0
+   ],
+   "per_alive_diff": [
+    -0.6277,
+    0.0
+   ],
+   "per_10s_until_all_back": [
+    0.014,
+    0.0
+   ]
+  },
+  "grub": {
+   "intercept": [
+    2.5893,
+    0.0
+   ],
+   "per_alive_diff": [
+    -0.6972,
+    0.0
+   ],
+   "per_10s_until_all_back": [
+    0.0653,
+    0.0
+   ]
+  },
+  "inhib": {
+   "intercept": [
+    0.6143,
+    0.0171
+   ],
+   "per_alive_diff": [
+    0.4172,
+    -0.0367
+   ],
+   "per_10s_until_all_back": [
+    -0.1649,
+    -0.0591
+   ]
+  },
+  "nxt": {
+   "intercept": [
+    -1.5011,
+    -0.0086
+   ],
+   "per_alive_diff": [
+    1.1033,
+    0.0203
+   ],
+   "per_10s_until_all_back": [
+    -0.1252,
+    0.0712
+   ]
+  },
+  "nexus": {
+   "intercept": [
+    0.713,
+    0.0017
+   ],
+   "per_alive_diff": [
+    0.6571,
+    0.0055
+   ],
+   "per_10s_until_all_back": [
+    -0.1261,
+    0.0294
+   ]
+  }
+ }
+}

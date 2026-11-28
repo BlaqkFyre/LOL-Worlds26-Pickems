@@ -1,0 +1,147 @@
+{
+ "name": "memory_window_outside",
+ "started_utc": "2026-11-28T02:25:46",
+ "script": {
+  "path": "research/memory/m23_window_outside.py",
+  "sha256": "eb5354264a133142d2400303c82c53e1dc28d2defbebb9e4a6cc48beb0312a64",
+  "git_commit": "e2f5804",
+  "uncommitted_edits": true
+ },
+ "params": {
+  "split": "2026-09-01",
+  "chain_s": 60,
+  "ridge": 1.0,
+  "copy": "research"
+ },
+ "inputs": [
+  {
+   "path": "research/model/sim3/tl_match.csv",
+   "bytes": 76659,
+   "modified": "2026-11-12T11:03:54",
+   "sha256": "7a104fddb4568343a71e0ef8e57237aa084e7ed3e00c7ac5a968fb7ec742d1e3"
+  },
+  {
+   "path": "research/local/sim3/tl_events.csv",
+   "bytes": 2977783,
+   "modified": "2026-11-12T11:01:46",
+   "sha256": "004117cfb7a232ce7937a15e26d2f985daa67e28843471bac1b4564993cfd2fc"
+  },
+  {
+   "path": "research/local/sim3/tl_gold.csv",
+   "bytes": 11603130,
+   "modified": "2026-11-12T11:01:47",
+   "sha256": "fbf6239e9b7314c901440f4173eb3a6e5b2f4433fd9e277875bb0dc232e41473"
+  },
+  {
+   "path": "research/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+   "bytes": 79691012,
+   "modified": "2026-11-17T13:14:28",
+   "sha256": "26d03d57b013cb903a5a48a507e3fdd4bfa765459591c6b7a7eec0f79fcc0f08"
+  },
+  {
+   "path": "research/model/sim4/deathtimer.json",
+   "bytes": 1079,
+   "modified": "2026-11-13T23:52:04",
+   "sha256": "c7c59c7b2aa809ee12a7f6f79531985d0c51fc4bd2f35441fa3c162f2de5eb2e"
+  },
+  {
+   "path": "research/sim3/s3_rates.py",
+   "bytes": 37224,
+   "modified": "2026-11-12T15:35:42",
+   "sha256": "94dca4c6dba86666a50eb5fd6e10aa7e619444e3b21254a8f118adebde473257"
+  },
+  {
+   "path": "research/model/sim2/v1_games.csv",
+   "bytes": 491255,
+   "modified": "2026-11-11T12:31:26",
+   "sha256": "635bb8bb28db2ff92d419ade178dbc3a4c7da498c2e7b4c8f7c1f8ccb2af050c"
+  },
+  {
+   "path": "research/local/sim3/out_11nov/comp3_games.csv",
+   "bytes": 222950,
+   "modified": "2026-11-11T13:55:29",
+   "sha256": "238fe347bc8e33a977c5aaa89f635de814963e899a952ec0a9494ca7e6de5946"
+  }
+ ],
+ "record": "20261128T023357Z_memory_window_outside.json",
+ "status": "ok",
+ "error": null,
+ "seconds": 491.1,
+ "results": {
+  "test": {
+   "steps": 130,
+   "takes": 56,
+   "real take share": 0.431,
+   "window model's mean take chance": 0.32,
+   "stage 1 log loss (window model | base share | refit outside)": [
+    0.76166,
+    0.6962,
+    0.6578
+   ],
+   "stage 2 log loss (window model | equal among up | refit outside)": [
+    0.24975,
+    0.3384,
+    0.19038
+   ],
+   "inhibitor up: steps, real share taking it next, window model's chance (by enemies alive)": {
+    "3 enemies alive": [
+     2,
+     0.5,
+     0.635
+    ],
+    "4 enemies alive": [
+     8,
+     0.5,
+     0.458
+    ],
+    "5 enemies alive": [
+     66,
+     0.545,
+     0.257
+    ]
+   },
+   "pass (window model beats base share, stage 1)": false
+  },
+  "worlds": {
+   "steps": 61,
+   "takes": 27,
+   "real take share": 0.443,
+   "window model's mean take chance": 0.323,
+   "stage 1 log loss (window model | base share | refit outside)": [
+    0.56937,
+    0.69571,
+    0.54156
+   ],
+   "stage 2 log loss (window model | equal among up | refit outside)": [
+    0.44681,
+    0.38944,
+    0.35333
+   ],
+   "inhibitor up: steps, real share taking it next, window model's chance (by enemies alive)": {
+    "2 enemies alive": [
+     1,
+     1.0,
+     0.691
+    ],
+    "4 enemies alive": [
+     6,
+     0.333,
+     0.446
+    ],
+    "5 enemies alive": [
+     27,
+     0.407,
+     0.212
+    ]
+   },
+   "pass (window model beats base share, stage 1)": true
+  }
+ },
+ "outputs": [
+  {
+   "path": "research/model/memory/m23_window_outside.json",
+   "sha256": "1515749163c4d10e8989042e18c33a12f47dbaae2e8654f6dfd745c5242b0fbc"
+  }
+ ],
+ "not_written_because_failed": []
+}

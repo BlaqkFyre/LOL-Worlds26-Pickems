@@ -1,0 +1,2554 @@
+{
+ "source": "research/memory/m26_outside_tables.py",
+ "model": "fixed",
+ "research": {
+  "deaths matched": [
+   17192,
+   17665
+  ],
+  "counts": {
+   "anchors": 305,
+   "anchors inside a window (skipped)": 2890,
+   "window step rows": 11516,
+   "outside step rows": 528,
+   "base team-minutes left out (windows | + outside chains)": [
+    1540,
+    1737
+   ],
+   "monster minutes left out (windows | + outside chains)": [
+    6826,
+    6848
+   ]
+  },
+  "CV log loss on outside rows by ridge": {
+   "stage 1": {
+    "0.1": 0.68325,
+    "0.3": 0.67826,
+    "1": 0.67565,
+    "3": 0.68221,
+    "10": 0.69324,
+    "30": 0.69837,
+    "100": 0.70053,
+    "300": 0.70466,
+    "1000": 0.7148,
+    "10000": 0.73706
+   },
+   "stage 2": {
+    "0.1": 0.52813,
+    "0.3": 0.43357,
+    "1": 0.35291,
+    "3": 0.3122,
+    "10": 0.28981,
+    "30": 0.28014,
+    "100": 0.27546,
+    "300": 0.27394,
+    "1000": 0.27357,
+    "10000": 0.27352
+   }
+  },
+  "window": {
+   "stage 1 coef": {
+    "intercept": -5.4275,
+    "own_alive": 0.4927,
+    "enemy_alive": -0.5356,
+    "per_10s_until_first_back": 0.0053,
+    "per_10s_until_all_back": 0.4781,
+    "step 1": 0.0354,
+    "step 2+": 0.5494,
+    "per_1k_lead": 0.1187,
+    "per_v1_logit": 0.0205,
+    "baron_buff": 0.5592,
+    "elder_buff": 1.5461,
+    "from 25": 0.1792,
+    "from 35": 0.1268,
+    "up_dragon": 3.0145,
+    "up_elder": 1.2869,
+    "up_baron": 1.5405,
+    "up_herald": 3.6009,
+    "up_grub": 6.142,
+    "up_inhib": 2.5665,
+    "up_nxt": 1.128,
+    "up_nexus": 1.0918
+   },
+   "stage 2 coef": {
+    "dragon": {
+     "intercept": 0.3049,
+     "per_alive_diff": -0.422,
+     "per_10s_until_all_back": 0.0781
+    },
+    "elder": {
+     "intercept": -0.3561,
+     "per_alive_diff": -0.2742,
+     "per_10s_until_all_back": 0.1561
+    },
+    "baron": {
+     "intercept": -1.5982,
+     "per_alive_diff": -0.2093,
+     "per_10s_until_all_back": 0.0959
+    },
+    "herald": {
+     "intercept": -0.5031,
+     "per_alive_diff": -0.6379,
+     "per_10s_until_all_back": 0.0183
+    },
+    "grub": {
+     "intercept": 2.6,
+     "per_alive_diff": -0.7113,
+     "per_10s_until_all_back": 0.068
+    },
+    "inhib": {
+     "intercept": 0.2839,
+     "per_alive_diff": 0.4578,
+     "per_10s_until_all_back": -0.1195
+    },
+    "nxt": {
+     "intercept": -1.5047,
+     "per_alive_diff": 1.1208,
+     "per_10s_until_all_back": -0.138
+    },
+    "nexus": {
+     "intercept": 0.7732,
+     "per_alive_diff": 0.6761,
+     "per_10s_until_all_back": -0.1588
+    }
+   },
+   "held-out scores": {
+    "train": {
+     "steps": 7349,
+     "takes": 3051,
+     "stage 1 log loss (fit | base share)": [
+      0.31439,
+      0.67868
+     ],
+     "stage 2 log loss (fit | equal among those up)": [
+      0.16985,
+      0.32779
+     ]
+    },
+    "test": {
+     "steps": 2605,
+     "takes": 1120,
+     "stage 1 log loss (fit | base share)": [
+      0.31557,
+      0.68374
+     ],
+     "stage 2 log loss (fit | equal among those up)": [
+      0.15223,
+      0.28851
+     ]
+    },
+    "worlds": {
+     "steps": 1562,
+     "takes": 671,
+     "stage 1 log loss (fit | base share)": [
+      0.31117,
+      0.68362
+     ],
+     "stage 2 log loss (fit | equal among those up)": [
+      0.14886,
+      0.31092
+     ]
+    }
+   },
+   "take times s (21 quantiles; option x players alive, n >= 20)": {
+    "dragon": {
+     "ahead 3+": [
+      -27.0,
+      -11.3,
+      -6.3,
+      2.0,
+      4.4,
+      7.2,
+      10.1,
+      13.0,
+      16.8,
+      18.0,
+      21.0,
+      24.4,
+      26.0,
+      28.0,
+      29.0,
+      32.0,
+      35.0,
+      42.0,
+      49.0,
+      54.0,
+      99.0
+     ],
+     "ahead 1-2": [
+      -16.0,
+      -2.1,
+      3.7,
+      9.0,
+      15.0,
+      18.0,
+      21.0,
+      23.0,
+      25.0,
+      27.0,
+      29.0,
+      31.0,
+      32.0,
+      34.0,
+      37.0,
+      40.0,
+      44.0,
+      49.5,
+      54.0,
+      60.0,
+      108.0
+     ],
+     "pooled": [
+      -33.0,
+      -6.0,
+      2.0,
+      6.0,
+      11.0,
+      15.5,
+      19.0,
+      21.5,
+      24.0,
+      26.0,
+      28.0,
+      29.0,
+      31.0,
+      33.0,
+      36.0,
+      39.0,
+      43.0,
+      49.0,
+      54.0,
+      60.0,
+      108.0
+     ]
+    },
+    "elder": {
+     "ahead 1-2": [
+      -12.0,
+      5.1,
+      7.8,
+      8.9,
+      15.4,
+      21.5,
+      23.7,
+      24.6,
+      25.6,
+      28.8,
+      32.0,
+      36.2,
+      42.4,
+      46.0,
+      46.0,
+      46.5,
+      49.0,
+      53.5,
+      56.2,
+      58.6,
+      69.0
+     ],
+     "pooled": [
+      -26.0,
+      -16.2,
+      -11.7,
+      -0.5,
+      5.2,
+      7.5,
+      8.3,
+      12.4,
+      17.4,
+      22.8,
+      23.5,
+      25.1,
+      29.0,
+      33.8,
+      39.4,
+      46.0,
+      46.0,
+      49.8,
+      55.7,
+      58.9,
+      69.0
+     ]
+    },
+    "baron": {
+     "ahead 3+": [
+      -21.0,
+      -0.1,
+      7.8,
+      19.7,
+      22.0,
+      24.0,
+      26.0,
+      28.0,
+      29.0,
+      30.0,
+      32.0,
+      32.0,
+      33.0,
+      35.0,
+      36.0,
+      37.0,
+      38.0,
+      40.2,
+      43.0,
+      46.1,
+      94.0
+     ],
+     "ahead 1-2": [
+      -23.0,
+      3.2,
+      13.8,
+      19.0,
+      22.0,
+      25.0,
+      26.0,
+      27.0,
+      29.0,
+      30.0,
+      32.0,
+      33.0,
+      34.0,
+      36.0,
+      38.0,
+      39.0,
+      41.0,
+      44.0,
+      46.0,
+      50.8,
+      85.0
+     ],
+     "pooled": [
+      -23.0,
+      2.4,
+      11.1,
+      19.0,
+      22.0,
+      24.0,
+      26.0,
+      27.0,
+      29.0,
+      30.0,
+      32.0,
+      33.0,
+      34.0,
+      35.0,
+      37.0,
+      38.0,
+      40.0,
+      42.0,
+      45.0,
+      50.0,
+      94.0
+     ]
+    },
+    "herald": {
+     "ahead 1-2": [
+      -18.0,
+      0.8,
+      5.6,
+      8.2,
+      13.0,
+      20.0,
+      25.0,
+      27.0,
+      28.0,
+      28.6,
+      30.0,
+      33.0,
+      34.0,
+      36.0,
+      37.0,
+      40.0,
+      43.0,
+      48.0,
+      54.2,
+      58.6,
+      95.0
+     ],
+     "pooled": [
+      -25.0,
+      0.0,
+      5.8,
+      9.0,
+      13.0,
+      21.8,
+      25.0,
+      27.0,
+      28.0,
+      29.0,
+      31.0,
+      33.0,
+      34.0,
+      36.0,
+      37.0,
+      40.0,
+      43.0,
+      48.7,
+      56.0,
+      60.6,
+      95.0
+     ]
+    },
+    "grub": {
+     "ahead 1-2": [
+      -13.0,
+      2.0,
+      4.0,
+      5.0,
+      7.0,
+      7.0,
+      8.5,
+      9.3,
+      10.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      20.5,
+      23.2,
+      25.0,
+      27.8,
+      38.5,
+      48.5,
+      57.0
+     ],
+     "even or behind": [
+      -27.0,
+      1.0,
+      2.0,
+      3.0,
+      3.0,
+      4.0,
+      4.8,
+      5.0,
+      6.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      8.2,
+      9.0,
+      9.8,
+      11.0,
+      12.0,
+      14.0,
+      56.0
+     ],
+     "pooled": [
+      -27.0,
+      1.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      9.0,
+      10.0,
+      11.0,
+      12.4,
+      15.0,
+      18.0,
+      20.0,
+      24.0,
+      28.4,
+      47.0,
+      57.0
+     ]
+    },
+    "inhib": {
+     "ahead 3+": [
+      -43.0,
+      -13.0,
+      -8.0,
+      -3.0,
+      3.0,
+      7.0,
+      9.0,
+      10.0,
+      13.0,
+      14.0,
+      15.0,
+      16.0,
+      18.0,
+      19.0,
+      21.0,
+      22.0,
+      24.0,
+      27.0,
+      29.0,
+      34.0,
+      122.0
+     ],
+     "ahead 1-2": [
+      -33.0,
+      -3.0,
+      1.8,
+      4.0,
+      6.0,
+      7.0,
+      10.0,
+      10.0,
+      12.2,
+      14.0,
+      16.0,
+      19.0,
+      21.0,
+      23.2,
+      25.0,
+      28.0,
+      30.4,
+      34.0,
+      41.2,
+      66.4,
+      119.0
+     ],
+     "even or behind": [
+      0.0,
+      2.3,
+      4.0,
+      5.0,
+      8.0,
+      9.0,
+      12.8,
+      17.0,
+      18.0,
+      21.1,
+      25.0,
+      29.6,
+      33.6,
+      34.9,
+      43.2,
+      50.0,
+      58.6,
+      71.0,
+      82.4,
+      91.0,
+      96.0
+     ],
+     "pooled": [
+      -43.0,
+      -11.0,
+      -3.0,
+      2.0,
+      5.0,
+      7.0,
+      9.0,
+      10.6,
+      13.0,
+      15.0,
+      16.0,
+      18.0,
+      19.0,
+      21.0,
+      23.0,
+      25.0,
+      28.0,
+      31.6,
+      37.0,
+      63.0,
+      122.0
+     ]
+    },
+    "nxt": {
+     "ahead 3+": [
+      -30.0,
+      -9.0,
+      -5.0,
+      -2.0,
+      0.0,
+      1.0,
+      2.0,
+      2.0,
+      3.0,
+      3.0,
+      4.0,
+      4.0,
+      5.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      9.0,
+      12.6,
+      27.0
+     ],
+     "ahead 1-2": [
+      -23.0,
+      -11.3,
+      -8.6,
+      -5.0,
+      1.0,
+      2.0,
+      2.0,
+      4.0,
+      5.0,
+      5.6,
+      7.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      13.0,
+      14.0,
+      16.0,
+      23.2,
+      45.0
+     ],
+     "even or behind": [
+      1.0,
+      3.2,
+      4.0,
+      4.8,
+      7.0,
+      7.5,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      12.8,
+      14.0,
+      15.5,
+      17.5,
+      20.2,
+      22.0,
+      23.0,
+      25.0,
+      28.5,
+      110.0
+     ],
+     "pooled": [
+      -30.0,
+      -10.0,
+      -5.0,
+      -2.0,
+      1.0,
+      1.0,
+      2.0,
+      3.0,
+      3.0,
+      4.0,
+      4.0,
+      5.0,
+      5.2,
+      6.0,
+      7.0,
+      8.0,
+      8.6,
+      10.0,
+      12.0,
+      16.0,
+      110.0
+     ]
+    },
+    "nexus": {
+     "ahead 3+": [
+      4.0,
+      6.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      9.0,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      11.0,
+      12.0,
+      14.0,
+      18.0
+     ],
+     "ahead 1-2": [
+      4.0,
+      5.0,
+      5.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      7.8,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      10.0,
+      10.0,
+      10.5,
+      11.0,
+      12.0,
+      14.3,
+      16.0,
+      18.5,
+      33.0
+     ],
+     "pooled": [
+      4.0,
+      5.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      12.0,
+      12.0,
+      15.0,
+      33.0
+     ]
+    },
+    "all": [
+     -43.0,
+     -7.0,
+     0.0,
+     3.0,
+     4.0,
+     5.0,
+     7.0,
+     8.0,
+     9.0,
+     10.0,
+     12.0,
+     15.0,
+     18.0,
+     22.0,
+     25.0,
+     28.0,
+     32.0,
+     36.0,
+     41.0,
+     51.0,
+     122.0
+    ]
+   },
+   "takes (train) by option x players alive": {
+    "dragon": {
+     "ahead 3+": 138,
+     "ahead 1-2": 478,
+     "even or behind": 15
+    },
+    "elder": {
+     "ahead 3+": 12,
+     "ahead 1-2": 20,
+     "even or behind": 0
+    },
+    "baron": {
+     "ahead 3+": 160,
+     "ahead 1-2": 225,
+     "even or behind": 3
+    },
+    "herald": {
+     "ahead 3+": 14,
+     "ahead 1-2": 109,
+     "even or behind": 7
+    },
+    "grub": {
+     "ahead 3+": 4,
+     "ahead 1-2": 156,
+     "even or behind": 97
+    },
+    "inhib": {
+     "ahead 3+": 281,
+     "ahead 1-2": 209,
+     "even or behind": 47
+    },
+    "nxt": {
+     "ahead 3+": 569,
+     "ahead 1-2": 138,
+     "even or behind": 26
+    },
+    "nexus": {
+     "ahead 3+": 297,
+     "ahead 1-2": 46,
+     "even or behind": 0
+    }
+   }
+  },
+  "outside": {
+   "model": "fixed",
+   "ridge (stage 1, stage 2)": [
+    1,
+    10000
+   ],
+   "stage1": {
+    "intercept": 1.0542,
+    "own_alive": 0.2571,
+    "enemy_alive": -0.2255,
+    "per_10s_until_first_back": 0.0548,
+    "per_10s_until_all_back": -0.1936,
+    "step 1": 0.8884,
+    "step 2+": 0.1658,
+    "per_1k_lead": -0.0877,
+    "per_v1_logit": 0.3705,
+    "baron_buff": 0.2551,
+    "elder_buff": -0.3409,
+    "from 25": 1.1805,
+    "from 35": 0.2473,
+    "up_dragon": -1.4546,
+    "up_elder": -0.4301,
+    "up_baron": -1.2599,
+    "up_herald": 0.0,
+    "up_grub": 0.0,
+    "up_inhib": -1.0609,
+    "up_nxt": -1.0744,
+    "up_nexus": -1.6344
+   },
+   "stage2": {
+    "dragon": {
+     "intercept": -0.0003,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": -0.0004
+    },
+    "elder": {
+     "intercept": -0.0002,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "baron": {
+     "intercept": 0.0001,
+     "per_alive_diff": 0.0001,
+     "per_10s_until_all_back": -0.0003
+    },
+    "herald": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "grub": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "inhib": {
+     "intercept": 0.0003,
+     "per_alive_diff": -0.0005,
+     "per_10s_until_all_back": -0.0011
+    },
+    "nxt": {
+     "intercept": -0.0,
+     "per_alive_diff": 0.0003,
+     "per_10s_until_all_back": 0.0013
+    },
+    "nexus": {
+     "intercept": 0.0001,
+     "per_alive_diff": 0.0001,
+     "per_10s_until_all_back": 0.0005
+    }
+   }
+  },
+  "base push, all rows (port check)": {
+   "coef": {
+    "intercept": -3.7034,
+    "from 25": 0.4259,
+    "from 35": 0.2437,
+    "per_1k_lead": 0.0074,
+    "per_v1_logit": 0.0126,
+    "baron": 0.6053,
+    "elder": 0.6856,
+    "enemy_inhibs_down": -0.0489,
+    "open_lanes": 0.8782,
+    "siege_style_sum": -0.0584,
+    "lane_just_opened": 1.4621,
+    "base_take_last_minute": -3.3441,
+    "net_kills_this_minute": 0.3795,
+    "net_kills_last_minute": 0.251,
+    "clear_fight_win": 0.6829
+   },
+   "clear_fight_cutoff": 2,
+   "n": {
+    "train": 1636,
+    "test": 578,
+    "worlds": 390
+   },
+   "log loss test": 0.42201,
+   "log loss worlds": 0.3845
+  },
+  "base push, without windows (m21)": {
+   "coef": {
+    "intercept": -3.8874,
+    "from 25": -0.3075,
+    "from 35": -0.1849,
+    "per_1k_lead": -0.0152,
+    "per_v1_logit": 0.2501,
+    "baron": 1.1712,
+    "elder": 0.3393,
+    "enemy_inhibs_down": -0.1767,
+    "open_lanes": 1.1305,
+    "siege_style_sum": -0.0664,
+    "lane_just_opened": 1.2664,
+    "base_take_last_minute": -1.8606,
+    "net_kills_this_minute": -0.0269,
+    "net_kills_last_minute": 0.2353,
+    "clear_fight_win": -0.1563
+   },
+   "clear_fight_cutoff": 2,
+   "n": {
+    "train": 660,
+    "test": 238,
+    "worlds": 166
+   },
+   "log loss test": 0.27758,
+   "log loss worlds": 0.22463
+  },
+  "base push, without windows and outside chains": {
+   "coef": {
+    "intercept": -3.3781,
+    "from 25": -1.1276,
+    "from 35": -0.055,
+    "per_1k_lead": -0.0027,
+    "per_v1_logit": 0.3354,
+    "baron": 0.8169,
+    "elder": 0.2963,
+    "enemy_inhibs_down": -0.0705,
+    "open_lanes": 1.0843,
+    "siege_style_sum": 0.0541,
+    "lane_just_opened": -0.5153,
+    "base_take_last_minute": -0.6131,
+    "net_kills_this_minute": 0.0511,
+    "net_kills_last_minute": 0.1295,
+    "clear_fight_win": 0.2469
+   },
+   "clear_fight_cutoff": 2,
+   "n": {
+    "train": 541,
+    "test": 183,
+    "worlds": 143
+   },
+   "log loss test": 0.10549,
+   "log loss worlds": 0.18593,
+   "held-out log loss on kept minutes (this refit | m21's window-only refit)": {
+    "test": [
+     0.10549,
+     0.13152
+    ],
+    "worlds": [
+     0.18593,
+     0.19331
+    ]
+   }
+  },
+  "monsters, all rows (port check)": {
+   "dragon": {
+    "coef": {
+     "intercept": 0.3086,
+     "spawn_minute": -0.1737,
+     "1_min_after": 0.4057,
+     "4+_min_after": 0.7017,
+     "per_1k_abs_lead": -0.0274,
+     "fight_this_minute": 0.0628,
+     "first_dragon": -1.4456,
+     "objectives_style_sum": -0.1667
+    },
+    "minutes_up": 6405,
+    "taken": 2901,
+    "log loss test": 0.6516,
+    "log loss worlds": 0.65612
+   },
+   "grub": {
+    "coef": {
+     "intercept": 1.6106,
+     "spawn_minute": 1.0355,
+     "1_min_after": 0.6265,
+     "4+_min_after": 0.0076,
+     "per_1k_abs_lead": -0.3534,
+     "fight_this_minute": -0.4094,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.186
+    },
+    "minutes_up": 716,
+    "taken": 640,
+    "log loss test": 0.31988,
+    "log loss worlds": 0.30812
+   },
+   "herald": {
+    "coef": {
+     "intercept": 0.2381,
+     "spawn_minute": -0.0316,
+     "1_min_after": 0.1551,
+     "4+_min_after": 0.8751,
+     "per_1k_abs_lead": 0.0491,
+     "fight_this_minute": 0.2676,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.0973
+    },
+    "minutes_up": 1021,
+    "taken": 640,
+    "log loss test": 0.64935,
+    "log loss worlds": 0.67172
+   },
+   "baron": {
+    "coef": {
+     "intercept": -2.1993,
+     "spawn_minute": -0.2457,
+     "1_min_after": -0.1989,
+     "4+_min_after": 0.4755,
+     "per_1k_abs_lead": 0.1041,
+     "fight_this_minute": 0.2986,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.102
+    },
+    "minutes_up": 5040,
+    "taken": 886,
+    "log loss test": 0.48654,
+    "log loss worlds": 0.4347
+   },
+   "elder": {
+    "coef": {
+     "intercept": -0.0927,
+     "spawn_minute": -0.7037,
+     "1_min_after": -0.0247,
+     "4+_min_after": 0.0,
+     "per_1k_abs_lead": -0.0994,
+     "fight_this_minute": 0.2415,
+     "first_dragon": 0.0,
+     "objectives_style_sum": 0.0931
+    },
+    "minutes_up": 245,
+    "taken": 73,
+    "log loss test": 0.62388,
+    "log loss worlds": 0.65389
+   }
+  },
+  "monsters, without windows and outside chains": {
+   "dragon": {
+    "coef": {
+     "intercept": -0.1753,
+     "spawn_minute": -0.1952,
+     "1_min_after": 0.4991,
+     "4+_min_after": 0.6864,
+     "per_1k_abs_lead": 0.0884,
+     "fight_this_minute": -0.2917,
+     "first_dragon": -1.1403,
+     "objectives_style_sum": -0.5113
+    },
+    "minutes_up": 3237,
+    "taken": 1267,
+    "log loss test": 0.64756,
+    "log loss worlds": 0.66296
+   },
+   "grub": {
+    "coef": {
+     "intercept": 1.5362,
+     "spawn_minute": 0.875,
+     "1_min_after": 0.4298,
+     "4+_min_after": 0.2577,
+     "per_1k_abs_lead": -0.2766,
+     "fight_this_minute": -0.6303,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1884
+    },
+    "minutes_up": 399,
+    "taken": 362,
+    "log loss test": 0.25875,
+    "log loss worlds": 0.30104
+   },
+   "herald": {
+    "coef": {
+     "intercept": -0.0102,
+     "spawn_minute": 0.0275,
+     "1_min_after": 0.4122,
+     "4+_min_after": 0.5024,
+     "per_1k_abs_lead": 0.0777,
+     "fight_this_minute": 0.0803,
+     "first_dragon": 0.0,
+     "objectives_style_sum": 0.0004
+    },
+    "minutes_up": 515,
+    "taken": 304,
+    "log loss test": 0.65921,
+    "log loss worlds": 0.69175
+   },
+   "baron": {
+    "coef": {
+     "intercept": -3.5042,
+     "spawn_minute": 0.3652,
+     "1_min_after": -0.1637,
+     "4+_min_after": -0.072,
+     "per_1k_abs_lead": 0.1338,
+     "fight_this_minute": 0.5579,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.3678
+    },
+    "minutes_up": 2375,
+    "taken": 132,
+    "log loss test": 0.25121,
+    "log loss worlds": 0.2256
+   }
+  }
+ },
+ "app": {
+  "deaths matched": [
+   17192,
+   17665
+  ],
+  "counts": {
+   "anchors": 305,
+   "anchors inside a window (skipped)": 2890,
+   "window step rows": 11516,
+   "outside step rows": 528,
+   "base team-minutes left out (windows | + outside chains)": [
+    1540,
+    1737
+   ],
+   "monster minutes left out (windows | + outside chains)": [
+    6826,
+    6848
+   ]
+  },
+  "CV log loss on outside rows by ridge": {
+   "stage 1": {
+    "0.1": 0.60064,
+    "0.3": 0.60046,
+    "1": 0.60222,
+    "3": 0.60858,
+    "10": 0.62352,
+    "30": 0.6408,
+    "100": 0.65817,
+    "300": 0.67148,
+    "1000": 0.68732,
+    "10000": 0.71645
+   },
+   "stage 2": {
+    "0.1": 1.30105,
+    "0.3": 0.29364,
+    "1": 0.27574,
+    "3": 0.26819,
+    "10": 0.26573,
+    "30": 0.26773,
+    "100": 0.27376,
+    "300": 0.27948,
+    "1000": 0.28313,
+    "10000": 0.28502
+   }
+  },
+  "window": {
+   "stage 1 coef": {
+    "intercept": -5.4885,
+    "own_alive": 0.5102,
+    "enemy_alive": -0.561,
+    "per_10s_until_first_back": 0.0062,
+    "per_10s_until_all_back": 0.4905,
+    "step 1": -0.0495,
+    "step 2+": 0.4609,
+    "per_1k_lead": 0.1087,
+    "per_v1_logit": 0.0177,
+    "baron_buff": 0.6015,
+    "elder_buff": 1.6322,
+    "from 25": 0.214,
+    "from 35": -0.0055,
+    "up_dragon": 3.0023,
+    "up_elder": 1.3144,
+    "up_baron": 1.6051,
+    "up_herald": 3.5819,
+    "up_grub": 6.4177,
+    "up_inhib": 2.73,
+    "up_nxt": 1.3016,
+    "up_nexus": 1.2195
+   },
+   "stage 2 coef": {
+    "dragon": {
+     "intercept": 0.038,
+     "per_alive_diff": -0.5059,
+     "per_10s_until_all_back": 0.1859
+    },
+    "elder": {
+     "intercept": -0.0394,
+     "per_alive_diff": -0.2895,
+     "per_10s_until_all_back": 0.1534
+    },
+    "baron": {
+     "intercept": -1.2652,
+     "per_alive_diff": -0.3119,
+     "per_10s_until_all_back": 0.0618
+    },
+    "herald": {
+     "intercept": -0.3818,
+     "per_alive_diff": -0.3907,
+     "per_10s_until_all_back": -0.0629
+    },
+    "grub": {
+     "intercept": 2.7842,
+     "per_alive_diff": -0.6685,
+     "per_10s_until_all_back": -0.1073
+    },
+    "inhib": {
+     "intercept": 0.2039,
+     "per_alive_diff": 0.4295,
+     "per_10s_until_all_back": -0.096
+    },
+    "nxt": {
+     "intercept": -1.8526,
+     "per_alive_diff": 1.0675,
+     "per_10s_until_all_back": -0.0709
+    },
+    "nexus": {
+     "intercept": 0.5128,
+     "per_alive_diff": 0.6695,
+     "per_10s_until_all_back": -0.064
+    }
+   },
+   "held-out scores": {
+    "train": {
+     "steps": 11516,
+     "takes": 4842,
+     "stage 1 log loss (fit | base share)": [
+      0.31344,
+      0.68044
+     ],
+     "stage 2 log loss (fit | equal among those up)": [
+      0.16174,
+      0.31636
+     ]
+    },
+    "test": null,
+    "worlds": null
+   },
+   "take times s (21 quantiles; option x players alive, n >= 20)": {
+    "dragon": {
+     "ahead 3+": [
+      -31.0,
+      -13.9,
+      -8.8,
+      -2.0,
+      3.0,
+      7.0,
+      9.0,
+      11.0,
+      13.8,
+      17.0,
+      21.0,
+      24.0,
+      25.0,
+      28.0,
+      29.4,
+      32.0,
+      36.2,
+      42.7,
+      48.0,
+      53.9,
+      99.0
+     ],
+     "ahead 1-2": [
+      -26.0,
+      -2.1,
+      4.0,
+      9.0,
+      14.0,
+      18.0,
+      21.0,
+      23.0,
+      25.0,
+      27.0,
+      28.0,
+      30.0,
+      31.0,
+      33.0,
+      36.0,
+      39.0,
+      43.0,
+      49.0,
+      54.0,
+      61.1,
+      126.0
+     ],
+     "even or behind": [
+      -33.0,
+      3.0,
+      17.0,
+      24.9,
+      26.0,
+      26.0,
+      27.8,
+      30.1,
+      31.8,
+      37.1,
+      44.0,
+      47.6,
+      49.6,
+      50.0,
+      55.2,
+      58.8,
+      68.0,
+      75.7,
+      81.9,
+      98.5,
+      117.0
+     ],
+     "pooled": [
+      -33.0,
+      -7.8,
+      2.0,
+      6.0,
+      10.0,
+      15.0,
+      18.0,
+      21.0,
+      23.0,
+      25.0,
+      27.0,
+      29.0,
+      31.0,
+      32.0,
+      35.0,
+      39.0,
+      43.0,
+      48.0,
+      53.0,
+      61.0,
+      126.0
+     ]
+    },
+    "elder": {
+     "ahead 3+": [
+      -26.0,
+      -19.0,
+      -14.0,
+      -13.0,
+      -9.0,
+      -7.0,
+      -2.0,
+      3.0,
+      3.0,
+      4.0,
+      5.0,
+      8.0,
+      13.0,
+      15.0,
+      18.0,
+      22.0,
+      23.0,
+      38.0,
+      49.0,
+      57.0,
+      60.0
+     ],
+     "ahead 1-2": [
+      -12.0,
+      -1.8,
+      6.8,
+      8.0,
+      8.8,
+      11.5,
+      17.2,
+      18.0,
+      20.4,
+      23.0,
+      24.0,
+      25.7,
+      28.6,
+      33.6,
+      39.8,
+      46.0,
+      46.2,
+      47.9,
+      53.0,
+      56.6,
+      69.0
+     ],
+     "pooled": [
+      -26.0,
+      -13.2,
+      -8.0,
+      -1.5,
+      3.0,
+      5.8,
+      8.0,
+      9.3,
+      13.0,
+      17.8,
+      18.0,
+      22.3,
+      23.0,
+      25.8,
+      32.0,
+      39.2,
+      46.0,
+      47.8,
+      53.0,
+      57.3,
+      69.0
+     ]
+    },
+    "baron": {
+     "ahead 3+": [
+      -21.0,
+      0.0,
+      14.0,
+      20.0,
+      23.0,
+      24.0,
+      26.0,
+      28.0,
+      29.0,
+      31.0,
+      32.0,
+      33.0,
+      34.0,
+      35.0,
+      36.0,
+      37.0,
+      39.0,
+      41.0,
+      44.0,
+      49.0,
+      94.0
+     ],
+     "ahead 1-2": [
+      -45.0,
+      3.7,
+      15.3,
+      20.0,
+      23.6,
+      25.0,
+      26.0,
+      28.0,
+      30.0,
+      31.0,
+      32.0,
+      34.0,
+      35.0,
+      36.0,
+      38.0,
+      39.0,
+      41.0,
+      43.1,
+      46.0,
+      51.0,
+      85.0
+     ],
+     "pooled": [
+      -45.0,
+      3.0,
+      15.0,
+      20.0,
+      23.0,
+      25.0,
+      26.0,
+      28.0,
+      29.0,
+      31.0,
+      32.0,
+      33.0,
+      34.0,
+      36.0,
+      37.0,
+      38.0,
+      40.0,
+      42.0,
+      45.0,
+      50.0,
+      94.0
+     ]
+    },
+    "herald": {
+     "ahead 3+": [
+      -25.0,
+      -3.2,
+      4.3,
+      14.7,
+      19.8,
+      23.2,
+      24.9,
+      25.1,
+      26.0,
+      26.7,
+      29.0,
+      30.6,
+      31.8,
+      32.0,
+      34.5,
+      41.5,
+      54.2,
+      65.3,
+      71.5,
+      78.1,
+      82.0
+     ],
+     "ahead 1-2": [
+      -18.0,
+      2.1,
+      7.0,
+      10.0,
+      17.0,
+      22.0,
+      25.0,
+      26.4,
+      28.0,
+      29.0,
+      30.0,
+      33.0,
+      34.0,
+      36.0,
+      38.0,
+      40.0,
+      43.0,
+      48.9,
+      54.9,
+      60.0,
+      104.0
+     ],
+     "pooled": [
+      -25.0,
+      0.0,
+      6.3,
+      10.0,
+      17.0,
+      22.0,
+      25.0,
+      26.0,
+      28.0,
+      29.0,
+      30.5,
+      33.0,
+      34.0,
+      36.0,
+      38.0,
+      40.0,
+      44.4,
+      49.1,
+      55.7,
+      62.0,
+      104.0
+     ]
+    },
+    "grub": {
+     "ahead 1-2": [
+      -13.0,
+      2.0,
+      3.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      13.0,
+      15.0,
+      18.0,
+      20.0,
+      22.0,
+      24.0,
+      26.0,
+      29.7,
+      40.0,
+      49.8,
+      59.0
+     ],
+     "even or behind": [
+      -27.0,
+      1.0,
+      2.9,
+      3.0,
+      3.8,
+      4.0,
+      5.0,
+      5.0,
+      6.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0,
+      15.2,
+      56.0
+     ],
+     "pooled": [
+      -27.0,
+      2.0,
+      3.0,
+      4.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      13.0,
+      15.0,
+      18.0,
+      21.6,
+      25.0,
+      30.3,
+      47.0,
+      59.0
+     ]
+    },
+    "inhib": {
+     "ahead 3+": [
+      -43.0,
+      -12.2,
+      -7.0,
+      0.3,
+      3.0,
+      6.8,
+      8.0,
+      10.0,
+      13.0,
+      14.0,
+      16.0,
+      18.0,
+      19.0,
+      20.0,
+      21.5,
+      23.0,
+      25.0,
+      27.0,
+      30.0,
+      34.0,
+      122.0
+     ],
+     "ahead 1-2": [
+      -33.0,
+      -1.3,
+      2.0,
+      5.0,
+      7.0,
+      9.0,
+      10.0,
+      12.0,
+      14.0,
+      15.0,
+      17.0,
+      20.0,
+      22.0,
+      25.0,
+      27.0,
+      30.0,
+      33.0,
+      37.0,
+      46.0,
+      75.0,
+      119.0
+     ],
+     "even or behind": [
+      0.0,
+      1.5,
+      3.0,
+      4.4,
+      6.8,
+      8.5,
+      13.0,
+      17.2,
+      19.0,
+      22.1,
+      28.5,
+      32.9,
+      35.8,
+      41.9,
+      50.0,
+      55.2,
+      59.2,
+      68.9,
+      82.1,
+      89.9,
+      96.0
+     ],
+     "pooled": [
+      -43.0,
+      -9.0,
+      0.0,
+      3.0,
+      5.0,
+      7.0,
+      10.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      20.0,
+      22.0,
+      24.0,
+      26.0,
+      29.0,
+      33.0,
+      39.0,
+      64.0,
+      122.0
+     ]
+    },
+    "nxt": {
+     "ahead 3+": [
+      -30.0,
+      -9.0,
+      -5.0,
+      -2.0,
+      0.0,
+      1.0,
+      2.0,
+      2.0,
+      3.0,
+      3.0,
+      4.0,
+      4.0,
+      5.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      9.0,
+      13.0,
+      29.0
+     ],
+     "ahead 1-2": [
+      -23.0,
+      -13.0,
+      -8.6,
+      -4.0,
+      0.0,
+      2.0,
+      2.0,
+      3.5,
+      5.0,
+      5.0,
+      6.5,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.2,
+      13.0,
+      14.0,
+      16.0,
+      23.7,
+      45.0
+     ],
+     "even or behind": [
+      1.0,
+      4.0,
+      4.3,
+      7.0,
+      7.0,
+      8.8,
+      9.0,
+      9.1,
+      10.0,
+      10.7,
+      13.5,
+      14.7,
+      17.0,
+      18.0,
+      18.1,
+      21.0,
+      22.0,
+      23.0,
+      27.7,
+      29.9,
+      110.0
+     ],
+     "pooled": [
+      -30.0,
+      -10.0,
+      -5.0,
+      -2.0,
+      1.0,
+      1.0,
+      2.0,
+      3.0,
+      3.0,
+      3.0,
+      4.0,
+      5.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      8.0,
+      10.0,
+      12.0,
+      17.0,
+      110.0
+     ]
+    },
+    "nexus": {
+     "ahead 3+": [
+      4.0,
+      5.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      12.0,
+      13.0,
+      19.0
+     ],
+     "ahead 1-2": [
+      4.0,
+      5.0,
+      5.0,
+      5.0,
+      6.0,
+      7.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      12.0,
+      13.0,
+      15.0,
+      17.3,
+      33.0
+     ],
+     "pooled": [
+      4.0,
+      5.0,
+      6.0,
+      6.0,
+      7.0,
+      7.0,
+      7.0,
+      7.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      9.0,
+      9.0,
+      9.0,
+      10.0,
+      10.0,
+      11.0,
+      12.0,
+      14.0,
+      33.0
+     ]
+    },
+    "all": [
+     -45.0,
+     -7.0,
+     1.0,
+     2.0,
+     4.0,
+     5.0,
+     6.0,
+     7.0,
+     8.0,
+     10.0,
+     12.0,
+     15.0,
+     18.0,
+     22.0,
+     25.0,
+     28.0,
+     32.0,
+     35.0,
+     41.0,
+     51.0,
+     126.0
+    ]
+   },
+   "takes (train) by option x players alive": {
+    "dragon": {
+     "ahead 3+": 223,
+     "ahead 1-2": 719,
+     "even or behind": 24
+    },
+    "elder": {
+     "ahead 3+": 21,
+     "ahead 1-2": 35,
+     "even or behind": 0
+    },
+    "baron": {
+     "ahead 3+": 273,
+     "ahead 1-2": 354,
+     "even or behind": 6
+    },
+    "herald": {
+     "ahead 3+": 24,
+     "ahead 1-2": 162,
+     "even or behind": 8
+    },
+    "grub": {
+     "ahead 3+": 5,
+     "ahead 1-2": 223,
+     "even or behind": 140
+    },
+    "inhib": {
+     "ahead 3+": 456,
+     "ahead 1-2": 335,
+     "even or behind": 70
+    },
+    "nxt": {
+     "ahead 3+": 925,
+     "ahead 1-2": 228,
+     "even or behind": 44
+    },
+    "nexus": {
+     "ahead 3+": 491,
+     "ahead 1-2": 75,
+     "even or behind": 1
+    }
+   }
+  },
+  "outside": {
+   "model": "fixed",
+   "ridge (stage 1, stage 2)": [
+    0.3,
+    10
+   ],
+   "stage1": {
+    "intercept": 1.6827,
+    "own_alive": 0.2937,
+    "enemy_alive": -0.2424,
+    "per_10s_until_first_back": -0.0275,
+    "per_10s_until_all_back": -0.1782,
+    "step 1": 1.183,
+    "step 2+": 0.4997,
+    "per_1k_lead": -0.067,
+    "per_v1_logit": 0.2159,
+    "baron_buff": 0.2129,
+    "elder_buff": -0.3023,
+    "from 25": 0.2495,
+    "from 35": 0.1816,
+    "up_dragon": -1.9963,
+    "up_elder": -0.3996,
+    "up_baron": -1.4196,
+    "up_herald": 0.0,
+    "up_grub": 0.0,
+    "up_inhib": -1.1917,
+    "up_nxt": -1.3281,
+    "up_nexus": -1.6397
+   },
+   "stage2": {
+    "dragon": {
+     "intercept": -0.0808,
+     "per_alive_diff": 0.0458,
+     "per_10s_until_all_back": -0.103
+    },
+    "elder": {
+     "intercept": -0.3512,
+     "per_alive_diff": -0.0135,
+     "per_10s_until_all_back": -0.2356
+    },
+    "baron": {
+     "intercept": 0.2743,
+     "per_alive_diff": 0.0824,
+     "per_10s_until_all_back": -0.0701
+    },
+    "herald": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "grub": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "inhib": {
+     "intercept": 0.2893,
+     "per_alive_diff": -0.2297,
+     "per_10s_until_all_back": -0.0327
+    },
+    "nxt": {
+     "intercept": -0.0699,
+     "per_alive_diff": 0.1234,
+     "per_10s_until_all_back": 0.2639
+    },
+    "nexus": {
+     "intercept": -0.0618,
+     "per_alive_diff": -0.0085,
+     "per_10s_until_all_back": 0.1775
+    }
+   }
+  },
+  "base push, all rows (port check)": {
+   "coef": {
+    "intercept": -3.6441,
+    "from 25": 0.4749,
+    "from 35": 0.1533,
+    "per_1k_lead": 0.0084,
+    "per_v1_logit": -0.0082,
+    "baron": 0.6669,
+    "elder": 0.9086,
+    "enemy_inhibs_down": -0.034,
+    "open_lanes": 0.8239,
+    "siege_style_sum": -0.2757,
+    "lane_just_opened": 1.5407,
+    "base_take_last_minute": -3.3115,
+    "net_kills_this_minute": 0.5626,
+    "net_kills_last_minute": 0.407,
+    "clear_fight_win": -0.1766
+   },
+   "clear_fight_cutoff": 4,
+   "n": {
+    "train": 2604,
+    "test": 0,
+    "worlds": 0
+   },
+   "log loss test": null,
+   "log loss worlds": null
+  },
+  "base push, without windows (m21)": {
+   "coef": {
+    "intercept": -3.9108,
+    "from 25": -0.4567,
+    "from 35": -0.1881,
+    "per_1k_lead": -0.0133,
+    "per_v1_logit": 0.2297,
+    "baron": 1.1544,
+    "elder": 0.522,
+    "enemy_inhibs_down": -0.0833,
+    "open_lanes": 1.0813,
+    "siege_style_sum": 0.1084,
+    "lane_just_opened": 1.4129,
+    "base_take_last_minute": -2.1454,
+    "net_kills_this_minute": -0.0123,
+    "net_kills_last_minute": 0.0994,
+    "clear_fight_win": -0.5515
+   },
+   "clear_fight_cutoff": 4,
+   "n": {
+    "train": 1064,
+    "test": 0,
+    "worlds": 0
+   },
+   "log loss test": null,
+   "log loss worlds": null
+  },
+  "base push, without windows and outside chains": {
+   "coef": {
+    "intercept": -3.8961,
+    "from 25": -1.047,
+    "from 35": 0.2701,
+    "per_1k_lead": 0.0139,
+    "per_v1_logit": 0.5404,
+    "baron": 0.8248,
+    "elder": 0.1201,
+    "enemy_inhibs_down": 0.0724,
+    "open_lanes": 1.0135,
+    "siege_style_sum": 0.3867,
+    "lane_just_opened": -0.1445,
+    "base_take_last_minute": -1.2146,
+    "net_kills_this_minute": -0.153,
+    "net_kills_last_minute": 0.0613,
+    "clear_fight_win": -0.2867
+   },
+   "clear_fight_cutoff": 4,
+   "n": {
+    "train": 867,
+    "test": 0,
+    "worlds": 0
+   },
+   "log loss test": null,
+   "log loss worlds": null,
+   "held-out log loss on kept minutes (this refit | m21's window-only refit)": {
+    "test": null,
+    "worlds": null
+   }
+  },
+  "monsters, all rows (port check)": {
+   "dragon": {
+    "coef": {
+     "intercept": 0.5335,
+     "spawn_minute": -0.2946,
+     "1_min_after": 0.3931,
+     "4+_min_after": 0.584,
+     "per_1k_abs_lead": -0.0457,
+     "fight_this_minute": 0.0453,
+     "first_dragon": -1.5601,
+     "objectives_style_sum": -0.1272
+    },
+    "minutes_up": 6405,
+    "taken": 2901,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "grub": {
+    "coef": {
+     "intercept": 1.6673,
+     "spawn_minute": 1.0195,
+     "1_min_after": 0.8286,
+     "4+_min_after": -0.0723,
+     "per_1k_abs_lead": -0.2891,
+     "fight_this_minute": -0.6056,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.2303
+    },
+    "minutes_up": 716,
+    "taken": 640,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "herald": {
+    "coef": {
+     "intercept": 0.45,
+     "spawn_minute": -0.1281,
+     "1_min_after": 0.0948,
+     "4+_min_after": 0.9972,
+     "per_1k_abs_lead": 0.0363,
+     "fight_this_minute": 0.0954,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1717
+    },
+    "minutes_up": 1021,
+    "taken": 640,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "baron": {
+    "coef": {
+     "intercept": -2.1765,
+     "spawn_minute": -0.2281,
+     "1_min_after": -0.1326,
+     "4+_min_after": 0.4664,
+     "per_1k_abs_lead": 0.1037,
+     "fight_this_minute": 0.3329,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.2149
+    },
+    "minutes_up": 5040,
+    "taken": 886,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "elder": {
+    "coef": {
+     "intercept": -0.1056,
+     "spawn_minute": -0.7098,
+     "1_min_after": 0.0518,
+     "4+_min_after": 0.0,
+     "per_1k_abs_lead": -0.0862,
+     "fight_this_minute": 0.4174,
+     "first_dragon": 0.0,
+     "objectives_style_sum": 0.1178
+    },
+    "minutes_up": 245,
+    "taken": 73,
+    "log loss test": null,
+    "log loss worlds": null
+   }
+  },
+  "monsters, without windows and outside chains": {
+   "dragon": {
+    "coef": {
+     "intercept": 0.0404,
+     "spawn_minute": -0.3369,
+     "1_min_after": 0.4808,
+     "4+_min_after": 0.5268,
+     "per_1k_abs_lead": 0.0825,
+     "fight_this_minute": -0.1485,
+     "first_dragon": -1.1963,
+     "objectives_style_sum": -0.1193
+    },
+    "minutes_up": 3237,
+    "taken": 1267,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "grub": {
+    "coef": {
+     "intercept": 1.6152,
+     "spawn_minute": 0.8899,
+     "1_min_after": 0.5257,
+     "4+_min_after": 0.2068,
+     "per_1k_abs_lead": -0.2213,
+     "fight_this_minute": -0.8257,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1992
+    },
+    "minutes_up": 399,
+    "taken": 362,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "herald": {
+    "coef": {
+     "intercept": 0.2334,
+     "spawn_minute": -0.011,
+     "1_min_after": 0.3636,
+     "4+_min_after": 0.4742,
+     "per_1k_abs_lead": 0.0281,
+     "fight_this_minute": -0.1495,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1884
+    },
+    "minutes_up": 515,
+    "taken": 304,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "baron": {
+    "coef": {
+     "intercept": -3.6841,
+     "spawn_minute": 0.4386,
+     "1_min_after": 0.0893,
+     "4+_min_after": 0.2366,
+     "per_1k_abs_lead": 0.165,
+     "fight_this_minute": 0.8442,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1885
+    },
+    "minutes_up": 2375,
+    "taken": 132,
+    "log loss test": null,
+    "log loss worlds": null
+   },
+   "elder": {
+    "coef": {
+     "intercept": -0.712,
+     "spawn_minute": -0.5359,
+     "1_min_after": -0.176,
+     "4+_min_after": 0.0,
+     "per_1k_abs_lead": -0.468,
+     "fight_this_minute": 0.0595,
+     "first_dragon": 0.0,
+     "objectives_style_sum": -0.1285
+    },
+    "minutes_up": 53,
+    "taken": 3,
+    "log loss test": null,
+    "log loss worlds": null
+   }
+  }
+ },
+ "port check": {
+  "base_push_fight (differences)": {
+   "intercept": 0.0,
+   "from 25": 0.0,
+   "from 35": 0.0,
+   "per_1k_lead": 0.0,
+   "per_v1_logit": 0.0,
+   "baron": 0.0,
+   "elder": 0.0,
+   "enemy_inhibs_down": 0.0,
+   "open_lanes": 0.0,
+   "siege_style_sum": 0.0,
+   "lane_just_opened": 0.0,
+   "base_take_last_minute": 0.0,
+   "net_kills_this_minute": 0.0,
+   "net_kills_last_minute": 0.0,
+   "clear_fight_win": 0.0
+  },
+  "monsters (differences)": {
+   "dragon": {
+    "intercept": 0.0,
+    "spawn_minute": 0.0,
+    "1_min_after": 0.0,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": 0.0,
+    "fight_this_minute": 0.0,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0
+   },
+   "grub": {
+    "intercept": 0.0,
+    "spawn_minute": 0.0,
+    "1_min_after": 0.0,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": 0.0,
+    "fight_this_minute": 0.0,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0
+   },
+   "herald": {
+    "intercept": 0.0,
+    "spawn_minute": 0.0,
+    "1_min_after": 0.0,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": 0.0,
+    "fight_this_minute": 0.0,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0
+   },
+   "baron": {
+    "intercept": 0.0,
+    "spawn_minute": 0.0,
+    "1_min_after": 0.0,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": 0.0,
+    "fight_this_minute": 0.0,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0
+   },
+   "elder": {
+    "intercept": 0.0,
+    "spawn_minute": 0.0,
+    "1_min_after": 0.0,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": 0.0,
+    "fight_this_minute": 0.0,
+    "first_dragon": 0.0,
+    "objectives_style_sum": 0.0
+   }
+  },
+  "identical": {
+   "base push": true,
+   "monsters": true
+  }
+ },
+ "app block": {
+  "cutoff": "2026-11-10",
+  "source": "research/memory/m26_outside_tables.py (fixed), gol.gg timelines before 2026-11-10",
+  "chain_s": 60,
+  "options": [
+   "dragon",
+   "elder",
+   "baron",
+   "herald",
+   "grub",
+   "inhib",
+   "nxt",
+   "nexus"
+  ],
+  "stage1": {
+   "intercept": -5.4885,
+   "own_alive": 0.5102,
+   "enemy_alive": -0.561,
+   "per_10s_until_first_back": 0.0062,
+   "per_10s_until_all_back": 0.4905,
+   "step 1": -0.0495,
+   "step 2+": 0.4609,
+   "per_1k_lead": 0.1087,
+   "per_v1_logit": 0.0177,
+   "baron_buff": 0.6015,
+   "elder_buff": 1.6322,
+   "from 25": 0.214,
+   "from 35": -0.0055,
+   "up_dragon": 3.0023,
+   "up_elder": 1.3144,
+   "up_baron": 1.6051,
+   "up_herald": 3.5819,
+   "up_grub": 6.4177,
+   "up_inhib": 2.73,
+   "up_nxt": 1.3016,
+   "up_nexus": 1.2195
+  },
+  "stage2": {
+   "dragon": {
+    "intercept": 0.038,
+    "per_alive_diff": -0.5059,
+    "per_10s_until_all_back": 0.1859
+   },
+   "elder": {
+    "intercept": -0.0394,
+    "per_alive_diff": -0.2895,
+    "per_10s_until_all_back": 0.1534
+   },
+   "baron": {
+    "intercept": -1.2652,
+    "per_alive_diff": -0.3119,
+    "per_10s_until_all_back": 0.0618
+   },
+   "herald": {
+    "intercept": -0.3818,
+    "per_alive_diff": -0.3907,
+    "per_10s_until_all_back": -0.0629
+   },
+   "grub": {
+    "intercept": 2.7842,
+    "per_alive_diff": -0.6685,
+    "per_10s_until_all_back": -0.1073
+   },
+   "inhib": {
+    "intercept": 0.2039,
+    "per_alive_diff": 0.4295,
+    "per_10s_until_all_back": -0.096
+   },
+   "nxt": {
+    "intercept": -1.8526,
+    "per_alive_diff": 1.0675,
+    "per_10s_until_all_back": -0.0709
+   },
+   "nexus": {
+    "intercept": 0.5128,
+    "per_alive_diff": 0.6695,
+    "per_10s_until_all_back": -0.064
+   }
+  },
+  "outside": {
+   "model": "fixed",
+   "ridge (stage 1, stage 2)": [
+    0.3,
+    10
+   ],
+   "stage1": {
+    "intercept": 1.6827,
+    "own_alive": 0.2937,
+    "enemy_alive": -0.2424,
+    "per_10s_until_first_back": -0.0275,
+    "per_10s_until_all_back": -0.1782,
+    "step 1": 1.183,
+    "step 2+": 0.4997,
+    "per_1k_lead": -0.067,
+    "per_v1_logit": 0.2159,
+    "baron_buff": 0.2129,
+    "elder_buff": -0.3023,
+    "from 25": 0.2495,
+    "from 35": 0.1816,
+    "up_dragon": -1.9963,
+    "up_elder": -0.3996,
+    "up_baron": -1.4196,
+    "up_herald": 0.0,
+    "up_grub": 0.0,
+    "up_inhib": -1.1917,
+    "up_nxt": -1.3281,
+    "up_nexus": -1.6397
+   },
+   "stage2": {
+    "dragon": {
+     "intercept": -0.0808,
+     "per_alive_diff": 0.0458,
+     "per_10s_until_all_back": -0.103
+    },
+    "elder": {
+     "intercept": -0.3512,
+     "per_alive_diff": -0.0135,
+     "per_10s_until_all_back": -0.2356
+    },
+    "baron": {
+     "intercept": 0.2743,
+     "per_alive_diff": 0.0824,
+     "per_10s_until_all_back": -0.0701
+    },
+    "herald": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "grub": {
+     "intercept": 0.0,
+     "per_alive_diff": 0.0,
+     "per_10s_until_all_back": 0.0
+    },
+    "inhib": {
+     "intercept": 0.2893,
+     "per_alive_diff": -0.2297,
+     "per_10s_until_all_back": -0.0327
+    },
+    "nxt": {
+     "intercept": -0.0699,
+     "per_alive_diff": 0.1234,
+     "per_10s_until_all_back": 0.2639
+    },
+    "nexus": {
+     "intercept": -0.0618,
+     "per_alive_diff": -0.0085,
+     "per_10s_until_all_back": 0.1775
+    }
+   }
+  },
+  "base_push": {
+   "coef": {
+    "intercept": -3.8961,
+    "from 25": -1.047,
+    "from 35": 0.2701,
+    "per_1k_lead": 0.0139,
+    "per_v1_logit": 0.5404,
+    "baron": 0.8248,
+    "elder": 0.1201,
+    "enemy_inhibs_down": 0.0724,
+    "open_lanes": 1.0135,
+    "siege_style_sum": 0.3867,
+    "lane_just_opened": -0.1445,
+    "base_take_last_minute": -1.2146,
+    "net_kills_this_minute": -0.153,
+    "net_kills_last_minute": 0.0613,
+    "clear_fight_win": -0.2867
+   },
+   "clear_fight_cutoff": 4
+  },
+  "monsters": {
+   "dragon": {
+    "intercept": 0.0404,
+    "spawn_minute": -0.3369,
+    "1_min_after": 0.4808,
+    "4+_min_after": 0.5268,
+    "per_1k_abs_lead": 0.0825,
+    "fight_this_minute": -0.1485,
+    "first_dragon": -1.1963,
+    "objectives_style_sum": -0.1193
+   },
+   "grub": {
+    "intercept": 1.6152,
+    "spawn_minute": 0.8899,
+    "1_min_after": 0.5257,
+    "4+_min_after": 0.2068,
+    "per_1k_abs_lead": -0.2213,
+    "fight_this_minute": -0.8257,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.1992
+   },
+   "herald": {
+    "intercept": 0.2334,
+    "spawn_minute": -0.011,
+    "1_min_after": 0.3636,
+    "4+_min_after": 0.4742,
+    "per_1k_abs_lead": 0.0281,
+    "fight_this_minute": -0.1495,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.1884
+   },
+   "baron": {
+    "intercept": -3.6841,
+    "spawn_minute": 0.4386,
+    "1_min_after": 0.0893,
+    "4+_min_after": 0.2366,
+    "per_1k_abs_lead": 0.165,
+    "fight_this_minute": 0.8442,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.1885
+   },
+   "elder": {
+    "intercept": -0.712,
+    "spawn_minute": -0.5359,
+    "1_min_after": -0.176,
+    "4+_min_after": 0.0,
+    "per_1k_abs_lead": -0.468,
+    "fight_this_minute": 0.0595,
+    "first_dragon": 0.0,
+    "objectives_style_sum": -0.1285
+   }
+  }
+ }
+}

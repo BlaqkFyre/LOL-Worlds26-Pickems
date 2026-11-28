@@ -1,0 +1,146 @@
+{
+ "source": "research/memory/m23_window_outside.py (28 Nov 2026 AEST)",
+ "deaths matched": [
+  17192,
+  17665
+ ],
+ "window step rows by split": {
+  "train": 7349,
+  "test": 2605,
+  "worlds": 1562
+ },
+ "outside rows by split": {
+  "train": 337,
+  "test": 130,
+  "worlds": 61
+ },
+ "anchors": 305,
+ "anchors inside a window (skipped)": 2890,
+ "outside steps (all) by next": {
+  "reset": 273,
+  "inhib": 154,
+  "nxt": 53,
+  "nexus": 22,
+  "dragon": 17,
+  "baron": 7,
+  "elder": 2
+ },
+ "scores": {
+  "test": {
+   "steps": 130,
+   "takes": 56,
+   "real take share": 0.431,
+   "window model's mean take chance": 0.32,
+   "stage 1 log loss (window model | base share | refit outside)": [
+    0.76166,
+    0.6962,
+    0.6578
+   ],
+   "stage 2 log loss (window model | equal among up | refit outside)": [
+    0.24975,
+    0.3384,
+    0.19038
+   ],
+   "inhibitor up: steps, real share taking it next, window model's chance (by enemies alive)": {
+    "3 enemies alive": [
+     2,
+     0.5,
+     0.635
+    ],
+    "4 enemies alive": [
+     8,
+     0.5,
+     0.458
+    ],
+    "5 enemies alive": [
+     66,
+     0.545,
+     0.257
+    ]
+   },
+   "pass (window model beats base share, stage 1)": false
+  },
+  "worlds": {
+   "steps": 61,
+   "takes": 27,
+   "real take share": 0.443,
+   "window model's mean take chance": 0.323,
+   "stage 1 log loss (window model | base share | refit outside)": [
+    0.56937,
+    0.69571,
+    0.54156
+   ],
+   "stage 2 log loss (window model | equal among up | refit outside)": [
+    0.44681,
+    0.38944,
+    0.35333
+   ],
+   "inhibitor up: steps, real share taking it next, window model's chance (by enemies alive)": {
+    "2 enemies alive": [
+     1,
+     1.0,
+     0.691
+    ],
+    "4 enemies alive": [
+     6,
+     0.333,
+     0.446
+    ],
+    "5 enemies alive": [
+     27,
+     0.407,
+     0.212
+    ]
+   },
+   "pass (window model beats base share, stage 1)": true
+  },
+  "stage 1 coef: window model | refit outside": {
+   "window": {
+    "intercept": -5.4275,
+    "own_alive": 0.4927,
+    "enemy_alive": -0.5356,
+    "per_10s_until_first_back": 0.0053,
+    "per_10s_until_all_back": 0.4781,
+    "step 1": 0.0354,
+    "step 2+": 0.5494,
+    "per_1k_lead": 0.1187,
+    "per_v1_logit": 0.0205,
+    "baron_buff": 0.5592,
+    "elder_buff": 1.5461,
+    "from 25": 0.1792,
+    "from 35": 0.1268,
+    "up_dragon": 3.0145,
+    "up_elder": 1.2869,
+    "up_baron": 1.5405,
+    "up_herald": 3.6009,
+    "up_grub": 6.142,
+    "up_inhib": 2.5665,
+    "up_nxt": 1.128,
+    "up_nexus": 1.0918
+   },
+   "outside": {
+    "intercept": -0.1853,
+    "own_alive": 0.6137,
+    "enemy_alive": -1.0806,
+    "per_10s_until_first_back": 0.222,
+    "per_10s_until_all_back": -0.0152,
+    "step 1": -0.0012,
+    "step 2+": -0.1841,
+    "per_1k_lead": 0.0344,
+    "per_v1_logit": 0.3875,
+    "baron_buff": 0.6591,
+    "elder_buff": 0.7925,
+    "from 25": 1.024,
+    "from 35": 0.4278,
+    "up_dragon": 0.9502,
+    "up_elder": 0.3361,
+    "up_baron": -0.0869,
+    "up_herald": 0.0,
+    "up_grub": 0.0,
+    "up_inhib": 1.0316,
+    "up_nxt": -0.2734,
+    "up_nexus": -1.0336
+   }
+  }
+ }
+}

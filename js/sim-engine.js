@@ -23,6 +23,9 @@ const NEXUS_TURRET_BACK = 180;
 const BASE_WAIT = [10, 10, 12, 12, 14, 16, 20, 25, 28, 32.5, 35, 37.5, 40, 42.5, 45, 47.5, 50, 52.5];
 const timeFactor = t => { const h = t / 30; return Math.min(0.5, 0.00425 * clamp(h - 30, 0, 30) + 0.003 * clamp(h - 60, 0, 30) + 0.0145 * clamp(h - 90, 0, 20)); };
 const quant = (q, u) => { const x = u * (q.length - 1), i = Math.floor(x); return i >= q.length - 1 ? q[q.length - 1] : q[i] + (q[i + 1] - q[i]) * (x - i); };
+/* structure rules v1 (28 Nov): the share of a quantile table below x (the inverse of quant; the first point at or above x) */
+const qcdf = (q, x) => { const n = q.length; if(x <= q[0]) return 0; if(x > q[n - 1]) return 1;
+  let i = 1; while(q[i] < x) i++; return (i - 1 + (x - q[i - 1]) / (q[i] - q[i - 1])) / (n - 1); };
 const sig = x => 1 / (1 + Math.exp(-x));
 const DEFAULT_CAL = {gain: 1, lane_mu: 1, lane_k: 1, fight_eps: 0, max_min: 70, style_mode: "side"};
 const g0 = (o, k, d) => (o && o[k] != null) ? o[k] : d;   // Python dict.get
@@ -186,6 +189,20 @@ class Sim {
        the minutes a window covers and use tables refitted without them. cal.fight_window = "off" plays v54 exactly. */
     const FW = (MT && g0(cal, "fight_window", "v1") === "v1" && window.SIM_TABLES.window) ? window.SIM_TABLES.window : null;
     const winM = [new Set(), new Set()], winAny = new Set(), windows = [];
+    /* structure rules v1 (28 Nov, v56; research/memory/structure-rules-plan.md parts 1-2; on by default, Luke: new versions go into the
+       app switched on; needs game memory). Part 1: after a window's first take, each take time is drawn from the part of its real time
+       table at or after the previous take (one draw, rescaled), so takes keep their order. Part 2: base structures follow the state at
+       the second they fall: a nexus tower only while an inhibitor is down then, the Nexus only while an inhibitor is down and no nexus
+       tower stands then, an inhibitor only while it is up then. cal.structure_rules = "off" plays v55 exactly. */
+    const SR = !!MT && g0(cal, "structure_rules", "v1") === "v1";
+    /* structure rules v1, part 3 (outside-window chains, decision B2; fitted by research/memory/m26_outside_tables.py, the fixed joint
+       model of m25): every base structure a side takes outside its own won-fight windows and chains (a T3 from the segment draws, or
+       the base push's first structure) starts a chain the window model runs from that take, with steps from 1 and the fitted outside
+       shifts added to its terms (take or reset; which option). The per-minute base push and monster draws then skip the chain's minutes
+       and use FW.outside's tables, refitted without them. Needs the fight window. */
+    const FWO = (SR && FW && FW.outside) ? FW.outside : null;
+    const spans = [[], []], t3T = [[-1, -1, -1], [-1, -1, -1]];   /* windows and chains as [start, end] per side; each lane's T3 fall time */
+    const inSpan = (s, t) => spans[s].some(([a, b]) => a <= t && t <= b);
     let curK = null, curS = null;
     const gapAfter = (kind, side) => { const q = EG[`${curK}>${kind}|${side == null || curS == null ? "any" : side === curS ? "same" : "other"}`] || EG[`${curK}>${kind}|any`];
       return cur + (q ? quant(q, rng.random()) : 1); };
@@ -201,7 +218,7 @@ class Sim {
         : Math.min(MT.level_xp[17], c[3] + (c[3] - c[2]) / 300 * (t - 1500));
       let lv = 0; for(const x of MT.level_xp) if(xp >= x) lv++; return Math.max(1, Math.min(18, lv)); };
     const deathWait = (i, t) => BASE_WAIT[levelAt(i, t) - 1] * (1 + timeFactor(t));
-    let lastFight = null; const nxDown = [[], []];
+    let lastFight = null; const nxDown = [[], []], nxHist = [[], []];   /* nxHist: every nexus tower fall time, never pruned (structure rules v1) */
     const FPon = g0(cal, "fight_players", "off") === "on" && !!this.FP;  /* who is in each fight (13 Nov): kills and assists only among them */
     /* kill credit v2 (24 Nov; on by default from v53, Luke: new versions go into the app switched on; needs fight players and game
        memory): who is in a fight by kills groups 1, 2, 3-4, 5+; who wins each kill also reads the players alive on each side (steps for
@@ -215,7 +232,7 @@ class Sim {
     const farm = [0, 0, 0, 0, 0], gold = [0, 0, 0, 0, 0];
     const mk = () => [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
     const K = mk(), D = mk(), A = mk(), SOLO = mk();
-    const seg = [[0, 0, 0], [0, 0, 0]], prevseg = [[0, 0, 0], [0, 0, 0]], inhibBack = [[-1, -1, -1], [-1, -1, -1]];
+    const seg = [[0, 0, 0], [0, 0, 0]], prevseg = [[0, 0, 0], [0, 0, 0]], inhibBack = [[-1, -1, -1], [-1, -1, -1]], inhibFall = [[-1, -1, -1], [-1, -1, -1]];
     const openT = [[null, null, null], [null, null, null]], lastBase = [-1e9, -1e9];
     const nxTowers = [2, 2], drag = [[], []], soul = [null, null], elderN = [0, 0], barons = [0, 0], grubs = [0, 0], heralds = [0, 0];
     const towers = [0, 0], inhibs = [0, 0], first = {}, ftime = {}, firstLane = {};
@@ -230,9 +247,18 @@ class Sim {
     const note = (t, side, kind, text, who) => { if(log) steps.push(Object.assign({t: Math.floor(t), side: side == null ? "" : ["blue", "red"][side], kind, text}, who || {})); };
     const setd = (o, k, v) => { if(!(k in o)) o[k] = v; };
     /* fight window: what is up for side s at time t, and structures left to the Nexus (null while no lane is open) */
+    /* structure rules v1: state at second t (an inhibitor or nexus tower placed later in time counts as standing until it falls) */
+    const inhibDown = (s, li, t) => inhibFall[s][li] <= t && t < inhibBack[s][li];
+    /* (from the full history: a take can be placed before the minute's start, after the minute-start respawn has pruned nxDown) */
+    const nxStanding = (s, t) => 2 - nxHist[s].filter(x => x <= t && t < x + NEXUS_TURRET_BACK).length;   /* standing at t */
+    const nxLeft = (s, t) => 2 - nxHist[s].filter(x => t < x + NEXUS_TURRET_BACK).length;                /* not yet taken or claimed */
     const fwAvail = (s, t) => { const A = {dragon: !elderMode && nxt.dragon <= t, elder: elderMode && nxt.dragon <= t, baron: nxt.baron <= t,
         herald: !takenOnce.herald && t >= SPAWN.herald, grub: !takenOnce.grub && t >= SPAWN.grub};
-      const open = [0, 1, 2].filter(li => seg[s][li] >= 15), dn = [0, 1, 2].some(li => inhibBack[s][li] > t);
+      const open = [0, 1, 2].filter(li => seg[s][li] >= 15 && (!SR || t3T[s][li] <= t));   /* structure rules v1: the T3 has fallen by t */
+      if(SR){ const dn = [0, 1, 2].some(li => inhibDown(s, li, t)), ns = nxStanding(s, t);
+        A.inhib = open.some(li => inhibBack[s][li] <= t); A.nxt = dn && nxLeft(s, t) > 0; A.nexus = dn && ns === 0;
+        return [A, open.length ? ns + (dn ? 0 : 1) : null]; }
+      const dn = [0, 1, 2].some(li => inhibBack[s][li] > t);
       A.inhib = open.some(li => inhibBack[s][li] <= t); A.nxt = dn && nxTowers[s] > 0; A.nexus = dn && nxTowers[s] === 0;
       return [A, open.length ? nxTowers[s] + (dn ? 0 : 1) : null]; };
     /* a take inside a window: the same effects as the per-minute draws (the winners take it, so no taker draw) */
@@ -249,37 +275,49 @@ class Sim {
       else if(k === "grub"){ takenOnce.grub = true; const nOwn = rng.random() < P.grubs_split.one_team_all ? 3 : 2;
         grubs[s] += nOwn; grubs[1 - s] += 3 - nOwn; setd(first, "grub", s); addGold(s, val.grub * nOwn); addGold(1 - s, val.grub * (3 - nOwn)); note(tt, s, "grubs", `${nOwn} void grubs`); }
       else if(k === "herald"){ takenOnce.herald = true; heralds[s]++; heraldT[s] = tt; setd(first, "herald", s); addGold(s, val.herald); note(tt, s, "herald", "Rift Herald"); }
-      else if(k === "inhib"){ const li = rng.pickUniform([0, 1, 2].filter(l => seg[s][l] >= 15 && inhibBack[s][l] <= Math.max(tt, ta)));   /* up when chosen (a take time can be drawn just before the step) */ inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++;
+      else if(k === "inhib"){ const li = rng.pickUniform([0, 1, 2].filter(l => seg[s][l] >= 15 && (SR ? inhibBack[s][l] <= tt && t3T[s][l] <= tt : inhibBack[s][l] <= Math.max(tt, ta))));   /* up when chosen (a take time can be drawn just before the step) */ inhibBack[s][li] = tt + INHIB_BACK; inhibFall[s][li] = tt; inhibs[s]++;
         addGold(s, val.inhib); lastBase[s] = 60 * Math.floor(tt / 60); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
-      else if(k === "nxt"){ nxTowers[s]--; towers[s]++; addGold(s, val.tower); nxDown[s].push(tt); lastBase[s] = 60 * Math.floor(tt / 60); note(tt, s, "tower", "nexus tower"); }
+      else if(k === "nxt"){ nxTowers[s]--; towers[s]++; addGold(s, val.tower); nxDown[s].push(tt); nxHist[s].push(tt); lastBase[s] = 60 * Math.floor(tt / 60); note(tt, s, "tower", "nexus tower"); }
       else if(k === "nexus"){ winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); } };
     /* the window after a won fight: w won, the fight started at tf, its last kill at t1 */
-    const fwRun = (w, tf, t1) => {
-      const o = 1 - w, sg = sd(w), S1 = FW.stage1, S2 = FW.stage2, rec = log ? {f: fid - 1, t0: Math.floor(tf), t1: Math.floor(t1), w: ["blue", "red"][w]} : null;
+    /* outside = 1: an outside-window chain from a base structure taken at t1 (= tf), steps from j0 = 1, the outside shifts added */
+    const fwRun = (w, tf, t1, outside = 0, j0 = 0) => {
+      const o = 1 - w, sg = sd(w), S1 = FW.stage1, S2 = FW.stage2, rec = log ? {f: outside ? null : fid - 1, t0: Math.floor(tf), t1: Math.floor(t1), w: ["blue", "red"][w]} : null;
+      if(rec && outside) rec.outside = true;
       if(rec){ const [A0, left0] = fwAvail(w, tf); rec.left = left0; rec.up = A0; }
       let ta = t1; const took = [];
-      for(let j = 0; j < 8; j++){
+      for(let j = j0; j < j0 + 8; j++){
         const [A] = fwAvail(w, ta), up = FW.options.filter(k => A[k]);
         const ownA = 5 - respawn[w].filter(r => r > ta).length, enA = 5 - respawn[o].filter(r => r > ta).length;
         const back = respawn[o].filter(r => r > ta).sort((a, b) => a - b), fb = back.length ? back[0] - ta : 0, ab = back.length ? back[back.length - 1] - ta : 0;
         if(rec && j === 0) rec.alive = [ownA, enA];
         if(!up.length) break;
-        const x1 = S1.intercept + S1.own_alive * ownA + S1.enemy_alive * enA + S1.per_10s_until_first_back * fb / 10 + S1.per_10s_until_all_back * ab / 10
+        const L1 = S1 => S1.intercept + S1.own_alive * ownA + S1.enemy_alive * enA + S1.per_10s_until_first_back * fb / 10 + S1.per_10s_until_all_back * ab / 10
           + S1["step 1"] * (j === 1) + S1["step 2+"] * (j >= 2) + S1.per_1k_lead * clamp(sg * gd / 1000, -15, 15) + S1.per_v1_logit * sg * z
           + S1.baron_buff * (baronUntil[w] > ta) + S1.elder_buff * (elderUntil[w] > ta) + S1["from 25"] * (ta >= 1500) + S1["from 35"] * (ta >= 2100)
           + FW.options.reduce((a, k) => a + S1["up_" + k] * (A[k] ? 1 : 0), 0);
+        const L2 = (S2, k) => S2[k].intercept + S2[k].per_alive_diff * (ownA - enA) + S2[k].per_10s_until_all_back * ab / 10;
+        const x1 = outside ? L1(S1) + L1(FWO.stage1) : L1(S1);
         if(rng.random() >= sig(x1)) break;
-        const u = up.map(k => S2[k].intercept + S2[k].per_alive_diff * (ownA - enA) + S2[k].per_10s_until_all_back * ab / 10), mx = Math.max(...u);
+        const u = up.map(k => outside ? L2(S2, k) + L2(FWO.stage2, k) : L2(S2, k)), mx = Math.max(...u);
         const k = rng.pick(up, norm(u.map(v => Math.exp(v - mx))));
         const d = ownA - enA, TQ = FW.take_q[k] || {}, q = TQ[d >= 3 ? "ahead 3+" : d >= 1 ? "ahead 1-2" : "even or behind"] || TQ.pooled || FW.take_q.all;
-        let tk = ta + quant(q, rng.random());
+        const u0 = rng.random(), lo = (SR && (took.length || outside)) ? qcdf(q, 0) : 0;   /* structure rules v1: after a take (an outside chain's anchor is one), only times at or after it */
+        let tk = ta + quant(q, lo + u0 * (1 - lo));
+        if(SR){   /* structure rules v1: the structure must be hittable at the second it falls, else the window resets */
+          const dnT = [0, 1, 2].some(li => inhibDown(w, li, tk));
+          if(k === "nxt" && !(dnT && nxLeft(w, tk) > 0)) break;
+          if(k === "nexus" && !(dnT && nxStanding(w, tk) === 0)) break;
+          if(k === "inhib" && ![0, 1, 2].some(li => seg[w][li] >= 15 && t3T[w][li] <= tk && inhibBack[w][li] <= tk)) break; }
         if(k === "nexus"){ const allBack = back.length ? back[back.length - 1] : ta;
           if(tk >= allBack) break;
-          if(cur > 0 && tk <= cur){ tk = EG ? gapAfter("structure", w) : cur + 1; if(tk >= allBack) break; }   /* the Nexus comes after every event placed */
+          if(cur > 0 && tk <= cur){ tk = EG ? gapAfter("structure", w) : cur + 1; if(tk >= allBack) break;
+            if(SR && (nxStanding(w, tk) > 0 || ![0, 1, 2].some(li => inhibDown(w, li, tk)))) break; }   /* the Nexus comes after every event placed */
           took.push(k); fwTake(k, w, at(tk, "structure", w, true)); break; }
         took.push(k); fwTake(k, w, at(tk, k === "inhib" || k === "nxt" ? "structure" : "monster", w, true), ta); ta = Math.max(ta, tk);
       }
       for(let mm = Math.floor(tf / 60); mm <= Math.floor(Math.max(ta, t1) / 60); mm++){ winM[w].add(mm); winAny.add(mm); }
+      if(SR) spans[w].push([tf, Math.max(ta, t1)]);
       if(rec){ rec.took = took; windows.push(rec); } };
 
     for(m = 0; m <= cal.max_min; m++){
@@ -419,7 +457,7 @@ class Sim {
         for(const f in feats) xb += g0(c, f + "_per_1k", 0) * feats[f] / 1000; return rng.random() < sig(xb) ? 0 : 1; };
       const firstDrag = !dragSeq.length && !elderMode;
       const fwSkip = FW && winAny.has(m);   /* fight window v1: a minute a window covers has no per-minute monster draw */
-      const takeChance = kind => { const c = (FW && FW.monsters[kind]) || P.monsters[kind], since = Math.max(0, Math.floor((t0 - nxt[kind !== "elder" ? kind : "dragon"]) / 60));
+      const takeChance = kind => { const c = (FWO ? FWO.monsters[kind] : FW && FW.monsters[kind]) || P.monsters[kind], since = Math.max(0, Math.floor((t0 - nxt[kind !== "elder" ? kind : "dragon"]) / 60));
         return sig(c.intercept + c.spawn_minute * (since === 0) + c["1_min_after"] * (since === 1) + c["4+_min_after"] * (since >= 4)
           + c.per_1k_abs_lead * Math.min(Math.abs(gd) / 1000, 15) + c.fight_this_minute * fought
           + g0(c, "first_dragon", 0) * (kind === "dragon" && firstDrag ? 1 : 0) + g0(c, "objectives_style_sum", 0) * obj_s); };
@@ -470,7 +508,7 @@ class Sim {
         /* push_chain v2: the push's first structure from the fight's last kill (real offsets, research/memory/m14_push_timing.py; one table
            for pushes that start in the base (T3 tower or base structure), one for pushes that start with an outer tower), later
            ones real gaps after the push's previous structure, carried across minutes; the Nexus a real gap after the push's previous structure */
-        let pcFirst = false;
+        let pcFirst = false; const t3a = [];
         if(PC && fromFight){ if(lastFight.pt != null) pt = lastFight.pt; else { pt = null; pcFirst = true; } }
         const pcNext = (gq, base) => { if(pcFirst){ pcFirst = false; pt = Math.max(lastFight.t0, lastFight.t + quant((base ? PC.first_base_q : PC.first_outer_q) || PC.first_q, rng.random())); }   /* real pushes are counted from the fight's start */ else pt += quant(gq, rng.random()); lastFight.pt = pt; return pt; };
         for(let li = 0; li < 3; li++){
@@ -500,17 +538,21 @@ class Sim {
               else if(m < 14){ for(let i = 0; i < 5; i++) gold[i] += sg * LL.ev.team_plate[i]; }
             }
             if(seg[s][li] % 5 === 0){ towers[s]++; addGold(s, val.tower); setd(first, "tower", s); const twt = (PC && fromFight) ? at(pcNext(MT.struct_gap, seg[s][li] === 15), "structure", s, true) : (MT && pt != null) ? at(pt += quant(MT.struct_gap, rng.random()), "structure", s, true) : at(t0 + rng.uniform(0, 59), "structure", s); setd(ftime, "tower", EO ? twt : t0 + 30); setd(firstLane, "tower", L);
-              note(twt, s, "tower", `T${seg[s][li] / 5} ${L}`); }
+              note(twt, s, "tower", `T${seg[s][li] / 5} ${L}`);
+              if(seg[s][li] === 15){ t3T[s][li] = twt; t3a.push(twt); } }
           }
         }
+        if(FWO){   /* structure rules v1, part 3: a T3 outside this side's windows and chains starts an outside chain (earliest first) */
+          for(const ta3 of t3a.sort((a, b) => a - b)){ if(!inSpan(s, ta3)) fwRun(s, ta3, ta3, 1, 1); if(winner != null) break; }
+          if(winner != null) break; }
         if(MT) nxDown[s] = nxDown[s].filter(x => { if(x + NEXUS_TURRET_BACK <= t0){ nxTowers[s]++; return false; } return true; });  /* nexus turrets respawn */
         const opn = [0, 1, 2].filter(li => seg[s][li] >= 15);
         opn.forEach(li => { if(openT[s][li] == null) openT[s][li] = t0; });
         if(!opn.length) continue;
         if(FW && winM[s].has(m)) continue;   /* fight window v1: the winners' minutes a window covers have no per-minute base push */
         let down = [0, 1, 2].filter(li => inhibBack[s][li] > t0);
-        const bc = FW ? FW.base_push.coef : PUSHC;
-        if(FW) cutB = FW.base_push.clear_fight_cutoff || 99;
+        const bc = FWO ? FWO.base_push.coef : FW ? FW.base_push.coef : PUSHC;   /* structure rules v1: refitted without outside-chain minutes too */
+        if(FW) cutB = (FWO || FW).base_push.clear_fight_cutoff || 99;
         const xb = bc.intercept + bc["from 25"] * (m >= 25) + bc["from 35"] * (m >= 35) + bc.per_1k_lead * clamp(sg * gd / 1000, -15, 15)
           + bc.per_v1_logit * sg * z + bc.baron * (baronUntil[s] > t0) + bc.elder * (elderUntil[s] > t0)
           + bc.enemy_inhibs_down * down.length + bc.open_lanes * opn.length + g0(bc, "siege_style", 0) * sg * siege_d + g0(bc, "siege_style_sum", 0) * siege_s
@@ -525,7 +567,28 @@ class Sim {
         /* game memory: a base push starts with the won fight (real bases fall while it is still going), else at a random second; base
            structures come real base gaps apart, and a step draws its time only when it takes something */
         if(MT && pt == null && !pcFirst) pt = t0 + rng.uniform(0, 59);
-        for(let q = 0; q < npush; q++){
+        for(let q = 0; q < npush && SR; q++){   /* structure rules v1: the take time first, then the state at that second */
+          const TT = () => (PC && fromFight) ? at(pcNext(MT.base_gap, true), "structure", s, true) : at(pt += quant(MT.base_gap, rng.random()), "structure", s, fromFight);
+          const tt = TT(), dn = [0, 1, 2].filter(li => inhibDown(s, li, tt)), upI = opn.filter(li => inhibBack[s][li] <= tt && t3T[s][li] <= tt);
+          if(dn.length && (!upI.length || rng.random() < P.nexus_tier_share)){
+            if(nxLeft(s, tt) > 0){ nxTowers[s]--; towers[s]++; addGold(s, val.tower); nxDown[s].push(tt); nxHist[s].push(tt); note(tt, s, "tower", "nexus tower");
+              if(FWO && !inSpan(s, tt)){ fwRun(s, tt, tt, 1, 1); break; }   /* part 3: the outside model runs the rest of the push */
+              continue; }
+            /* the Nexus: only after a won fight, before the losers are all back (as v55), and only while an inhibitor is down and no
+               nexus tower stands at the second it falls */
+            const o_ = 1 - s, back = Math.max(...respawn[o_]);
+            if(!lastFight || lastFight.w !== s || back <= Math.max(t0, lastFight.t)) break;
+            let gapN = (PC && lastFight.pt != null) ? lastFight.pt + quant(PC.nexus_prev_q, rng.random()) : lastFight.t + quant(MT.nexus_gap, rng.random());
+            if(!EG) gapN = Math.max(gapN, EO && cur > 0 ? cur + 1 : 0);
+            else if(cur > 0 && gapN <= cur) gapN = gapAfter("structure", s);
+            if(gapN >= back || nxStanding(s, gapN) > 0 || ![0, 1, 2].some(li => inhibDown(s, li, gapN))) break;
+            const tn = at(gapN, "structure", s, true);
+            winner = s; tEnd = tn; note(tn, s, "nexus", "Nexus"); break; }
+          else if(upI.length){ const li = rng.pickUniform(upI); inhibBack[s][li] = tt + INHIB_BACK; inhibFall[s][li] = tt; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`);
+            if(FWO && !inSpan(s, tt)){ fwRun(s, tt, tt, 1, 1); break; } }   /* part 3: the outside model runs the rest of the push */
+          else break;   /* nothing standing that can be hit at that second: the push stops */
+        }
+        for(let q = 0; q < npush && !SR; q++){
           down = [0, 1, 2].filter(li => inhibBack[s][li] > t0);
           const upInh = opn.filter(li => inhibBack[s][li] <= t0), ttE = MT ? null : at(t0 + rng.uniform(0, 59), "structure", s);
           const TT = () => (PC && fromFight) ? at(pcNext(MT.base_gap, true), "structure", s, true) : MT ? at(pt += quant(MT.base_gap, rng.random()), "structure", s, fromFight) : ttE;
@@ -541,7 +604,7 @@ class Sim {
               const tn = at(gapN, "structure", s, true);
               winner = s; tEnd = tn; note(tn, s, "nexus", "Nexus"); break; }
             else { const tt = TT(); winner = s; tEnd = tt; note(tt, s, "nexus", "Nexus"); break; }
-          } else if(upInh.length){ const tt = TT(), li = rng.pickUniform(upInh); inhibBack[s][li] = tt + INHIB_BACK; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
+          } else if(upInh.length){ const tt = TT(), li = rng.pickUniform(upInh); inhibBack[s][li] = tt + INHIB_BACK; inhibFall[s][li] = tt; inhibs[s]++; addGold(s, val.inhib); note(tt, s, "inhib", `inhibitor ${LANES[li]}`); }
         }
         if(winner != null) break;
       }
